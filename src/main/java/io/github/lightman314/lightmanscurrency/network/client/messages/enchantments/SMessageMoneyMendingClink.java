@@ -1,0 +1,39 @@
+package io.github.lightman314.lightmanscurrency.network.client.messages.enchantments;
+
+import io.github.lightman314.lightmanscurrency.client.LCConfigClient;
+import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
+import io.github.lightman314.lightmanscurrency.network.client.ServerToClientPacket;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
+
+public class SMessageMoneyMendingClink extends ServerToClientPacket {
+
+    public static final Identifier PACKET_ID = new Identifier(LightmansCurrency.MODID, "enchantment_money_clink");
+
+    private static long lastClink = 0;
+    private static final long CLINK_DELAY = 1000;
+
+    public SMessageMoneyMendingClink() { super(PACKET_ID); }
+
+    @Override
+    protected void encode(PacketByteBuf buffer) { }
+
+    @Environment(EnvType.CLIENT)
+    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
+
+        if(System.currentTimeMillis() - lastClink < CLINK_DELAY || !LCConfigClient.INSTANCE.moneyMendingClink.get())
+            return;
+        lastClink = System.currentTimeMillis();
+        //Play a coin clinking sound
+        client.getSoundManager().play(PositionedSoundInstance.master(ModSounds.COINS_CLINKING, 1f, 0.4f));
+
+    }
+
+}

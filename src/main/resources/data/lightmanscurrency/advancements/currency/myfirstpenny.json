@@ -1,0 +1,32 @@
+{
+    "parent": "lightmanscurrency:currency/root",
+    "display": {
+        "icon": {
+            "item": "lightmanscurrency:coin_copper"
+        },
+        "title": {
+            "translate": "advancements.lightmanscurrency.myfirstpenny.title"
+        },
+        "description": {
+            "translate": "advancements.lightmanscurrency.myfirstpenny.description"
+        },
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "criteria": {
+        "coin": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "tag": "lightmanscurrency:coin"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": ["lightmanscurrency:wallet_copper","lightmanscurrency:wallet_iron","lightmanscurrency:wallet_gold","lightmanscurrency:wallet_emerald","lightmanscurrency:wallet_diamond","lightmanscurrency:wallet_diamond"]
+    }
+}

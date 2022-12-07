@@ -1,0 +1,44 @@
+package io.github.lightman314.lightmanscurrency.network.client;
+
+import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.server.ServerHook;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
+
+public abstract class ServerToClientPacket {
+
+	private final Identifier type;
+	protected ServerToClientPacket(Identifier type) { this.type = type; }
+	
+	protected final PacketByteBuf encode() {
+		PacketByteBuf buffer = PacketByteBufs.create();
+		buffer.writeString(this.type.toString());
+		try{ this.encode(buffer);
+		} catch (Throwable t) { LightmansCurrency.LogError("Error encoding ServerToClient packet '" + this.type + "'", t); }
+		return buffer;
+	}
+	protected abstract void encode(PacketByteBuf buffer);
+
+	public final void sendToAll() {
+		MinecraftServer server = ServerHook.getServer();
+		if(server != null)
+			this.sendTo(server.getPlayerManager().getPlayerList());
+	}
+
+	public final void sendTo(Iterable<ServerPlayerEntity> players) {
+		for(ServerPlayerEntity player : players)
+			this.sendTo(player);
+	}
+
+	public final void sendTo(PlayerEntity player) { if(player instanceof ServerPlayerEntity) this.sendTo((ServerPlayerEntity) player);}
+	public final void sendTo(ServerPlayerEntity player) { ServerPlayNetworking.send(player, LCClientPacketHandler.CHANNEL, this.encode()); }
+
+	public final void sendTo(PacketSender packetSender) { packetSender.sendPacket(LCClientPacketHandler.CHANNEL, this.encode()); }
+
+}

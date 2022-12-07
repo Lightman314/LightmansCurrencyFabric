@@ -1,29 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "lightmanscurrency",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Lightman's Currency",
+  "description": "Adds a simple money & shop system to the game.",
   "authors": [
-    "Me!"
+    "Lightman314"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://discord.gg/5ErDbMKFJP",
+    "sources": "https://github.com/Lightman314/LightmansCurrencyFabric"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/lightman_icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "io.github.lightman314.lightmanscurrency.common.LightmansCurrency"
+    ],
+    "client": [
+      "io.github.lightman314.lightmanscurrency.client.LightmansCurrencyClient"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "lightmanscurrency.mixins.json"
   ],
 
   "depends": {
