@@ -1,0 +1,73 @@
+name: Bug Report
+description: Report a bug or crash
+title: "BUG: "
+labels: [ "bug" ]
+assignees:
+  - Lightman314
+body:
+    - type: dropdown
+      attributes:
+        label: Minecraft Version
+        description: The version of Minecraft you are using.
+        options:
+          - "1.19.2"
+      validations:
+        required: true
+    - type: input
+      attributes:
+        label: Fabric Version
+        description: The version of the Fabric Loader you are using.
+        placeholder: "ex. 40.1.84"
+      validations:
+        required: true
+    - type: input
+      attributes:
+        label: Lightman's Currency Version
+        description: The version of Lightman's Currency you are using. If it's not the latest version available, please try again on the latest version to confirm that this issue has not already been fixed.
+        placeholder: "ex. 0.14.10-1.19.2"
+      validations:
+        required: true
+    - type: dropdown
+      attributes:
+        label: Environment Type
+        description: The environment/connection type that the issue occurred in.
+        options:
+          - "Minecraft Client (Bug/crash happened in a single-player world or while the game was booting)"
+          - "Dedicated Server (Bug/crash happened while connected to a server or while the dedicated server was booting)"
+      validations:
+        required: true
+    - type: textarea
+      attributes:
+        label: Other relevant Mods
+        description: Other mods that you believe may be relevant to the issue (and their versions).
+        placeholder: "ex. LC Tech v1.0.1.0"
+      validations:
+        required: false
+    - type: textarea
+      attributes:
+        label: Describe the bug
+        description: A clear and concise description of what the bug is.
+      validations:
+        required: true
+    - type: textarea
+      attributes:
+        label: To Reproduce
+        description: "Steps to reproduce the behavior:"
+        placeholder: |
+          1. Go to '...'
+          2. Click on '....'
+          3. Scroll down to '....'
+          4. See error
+      validations:
+        required: true
+    - type: textarea
+      attributes:
+        label: Screenshots/Logs/Crash Reports
+        description: |
+          If your game crashed, it is **100% required** that you attach the crash report, or your issue will be ignored. Crash reports can be found in the `*/crash-reports` folder.
+          If the game did not crash, please attach the latest.log or debug.log file from the `*/logs` folder.
+          Please either attach the log and/or crash report as a file directly in this field, or upload to a website such as Pastebin. Do **NOT** just copy/paste the logs contents into this field.
+          If you upload the log to a 3rd party site, do **NOT** just clip out the part of the log/crash report that you *think* is relevant. Include the entirety of the log/crash report file, as some past warnings that I have set up may give the additional context I need to figure out your problem.
+          You may also include screenshots that you believe are relevant.
+      validations:
+        required: true
