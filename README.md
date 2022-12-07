@@ -1,5 +1,5 @@
 # Lightmans Currency
-Lightman's Currency is a forge mod that adds a simple currency system of 6 different coins, as well as break & access protected traders from which players can safely set up trades with other players without fear of theft or griefing.
+This is the Fabric port of a Forge mod that adds a simple currency system of 6 different coins, as well as break & access protected traders from which players can safely set up trades with other players without fear of theft or griefing.
 
 ## Features
 #### Coins
