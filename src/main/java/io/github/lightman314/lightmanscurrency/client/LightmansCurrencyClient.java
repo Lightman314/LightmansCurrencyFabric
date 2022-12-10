@@ -23,6 +23,7 @@ import io.github.lightman314.lightmanscurrency.common.menu.slots.ticket.TicketSl
 import io.github.lightman314.lightmanscurrency.common.menu.slots.trader.UpgradeInputSlot;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.config.Config;
+import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.network.client.LCClientPacketHandler;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
 import net.fabricmc.api.ClientModInitializer;
@@ -49,7 +50,7 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 	public void onInitializeClient() {
 
 		LightmansCurrency.LogInfo("Hello from client init!");
-		ClientPlayNetworking.registerGlobalReceiver(LCClientPacketHandler.CHANNEL, new LCClientPacketHandler());
+		ClientPlayNetworking.registerGlobalReceiver(PacketChannels.SERVER_TO_CLIENT, new LCClientPacketHandler());
 
 		//Set certain blocks as cutout layer
 		this.setRenderLayer(RenderLayer.getCutout(), ModBlocks.DISPLAY_CASE, ModBlocks.VENDING_MACHINE, ModBlocks.VENDING_MACHINE_LARGE, ModBlocks.ARMOR_DISPLAY);

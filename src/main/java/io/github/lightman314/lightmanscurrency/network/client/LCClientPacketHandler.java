@@ -17,6 +17,8 @@ import io.github.lightman314.lightmanscurrency.network.client.messages.notificat
 import io.github.lightman314.lightmanscurrency.network.client.messages.team.SMessageCreateTeamResponse;
 import io.github.lightman314.lightmanscurrency.network.client.messages.trader.SMessageStorageInteraction;
 import io.github.lightman314.lightmanscurrency.network.client.messages.trader.SMessageSyncUserCount;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.PlayChannelHandler;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
@@ -24,9 +26,8 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
+@Environment(EnvType.CLIENT)
 public class LCClientPacketHandler implements PlayChannelHandler {
-
-	public static final Identifier CHANNEL = new Identifier(LightmansCurrency.MODID, "server_to_client");
 
 	private final Map<Identifier,IClientPacketHandler> PACKET_HANDLERS = new HashMap<>();
 

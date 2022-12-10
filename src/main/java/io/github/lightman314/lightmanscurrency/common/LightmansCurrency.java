@@ -36,6 +36,7 @@ import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.types.*;
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.*;
 import io.github.lightman314.lightmanscurrency.config.Config;
+import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -80,7 +81,7 @@ public class LightmansCurrency implements ModInitializer {
         VillagerTradeManager.registerVillagerTrades();
 
         //Setup Server Packet Listener
-        ServerPlayNetworking.registerGlobalReceiver(LCServerPacketHandler.CHANNEL, new LCServerPacketHandler());
+        ServerPlayNetworking.registerGlobalReceiver(PacketChannels.CLIENT_TO_SERVER, new LCServerPacketHandler());
 
         //Register Event Listeners
         this.registerEventListeners();

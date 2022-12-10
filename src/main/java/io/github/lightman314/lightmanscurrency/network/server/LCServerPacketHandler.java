@@ -31,8 +31,6 @@ import net.minecraft.util.Identifier;
 
 public class LCServerPacketHandler implements PlayChannelHandler {
 
-	public static final Identifier CHANNEL = new Identifier(LightmansCurrency.MODID, "client_to_server");
-	
 	private final Map<Identifier,IServerPacketHandler> PACKET_HANDLERS = new HashMap<>();
 	
 	public LCServerPacketHandler() {

@@ -1,5 +1,6 @@
 package io.github.lightman314.lightmanscurrency.network.server;
 
+import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.PacketByteBuf;
@@ -18,6 +19,6 @@ public abstract class ClientToServerPacket {
 	}
 	protected abstract void encode(PacketByteBuf buffer);
 	
-	public final void sendToServer() { ClientPlayNetworking.send(LCServerPacketHandler.CHANNEL, this.encode()); }
+	public final void sendToServer() { ClientPlayNetworking.send(PacketChannels.CLIENT_TO_SERVER, this.encode()); }
 	
 }

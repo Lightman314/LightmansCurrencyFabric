@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.network.client;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -37,8 +38,8 @@ public abstract class ServerToClientPacket {
 	}
 
 	public final void sendTo(PlayerEntity player) { if(player instanceof ServerPlayerEntity) this.sendTo((ServerPlayerEntity) player);}
-	public final void sendTo(ServerPlayerEntity player) { ServerPlayNetworking.send(player, LCClientPacketHandler.CHANNEL, this.encode()); }
+	public final void sendTo(ServerPlayerEntity player) { ServerPlayNetworking.send(player, PacketChannels.SERVER_TO_CLIENT, this.encode()); }
 
-	public final void sendTo(PacketSender packetSender) { packetSender.sendPacket(LCClientPacketHandler.CHANNEL, this.encode()); }
+	public final void sendTo(PacketSender packetSender) { packetSender.sendPacket(PacketChannels.SERVER_TO_CLIENT, this.encode()); }
 
 }
