@@ -34,13 +34,13 @@ public class CoinpileBlock extends CoinBlock implements IRotatableBlock, Waterlo
 	
 	public CoinpileBlock(Settings properties, ItemConvertible coinItem)
 	{
-		this(properties, coinItem, LazyShapes.SHORT_BOX_T);
+		this(properties, coinItem, LazyShapes.SHORT_BOX);
 	}
 	
 	public CoinpileBlock(Settings properties, ItemConvertible coinItem, VoxelShape shape)
 	{
 		super(properties, coinItem);
-		this.shape = shape != null ? shape : LazyShapes.SHORT_BOX_T;
+		this.shape = shape != null ? shape : LazyShapes.SHORT_BOX;
 		this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
 	}
 	
@@ -52,7 +52,7 @@ public class CoinpileBlock extends CoinBlock implements IRotatableBlock, Waterlo
 	public BlockState getPlacementState(ItemPlacementContext context) {
 		BlockPos blockpos = context.getBlockPos();
 		FluidState fluidstate = context.getWorld().getFluidState(blockpos);
-		return super.getPlacementState(context).with(FACING, context.getPlayerLookDirection()).with(WATERLOGGED, Boolean.valueOf(fluidstate.isOf(Fluids.WATER)));
+		return super.getPlacementState(context).with(FACING, context.getPlayerFacing()).with(WATERLOGGED, fluidstate.isOf(Fluids.WATER));
 	}
 	
 	@Override
@@ -88,16 +88,9 @@ public class CoinpileBlock extends CoinBlock implements IRotatableBlock, Waterlo
 	
 	@Override
 	public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
-		switch(type) {
-		case LAND:
-			return false;
-		case WATER:
+		if(type == NavigationType.WATER)
 			return world.getFluidState(pos).isIn(FluidTags.WATER);
-		case AIR:
-			return false;
-		default:
-			return false;
-		}
+		return false;
 	}
 	
 }

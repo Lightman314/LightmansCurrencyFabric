@@ -25,36 +25,40 @@ public class LazyShapes {
 	
 	//Half Box
 	public static final VoxelShape SHORT_BOX = Block.createCuboidShape(0d,0d,0d,16d,8d,16d);
-	public static final VoxelShape SHORT_BOX_T = Block.createCuboidShape(0.01d,0d,0.01d,15.99d,8d,15.99d);
+	//public static final VoxelShape SHORT_BOX_T = Block.createCuboidShape(0.01d,0d,0.01d,15.99d,8d,15.99d);
 	public static final Function<Direction,VoxelShape> SHORT_BOX_SHAPE = lazySingleShape(SHORT_BOX);
-	public static final Function<Direction,VoxelShape> SHORT_BOX_SHAPE_T = lazySingleShape(SHORT_BOX_T);
+	//public static final Function<Direction,VoxelShape> SHORT_BOX_SHAPE_T = lazySingleShape(SHORT_BOX_T);
+
 	//Full Box
 	public static final VoxelShape BOX = Block.createCuboidShape(0d,0d,0d,16d,16d,16d);
-	public static final VoxelShape BOX_T = Block.createCuboidShape(0.01d,0d,0.01d,15.99d,16d,15.99d);
+	//public static final VoxelShape BOX_T = Block.createCuboidShape(0.01d,0d,0.01d,15.99d,16d,15.99d);
 	public static final Function<Direction,VoxelShape> BOX_SHAPE = lazySingleShape(BOX);
-	public static final Function<Direction,VoxelShape> BOX_SHAPE_T = lazySingleShape(BOX_T);
+	//public static final Function<Direction,VoxelShape> BOX_SHAPE_T = lazySingleShape(BOX_T);
+
 	//Tall Box
 	public static final VoxelShape TALL_BOX = Block.createCuboidShape(0d,0d,0d,16d,32d,16d);
-	public static final VoxelShape TALL_BOX_T = Block.createCuboidShape(0.01d,0d,0.01d,15.99d,32d,15.99d);
+	//public static final VoxelShape TALL_BOX_T = Block.createCuboidShape(0.01d,0d,0.01d,15.99d,32d,15.99d);
 	public static final BiFunction<Direction,Boolean,VoxelShape> TALL_BOX_SHAPE = lazyTallSingleShape(TALL_BOX);
-	public static final BiFunction<Direction,Boolean,VoxelShape> TALL_BOX_SHAPE_T = lazyTallSingleShape(TALL_BOX_T);
+	//public static final BiFunction<Direction,Boolean,VoxelShape> TALL_BOX_SHAPE_T = lazyTallSingleShape(TALL_BOX_T);
+
 	//Wide Box
 	public static final VoxelShape WIDE_BOX_NORTH = Block.createCuboidShape(0d,0d,0d,32d,16d,16d);
 	public static final VoxelShape WIDE_BOX_EAST = Block.createCuboidShape(0d,0d,0d,16d,16d,32d);
 	public static final VoxelShape WIDE_BOX_SOUTH = Block.createCuboidShape(-16d,0d,0d,16d,16d,16d);
 	public static final VoxelShape WIDE_BOX_WEST = Block.createCuboidShape(0d,0d,-16d,16d,16d,16d);
 	public static final BiFunction<Direction,Boolean,VoxelShape> WIDE_BOX_SHAPE = lazyWideDirectionalShape(WIDE_BOX_NORTH,WIDE_BOX_EAST,WIDE_BOX_SOUTH,WIDE_BOX_WEST);
+
 	//Tall & Wide Box
 	public static final VoxelShape TALL_WIDE_BOX_NORTH = Block.createCuboidShape(0d,0d,0d,32d,32d,16d);
 	public static final VoxelShape TALL_WIDE_BOX_EAST = Block.createCuboidShape(0d,0d,0d,16d,32d,32d);
 	public static final VoxelShape TALL_WIDE_BOX_SOUTH = Block.createCuboidShape(-16d,0d,0d,16d,32d,16d);
 	public static final VoxelShape TALL_WIDE_BOX_WEST = Block.createCuboidShape(0d,0d,-16d,16d,32d,16d);
-	public static final VoxelShape TALL_WIDE_BOX_NORTH_T = Block.createCuboidShape(0.01d,0d,0.01d,31.99d,32d,15.99d);
-	public static final VoxelShape TALL_WIDE_BOX_EAST_T = Block.createCuboidShape(0.01d,0d,0.01d,15.99d,32d,31.99d);
-	public static final VoxelShape TALL_WIDE_BOX_SOUTH_T = Block.createCuboidShape(-15.99d,0d,0.01d,15.99d,32d,15.99d);
-	public static final VoxelShape TALL_WIDE_BOX_WEST_T = Block.createCuboidShape(0.01d,0d,-15.99d,15.99d,32d,15.99d);
+	//public static final VoxelShape TALL_WIDE_BOX_NORTH_T = Block.createCuboidShape(0.01d,0d,0.01d,31.99d,32d,15.99d);
+	//public static final VoxelShape TALL_WIDE_BOX_EAST_T = Block.createCuboidShape(0.01d,0d,0.01d,15.99d,32d,31.99d);
+	//public static final VoxelShape TALL_WIDE_BOX_SOUTH_T = Block.createCuboidShape(-15.99d,0d,0.01d,15.99d,32d,15.99d);
+	//public static final VoxelShape TALL_WIDE_BOX_WEST_T = Block.createCuboidShape(0.01d,0d,-15.99d,15.99d,32d,15.99d);
 	public static final TriFunction<Direction,Boolean,Boolean,VoxelShape> TALL_WIDE_BOX_SHAPE = lazyTallWideDirectionalShape(TALL_WIDE_BOX_NORTH,TALL_WIDE_BOX_EAST,TALL_WIDE_BOX_SOUTH,TALL_WIDE_BOX_WEST);
-	public static final TriFunction<Direction,Boolean,Boolean,VoxelShape> TALL_WIDE_BOX_SHAPE_T = lazyTallWideDirectionalShape(TALL_WIDE_BOX_NORTH_T,TALL_WIDE_BOX_EAST_T,TALL_WIDE_BOX_SOUTH_T,TALL_WIDE_BOX_WEST_T);
+	//public static final TriFunction<Direction,Boolean,Boolean,VoxelShape> TALL_WIDE_BOX_SHAPE_T = lazyTallWideDirectionalShape(TALL_WIDE_BOX_NORTH_T,TALL_WIDE_BOX_EAST_T,TALL_WIDE_BOX_SOUTH_T,TALL_WIDE_BOX_WEST_T);
 	
 	public static VoxelShape moveDown(VoxelShape shape) { return shape.offset(0f, -1d, 0d); }
 	

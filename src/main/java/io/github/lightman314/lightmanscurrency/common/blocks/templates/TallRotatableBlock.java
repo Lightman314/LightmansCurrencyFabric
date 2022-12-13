@@ -29,7 +29,7 @@ public class TallRotatableBlock extends RotatableBlock implements ITallBlock{
 	public static final BooleanProperty ISBOTTOM = Properties.BOTTOM;
 	private final BiFunction<Direction,Boolean,VoxelShape> shape;
 	
-	protected TallRotatableBlock(Settings properties) { this(properties, LazyShapes.TALL_BOX_SHAPE_T); }
+	protected TallRotatableBlock(Settings properties) { this(properties, LazyShapes.TALL_BOX_SHAPE); }
 	
 	protected TallRotatableBlock(Settings properties, VoxelShape shape) { this(properties, LazyShapes.lazyTallSingleShape(shape)); }
 	
@@ -43,12 +43,9 @@ public class TallRotatableBlock extends RotatableBlock implements ITallBlock{
 				.with(ISBOTTOM, true)
 		);
 	}
-	
+
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext contect)
-	{
-		return this.shape.apply(this.getFacing(state), this.getIsBottom(state));
-	}
+	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)  { return this.shape.apply(this.getFacing(state), this.getIsBottom(state)); }
 	
 	@Override
 	protected void appendProperties(Builder<Block, BlockState> builder)

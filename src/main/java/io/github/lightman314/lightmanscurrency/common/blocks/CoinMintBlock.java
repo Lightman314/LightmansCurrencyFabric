@@ -35,10 +35,7 @@ public class CoinMintBlock extends RotatableBlock implements BlockEntityProvider
 
 	private static final MutableText TITLE = Text.translatable("gui.lightmanscurrency.coinmint.title");
 	
-	public CoinMintBlock(Settings properties)
-	{
-		super(properties, createCuboidShape(1d,0d,1d,15d,16d,15d));
-	}
+	public CoinMintBlock(Settings properties) { super(properties, createCuboidShape(1d,0d,1d,15d,16d,15d)); }
 	
 	@Override
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new CoinMintBlockEntity(pos, state); }
@@ -78,10 +75,7 @@ public class CoinMintBlock extends RotatableBlock implements BlockEntityProvider
 		super.appendTooltip(stack, level, tooltip, flag);
 	}
 
-	private static class CoinMintMenuProvider implements ExtendedScreenHandlerFactory
-	{
-		private final BlockPos blockPos;
-		public CoinMintMenuProvider(BlockPos blockPos) { this.blockPos = blockPos; }
+	private record CoinMintMenuProvider(BlockPos blockPos) implements ExtendedScreenHandlerFactory {
 		@Override
 		public ScreenHandler createMenu(int id, PlayerInventory inventory, PlayerEntity player) { return new MintMenu(id, inventory, this.blockPos); }
 		@Override

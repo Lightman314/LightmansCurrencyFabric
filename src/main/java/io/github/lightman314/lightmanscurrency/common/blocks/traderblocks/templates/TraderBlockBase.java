@@ -45,12 +45,12 @@ public abstract class TraderBlockBase extends Block implements ITraderBlock, Blo
 
     private final VoxelShape shape;
 
-    public TraderBlockBase(Settings properties)  { this(properties, LazyShapes.BOX_T); }
+    public TraderBlockBase(Settings properties)  { this(properties, LazyShapes.BOX); }
 
-    public TraderBlockBase(Settings properties, VoxelShape shape)  { super(properties);this.shape = shape != null ? shape : LazyShapes.BOX_T; }
+    public TraderBlockBase(Settings properties, VoxelShape shape)  { super(properties); this.shape = shape != null ? shape : LazyShapes.BOX; }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView level, BlockPos pos, ShapeContext context)  {return this.shape; }
+    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)   {return this.shape; }
 
     protected boolean shouldMakeTrader(BlockState state) { return true; }
     protected abstract BlockEntity makeTrader(BlockPos pos, BlockState state);

@@ -86,8 +86,8 @@ public class ModBlocks {
 	
 	//Machines
 	//Misc Machines
-	public static final BlockItemPair MACHINE_ATM = build(new ATMBlock(FabricBlockSettings.of(Material.METAL).strength(3.0f, 6.0f).sounds(BlockSoundGroup.METAL)), LightmansCurrency.MACHINE_GROUP);
-	public static final BlockItemPair MACHINE_MINT = build(new CoinMintBlock(FabricBlockSettings.of(Material.METAL).strength(2f, Float.POSITIVE_INFINITY).sounds(BlockSoundGroup.METAL)), LightmansCurrency.MACHINE_GROUP);
+	public static final BlockItemPair MACHINE_ATM = build(new ATMBlock(FabricBlockSettings.of(Material.METAL).strength(3.0f, 6.0f).sounds(BlockSoundGroup.METAL).nonOpaque()), LightmansCurrency.MACHINE_GROUP);
+	public static final BlockItemPair MACHINE_MINT = build(new CoinMintBlock(FabricBlockSettings.of(Material.METAL).strength(2f, Float.POSITIVE_INFINITY).sounds(BlockSoundGroup.METAL).nonOpaque()), LightmansCurrency.MACHINE_GROUP);
 	//Cash Register
 	public static final BlockItemPair CASH_REGISTER = build(new CashRegisterBlock(FabricBlockSettings.of(Material.METAL).strength(3f,6f).sounds(BlockSoundGroup.METAL).nonOpaque(), Block.createCuboidShape(1d,0d,1d,15d,10d,15d)), LightmansCurrency.MACHINE_GROUP, CASH_REGISTER_ITEM);
 

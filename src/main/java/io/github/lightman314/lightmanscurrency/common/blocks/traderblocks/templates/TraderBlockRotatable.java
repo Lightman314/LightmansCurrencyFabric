@@ -24,14 +24,14 @@ public abstract class TraderBlockRotatable extends TraderBlockBase implements IR
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     private final Function<Direction, VoxelShape> shape;
 
-    protected TraderBlockRotatable(Settings properties) { this(properties, LazyShapes.BOX_SHAPE_T); }
+    protected TraderBlockRotatable(Settings properties) { this(properties, LazyShapes.BOX); }
 
     protected TraderBlockRotatable(Settings properties, VoxelShape shape) { this(properties, LazyShapes.lazySingleShape(shape)); }
 
     protected TraderBlockRotatable(Settings properties, Function<Direction,VoxelShape> shape) { super(properties); this.shape = shape; }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext context) { return super.getPlacementState(context).with(FACING, context.getPlayerLookDirection()); }
+    public BlockState getPlacementState(ItemPlacementContext context) { return super.getPlacementState(context).with(FACING, context.getPlayerFacing()); }
 
     @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {return state.with(FACING, rotation.rotate(state.get(FACING)));}
@@ -44,7 +44,7 @@ public abstract class TraderBlockRotatable extends TraderBlockBase implements IR
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView level, BlockPos pos, ShapeContext context) {return this.shape.apply(this.getFacing(state)); }
+    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)  {return this.shape.apply(this.getFacing(state)); }
 
     @Override
     public Direction getFacing(BlockState state)  {return state.get(FACING); }

@@ -35,7 +35,7 @@ public abstract class TraderBlockTallRotatable extends TraderBlockRotatable impl
     protected static final BooleanProperty ISBOTTOM = Properties.BOTTOM;
     private final BiFunction<Direction,Boolean, VoxelShape> shape;
 
-    protected TraderBlockTallRotatable(Settings properties) {this(properties, LazyShapes.TALL_BOX_SHAPE_T);}
+    protected TraderBlockTallRotatable(Settings properties) {this(properties, LazyShapes.TALL_BOX_SHAPE);}
 
     protected TraderBlockTallRotatable(Settings properties, VoxelShape shape) { this(properties, LazyShapes.lazyTallSingleShape(shape)); }
 
@@ -54,7 +54,7 @@ public abstract class TraderBlockTallRotatable extends TraderBlockRotatable impl
     protected boolean shouldMakeTrader(BlockState state) { return this.getIsBottom(state); }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView level, BlockPos pos, ShapeContext context) { return this.shape.apply(this.getFacing(state), this.getIsBottom(state)); }
+    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)  { return this.shape.apply(this.getFacing(state), this.getIsBottom(state)); }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)

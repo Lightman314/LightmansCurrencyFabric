@@ -31,7 +31,7 @@ public abstract class TraderBlockTallWideRotatable extends TraderBlockTallRotata
     protected static final BooleanProperty ISLEFT = Properties.ATTACHED;
     private final LazyShapes.TriFunction<Direction,Boolean,Boolean, VoxelShape> shape;
 
-    protected TraderBlockTallWideRotatable(Settings properties) { this(properties, LazyShapes.TALL_WIDE_BOX_SHAPE_T); }
+    protected TraderBlockTallWideRotatable(Settings properties) { this(properties, LazyShapes.TALL_WIDE_BOX_SHAPE); }
 
     protected TraderBlockTallWideRotatable(Settings properties, VoxelShape north, VoxelShape east, VoxelShape south, VoxelShape west)
     {
@@ -59,7 +59,7 @@ public abstract class TraderBlockTallWideRotatable extends TraderBlockTallRotata
     protected boolean shouldMakeTrader(BlockState state) { return this.getIsBottom(state) && this.getIsLeft(state); }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView level, BlockPos pos, ShapeContext context) { return this.shape.apply(this.getFacing(state), this.getIsBottom(state), this.getIsLeft(state)); }
+    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)  { return this.shape.apply(this.getFacing(state), this.getIsBottom(state), this.getIsLeft(state)); }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
