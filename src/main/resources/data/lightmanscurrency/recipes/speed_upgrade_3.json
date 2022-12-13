@@ -4,7 +4,7 @@
     "item": "lightmanscurrency:speed_upgrade_2"
   },
   "addition": {
-    "tag": "forge:gems/emerald"
+    "tag": "c:emeralds"
   },
   "result": {
     "item": "lightmanscurrency:speed_upgrade_3"

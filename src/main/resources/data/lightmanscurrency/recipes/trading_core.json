@@ -10,7 +10,7 @@
       "item": "minecraft:redstone"
     },
     "q": {
-      "tag": "forge:gems/quartz"
+      "tag": "c:quartz"
     },
     "d": {
       "item": "minecraft:dropper"

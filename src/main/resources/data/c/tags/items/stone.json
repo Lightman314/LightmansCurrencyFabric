@@ -1,0 +1,15 @@
+{
+    "replace": false,
+    "values": [
+        "minecraft:stone",
+        "minecraft:andesite",
+        "minecraft:diorite",
+        "minecraft:granite",
+        "minecraft:deepslate",
+        "minecraft:tuff",
+        "minecraft:infested_stone",
+        "minecraft:polished_andesite",
+        "minecraft:polished_diorite",
+        "minecraft:polished_granite"
+    ]
+}

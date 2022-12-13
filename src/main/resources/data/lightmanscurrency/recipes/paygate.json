@@ -7,7 +7,7 @@
   ],
   "key": {
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:iron_ingots"
     },
     "t": {
       "item": "minecraft:redstone_torch"

@@ -10,13 +10,13 @@
       "item": "lightmanscurrency:trading_core"
     },
     "g": {
-      "tag": "forge:glass/colorless"
+      "item": "minecraft:glass"
     },
     "i": {
       "item": "minecraft:black_concrete_powder"
     },
     "c": {
-      "tag": "forge:chests/wooden"
+      "tag": "c:wooden_chests"
     }
   },
   "result": {

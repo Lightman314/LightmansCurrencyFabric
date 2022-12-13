@@ -7,10 +7,10 @@
   ],
   "key": {
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:iron_ingots"
     },
     "g": {
-      "tag": "forge:glass_panes/colorless"
+      "item": "minecraft:glass_pane"
     },
     "r": {
       "item": "minecraft:redstone"

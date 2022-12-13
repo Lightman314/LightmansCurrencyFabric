@@ -11,7 +11,7 @@
       "item": "minecraft:brick"
     },
     "d": {
-      "tag": "forge:dyes/pink"
+      "tag": "c:dye_pink"
     }
   },
   "result": {

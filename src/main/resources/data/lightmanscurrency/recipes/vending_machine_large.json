@@ -11,13 +11,13 @@
       "item": "lightmanscurrency:vending_machine"
     },
     "g": {
-      "tag": "forge:glass/colorless"
+      "item": "minecraft:glass"
     },
     "i": {
-      "item": "minecraft:iron_ingot"
+      "tag": "c:iron_ingots"
     },
     "c": {
-      "tag": "forge:chests/wooden"
+      "tag": "c:wooden_chests"
     }
   },
   "result": {

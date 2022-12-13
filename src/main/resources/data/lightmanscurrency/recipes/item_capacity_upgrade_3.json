@@ -4,7 +4,7 @@
     "item": "lightmanscurrency:item_capacity_upgrade_2"
   },
   "addition": {
-    "tag": "forge:gems/diamond"
+    "tag": "c:diamonds"
   },
   "result": {
     "item": "lightmanscurrency:item_capacity_upgrade_3"

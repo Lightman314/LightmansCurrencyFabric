@@ -10,10 +10,10 @@
       "item": "lightmanscurrency:trading_core"
     },
     "g": {
-      "tag": "forge:glass/colorless"
+      "item": "minecraft:glass"
     },
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:iron_ingots"
     },
     "a": {
       "item": "minecraft:armor_stand"

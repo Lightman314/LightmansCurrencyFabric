@@ -4,7 +4,7 @@
     "item": "lightmanscurrency:item_capacity_upgrade_1"
   },
   "addition": {
-    "tag": "forge:ingots/gold"
+    "tag": "c:gold_ingots"
   },
   "result": {
     "item": "lightmanscurrency:item_capacity_upgrade_2"

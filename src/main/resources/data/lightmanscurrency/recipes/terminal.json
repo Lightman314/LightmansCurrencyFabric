@@ -10,13 +10,13 @@
       "item": "minecraft:ender_eye"
     },
     "g": {
-      "tag": "forge:glass/colorless"
+      "item": "minecraft:glass"
     },
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:iron_ingots"
     },
     "s": {
-      "tag": "forge:stone"
+      "tag": "c:stone"
     }
   },
   "result": {
