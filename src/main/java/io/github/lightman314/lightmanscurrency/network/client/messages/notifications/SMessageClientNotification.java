@@ -24,7 +24,7 @@ public class SMessageClientNotification extends ServerToClientPacket {
     protected void encode(PacketByteBuf buffer) { buffer.writeNbt(this.notification.save()); }
 
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        Notification notification = Notification.deserialize(buffer.readNbt());
+        Notification notification = Notification.deserialize(buffer.readUnlimitedNbt());
         if(notification != null)
         {
             if(!NotificationEvent.CLIENT_NOTIFICATION_EVENT.invoker().display(new NotificationEvent.NotificationReceivedOnClient(client.player.getUuid(), ClientNotificationData.GetNotifications(), notification)))

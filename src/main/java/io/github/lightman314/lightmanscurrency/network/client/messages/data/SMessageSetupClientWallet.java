@@ -32,7 +32,7 @@ public class SMessageSetupClientWallet extends ServerToClientPacket {
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         Map<UUID, WalletHandler> walletData = new HashMap<>();
-        NbtList walletList = buffer.readNbt().getList("PlayerWalletData", NbtElement.COMPOUND_TYPE);
+        NbtList walletList = buffer.readUnlimitedNbt().getList("PlayerWalletData", NbtElement.COMPOUND_TYPE);
         for(int i = 0; i < walletList.size(); ++i)
         {
             NbtCompound tag = walletList.getCompound(i);

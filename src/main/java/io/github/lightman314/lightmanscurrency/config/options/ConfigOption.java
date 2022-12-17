@@ -6,7 +6,6 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.config.Config;
 import io.github.lightman314.lightmanscurrency.config.pathing.IConfigAction;
 import io.github.lightman314.lightmanscurrency.config.pathing.JsonStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -45,7 +44,7 @@ public abstract class ConfigOption<T> implements IConfigAction, Supplier<T> {
     protected abstract void writeValue(JsonObject json, String name);
     public final T get() {
         if(this.parent != null && !this.parent.isLoaded())
-            this.parent.reloadValues();
+            this.parent.reloadFromFile();
         return this.getInternal();
     }
     protected abstract T getInternal();

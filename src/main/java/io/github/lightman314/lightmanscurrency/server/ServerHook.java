@@ -23,7 +23,7 @@ public class ServerHook {
         }
     }
 
-    public static void onServerClose(MinecraftServer server) { ServerHook.server = null; }
+    public static void onServerClose(MinecraftServer ignored) { ServerHook.server = null; }
 
 
 

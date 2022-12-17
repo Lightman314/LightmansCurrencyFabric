@@ -26,7 +26,7 @@ public class SMessageUpdateClientNotifications extends ServerToClientPacket {
 
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        ClientNotificationData.UpdateNotifications(NotificationData.loadFrom(buffer.readNbt()));
+        ClientNotificationData.UpdateNotifications(NotificationData.loadFrom(buffer.readUnlimitedNbt()));
     }
 
 }

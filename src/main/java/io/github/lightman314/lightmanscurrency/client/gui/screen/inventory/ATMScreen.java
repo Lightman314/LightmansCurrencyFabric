@@ -140,8 +140,8 @@ public class ATMScreen extends MenuScreen<ATMMenu>{
         this.changeTab(tabIndex);
     }
 
-    public void containerTick()
-    {
+    @Override
+    public void handledScreenTick() {
         this.currentTab().tick();
     }
 

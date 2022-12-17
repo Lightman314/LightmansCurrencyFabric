@@ -30,7 +30,7 @@ public class CMessageBankTransferPlayer extends ClientToServerPacket {
         if(player.currentScreenHandler instanceof BankAccount.IBankAccountAdvancedMenu menu)
         {
             BankAccount.AccountReference destination = BankAccount.GenerateReference(false, PlayerReference.of(false, buffer.readString()));
-            MutableText response = BankAccount.TransferCoins(menu, new CoinValue(buffer.readNbt()), destination);
+            MutableText response = BankAccount.TransferCoins(menu, new CoinValue(buffer.readUnlimitedNbt()), destination);
             new SMessageBankTransferResponse(response).sendTo(responseSender);
         }
     }

@@ -24,7 +24,7 @@ public class CMessageFlagNotificationsSeen extends ClientToServerPacket {
     protected void encode(PacketByteBuf buffer) { buffer.writeNbt(this.category.save()); }
 
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        NotificationCategory category = NotificationCategory.deserialize(buffer.readNbt());
+        NotificationCategory category = NotificationCategory.deserialize(buffer.readUnlimitedNbt());
         if(category != null)
         {
             NotificationData data = NotificationSaveData.GetNotifications(player);

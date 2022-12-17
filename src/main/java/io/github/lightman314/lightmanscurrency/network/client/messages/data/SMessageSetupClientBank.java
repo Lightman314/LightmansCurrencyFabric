@@ -32,7 +32,7 @@ public class SMessageSetupClientBank extends ServerToClientPacket {
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         Map<UUID, BankAccount> bankAccounts = new HashMap<>();
-        NbtList accountList = buffer.readNbt().getList("BankAccounts", NbtElement.COMPOUND_TYPE);
+        NbtList accountList = buffer.readUnlimitedNbt().getList("BankAccounts", NbtElement.COMPOUND_TYPE);
         for(int i = 0; i < accountList.size(); ++i)
         {
             NbtCompound compound = accountList.getCompound(i);

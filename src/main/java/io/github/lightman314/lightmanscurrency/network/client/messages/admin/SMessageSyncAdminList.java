@@ -23,13 +23,16 @@ public class SMessageSyncAdminList extends ServerToClientPacket {
     public SMessageSyncAdminList(List<UUID> serverAdminList) { super(PACKET_ID); this.serverAdminList = serverAdminList; }
 
     @Override
-    public void encode(PacketByteBuf buffer) { buffer.writeInt(this.serverAdminList.size()); this.serverAdminList.forEach(admin -> buffer.writeUuid(admin)); }
+    public void encode(PacketByteBuf buffer) {
+        buffer.writeInt(this.serverAdminList.size());
+        this.serverAdminList.forEach(buffer::writeUuid);
+    }
 
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         List<UUID> clientAdminList = new ArrayList<>();
         int count = buffer.readInt();
-        for(int i = buffer.readInt(); i > 0; i--)
+        for(int i = count; i > 0; i--)
             clientAdminList.add(buffer.readUuid());
         CommandLCAdmin.loadAdminPlayers(clientAdminList);
     }

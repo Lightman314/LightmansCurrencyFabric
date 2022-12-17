@@ -21,13 +21,13 @@ public class CMessageBankInteraction extends ClientToServerPacket {
     public CMessageBankInteraction(boolean deposit, CoinValue amount) { super(PACKET_ID); this.deposit = deposit; this.amount = amount; }
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeBoolean(this.deposit); this.amount.save(new NbtCompound(), CoinValue.DEFAULT_KEY); }
+    protected void encode(PacketByteBuf buffer) { buffer.writeBoolean(this.deposit); this.amount.encode(buffer); }
 
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         if(player.currentScreenHandler instanceof BankAccount.IBankAccountMenu menu)
         {
             boolean isDeposit = buffer.readBoolean();
-            CoinValue amount = new CoinValue(buffer.readNbt());
+            CoinValue amount = CoinValue.decode(buffer);
             if(isDeposit)
                 BankAccount.DepositCoins(menu, amount);
             else

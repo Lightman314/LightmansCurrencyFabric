@@ -172,7 +172,8 @@ public class WalletBankScreen extends MenuScreen<WalletBankMenu>{
         this.changeTab(tabIndex);
     }
 
-    public void containerTick()
+    @Override
+    public void handledScreenTick()
     {
         this.currentTab().tick();
     }

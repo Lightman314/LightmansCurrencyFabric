@@ -25,7 +25,7 @@ public class SMessageUpdateClientTrader extends ServerToClientPacket {
 
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        ClientTraderData.UpdateTrader(buffer.readNbt());
+        ClientTraderData.UpdateTrader(buffer.readUnlimitedNbt());
     }
 
 }

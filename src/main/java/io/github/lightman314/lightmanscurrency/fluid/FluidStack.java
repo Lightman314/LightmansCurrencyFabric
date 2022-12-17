@@ -74,7 +74,7 @@ public class FluidStack implements FluidVariant {
             return FluidStack.EMPTY;
         Fluid fluid = Registry.FLUID.get(new Identifier(buffer.readString()));
         long quantity = buffer.readLong();
-        NbtCompound nbt = buffer.readBoolean() ? buffer.readNbt() : null;
+        NbtCompound nbt = buffer.readBoolean() ? buffer.readUnlimitedNbt() : null;
         FluidStack stack = new FluidStack(fluid, quantity, nbt);
         return stack.isEmpty() ? FluidStack.EMPTY : stack;
     }

@@ -27,7 +27,7 @@ public class CMessageTraderMessage extends ClientToServerPacket {
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         TraderData trader = TraderSaveData.GetTrader(false, buffer.readLong());
         if(trader != null)
-            trader.receiveNetworkMessage(player, buffer.readNbt());
+            trader.receiveNetworkMessage(player, buffer.readUnlimitedNbt());
     }
 
 }

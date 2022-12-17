@@ -20,6 +20,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -145,8 +146,15 @@ public class CoinValue
         return compound;
     }
 
+    public void encode(PacketByteBuf buffer) {
+        NbtCompound tag = this.save(new NbtCompound(), CoinValue.DEFAULT_KEY);
+        buffer.writeNbt(tag);
+    }
+
     public void load(NbtCompound compound, String key)
     {
+        if(compound == null)
+            return;
         if(compound.contains(key, NbtElement.LIST_TYPE))
         {
             //Read full value
@@ -193,6 +201,13 @@ public class CoinValue
             }
         }
 
+    }
+
+    public static CoinValue decode(PacketByteBuf buffer) {
+        NbtCompound tag = buffer.readUnlimitedNbt();
+        CoinValue value = new CoinValue();
+        value.load(tag, CoinValue.DEFAULT_KEY);
+        return value;
     }
 
     public void addValue(CoinValue other)

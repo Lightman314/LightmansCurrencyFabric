@@ -31,7 +31,7 @@ public class SMessageSetupClientTeam extends ServerToClientPacket {
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         List<Team> teams = new ArrayList<>();
-        NbtList teamList = buffer.readNbt().getList("Teams", NbtElement.COMPOUND_TYPE);
+        NbtList teamList = buffer.readUnlimitedNbt().getList("Teams", NbtElement.COMPOUND_TYPE);
         for(int i = 0; i < teamList.size(); ++i)
         {
             Team team = Team.load(teamList.getCompound(i));

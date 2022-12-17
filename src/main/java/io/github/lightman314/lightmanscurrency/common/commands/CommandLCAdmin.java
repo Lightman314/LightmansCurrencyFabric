@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -22,6 +21,7 @@ import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.types.PlayerWhitelist;
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.TraderSearchFilter;
 import io.github.lightman314.lightmanscurrency.network.client.messages.admin.SMessageSyncAdminList;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.command.argument.BlockPosArgumentType;
@@ -100,16 +100,15 @@ public class CommandLCAdmin {
         World level = source.getWorld();
 
         BlockState state = level.getBlockState(pos);
-        BlockEntity be = null;
+        BlockEntity be;
         if(state.getBlock() instanceof ITraderBlock)
             be = ((ITraderBlock)state.getBlock()).getBlockEntity(state, level, pos);
         else
             be = level.getBlockEntity(pos);
 
-        if(be instanceof TraderBlockEntity<?>)
+        if(be instanceof TraderBlockEntity<?> trader)
         {
-            TraderBlockEntity<?> t = (TraderBlockEntity<?>)be;
-            t.saveCurrentTraderAsCustomTrader();
+            trader.saveCurrentTraderAsCustomTrader();
             source.sendFeedback(Text.translatable("command.lightmanscurrency.lcadmin.setCustomTrader.success"), true);
             return 1;
         }
@@ -153,7 +152,7 @@ public class CommandLCAdmin {
 
         String searchText = MessageArgumentType.getMessage(commandContext, "searchText").getString();
 
-        List<TraderData> results = TraderSaveData.GetAllTraders(false).stream().filter(trader -> TraderSearchFilter.CheckFilters(trader, searchText)).collect(Collectors.toList());
+        List<TraderData> results = TraderSaveData.GetAllTraders(false).stream().filter(trader -> TraderSearchFilter.CheckFilters(trader, searchText)).toList();
         if(results.size() > 0)
         {
 
@@ -243,9 +242,6 @@ public class CommandLCAdmin {
         TraderData trader = TraderArgument.getTrader(commandContext, "traderID");
         source.sendFeedback(Text.literal(trader.save().asString()), false);
 
-        //TODO send debug packet to debug client-side?
-        //if(source.getPlayer() != null)
-        //    LightmansCurrencyPacketHandler.instance.send(LightmansCurrencyPacketHandler.getTarget(source.getPlayer()), new MessageDebugTrader(trader.getID()));
         return 1;
     }
 
@@ -257,9 +253,8 @@ public class CommandLCAdmin {
         TraderData trader = TraderArgument.getTrader(commandContext, "traderID");
 
         TradeRule rule = TradeRule.getRule(PlayerWhitelist.TYPE, trader.getRules());
-        if(rule instanceof PlayerWhitelist)
+        if(rule instanceof PlayerWhitelist whitelist)
         {
-            PlayerWhitelist whitelist = (PlayerWhitelist)rule;
             Collection<ServerPlayerEntity> players = EntityArgumentType.getPlayers(commandContext, "player");
             int count = 0;
             for(ServerPlayerEntity player : players)
@@ -282,30 +277,18 @@ public class CommandLCAdmin {
 
     }
 
-
-
     public static boolean isAdminPlayer(PlayerEntity player) { return adminPlayers.contains(player.getUuid()) && player.hasPermissionLevel(2); }
-
 
     private static void ToggleAdminPlayer(ServerPlayerEntity player) {
         UUID playerID = player.getUuid();
         if(adminPlayers.contains(playerID))
-        {
             adminPlayers.remove(playerID);
-            if(!player.world.isClient)
-            {
-                new SMessageSyncAdminList(adminPlayers).sendToAll();;
-            }
-        }
         else
-        {
             adminPlayers.add(playerID);
-            if(!player.world.isClient)
-            {
-                new SMessageSyncAdminList(adminPlayers).sendToAll();;
-            }
-        }
+        new SMessageSyncAdminList(adminPlayers).sendToAll();
     }
+
+    public static void SendAdminList(PacketSender channel) { new SMessageSyncAdminList(adminPlayers).sendTo(channel); }
 
     public static void loadAdminPlayers(List<UUID> serverAdminList) { adminPlayers = serverAdminList; }
 

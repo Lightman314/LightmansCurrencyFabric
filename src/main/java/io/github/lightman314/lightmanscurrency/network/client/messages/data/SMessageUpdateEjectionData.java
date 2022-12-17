@@ -26,7 +26,7 @@ public class SMessageUpdateEjectionData extends ServerToClientPacket {
 
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        ClientEjectionData.UpdateEjectionData(buffer.readNbt());
+        ClientEjectionData.UpdateEjectionData(buffer.readUnlimitedNbt());
     }
 
 }

@@ -43,7 +43,7 @@ public class CMessageAddPersistentAuction extends ClientToServerPacket {
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         if(CommandLCAdmin.isAdminPlayer(player))
         {
-            NbtCompound auctionNbt = buffer.readNbt();
+            NbtCompound auctionNbt = buffer.readUnlimitedNbt();
             String id = buffer.readString();
 
             boolean generateID = id.isBlank();

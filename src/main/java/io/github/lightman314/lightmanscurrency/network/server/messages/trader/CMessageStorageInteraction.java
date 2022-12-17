@@ -23,6 +23,6 @@ public class CMessageStorageInteraction extends ClientToServerPacket {
 
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         if(player.currentScreenHandler instanceof TraderStorageMenu storageMenu)
-            storageMenu.receiveMessage(buffer.readNbt());
+            storageMenu.receiveMessage(buffer.readUnlimitedNbt());
     }
 }

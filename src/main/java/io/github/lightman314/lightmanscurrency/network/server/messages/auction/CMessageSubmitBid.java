@@ -32,7 +32,7 @@ public class CMessageSubmitBid extends ClientToServerPacket {
         {
             TraderData data = TraderSaveData.GetTrader(false, buffer.readLong());
             if(data instanceof AuctionHouseTrader ah)
-                ah.makeBid(player, menu, buffer.readInt(), new CoinValue(buffer.readNbt()));
+                ah.makeBid(player, menu, buffer.readInt(), new CoinValue(buffer.readUnlimitedNbt()));
         }
     }
 

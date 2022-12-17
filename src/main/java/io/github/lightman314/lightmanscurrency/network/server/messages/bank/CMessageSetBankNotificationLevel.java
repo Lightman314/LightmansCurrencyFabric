@@ -25,7 +25,7 @@ public class CMessageSetBankNotificationLevel extends ClientToServerPacket {
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         if(player.currentScreenHandler instanceof BankAccount.IBankAccountAdvancedMenu menu)
         {
-            menu.setNotificationLevel(new CoinValue(buffer.readNbt()));
+            menu.setNotificationLevel(new CoinValue(buffer.readUnlimitedNbt()));
         }
     }
 }

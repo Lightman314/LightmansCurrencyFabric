@@ -28,6 +28,6 @@ public class CMessageHandlerMessage extends ClientToServerPacket {
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         BlockEntity blockEntity = player.world.getBlockEntity(buffer.readBlockPos());
         if(blockEntity instanceof TraderInterfaceBlockEntity traderInterface)
-            traderInterface.receiveHandlerMessage(new Identifier(buffer.readString()), player, buffer.readNbt());
+            traderInterface.receiveHandlerMessage(new Identifier(buffer.readString()), player, buffer.readUnlimitedNbt());
     }
 }

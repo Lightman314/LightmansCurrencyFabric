@@ -54,25 +54,42 @@ public abstract class Config {
         return new JsonObject();
     }
 
-    private void writeFileJson() {
-        try{
-            JsonStack jsonStack = new JsonStack();
-            for(IConfigAction option : this.getActions())
-                option.writeAction(jsonStack);
-            File file = new File(this.getFilePath());
-            FileUtil.writeStringToFile(file, FileUtil.GSON.toJson(jsonStack.getRoot()));
-        } catch(Throwable t) { LightmansCurrency.LogError("Error write config file at '" + this.getFilePath() + "'!");  }
+    protected final JsonObject getAsJson() {
+        JsonStack jsonStack = new JsonStack();
+        for(IConfigAction option : this.getActions())
+            option.writeAction(jsonStack);
+        return jsonStack.getRoot();
     }
 
-    public void reloadValues() {
+    private void writeJsonToFile() {
+        try{
+            JsonObject json = this.getAsJson();
+            File file = new File(this.getFilePath());
+            FileUtil.writeStringToFile(file, FileUtil.GSON.toJson(json));
+        } catch(Throwable t) { LightmansCurrency.LogError("Error writing config file at '" + this.getFilePath() + "'!", t);  }
+    }
+
+    public final void reloadFromFile() {
         try{
             JsonStack jsonStack = new JsonStack(this.getFileJson());
             for(IConfigAction option : this.getActions())
                 option.readAction(jsonStack);
-        } catch(Throwable t) { LightmansCurrency.LogError("Error loading config file at '" + this.getFilePath() + "'!"); }
-        this.writeFileJson();
+        } catch(Throwable t) { LightmansCurrency.LogError("Error loading config file at '" + this.getFilePath() + "'!", t); }
+        this.writeJsonToFile();
+        this.loaded = true;
+        this.afterReload();
+    }
+
+    protected final void reloadFromJson(JsonObject json) {
+        try{
+            JsonStack jsonStack = new JsonStack(json);
+            for(IConfigAction option : this.getActions())
+                option.readAction(jsonStack);
+        } catch(Throwable t) { LightmansCurrency.LogError("Error loading config file at '" + this.getFilePath() + "'!", t); }
         this.loaded = true;
     }
+
+    protected void afterReload() {}
 
     public static void register(Config config) {
         if(registeredConfigs.contains(config) || config == null)
@@ -84,7 +101,7 @@ public abstract class Config {
         for(Config c : registeredConfigs)
         {
             if(c != null)
-                c.reloadValues();
+                c.reloadFromFile();
         }
     }
 

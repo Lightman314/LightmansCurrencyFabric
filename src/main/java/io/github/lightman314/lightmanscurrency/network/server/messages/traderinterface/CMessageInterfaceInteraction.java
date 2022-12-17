@@ -23,7 +23,7 @@ public class CMessageInterfaceInteraction extends ClientToServerPacket {
 
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         if(player.currentScreenHandler instanceof TraderInterfaceMenu menu)
-            menu.receiveMessage(buffer.readNbt());
+            menu.receiveMessage(buffer.readUnlimitedNbt());
     }
 
 }

@@ -26,6 +26,6 @@ public class SMessageStorageInteraction extends ServerToClientPacket {
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         if(client.player.currentScreenHandler instanceof TraderStorageMenu storageMenu)
-            storageMenu.receiveMessage(buffer.readNbt());
+            storageMenu.receiveMessage(buffer.readUnlimitedNbt());
     }
 }

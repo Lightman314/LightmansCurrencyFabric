@@ -63,9 +63,7 @@ public class MintScreen extends MenuScreen<MintMenu>{
     @Override
     protected void handledScreenTick()
     {
-
         this.buttonMint.visible = this.handler.coinMint.validMintInput();
-
     }
 
     @Override

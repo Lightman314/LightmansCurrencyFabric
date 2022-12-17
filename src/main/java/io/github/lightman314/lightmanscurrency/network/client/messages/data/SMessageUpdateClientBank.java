@@ -24,6 +24,6 @@ public class SMessageUpdateClientBank extends ServerToClientPacket {
 
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        ClientBankData.UpdateBankAccount(buffer.readNbt());
+        ClientBankData.UpdateBankAccount(buffer.readUnlimitedNbt());
     }
 }

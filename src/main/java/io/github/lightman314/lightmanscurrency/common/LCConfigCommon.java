@@ -6,7 +6,7 @@ import io.github.lightman314.lightmanscurrency.common.loot.LootManager;
 import io.github.lightman314.lightmanscurrency.common.money.CoinData;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
-import io.github.lightman314.lightmanscurrency.config.Config;
+import io.github.lightman314.lightmanscurrency.config.SynchronizedConfig;
 import io.github.lightman314.lightmanscurrency.config.options.*;
 import io.github.lightman314.lightmanscurrency.config.options.custom.IdentifierListOption;
 import io.github.lightman314.lightmanscurrency.config.options.custom.VillagerItemOverrideListOption;
@@ -16,7 +16,7 @@ import net.minecraft.util.Identifier;
 
 import java.text.DecimalFormat;
 
-public class LCConfigCommon extends Config {
+public class LCConfigCommon extends SynchronizedConfig {
 
     public static final LCConfigCommon INSTANCE = new LCConfigCommon(ConfigBuilder.create());
 
@@ -182,7 +182,7 @@ public class LCConfigCommon extends Config {
 
     private LCConfigCommon(ConfigBuilder builder) {
 
-        super(LightmansCurrency.MODID + "/config-common", builder);
+        super(LightmansCurrency.MODID + "/config-common", new Identifier(LightmansCurrency.MODID, "config_common"), builder);
 
         //Crafting Settings
         builder.comment("Crafting Settings").push("crafting");

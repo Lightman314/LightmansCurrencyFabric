@@ -24,6 +24,6 @@ public class SMessageUpdateClientTeam extends ServerToClientPacket {
 
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        ClientTeamData.UpdateTeam(buffer.readNbt());
+        ClientTeamData.UpdateTeam(buffer.readUnlimitedNbt());
     }
 }

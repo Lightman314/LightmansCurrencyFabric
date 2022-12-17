@@ -5,6 +5,7 @@ import io.github.lightman314.lightmanscurrency.common.Reference.*;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
 import io.github.lightman314.lightmanscurrency.common.callbacks.EntityDeathCallback;
+import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.core.*;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionSaveData;
 import io.github.lightman314.lightmanscurrency.common.enchantments.EnchantmentEvents;
@@ -36,6 +37,7 @@ import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.types.*;
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.*;
 import io.github.lightman314.lightmanscurrency.config.Config;
+import io.github.lightman314.lightmanscurrency.config.SynchronizedConfig;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -178,7 +180,8 @@ public class LightmansCurrency implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> WalletSaveData.OnPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> MoneyUtil.onPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> NotificationSaveData.OnPlayerLogin(handler.player, sender));
-
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> CommandLCAdmin.SendAdminList(sender));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> SynchronizedConfig.sendConfigSyncPackets(sender));
 
         //Killed by other entity event
         LootTableEvents.MODIFY.register(LootManager::onLootTableLoaded);

@@ -29,7 +29,7 @@ public class SMessageUpdateClientWallet extends ServerToClientPacket {
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         UUID playerID = buffer.readUuid();
         WalletHandler walletHandler = new WalletHandler();
-        walletHandler.load(buffer.readNbt());
+        walletHandler.load(buffer.readUnlimitedNbt());
         ClientWalletData.UpdateWallet(playerID, walletHandler);
     }
 

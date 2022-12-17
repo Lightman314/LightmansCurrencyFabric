@@ -23,6 +23,7 @@ import io.github.lightman314.lightmanscurrency.common.menu.slots.ticket.TicketSl
 import io.github.lightman314.lightmanscurrency.common.menu.slots.trader.UpgradeInputSlot;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.config.Config;
+import io.github.lightman314.lightmanscurrency.config.network.SynchronizedConfigPacketHandler;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.network.client.LCClientPacketHandler;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
@@ -51,6 +52,7 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 
 		LightmansCurrency.LogInfo("Hello from client init!");
 		ClientPlayNetworking.registerGlobalReceiver(PacketChannels.SERVER_TO_CLIENT, new LCClientPacketHandler());
+		ClientPlayNetworking.registerGlobalReceiver(PacketChannels.CONFIG_SYNC, new SynchronizedConfigPacketHandler());
 
 		//Set certain blocks as cutout layer
 		this.setRenderLayer(RenderLayer.getCutout(), ModBlocks.DISPLAY_CASE, ModBlocks.VENDING_MACHINE, ModBlocks.VENDING_MACHINE_LARGE, ModBlocks.ARMOR_DISPLAY);
@@ -80,7 +82,7 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		EntityModelLayerRegistry.registerModelLayer(ModLayerDefinitions.WALLET, WalletLayer::createLayer);
 
 		//Reload configs on server start
-		ServerHook.addServerStartListener(server -> LCConfigClient.INSTANCE.reloadValues());
+		ServerHook.addServerStartListener(server -> LCConfigClient.INSTANCE.reloadFromFile());
 
 		//Register Event Listeners
 		this.registerEventListeners();
