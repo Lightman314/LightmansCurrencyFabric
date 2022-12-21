@@ -47,11 +47,10 @@ public class PaygateBlock extends TraderBlockRotatable {
     {
         if(!level.isClient)
         {
-            //Get the item in the players hand
+            //Attempt to trigger ticket trade without opening the UI
             BlockEntity tileEntity = level.getBlockEntity(pos);
-            if(tileEntity instanceof PaygateBlockEntity)
+            if(tileEntity instanceof PaygateBlockEntity paygate)
             {
-                PaygateBlockEntity paygate = (PaygateBlockEntity)tileEntity;
                 int tradeIndex = paygate.getValidTicketTrade(player, player.getStackInHand(hand));
                 if(tradeIndex >= 0)
                 {
@@ -78,7 +77,7 @@ public class PaygateBlock extends TraderBlockRotatable {
     public boolean emitsRedstonePower(BlockState state) { return true; }
 
     @Override
-    public int getStrongRedstonePower(BlockState state, BlockView level, BlockPos pos, Direction dir) {
+    public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
         if(state.get(POWERED))
             return 15;
         return 0;

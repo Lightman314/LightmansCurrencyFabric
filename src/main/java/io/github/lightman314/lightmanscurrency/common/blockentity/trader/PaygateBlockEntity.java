@@ -25,17 +25,13 @@ public class PaygateBlockEntity extends TraderBlockEntity<PaygateTraderData> {
 
     protected PaygateBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
 
-
     @Override
     public void writeNbt(NbtCompound compound) {
         super.writeNbt(compound);
         this.saveTimer(compound);
     }
 
-    public final NbtCompound saveTimer(NbtCompound compound) {
-        compound.putInt("Timer", Math.max(this.timer, 0));
-        return compound;
-    }
+    public final void saveTimer(NbtCompound compound) { compound.putInt("Timer", Math.max(this.timer, 0)); }
 
     @Override
     public void readNbt(NbtCompound compound) {
@@ -49,7 +45,8 @@ public class PaygateBlockEntity extends TraderBlockEntity<PaygateTraderData> {
 
     public void activate(int duration) {
         this.timer = duration;
-        this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(PaygateBlock.POWERED, true));
+        if(this.world != null)
+            this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(PaygateBlock.POWERED, true));
         this.markDirty();
     }
 
@@ -61,11 +58,18 @@ public class PaygateBlockEntity extends TraderBlockEntity<PaygateTraderData> {
         {
             this.timer--;
             this.markDirty();
-            if(this.timer <= 0)
+            if(this.timer <= 0 && this.world != null)
             {
                 this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(PaygateBlock.POWERED, false));
             }
         }
+    }
+
+    @Override
+    public void onLoad() {
+        PaygateTraderData data = this.getTraderData();
+        if(data != null)
+            data.setCachedBE(this);
     }
 
     public int getValidTicketTrade(PlayerEntity player, ItemStack heldItem) {

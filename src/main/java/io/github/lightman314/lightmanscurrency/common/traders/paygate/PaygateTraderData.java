@@ -142,7 +142,13 @@ public class PaygateTraderData extends TraderData implements ITradeSource<Paygat
 
     public int getTradeStock(int tradeIndex) { return 1; }
 
+    private PaygateBlockEntity cachedBE = null;
+
+    public void setCachedBE(PaygateBlockEntity be) { this.cachedBE = be; }
+
     private PaygateBlockEntity getBlockEntity() {
+        if(this.cachedBE != null && !this.cachedBE.isRemoved())
+            return this.cachedBE;
         MinecraftServer server = ServerHook.getServer();
         if(server != null && this.getLevel() != null)
         {
@@ -152,7 +158,25 @@ public class PaygateTraderData extends TraderData implements ITradeSource<Paygat
                 BlockEntity be = l.getBlockEntity(this.getPos());
                 if(be instanceof PaygateBlockEntity)
                     return (PaygateBlockEntity)be;
+                else if(be == null)
+                    LightmansCurrency.LogWarning("Could not get Paygate BE as there is no block entity at its pos (" + this.getPos().toShortString() + "; " + this.getLevel().getValue() + ")");
+                else
+                    LightmansCurrency.LogWarning("Could not get Paygate BE as its block entity is the wrong type (" + be.getClass().getName() + ")");
             }
+            else
+            {
+                if(l == null)
+                    LightmansCurrency.LogWarning("Could not get Paygate BE as its dimension isn't loaded.");
+                else
+                    LightmansCurrency.LogWarning("Could not get Paygate BE as its pos (" + this.getPos().toShortString() + ";" + this.getLevel().getValue() + ") isn't loaded.");
+            }
+        }
+        else
+        {
+            if(server == null)
+                LightmansCurrency.LogWarning("Could not get Paygate BE as the Server could not be accessed.");
+            else
+                LightmansCurrency.LogWarning("Could not get Paygate BE as the data has no cached dimension id.");
         }
         return null;
     }
