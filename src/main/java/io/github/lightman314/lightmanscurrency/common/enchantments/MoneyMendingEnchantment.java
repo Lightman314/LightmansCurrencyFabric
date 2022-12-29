@@ -33,8 +33,10 @@ public class MoneyMendingEnchantment extends Enchantment {
     @Override
     public boolean isTreasure() { return true; }
 
+    @Override
     public int getMaxLevel() { return 1; }
 
+    @Override
     protected boolean canAccept(Enchantment otherEnchant) {
         return otherEnchant != Enchantments.MENDING && super.canAccept(otherEnchant);
     }

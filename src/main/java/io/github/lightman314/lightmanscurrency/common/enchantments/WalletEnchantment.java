@@ -15,14 +15,15 @@ public abstract class WalletEnchantment extends Enchantment {
     private final boolean requiresPickup;
     protected WalletEnchantment(Rarity rarity, boolean requiresPickup) { super(rarity, EnchantmentTarget.ARMOR, new EquipmentSlot[0]); this.requiresPickup = requiresPickup; }
 
-    public final boolean isAcceptableItem(ItemStack stack) { return stack.getItem() instanceof WalletItem && !this.requiresPickup || WalletItem.CanPickup((WalletItem) stack.getItem()); }
+    @Override
+    public final boolean isAcceptableItem(ItemStack stack) { return stack.getItem() instanceof WalletItem walletItem && !(this.requiresPickup || WalletItem.CanPickup(walletItem)); }
 
     public abstract void addWalletTooltips(List<Text> tooltip, int enchantLevel, ItemStack item);
 
     public static void addWalletEnchantmentTooltips(List<Text> tooltip, ItemStack item) {
         EnchantmentHelper.get(item).forEach((e,l) -> {
-            if(e instanceof WalletEnchantment && l > 0)
-                ((WalletEnchantment)e).addWalletTooltips(tooltip, l, item);
+            if(e instanceof WalletEnchantment we && l > 0)
+                we.addWalletTooltips(tooltip, l, item);
         });
     }
 
