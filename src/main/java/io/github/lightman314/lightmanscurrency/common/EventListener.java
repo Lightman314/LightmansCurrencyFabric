@@ -1,6 +1,8 @@
 package io.github.lightman314.lightmanscurrency.common;
 
 import io.github.lightman314.lightmanscurrency.common.blocks.interfaces.IOwnableBlock;
+import io.github.lightman314.lightmanscurrency.common.callbacks.EntityDeathCallback;
+import io.github.lightman314.lightmanscurrency.common.callbacks.ItemEntityCollisionCallback;
 import io.github.lightman314.lightmanscurrency.common.core.ModGameRules;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
@@ -13,6 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -21,20 +24,30 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class EventListener {
 
     public static void registerEventListeners() {
         PlayerBlockBreakEvents.BEFORE.register(EventListener::onBlockBreak);
+        ItemEntityCollisionCallback.EVENT.register(EventListener::onPlayerItemPickup);
+        EntityDeathCallback.EVENT.register(EventListener::onPlayerDeath);
     }
 
-    //TODO create or listen to item pickup event
-    private static void onPlayerItemPickup(PlayerEntity player, ItemEntity item)
+    private static void onPlayerItemPickup(ItemEntity item, PlayerEntity player)
     {
-
+        ItemStack stack = item.getStack();
+        if(MoneyUtil.isCoin(stack.getItem(), false))
+        {
+            WalletHandler walletHandler = WalletHandler.getWallet(player);
+            ItemStack wallet = walletHandler.getWallet();
+            if(wallet.getItem() instanceof WalletItem walletItem && WalletItem.CanPickup(walletItem))
+            {
+                ItemStack change = WalletItem.PickupCoin(wallet,stack);
+                //Return the change to the original item so that it will be picked up normally.
+                item.setStack(change);
+            }
+        }
     }
 
     private static boolean onBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, /* Nullable */ BlockEntity blockEntity)
@@ -45,8 +58,7 @@ public class EventListener {
     }
 
     //Player Drops
-    //TODO create or listen to entity/player death event
-    private static void onPlayerDeath(LivingEntity entity)
+    private static void onPlayerDeath(LivingEntity entity, DamageSource damage)
     {
         if(entity.world.isClient) //Do nothing client side
             return;

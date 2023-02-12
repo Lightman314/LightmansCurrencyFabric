@@ -5,6 +5,7 @@ import io.github.lightman314.lightmanscurrency.common.Reference.*;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
 import io.github.lightman314.lightmanscurrency.common.callbacks.EntityDeathCallback;
+import io.github.lightman314.lightmanscurrency.common.callbacks.ItemEntityCollisionCallback;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.core.*;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionSaveData;
@@ -185,7 +186,6 @@ public class LightmansCurrency implements ModInitializer {
 
         //Killed by other entity event
         LootTableEvents.MODIFY.register(LootManager::onLootTableLoaded);
-        //TODO verify that entity death mixin works as intended
         EntityDeathCallback.EVENT.register(LootManager::entityDeath);
 
         //Money Data init event

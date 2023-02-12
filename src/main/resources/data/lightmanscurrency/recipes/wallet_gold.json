@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "group": "wallet_crafting",
   "ingredients": [{
-      "tag": "forge:leather"
+      "tag": "c:leather"
   },{
       "item": "lightmanscurrency:coin_copper"
   },{
@@ -10,7 +10,7 @@
   },{
       "item": "lightmanscurrency:coin_gold"
   },{
-      "tag": "forge:leather"
+      "tag": "c:leather"
   }],
   "result": {
     "item": "lightmanscurrency:wallet_gold"
