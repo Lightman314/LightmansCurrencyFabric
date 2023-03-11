@@ -3,8 +3,8 @@ package io.github.lightman314.lightmanscurrency.util;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 
 public class TimeUtil {
 
@@ -25,7 +25,6 @@ public class TimeUtil {
     /**
      * Calculates if the compareTime is less than the duration before the current time.
      * @param duration The duration of time (in milliseconds)
-     * @param compareTime
      * @return Returns true if the time is within the duration.
      */
     public static boolean compareTime(long duration, long compareTime)
@@ -132,9 +131,9 @@ public class TimeUtil {
         public static final List<TimeUnit> UNITS_SMALL_TO_LARGE = ImmutableList.of(TimeUnit.SECOND, TimeUnit.MINUTE, TimeUnit.HOUR, TimeUnit.DAY);
         public static final List<TimeUnit> UNITS_LARGE_TO_SMALL = ImmutableList.of(TimeUnit.DAY, TimeUnit.HOUR, TimeUnit.MINUTE, TimeUnit.SECOND);
 
-        public MutableText getText() { return Text.translatable("gui.lightmanscurrency.time.unit." + this.name().toLowerCase()); }
-        public MutableText getPluralText() { return Text.translatable("gui.lightmanscurrency.time.unit." + this.name().toLowerCase() + ".plural"); }
-        public MutableText getShortText() { return Text.translatable("gui.lightmanscurrency.time.unit." + this.name().toLowerCase() + ".short"); }
+        public MutableText getText() { return EasyText.translatable("gui.lightmanscurrency.time.unit." + this.name().toLowerCase()); }
+        public MutableText getPluralText() { return EasyText.translatable("gui.lightmanscurrency.time.unit." + this.name().toLowerCase() + ".plural"); }
+        public MutableText getShortText() { return EasyText.translatable("gui.lightmanscurrency.time.unit." + this.name().toLowerCase() + ".short"); }
 
     }
 

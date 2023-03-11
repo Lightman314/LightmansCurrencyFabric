@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 public interface ITab
 {
     @NotNull
-    public IconData getIcon();
-    public int getColor();
-    public MutableText getTooltip();
+    IconData getIcon();
+    int getColor();
+    MutableText getTooltip();
 
 }

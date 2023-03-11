@@ -12,10 +12,10 @@ import net.minecraft.world.World;
 public interface IDumpable {
 
     //Ejection stuff
-    public List<ItemStack> getContents(World level, BlockPos pos, BlockState state, boolean dropBlock);
+    List<ItemStack> getContents(World level, BlockPos pos, BlockState state, boolean dropBlock);
 
-    public MutableText getName();
+    MutableText getName();
 
-    public OwnerData getOwner();
+    OwnerData getOwner();
 
 }

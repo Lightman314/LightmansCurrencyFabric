@@ -11,8 +11,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
-import static net.minecraft.util.math.MathHelper.ceil;
-
 public class MarkAsSeenButton extends ButtonWidget {
 
     public static final int HEIGHT = 11;

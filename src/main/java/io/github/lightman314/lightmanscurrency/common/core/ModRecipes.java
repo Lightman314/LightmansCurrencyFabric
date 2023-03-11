@@ -10,7 +10,7 @@ import net.minecraft.util.registry.Registry;
 
 public class ModRecipes {
 
-    public static final RecipeType<CoinMintRecipe> COIN_MINT_TYPE = new RecipeType<CoinMintRecipe>() { @Override public String toString() {return "lightmanscurrency:coin_mint"; }};
+    public static final RecipeType<CoinMintRecipe> COIN_MINT_TYPE = new RecipeType<>() { @Override public String toString() {return "lightmanscurrency:coin_mint"; }};
 
     public static final RecipeSerializer<CoinMintRecipe> COIN_MINT_SERIALIZER = new CoinMintRecipe.Serializer();
     public static final RecipeSerializer<WalletUpgradeRecipe> WALLET_UPGRADE = new WalletUpgradeRecipe.Serializer();

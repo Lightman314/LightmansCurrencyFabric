@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.UpgradeItem;
 import io.github.lightman314.lightmanscurrency.common.upgrades.types.*;
 import io.github.lightman314.lightmanscurrency.common.upgrades.types.capacity.*;
@@ -29,9 +30,9 @@ public abstract class UpgradeType {
 	
 	public static final SpeedUpgrade SPEED = register(new Identifier(LightmansCurrency.MODID, "speed"), new SpeedUpgrade());
 	
-	public static final Simple NETWORK = register(new Identifier(LightmansCurrency.MODID, "trader_network"), new Simple(Text.translatable("tooltip.lightmanscurrency.upgrade.network")));
+	public static final Simple NETWORK = register(new Identifier(LightmansCurrency.MODID, "trader_network"), new Simple(EasyText.translatable("tooltip.lightmanscurrency.upgrade.network")));
 	
-	public static final Simple HOPPER = register(new Identifier(LightmansCurrency.MODID, "hopper"), new Simple(Text.translatable("tooltip.lightmanscurrency.upgrade.hopper")));
+	public static final Simple HOPPER = register(new Identifier(LightmansCurrency.MODID, "hopper"), new Simple(EasyText.translatable("tooltip.lightmanscurrency.upgrade.hopper")));
 	
 	private Identifier type;
 	

@@ -135,9 +135,7 @@ public class WalletUpgradeRecipe implements CraftingRecipe {
             int i = buffer.readVarInt();
             DefaultedList<Ingredient> nonnulllist = DefaultedList.ofSize(i, Ingredient.EMPTY);
 
-            for(int j = 0; j < nonnulllist.size(); ++j) {
-                nonnulllist.set(j, Ingredient.fromPacket(buffer));
-            }
+            nonnulllist.replaceAll(ignored -> Ingredient.fromPacket(buffer));
 
             ItemStack itemstack = buffer.readItemStack();
             return new WalletUpgradeRecipe(recipeId, s, itemstack, nonnulllist);

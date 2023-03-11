@@ -7,6 +7,6 @@ import net.minecraft.world.WorldAccess;
 
 public interface IOwnableBlock {
 
-    public boolean canBreak(PlayerEntity player, WorldAccess level, BlockPos pos, BlockState state);
+    boolean canBreak(PlayerEntity player, WorldAccess level, BlockPos pos, BlockState state);
 
 }

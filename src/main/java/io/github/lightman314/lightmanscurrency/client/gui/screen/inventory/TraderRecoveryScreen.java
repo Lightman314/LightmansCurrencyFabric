@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionData;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderRecoveryMenu;
 import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageChangeSelectedData;
@@ -50,7 +51,7 @@ public class TraderRecoveryScreen extends MenuScreen<TraderRecoveryMenu> {
         EjectionData data = this.handler.getSelectedData();
         if(data != null)
             return data.getTraderName();
-        return Text.translatable("gui.lightmanscurrency.trader_recovery.nodata");
+        return EasyText.translatable("gui.lightmanscurrency.trader_recovery.nodata");
     }
 
     @Override
@@ -72,7 +73,7 @@ public class TraderRecoveryScreen extends MenuScreen<TraderRecoveryMenu> {
     protected void handledScreenTick() {
 
         this.buttonLeft.active = this.handler.getSelectedIndex() > 0;
-        this.buttonRight.active = this.handler.getSelectedIndex() < this.handler.getValidEjectionData().size() - 2;
+        this.buttonRight.active = this.handler.getSelectedIndex() < this.handler.getValidEjectionData().size() - 1;
 
     }
 

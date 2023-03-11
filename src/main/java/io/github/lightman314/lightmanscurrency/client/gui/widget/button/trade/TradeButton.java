@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TradeContext;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.AlertData;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
@@ -38,7 +38,7 @@ public class TradeButton extends ButtonWidget {
     public boolean displayOnly = false;
 
     public TradeButton(Supplier<TradeContext> contextSource, Supplier<TradeData> tradeSource, PressAction onPress) {
-        super(0, 0, 0, BUTTON_HEIGHT, Text.empty(), onPress);
+        super(0, 0, 0, BUTTON_HEIGHT, EasyText.empty(), onPress);
         this.tradeSource = tradeSource;
         this.contextSource = contextSource;
         this.recalculateSize();

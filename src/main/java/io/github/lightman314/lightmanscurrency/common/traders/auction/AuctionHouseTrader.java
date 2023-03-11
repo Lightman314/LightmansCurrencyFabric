@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.SettingsTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderStorageMenu;
@@ -35,7 +36,6 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class AuctionHouseTrader extends TraderData {
@@ -55,11 +55,11 @@ public class AuctionHouseTrader extends TraderData {
 
     public AuctionHouseTrader() {
         super(TYPE);
-        this.getOwner().SetCustomOwner(Text.translatable("gui.lightmanscurrency.universaltrader.auction.owner"));
+        this.getOwner().SetCustomOwner(EasyText.translatable("gui.lightmanscurrency.universaltrader.auction.owner"));
     }
 
     @Override
-    public MutableText getName() { return Text.translatable("gui.lightmanscurrency.universaltrader.auction"); }
+    public MutableText getName() { return EasyText.translatable("gui.lightmanscurrency.universaltrader.auction"); }
 
     @Override
     public int getTradeCount() { return this.trades.size(); }
@@ -203,7 +203,7 @@ public class AuctionHouseTrader extends TraderData {
         }
 
         if(!this.getOwner().hasOwner())
-            this.getOwner().SetCustomOwner(Text.translatable("gui.lightmanscurrency.universaltrader.auction.owner"));
+            this.getOwner().SetCustomOwner(EasyText.translatable("gui.lightmanscurrency.universaltrader.auction.owner"));
 
     }
 

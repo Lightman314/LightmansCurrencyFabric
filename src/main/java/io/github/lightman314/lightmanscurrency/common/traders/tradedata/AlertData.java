@@ -44,15 +44,15 @@ public class AlertData {
 
     public MutableText getFormattedMessage() { return this.message.styled(this.formatting); }
 
-    public static final int compare(AlertData a, AlertData b) {return Integer.compare(a.priority, b.priority) * -1; }
+    public static int compare(AlertData a, AlertData b) {return Integer.compare(a.priority, b.priority) * -1; }
 
-    public static final AlertData helpful(MutableText message) { return of(message, AlertType.HELPFUL); }
-    public static final AlertData warn(MutableText message) { return of(message, AlertType.WARN); }
-    public static final AlertData error(MutableText message) { return of(message, AlertType.ERROR); }
+    public static AlertData helpful(MutableText message) { return of(message, AlertType.HELPFUL); }
+    public static AlertData warn(MutableText message) { return of(message, AlertType.WARN); }
+    public static AlertData error(MutableText message) { return of(message, AlertType.ERROR); }
 
-    private static final AlertData of(MutableText message, AlertType type) { return of(message, type.priority, type.color, type.format); }
+    private static AlertData of(MutableText message, AlertType type) { return of(message, type.priority, type.color, type.format); }
 
-    public static final AlertData of(MutableText message, int priority, int color, UnaryOperator<Style> style) {
+    public static AlertData of(MutableText message, int priority, int color, UnaryOperator<Style> style) {
         return new AlertData(message, priority, color, style);
     }
 

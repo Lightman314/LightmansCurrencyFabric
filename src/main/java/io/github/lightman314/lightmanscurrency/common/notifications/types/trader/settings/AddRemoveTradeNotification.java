@@ -1,13 +1,13 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types.trader.settings;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import io.github.lightman314.lightmanscurrency.common.notifications.categories.NullCategory;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class AddRemoveTradeNotification extends Notification {
@@ -29,7 +29,7 @@ public class AddRemoveTradeNotification extends Notification {
 
     @Override
     public MutableText getMessage() {
-        return Text.translatable("log.settings.addremovetrade", this.player.getName(true), Text.translatable(this.isAdd ? "log.settings.add" : "log.settings.remove"), this.newCount);
+        return EasyText.translatable("log.settings.addremovetrade", this.player.getName(true), EasyText.translatable(this.isAdd ? "log.settings.add" : "log.settings.remove"), this.newCount);
     }
 
     @Override

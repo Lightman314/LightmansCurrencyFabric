@@ -1,9 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.loot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.google.common.collect.ImmutableList;
 
@@ -12,7 +9,8 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
 import io.github.lightman314.lightmanscurrency.config.options.custom.IdentifierListOption;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
-import net.fabricmc.fabric.api.loot.v2.LootTableSource;
+import net.fabricmc.fabric.api.loot.v1.FabricLootSupplierBuilder;
+import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -61,15 +59,15 @@ public class LootManager {
         private final boolean requiresPlayerKill;
         public final boolean requiresPlayerKill() { return this.requiresPlayerKill; }
 
-        private PoolLevel(int level, boolean requiresPlayerKill) { this.level = level; this.requiresPlayerKill = requiresPlayerKill; }
+        PoolLevel(int level, boolean requiresPlayerKill) { this.level = level; this.requiresPlayerKill = requiresPlayerKill; }
 
-    };
+    }
 
     public static boolean isValidSpawnReason(String reasonString)
     {
         for(SpawnReason reason : SpawnReason.values())
         {
-            if(reason.toString() == reasonString)
+            if(Objects.equals(reason.toString(), reasonString))
                 return true;
         }
         return false;
@@ -242,7 +240,7 @@ public class LootManager {
     /**
      * Listens to LootTableEvents.MODIFY to modify the chest loot tables safely.
      */
-    public static void onLootTableLoaded(ResourceManager resourceManager, net.minecraft.loot.LootManager lootManager, Identifier id, LootTable.Builder tableBuilder, LootTableSource source) {
+    public static void onLootTableLoaded(ResourceManager resourceManager, net.minecraft.loot.LootManager lootManager, Identifier id, FabricLootSupplierBuilder tableBuilder, LootTableLoadingCallback.LootTableSetter source) {
         PoolLevel level = GetChestPoolLevel(id);
         if(level != null)
             AddChestLootToTable(tableBuilder, level);
@@ -464,21 +462,21 @@ public class LootManager {
             }
 
             //LightmansCurrency.LOGGER.debug("Added " + coinPool + " level entity loot to the " + name + " loot entry.");
-            table.pool(ENTITY_LOOT_COPPER.build());
+            table.pool(ENTITY_LOOT_COPPER);
             if(coinPool != PoolLevel.COPPER)
             {
-                table.pool(ENTITY_LOOT_IRON.build());
+                table.pool(ENTITY_LOOT_IRON);
                 if(coinPool != PoolLevel.IRON)
                 {
-                    table.pool(ENTITY_LOOT_GOLD.build());
+                    table.pool(ENTITY_LOOT_GOLD);
                     if(coinPool != PoolLevel.GOLD)
                     {
-                        table.pool(ENTITY_LOOT_EMERALD.build());
+                        table.pool(ENTITY_LOOT_EMERALD);
                         if(coinPool != PoolLevel.EMERALD)
                         {
-                            table.pool(ENTITY_LOOT_DIAMOND.build());
+                            table.pool(ENTITY_LOOT_DIAMOND);
                             if(coinPool != PoolLevel.DIAMOND)
-                                table.pool(ENTITY_LOOT_NETHERITE.build());
+                                table.pool(ENTITY_LOOT_NETHERITE);
                         }
                     }
                 }
@@ -521,31 +519,31 @@ public class LootManager {
             else if(coinPool == PoolLevel.IRON)
             {
                 LootTable.Builder table = LootTable.builder();
-                table.pool(CHEST_LOOT_IRON.build());
+                table.pool(CHEST_LOOT_IRON);
                 return safelyGetResults(table, context);
             }
             else if(coinPool == PoolLevel.GOLD)
             {
                 LootTable.Builder table = LootTable.builder();
-                table.pool(CHEST_LOOT_GOLD.build());
+                table.pool(CHEST_LOOT_GOLD);
                 return safelyGetResults(table, context);
             }
             else if(coinPool == PoolLevel.EMERALD)
             {
                 LootTable.Builder table = LootTable.builder();
-                table.pool(CHEST_LOOT_EMERALD.build());
+                table.pool(CHEST_LOOT_EMERALD);
                 return safelyGetResults(table, context);
             }
             else if(coinPool == PoolLevel.DIAMOND)
             {
                 LootTable.Builder table = LootTable.builder();
-                table.pool(CHEST_LOOT_DIAMOND.build());
+                table.pool(CHEST_LOOT_DIAMOND);
                 return safelyGetResults(table, context);
             }
             else if(coinPool == PoolLevel.NETHERITE)
             {
                 LootTable.Builder table = LootTable.builder();
-                table.pool(CHEST_LOOT_NETHERITE.build());
+                table.pool(CHEST_LOOT_NETHERITE);
                 return safelyGetResults(table, context);
             }
             else

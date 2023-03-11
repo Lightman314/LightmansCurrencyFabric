@@ -5,12 +5,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +39,7 @@ public class TeamButton extends ButtonWidget {
 
     public TeamButton(int x, int y, Size size, PressAction press, TextRenderer font, @NotNull Supplier<Team> teamSource, @NotNull Supplier<Boolean> selectedSource)
     {
-        super(x, y, size.width, HEIGHT, Text.empty(), press);
+        super(x, y, size.width, HEIGHT, EasyText.empty(), press);
         this.font = font;
         this.size = size;
         this.teamSource = teamSource;
@@ -60,8 +60,8 @@ public class TeamButton extends ButtonWidget {
 
         //Render Team Name
         this.font.draw(pose, TextRenderUtil.fitString(this.getTeam().getName(), this.width - 4), this.x + 2, this.y + 2, TEXT_COLOR);
-        //Render Owner Name)
-        this.font.draw(pose, TextRenderUtil.fitString(Text.translatable("gui.button.lightmanscurrency.team.owner", this.getTeam().getOwner().getName(true)), this.width - 4), this.x + 2, this.y + 10, TEXT_COLOR);
+        //Render Owner Name
+        this.font.draw(pose, TextRenderUtil.fitString(EasyText.translatable("gui.button.lightmanscurrency.team.owner", this.getTeam().getOwner().getName(true)), this.width - 4), this.x + 2, this.y + 10, TEXT_COLOR);
 
     }
 

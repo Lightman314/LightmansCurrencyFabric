@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.notifications.types.trade
 import java.util.UUID;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
@@ -11,7 +12,6 @@ import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import io.github.lightman314.lightmanscurrency.common.traders.paygate.tradedata.PaygateTradeData;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class PaygateNotification extends Notification{
@@ -55,9 +55,9 @@ public class PaygateNotification extends Notification{
     public MutableText getMessage() {
 
         if(this.ticketID != null)
-            return Text.translatable("notifications.message.paygate_trade.ticket", this.customer, this.ticketID.toString(), PaygateTradeData.formatDurationShort(this.duration));
+            return EasyText.translatable("notifications.message.paygate_trade.ticket", this.customer, this.ticketID.toString(), PaygateTradeData.formatDurationShort(this.duration));
         else
-            return Text.translatable("notifications.message.paygate_trade.coin", this.customer, this.cost.getString(), PaygateTradeData.formatDurationShort(this.duration));
+            return EasyText.translatable("notifications.message.paygate_trade.coin", this.customer, this.cost.getString(), PaygateTradeData.formatDurationShort(this.duration));
 
     }
 

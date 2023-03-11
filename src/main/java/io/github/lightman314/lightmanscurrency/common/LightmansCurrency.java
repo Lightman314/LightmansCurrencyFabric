@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.common.Reference.*;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
+import io.github.lightman314.lightmanscurrency.common.blockentity.interfaces.SidedStorageBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.callbacks.EntityDeathCallback;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.core.*;
@@ -40,10 +41,10 @@ import io.github.lightman314.lightmanscurrency.config.Config;
 import io.github.lightman314.lightmanscurrency.config.SynchronizedConfig;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,6 +149,9 @@ public class LightmansCurrency implements ModInitializer {
         //Register Configs
         Config.register(LCConfigCommon.INSTANCE);
 
+        //Add custom replacement for SidedStorageBlockEntity
+        SidedStorageBlockEntity.setup();
+
 	}
 
     private void registerEventListeners()
@@ -182,7 +186,7 @@ public class LightmansCurrency implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> SynchronizedConfig.sendConfigSyncPackets(sender));
 
         //Killed by other entity event
-        LootTableEvents.MODIFY.register(LootManager::onLootTableLoaded);
+        LootTableLoadingCallback.EVENT.register(LootManager::onLootTableLoaded);
         EntityDeathCallback.EVENT.register(LootManager::entityDeath);
 
         //Money Data init event

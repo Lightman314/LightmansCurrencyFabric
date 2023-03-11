@@ -10,6 +10,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.Settin
 import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.input.InputTab;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.input.InputTabAddon;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.types.trader.settings.ChangeSettingNotification;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
@@ -20,7 +21,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 
 public abstract class InputTraderData extends TraderData {
 
-    public static MutableText getFacingName(Direction side) { return Text.translatable("gui.lightmanscurrency.settings.side." + side.toString().toLowerCase()); }
+    public static MutableText getFacingName(Direction side) { return EasyText.translatable("gui.lightmanscurrency.settings.side." + side.toString().toLowerCase()); }
 
     public final ImmutableList<Direction> ignoreSides;
     private final Map<Direction,Boolean> inputSides = new HashMap<>();

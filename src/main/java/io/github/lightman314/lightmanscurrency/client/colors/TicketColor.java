@@ -2,7 +2,6 @@ package io.github.lightman314.lightmanscurrency.client.colors;
 
 import io.github.lightman314.lightmanscurrency.common.items.TicketItem;
 import net.minecraft.client.color.item.ItemColorProvider;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.item.ItemStack;
 
 import java.util.UUID;
@@ -25,8 +24,7 @@ public class TicketColor implements ItemColorProvider {
         if(hash < 0)
             hash *= -1;
         //Limit to a valid color id
-        int output = hash % 0xFFFFFF;
-        return output;
+        return hash % 0xFFFFFF;
     }
 
 }

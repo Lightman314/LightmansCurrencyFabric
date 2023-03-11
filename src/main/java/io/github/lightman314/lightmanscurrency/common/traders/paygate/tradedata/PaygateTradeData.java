@@ -12,6 +12,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.Di
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil.TextFormatting;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.TicketItem;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderStorageMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.TraderStorageTab;
@@ -167,9 +168,9 @@ public class PaygateTradeData extends TradeData {
     @Override
     public List<DisplayEntry> getInputDisplays(TradeContext context) {
         if(this.isTicketTrade())
-            return Lists.newArrayList(DisplayEntry.of(TicketItem.CreateTicket(this.ticketID), 1, Lists.newArrayList(Text.translatable("tooltip.lightmanscurrency.ticket.id", this.ticketID))));
+            return Lists.newArrayList(DisplayEntry.of(TicketItem.CreateTicket(this.ticketID), 1, Lists.newArrayList(EasyText.translatable("tooltip.lightmanscurrency.ticket.id", this.ticketID))));
         else
-            return Lists.newArrayList(DisplayEntry.of(this.getCost(context), context.isStorageMode ? Lists.newArrayList(Text.translatable("tooltip.lightmanscurrency.trader.price_edit")) : null));
+            return Lists.newArrayList(DisplayEntry.of(this.getCost(context), context.isStorageMode ? Lists.newArrayList(EasyText.translatable("tooltip.lightmanscurrency.trader.price_edit")) : null));
     }
 
     @Override
@@ -183,15 +184,15 @@ public class PaygateTradeData extends TradeData {
         int seconds = (duration / 20) % 60;
         int minutes = (duration / 1200 ) % 60;
         int hours = (duration / 72000);
-        MutableText result = Text.empty();
+        MutableText result = EasyText.empty();
         if(hours > 0)
-            result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.hours.short", hours));
+            result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.hours.short", hours));
         if(minutes > 0)
-            result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.minutes.short", minutes));
+            result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.minutes.short", minutes));
         if(seconds > 0)
-            result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.seconds.short", seconds));
+            result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.seconds.short", seconds));
         if(ticks > 0 || result.getString().isBlank())
-            result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.ticks.short", ticks));
+            result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.ticks.short", ticks));
         return result;
     }
 
@@ -202,12 +203,12 @@ public class PaygateTradeData extends TradeData {
         int minutes = (duration / 1200 ) % 60;
         int hours = (duration / 72000);
         if(hours > 0)
-            return Text.translatable("tooltip.lightmanscurrency.paygate.duration.hours.short", hours);
+            return EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.hours.short", hours);
         if(minutes > 0)
-            return Text.translatable("tooltip.lightmanscurrency.paygate.duration.minutes.short", minutes);
+            return EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.minutes.short", minutes);
         if(seconds > 0)
-            return Text.translatable("tooltip.lightmanscurrency.paygate.duration.seconds.short", seconds);
-        return Text.translatable("tooltip.lightmanscurrency.paygate.duration.ticks.short", ticks);
+            return EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.seconds.short", seconds);
+        return EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.ticks.short", ticks);
     }
 
     public static MutableText formatDuration(int duration) {
@@ -216,47 +217,47 @@ public class PaygateTradeData extends TradeData {
         int seconds = (duration / 20) % 60;
         int minutes = (duration / 1200 ) % 60;
         int hours = (duration / 72000);
-        MutableText result = Text.empty();
+        MutableText result = EasyText.empty();
         boolean addSpacer = false;
         if(hours > 0)
         {
             if(addSpacer)
-                result.append(Text.literal(" "));
+                result.append(EasyText.literal(" "));
             addSpacer = true;
             if(hours > 1)
-                result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.hours", hours));
+                result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.hours", hours));
             else
-                result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.hours.singular", hours));
+                result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.hours.singular", hours));
         }
         if(minutes > 0)
         {
             if(addSpacer)
-                result.append(Text.literal(" "));
+                result.append(EasyText.literal(" "));
             addSpacer = true;
             if(minutes > 1)
-                result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.minutes", minutes));
+                result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.minutes", minutes));
             else
-                result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.minutes.singular", minutes));
+                result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.minutes.singular", minutes));
         }
         if(seconds > 0)
         {
             if(addSpacer)
-                result.append(Text.literal(" "));
+                result.append(EasyText.literal(" "));
             addSpacer = true;
             if(seconds > 1)
-                result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.seconds", seconds));
+                result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.seconds", seconds));
             else
-                result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.seconds.singular", seconds));
+                result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.seconds.singular", seconds));
         }
         if(ticks > 0)
         {
             if(addSpacer)
-                result.append(Text.literal(" "));
+                result.append(EasyText.literal(" "));
             addSpacer = true;
             if(ticks > 1)
-                result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.ticks", ticks));
+                result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.ticks", ticks));
             else
-                result.append(Text.translatable("tooltip.lightmanscurrency.paygate.duration.ticks.singular", ticks));
+                result.append(EasyText.translatable("tooltip.lightmanscurrency.paygate.duration.ticks.singular", ticks));
         }
         return result;
     }
@@ -268,10 +269,10 @@ public class PaygateTradeData extends TradeData {
             PaygateTraderData paygate = (PaygateTraderData)context.getTrader();
             //Check whether the paygate is currently active
             if(paygate.isActive())
-                alerts.add(AlertData.warn(Text.translatable("tooltip.lightmanscurrency.paygate.active")));
+                alerts.add(AlertData.warn(EasyText.translatable("tooltip.lightmanscurrency.paygate.active")));
             //Check whether they can afford the costs
             if(!this.canAfford(context))
-                alerts.add(AlertData.warn(Text.translatable("tooltip.lightmanscurrency.cannotafford")));
+                alerts.add(AlertData.warn(EasyText.translatable("tooltip.lightmanscurrency.cannotafford")));
         }
     }
 

@@ -12,17 +12,16 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderSaveData;
-import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
 
 public class TraderArgument implements ArgumentType<TraderData>{
 
-    private static final SimpleCommandExceptionType ERROR_NOT_FOUND = new SimpleCommandExceptionType(Text.translatable("command.argument.trader.notfound"));
+    private static final SimpleCommandExceptionType ERROR_NOT_FOUND = new SimpleCommandExceptionType(EasyText.translatable("command.argument.trader.notfound"));
 
     private final boolean acceptPersistentIDs;
     private TraderArgument(boolean acceptPersistentIDs) { this.acceptPersistentIDs = acceptPersistentIDs; }
@@ -86,34 +85,17 @@ public class TraderArgument implements ArgumentType<TraderData>{
         return suggestionsBuilder.buildFuture();
     }
 
-    public static class Info implements ArgumentSerializer<TraderArgument, Info.Template>
+    public static class Info implements ArgumentSerializer<TraderArgument>
     {
 
         @Override
-        public void writePacket(Template template, PacketByteBuf buffer) { buffer.writeBoolean(template.acceptPersistentIDs); }
+        public void toPacket(TraderArgument argument, PacketByteBuf buffer) { buffer.writeBoolean(argument.acceptPersistentIDs); }
 
         @Override
-        public Template fromPacket(PacketByteBuf buffer) { return new Template(buffer.readBoolean()); }
+        public TraderArgument fromPacket(PacketByteBuf buffer) { return new TraderArgument(buffer.readBoolean()); }
 
         @Override
-        public void writeJson(Template template, JsonObject json) { json.addProperty("acceptPersistentIDs", template.acceptPersistentIDs); }
-
-        @Override
-        public Template getArgumentTypeProperties(TraderArgument argument) { return new Template(argument.acceptPersistentIDs); }
-
-        public final class Template implements ArgumentSerializer.ArgumentTypeProperties<TraderArgument>
-        {
-            final boolean acceptPersistentIDs;
-
-            Template(boolean checkPersistentIDs) { this.acceptPersistentIDs = checkPersistentIDs; }
-
-            @Override
-            public TraderArgument createType(CommandRegistryAccess p_235378_) { return new TraderArgument(this.acceptPersistentIDs); }
-
-            @Override
-            public ArgumentSerializer<TraderArgument, ?> getSerializer() { return Info.this; }
-
-        }
+        public void toJson(TraderArgument argument, JsonObject json) { json.addProperty("acceptPersistentIDs", argument.acceptPersistentIDs); }
 
     }
 

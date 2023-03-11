@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.base.Supplier;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
@@ -25,7 +26,7 @@ public class ScrollTextDisplay extends ClickableWidget {
 
     public ScrollTextDisplay(int x, int y, int width, int height, TextRenderer font, Supplier<List<? extends Text>> textSource)
     {
-        super(x, y, width, height, Text.empty());
+        super(x, y, width, height, EasyText.empty());
 
         this.font = font;
         this.textSource = textSource;

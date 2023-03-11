@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollBarWidget.IScrollable;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
@@ -31,14 +32,14 @@ public class NotificationDisplayWidget extends ClickableWidget implements IScrol
     public boolean colorIfUnseen = false;
     public int backgroundColor = 0xFFC6C6C6;
 
-    public static final int CalculateHeight(int rowCount) { return rowCount * HEIGHT_PER_ROW; }
+    public static int CalculateHeight(int rowCount) { return rowCount * HEIGHT_PER_ROW; }
 
     private List<Notification> getNotifications() { return this.notificationSource.get(); }
 
     Text tooltip = null;
 
     public NotificationDisplayWidget(int x, int y, int width, int rowCount, TextRenderer font, Supplier<List<Notification>> notificationSource) {
-        super(x, y, width, CalculateHeight(rowCount), Text.empty());
+        super(x, y, width, CalculateHeight(rowCount), EasyText.empty());
         this.notificationSource = notificationSource;
         this.font = font;
         this.rowCount = rowCount;

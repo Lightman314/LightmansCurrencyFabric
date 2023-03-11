@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import io.github.lightman314.lightmanscurrency.common.notifications.categories.NullCategory;
@@ -14,7 +15,7 @@ public class TextNotification extends Notification {
 
     public static final Identifier TYPE = new Identifier(LightmansCurrency.MODID, "text");
 
-    private MutableText text = Text.literal("");
+    private MutableText text = EasyText.literal("");
     private NotificationCategory category = NullCategory.INSTANCE;
 
     public TextNotification(MutableText text){ this(text, NullCategory.INSTANCE); }

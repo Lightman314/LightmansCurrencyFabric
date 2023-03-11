@@ -4,11 +4,11 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
@@ -91,15 +91,15 @@ public class CoinData
     public MutableText getInitial()
     {
         if(this.initialTranslation != null && !this.initialTranslation.isBlank())
-            return Text.translatable(this.initialTranslation);
+            return EasyText.translatable(this.initialTranslation);
         //LightmansCurrency.LogWarning("No initial found for the coin '" + this.coinItem.getRegistryName().toString() + "'.");
-        return Text.literal(new ItemStack(this.coinItem).getName().getString().substring(0,1).toLowerCase());
+        return EasyText.literal(new ItemStack(this.coinItem).getName().getString().substring(0,1).toLowerCase());
     }
 
     public MutableText getPlural() {
         //Get plural form
         if(this.pluralTranslation != null && !this.pluralTranslation.isBlank())
-            return Text.translatable(this.pluralTranslation);
+            return EasyText.translatable(this.pluralTranslation);
         return MoneyUtil.getDefaultPlural(this.coinItem);
     }
 

@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.menu;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.core.ModMenus;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.CoinSlot;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
@@ -16,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -202,12 +202,12 @@ public class ATMMenu extends Menu implements BankAccount.IBankAccountAdvancedMen
             if(accountPlayer != null)
             {
                 BankSaveData.SetSelectedBankAccount(this.player, BankAccount.GenerateReference(false, accountPlayer));
-                return Text.translatable("gui.bank.select.player.success", accountPlayer.getName(false));
+                return EasyText.translatable("gui.bank.select.player.success", accountPlayer.getName(false));
             }
             else
-                return Text.translatable("gui.bank.transfer.error.null.to");
+                return EasyText.translatable("gui.bank.transfer.error.null.to");
         }
-        return Text.literal("ERROR");
+        return EasyText.literal("ERROR");
 
     }
 

@@ -93,7 +93,7 @@ public abstract class TraderBlockTallRotatable extends TraderBlockRotatable impl
     public boolean getReplacable(World level, BlockPos pos, BlockState state, LivingEntity player, ItemStack stack) {
         if(player instanceof PlayerEntity)
         {
-            ItemPlacementContext context = new ItemPlacementContext(level, (PlayerEntity)player, Hand.MAIN_HAND, stack, new BlockHitResult(Vec3d.ZERO, Direction.UP, pos, true));
+            ItemPlacementContext context = new ItemPlacementContext((PlayerEntity)player, Hand.MAIN_HAND, stack, new BlockHitResult(Vec3d.ZERO, Direction.UP, pos, true));
             return level.getBlockState(pos).canReplace(context);
         }
         else

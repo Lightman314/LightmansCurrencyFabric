@@ -12,6 +12,7 @@ import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
@@ -25,7 +26,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import org.jetbrains.annotations.NotNull;
@@ -54,9 +54,9 @@ public class MoneyUtil {
     public static MutableText getDefaultPlural(Item coin) {
         //If no plural form defined, attempt to find one.
         String defaultPlural = coin.getTranslationKey() + ".plural";
-        if(Text.translatable(defaultPlural).getString().equals(defaultPlural))
-            return Text.translatable("item.lightmanscurrency.generic.plural", coin.getName(new ItemStack(coin)));
-        return Text.translatable(defaultPlural);
+        if(EasyText.translatable(defaultPlural).getString().equals(defaultPlural))
+            return EasyText.translatable("item.lightmanscurrency.generic.plural", coin.getName(new ItemStack(coin)));
+        return EasyText.translatable(defaultPlural);
     }
 
     public static void reloadMoneyData() {

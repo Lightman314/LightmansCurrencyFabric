@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import com.google.common.collect.Lists;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;

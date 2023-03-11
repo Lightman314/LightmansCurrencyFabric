@@ -2,6 +2,7 @@ package io.github.lightman314.lightmanscurrency.common.items;
 
 import io.github.lightman314.lightmanscurrency.common.blockentity.trader.TraderBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.traderblocks.interfaces.ITraderBlock;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.tooltips.LCTooltips;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -156,11 +157,11 @@ public class CashRegisterItem extends BlockItem {
 
         TooltipItem.addTooltipAlways(tooltip, LCTooltips.CASH_REGISTER);
 
-        tooltip.add(Text.translatable("tooptip.lightmanscurrency.cash_register", data.size()));
+        tooltip.add(EasyText.translatable("tooptip.lightmanscurrency.cash_register", data.size()));
 
         if(!Screen.hasShiftDown() || data.size() == 0)
         {
-            tooltip.add(Text.translatable("tooptip.lightmanscurrency.cash_register.instructions"));
+            tooltip.add(EasyText.translatable("tooptip.lightmanscurrency.cash_register.instructions"));
         }
 
         if(Screen.hasShiftDown())
@@ -168,12 +169,12 @@ public class CashRegisterItem extends BlockItem {
             //Display details of the
             for(int i = 0; i < data.size(); i++)
             {
-                tooltip.add(Text.translatable("tooltip.lightmanscurrency.cash_register.details", i + 1, data.get(i).getX(), data.get(i).getY(), data.get(i).getZ()));
+                tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.cash_register.details", i + 1, data.get(i).getX(), data.get(i).getY(), data.get(i).getZ()));
             }
         }
         else if(data.size() > 0)
         {
-            tooltip.add(Text.translatable("tooptip.lightmanscurrency.cash_register.holdshift").formatted(Formatting.YELLOW));
+            tooltip.add(EasyText.translatable("tooptip.lightmanscurrency.cash_register.holdshift").formatted(Formatting.YELLOW));
         }
     }
 

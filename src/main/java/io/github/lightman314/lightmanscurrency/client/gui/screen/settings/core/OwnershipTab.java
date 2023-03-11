@@ -9,6 +9,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.Settin
 import io.github.lightman314.lightmanscurrency.client.gui.widget.TeamSelectWidget;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
@@ -17,7 +18,6 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +34,7 @@ public class OwnershipTab extends SettingsTab {
     public @NotNull IconData getIcon() { return IconData.of(ItemRenderUtil.getAlexHead()); }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.settings.owner"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.settings.owner"); }
 
     private OwnershipTab() { }
 
@@ -54,16 +54,16 @@ public class OwnershipTab extends SettingsTab {
 
         TraderSettingsScreen screen = this.getScreen();
 
-        this.newOwnerInput = screen.addRenderableTabWidget(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 20, screen.guiTop() + 20, 160, 20, Text.empty()));
+        this.newOwnerInput = screen.addRenderableTabWidget(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 20, screen.guiTop() + 20, 160, 20, EasyText.empty()));
         this.newOwnerInput.setMaxLength(16);
 
-        this.buttonSetOwner = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 41, 160, 20, Text.translatable("gui.button.lightmanscurrency.set_owner"), this::setOwner));
+        this.buttonSetOwner = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 41, 160, 20, EasyText.translatable("gui.button.lightmanscurrency.set_owner"), this::setOwner));
         this.buttonSetOwner.active = false;
 
         this.teamSelection = screen.addRenderableTabWidget(new TeamSelectWidget(screen.guiLeft() + 10, screen.guiTop() + 65, 5, () -> this.teamList, this::getSelectedTeam, this::selectTeam));
         this.teamSelection.init(screen::addRenderableTabWidget, this.getFont());
 
-        this.buttonSetTeamOwner = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 170, 160, 20, Text.translatable("gui.button.lightmanscurrency.set_owner"), this::setTeamOwner));
+        this.buttonSetTeamOwner = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 170, 160, 20, EasyText.translatable("gui.button.lightmanscurrency.set_owner"), this::setTeamOwner));
         this.buttonSetTeamOwner.active = false;
 
     }
@@ -98,7 +98,7 @@ public class OwnershipTab extends SettingsTab {
 
         TraderSettingsScreen screen = this.getScreen();
 
-        this.getFont().draw(pose, Text.translatable("gui.button.lightmanscurrency.team.owner", this.getScreen().getTrader().getOwner().getOwnerName(true)), screen.guiLeft() + 20, screen.guiTop() + 10, 0x404040);
+        this.getFont().draw(pose, EasyText.translatable("gui.button.lightmanscurrency.team.owner", this.getScreen().getTrader().getOwner().getOwnerName(true)), screen.guiLeft() + 20, screen.guiTop() + 10, 0x404040);
 
     }
 
@@ -108,7 +108,7 @@ public class OwnershipTab extends SettingsTab {
         //Render button tooltips
         if(this.buttonSetOwner.isMouseOver(mouseX, mouseY) || this.buttonSetTeamOwner.isMouseOver(mouseX, mouseY))
         {
-            screen.renderTooltip(pose, Text.translatable("tooltip.lightmanscurrency.warning").formatted(Formatting.BOLD, Formatting.YELLOW), mouseX, mouseY);
+            screen.renderTooltip(pose, EasyText.translatable("tooltip.lightmanscurrency.warning").formatted(Formatting.BOLD, Formatting.YELLOW), mouseX, mouseY);
         }
     }
 

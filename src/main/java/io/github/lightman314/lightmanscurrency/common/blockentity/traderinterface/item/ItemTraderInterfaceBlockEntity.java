@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import io.github.lightman314.lightmanscurrency.common.blockentity.traderinterface.TraderInterfaceBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.interfaces.IRotatableBlock;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.UpgradeItem;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderInterfaceMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.traderinterface.TraderInterfaceTab;
@@ -29,7 +30,6 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -79,7 +79,7 @@ public class ItemTraderInterfaceBlockEntity extends TraderInterfaceBlockEntity i
         }
         else
         {
-            //Scan all trades for sell items to restock
+            //Scan all trades for sold items to restock
             TraderData trader = this.getTrader();
             if(trader instanceof ItemTraderData)
             {
@@ -414,6 +414,6 @@ public class ItemTraderInterfaceBlockEntity extends TraderInterfaceBlockEntity i
     public void getAdditionalContents(List<ItemStack> contents) { contents.addAll(this.itemBuffer.getSplitContents()); }
 
     @Override
-    public MutableText getName() { return Text.translatable("block.lightmanscurrency.item_trader_interface"); }
+    public MutableText getName() { return EasyText.translatable("block.lightmanscurrency.item_trader_interface"); }
 
 }

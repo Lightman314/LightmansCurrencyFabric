@@ -3,16 +3,14 @@ package io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade;
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.Font;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ import java.util.List;
 public abstract class DisplayEntry
 {
 
-    public static final DisplayEntry EMPTY = of(Text.empty(), TextRenderUtil.TextFormatting.create());
+    public static final DisplayEntry EMPTY = of(EasyText.empty(), TextRenderUtil.TextFormatting.create());
 
     private final List<Text> tooltip;
 
@@ -171,7 +169,7 @@ public abstract class DisplayEntry
             if(tooltipOverride && additionalTooltips != null)
                 return additionalTooltips;
             if(!price.isFree() && price.isValid())
-                tooltips.add(Text.literal(price.getString()));
+                tooltips.add(EasyText.literal(price.getString()));
             if(additionalTooltips != null)
                 tooltips.addAll(additionalTooltips);
             return tooltips;
@@ -184,7 +182,7 @@ public abstract class DisplayEntry
                 TextRenderer font = this.getFont();
                 int left = x + area.xOffset + (area.width / 2) - (font.getWidth(this.price.getString()) / 2);
                 int top = y + area.yOffset + (area.height / 2) - (font.fontHeight / 2);
-                font.draw(pose, Text.literal(this.price.getString()), left, top, 0xFFFFFF);
+                font.draw(pose, EasyText.literal(this.price.getString()), left, top, 0xFFFFFF);
             }
             else
             {

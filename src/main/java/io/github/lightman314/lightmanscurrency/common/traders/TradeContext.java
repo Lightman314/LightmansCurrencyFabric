@@ -3,12 +3,10 @@ package io.github.lightman314.lightmanscurrency.common.traders;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.TicketItem;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.trader.InteractionSlot;
@@ -26,16 +24,12 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.impl.transfer.TransferApiImpl;
-import net.fabricmc.fabric.impl.transfer.transaction.TransactionManagerImpl;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 
-@SuppressWarnings("removal")
 public class TradeContext {
 
     public enum TradeResult {
@@ -78,7 +72,7 @@ public class TradeContext {
         FAIL_NULL("lightmanscurrency.remotetrade.fail.null");
         public boolean hasMessage() { return this.failMessage != null; }
         public final Text failMessage;
-        TradeResult(String message) { this.failMessage = message == null ? null : Text.translatable(message); }
+        TradeResult(String message) { this.failMessage = message == null ? null : EasyText.translatable(message); }
     }
 
     public final boolean isStorageMode;

@@ -12,6 +12,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollTextDispl
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import io.github.lightman314.lightmanscurrency.common.traders.events.TradeEvent;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
@@ -38,7 +39,7 @@ public class PlayerBlacklist extends TradeRule {
     public void beforeTrade(TradeEvent.PreTradeEvent event) {
 
         if(this.isBlacklisted(event.getPlayerReference()))
-            event.addDenial(Text.translatable("traderule.lightmanscurrency.blacklist.denial"));
+            event.addDenial(EasyText.translatable("traderule.lightmanscurrency.blacklist.denial"));
     }
 
     public boolean isBlacklisted(PlayerReference player)
@@ -156,10 +157,10 @@ public class PlayerBlacklist extends TradeRule {
         @Override
         public void initTab() {
 
-            this.nameInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 9, screen.xSize - 20, 20, Text.empty()));
+            this.nameInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 9, screen.xSize - 20, 20, EasyText.empty()));
 
-            this.buttonAddPlayer = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 30, 78, 20, Text.translatable("gui.button.lightmanscurrency.blacklist.add"), this::PressBlacklistButton));
-            this.buttonRemovePlayer = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + screen.xSize - 88, screen.guiTop() + 30, 78, 20, Text.translatable("gui.button.lightmanscurrency.blacklist.remove"), this::PressForgiveButton));
+            this.buttonAddPlayer = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 30, 78, 20, EasyText.translatable("gui.button.lightmanscurrency.blacklist.add"), this::PressBlacklistButton));
+            this.buttonRemovePlayer = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + screen.xSize - 88, screen.guiTop() + 30, 78, 20, EasyText.translatable("gui.button.lightmanscurrency.blacklist.remove"), this::PressForgiveButton));
 
             this.playerDisplay = this.addCustomRenderable(new ScrollTextDisplay(screen.guiLeft() + 7, screen.guiTop() + 55, this.screen.xSize - 14, 114, this.screen.getFont(), this::getBlacklistedPlayers));
             this.playerDisplay.setColumnCount(2);

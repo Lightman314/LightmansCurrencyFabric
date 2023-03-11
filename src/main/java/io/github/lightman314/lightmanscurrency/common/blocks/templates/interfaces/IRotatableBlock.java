@@ -14,7 +14,7 @@ public interface IRotatableBlock {
 	 * @param pos This blocks BlockPos.
 	 * @param facing This blocks rotational direction.
 	 */
-	public static BlockPos getRightPos(BlockPos pos, Direction facing)
+	static BlockPos getRightPos(BlockPos pos, Direction facing)
 	{
 		switch (facing)
 		{
@@ -36,7 +36,7 @@ public interface IRotatableBlock {
 	 * @param pos This blocks BlockPos.
 	 * @param facing This blocks rotational direction.
 	 */
-	public static BlockPos getLeftPos(BlockPos pos, Direction facing) {
+	static BlockPos getLeftPos(BlockPos pos, Direction facing) {
 		switch (facing)
 		{
 			case NORTH:
@@ -57,7 +57,7 @@ public interface IRotatableBlock {
 	 * @param pos This blocks BlockPos.
 	 * @param facing This blocks rotational direction.
 	 */
-	public static BlockPos getForwardPos(BlockPos pos, Direction facing) {
+	static BlockPos getForwardPos(BlockPos pos, Direction facing) {
 		switch (facing)
 		{
 			case NORTH:
@@ -78,7 +78,7 @@ public interface IRotatableBlock {
 	 * @param pos This blocks BlockPos.
 	 * @param facing This blocks rotational direction.
 	 */
-	public static BlockPos getBackwardPos(BlockPos pos, Direction facing) {
+	static BlockPos getBackwardPos(BlockPos pos, Direction facing) {
 		switch (facing)
 		{
 			case NORTH:
@@ -98,7 +98,7 @@ public interface IRotatableBlock {
 	 * Gets the local right direction based on the blocks rotation.
 	 * @param facing The rotatable blocks facing.
 	 */
-	public static Vec3f getRightVect(Direction facing) {
+	static Vec3f getRightVect(Direction facing) {
 		switch (facing)
 		{
 			case NORTH:
@@ -118,7 +118,7 @@ public interface IRotatableBlock {
 	 * Gets the local left direction based on the blocks rotation.
 	 * @param facing The rotatable blocks facing.
 	 */
-	public static Vec3f getLeftVect(Direction facing) {
+	static Vec3f getLeftVect(Direction facing) {
 		return MathUtil.VectorMult(getRightVect(facing), -1f);
 	}
 
@@ -126,7 +126,7 @@ public interface IRotatableBlock {
 	 * Gets the local forward (toward the back) direction based on the blocks rotation.
 	 * @param facing The rotatable blocks facing.
 	 */
-	public static Vec3f getForwardVect(Direction facing) {
+	static Vec3f getForwardVect(Direction facing) {
 		switch (facing)
 		{
 			case NORTH:
@@ -146,7 +146,7 @@ public interface IRotatableBlock {
 	 * Gets the local backward (toward the front) direction based on the blocks rotation.
 	 * @param facing The rotatable blocks facing.
 	 */
-	public static Vec3f getBackwardVect(Direction facing) {
+	static Vec3f getBackwardVect(Direction facing) {
 		return MathUtil.VectorMult(getForwardVect(facing), -1f);
 	}
 	
@@ -154,7 +154,7 @@ public interface IRotatableBlock {
 	 * Gets the Vector3f offset from the world-defined bottom-left corner, to the local bottom-left of the block.
 	 * @param facing The rotatable blocks facing.
 	 */
-	public static Vec3f getOffsetVect(Direction facing)
+	static Vec3f getOffsetVect(Direction facing)
 	{
 		switch (facing)
 		{
@@ -174,9 +174,9 @@ public interface IRotatableBlock {
 	/**
 	 * Gets the rotational direction of the given rotatable block state.
 	 */
-	public Direction getFacing(BlockState state);
+	Direction getFacing(BlockState state);
 	
-	public static Direction getRelativeSide(Direction facing, Direction side)
+	static Direction getRelativeSide(Direction facing, Direction side)
 	{
 		if(side == null)
 			return side;
@@ -188,7 +188,7 @@ public interface IRotatableBlock {
 		return Direction.fromHorizontal(facing.getHorizontal() + side.getHorizontal());
 	}
 	
-	public static Direction getActualSide(Direction facing, Direction relativeSide)
+	static Direction getActualSide(Direction facing, Direction relativeSide)
 	{
 		if(relativeSide == null)
 			return relativeSide;

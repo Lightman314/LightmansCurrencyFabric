@@ -1,5 +1,6 @@
 package io.github.lightman314.lightmanscurrency.client.util;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -24,7 +25,7 @@ public class TextRenderUtil {
             private final int horiz;
             private final int vert;
 
-            private Centering(int horiz, int vert) { this.horiz = horiz; this.vert = vert; }
+            Centering(int horiz, int vert) { this.horiz = horiz; this.vert = vert; }
             public boolean isTop() { return vert > 0; }
             public boolean isMiddle() { return vert == 0; }
             public boolean isBottom() { return vert < 0; }
@@ -81,7 +82,7 @@ public class TextRenderUtil {
 
     public static Text fitString(String text, int width, Style style) { return fitString(text, width, "...", style); }
 
-    public static Text fitString(String text, int width, String edge) { return fitString(Text.literal(text), width, edge); }
+    public static Text fitString(String text, int width, String edge) { return fitString(EasyText.literal(text), width, edge); }
 
     public static Text fitString(Text component, int width) { return fitString(component.getString(), width, "...", component.getStyle()); }
 
@@ -93,28 +94,28 @@ public class TextRenderUtil {
 
     public static Text fitString(String text, int width, String edge, Style style) {
         TextRenderer font = getFont();
-        if(font.getWidth(Text.literal(text).setStyle(style)) <= width)
-            return Text.literal(text).setStyle(style);
-        while(font.getWidth(Text.literal(text + edge).setStyle(style)) > width && text.length() > 0)
+        if(font.getWidth(EasyText.literal(text).setStyle(style)) <= width)
+            return EasyText.literal(text).setStyle(style);
+        while(font.getWidth(EasyText.literal(text + edge).setStyle(style)) > width && text.length() > 0)
             text = text.substring(0, text.length() - 1);
-        return Text.literal(text + edge).setStyle(style);
+        return EasyText.literal(text + edge).setStyle(style);
     }
 
-    public static void drawCenteredText(MatrixStack pose, String string, int centerX, int yPos, int color) { drawCenteredText(pose, Text.literal(string), centerX, yPos, color); }
+    public static void drawCenteredText(MatrixStack pose, String string, int centerX, int yPos, int color) { drawCenteredText(pose, EasyText.literal(string), centerX, yPos, color); }
     public static void drawCenteredText(MatrixStack pose, Text component, int centerX, int yPos, int color) {
         TextRenderer font = getFont();
         int width = font.getWidth(component);
         font.draw(pose, component, centerX - (width/2), yPos, color);
     }
 
-    public static void drawRightEdgeText(MatrixStack pose, String string, int rightPos, int yPos, int color) { drawRightEdgeText(pose, Text.literal(string), rightPos, yPos, color); }
+    public static void drawRightEdgeText(MatrixStack pose, String string, int rightPos, int yPos, int color) { drawRightEdgeText(pose, EasyText.literal(string), rightPos, yPos, color); }
     public static void drawRightEdgeText(MatrixStack pose, Text component, int rightPos, int yPos, int color) {
         TextRenderer font = getFont();
         int width = font.getWidth(component);
         font.draw(pose, component, rightPos, yPos - width, color);
     }
 
-    public static void drawCenteredMultilineText(MatrixStack pose, String string, int leftPos, int width, int topPos, int color) { drawCenteredMultilineText(pose, Text.literal(string), leftPos, width, topPos, color); }
+    public static void drawCenteredMultilineText(MatrixStack pose, String string, int leftPos, int width, int topPos, int color) { drawCenteredMultilineText(pose, EasyText.literal(string), leftPos, width, topPos, color); }
     public static void drawCenteredMultilineText(MatrixStack pose, Text component, int leftPos, int width, int topPos, int color) {
         TextRenderer font = getFont();
         List<OrderedText> lines = font.wrapLines(component, width);
@@ -127,7 +128,7 @@ public class TextRenderUtil {
         }
     }
 
-    public static void drawVerticallyCenteredMultilineText(MatrixStack pose, String string, int leftPos, int width, int topPos, int height, int color) { drawVerticallyCenteredMultilineText(pose, Text.literal(string), leftPos, width, topPos, height, color); }
+    public static void drawVerticallyCenteredMultilineText(MatrixStack pose, String string, int leftPos, int width, int topPos, int height, int color) { drawVerticallyCenteredMultilineText(pose, EasyText.literal(string), leftPos, width, topPos, height, color); }
     public static void drawVerticallyCenteredMultilineText(MatrixStack pose, Text component, int leftPos, int width, int topPos, int height, int color) {
         TextRenderer font = getFont();
         List<OrderedText> lines = font.wrapLines(component, width);
@@ -146,7 +147,7 @@ public class TextRenderUtil {
             MutableText mc = (MutableText)component;
             return mc.styled(styleChanges);
         }
-        return Text.empty().append(component).setStyle(component.getStyle()).styled(styleChanges);
+        return EasyText.empty().append(component).setStyle(component.getStyle()).styled(styleChanges);
     }
 
 }

@@ -85,8 +85,8 @@ public class NotificationEvent {
 
     }
 
-    public interface NotificationPreSendCallback { public boolean allow(NotificationEvent.NotificationSent.Pre preSendEvent); }
-    public interface NotificationSentCallback { public void listen(NotificationSent.Post notificationSentEvent); }
+    public interface NotificationPreSendCallback { boolean allow(NotificationEvent.NotificationSent.Pre preSendEvent); }
+    public interface NotificationSentCallback { void listen(NotificationSent.Post notificationSentEvent); }
 
     /**
      * Sent when a notification is received on the client.
@@ -98,6 +98,6 @@ public class NotificationEvent {
 
     }
 
-    public interface ClientNotificationCallback { public boolean display(NotificationReceivedOnClient clientNotificationEvent); }
+    public interface ClientNotificationCallback { boolean display(NotificationReceivedOnClient clientNotificationEvent); }
 
 }

@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types.trader.settings;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import io.github.lightman314.lightmanscurrency.common.notifications.categories.NullCategory;
@@ -9,7 +10,6 @@ import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class ChangeOwnerNotification extends Notification {
@@ -42,11 +42,11 @@ public class ChangeOwnerNotification extends Notification {
     @Override
     public MutableText getMessage() {
         if(newOwner.is(this.player))
-            return Text.translatable("log.settings.newowner.taken", this.player.getName(true), this.oldOwner.getName());
+            return EasyText.translatable("log.settings.newowner.taken", this.player.getName(true), this.oldOwner.getName());
         if(oldOwner.is(this.player))
-            return Text.translatable("log.settings.newowner.passed", this.player.getName(true), this.newOwner.getName());
+            return EasyText.translatable("log.settings.newowner.passed", this.player.getName(true), this.newOwner.getName());
         else
-            return Text.translatable("log.settings.newowner.transferred", this.player.getName(true), this.oldOwner.getName(), this.newOwner.getName());
+            return EasyText.translatable("log.settings.newowner.transferred", this.player.getName(true), this.oldOwner.getName(), this.newOwner.getName());
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.github.lightman314.lightmanscurrency.client.gui.widget.button.invento
 
 import io.github.lightman314.lightmanscurrency.client.LCConfigClient;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionSaveData;
 import io.github.lightman314.lightmanscurrency.config.options.custom.values.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageOpenRecoveryMenu;
@@ -58,7 +59,7 @@ public class TraderRecoveryButton extends InventoryButton {
 
     public static void tryRenderTooltip(MatrixStack pose, int mouseX, int mouseY) {
         if(lastButton != null && lastButton.isMouseOver(mouseX, mouseY))
-            lastButton.screen.renderTooltip(pose, Text.translatable("tooltip.button.team_manager"), mouseX, mouseY);
+            lastButton.screen.renderTooltip(pose, EasyText.translatable("tooltip.button.team_manager"), mouseX, mouseY);
     }
 
     private static void openTraderRecoveryMenu() { new CMessageOpenRecoveryMenu().sendToServer(); }

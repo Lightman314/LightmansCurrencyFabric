@@ -7,6 +7,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainBut
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.InteractionConsumer;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.trades_basic.BasicTradeEditTab;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
@@ -24,7 +25,7 @@ public class BasicTradeEditClientTab<T extends BasicTradeEditTab> extends Trader
     public @NotNull IconData getIcon() { return IconAndButtonUtil.ICON_TRADELIST; }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.trader.edit_trades"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.trader.edit_trades"); }
 
     @Override
     public boolean tabButtonVisible() { return true; }

@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.notifications.categories;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -38,7 +39,7 @@ public class TraderCategory extends NotificationCategory {
         if(compound.contains("TraderName"))
             this.traderName = Text.Serializer.fromJson(compound.getString("TraderName"));
         else
-            this.traderName = Text.translatable("gui.lightmanscurrency.universaltrader.default");
+            this.traderName = EasyText.translatable("gui.lightmanscurrency.universaltrader.default");
 
         if(compound.contains("TraderID"))
             this.traderID = compound.getLong("TraderID");

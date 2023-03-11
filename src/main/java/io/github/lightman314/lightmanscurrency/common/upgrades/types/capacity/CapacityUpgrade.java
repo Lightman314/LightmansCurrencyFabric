@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.common.upgrades.types.capacity;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.collect.Lists;
 
@@ -18,7 +19,7 @@ public abstract class CapacityUpgrade extends UpgradeType{
 
 	@Override
 	protected Object defaultTagValue(String tag) {
-		if(tag == CAPACITY)
+		if(Objects.equals(tag, CAPACITY))
 			return 1;
 		return null;
 	}

@@ -15,6 +15,7 @@ import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.SimpleSlot;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.TraderStorageTab;
@@ -30,7 +31,6 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +44,7 @@ public class AuctionCreateClientTab extends TraderStorageClientTab<AuctionCreate
     public @NotNull IconData getIcon() { return IconAndButtonUtil.ICON_PLUS; }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.auction.create"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.auction.create"); }
 
     @Override
     public boolean tabButtonVisible() { return true; }
@@ -81,11 +81,11 @@ public class AuctionCreateClientTab extends TraderStorageClientTab<AuctionCreate
         this.tradeDisplay = this.screen.addRenderableTabWidget(new TradeButton(this.menu::getContext, () -> this.pendingAuction, b -> {}));
         this.tradeDisplay.move(this.screen.getGuiLeft() + 15, this.screen.getGuiTop() + 5);
 
-        this.priceSelect = this.screen.addRenderableTabWidget(new CoinValueInput(this.screen.getGuiLeft() + this.screen.getImageWidth() / 2 - CoinValueInput.DISPLAY_WIDTH / 2, this.screen.getGuiTop() + 34, Text.empty(), CoinValue.EMPTY, this.font, this::onPriceChanged, this.screen::addRenderableTabWidget));
+        this.priceSelect = this.screen.addRenderableTabWidget(new CoinValueInput(this.screen.getGuiLeft() + this.screen.getImageWidth() / 2 - CoinValueInput.DISPLAY_WIDTH / 2, this.screen.getGuiTop() + 34, EasyText.empty(), CoinValue.EMPTY, this.font, this::onPriceChanged, this.screen::addRenderableTabWidget));
         this.priceSelect.init();
         this.priceSelect.drawBG = this.priceSelect.allowFreeToggle = false;
 
-        this.buttonTogglePriceMode = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 114, this.screen.getGuiTop() + 5, this.screen.getImageWidth() - 119, 20, Text.translatable("button.lightmanscurrency.auction.toggleprice.startingbid"), b -> this.TogglePriceTarget()));
+        this.buttonTogglePriceMode = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 114, this.screen.getGuiTop() + 5, this.screen.getImageWidth() - 119, 20, EasyText.translatable("button.lightmanscurrency.auction.toggleprice.startingbid"), b -> this.TogglePriceTarget()));
 
         this.commonTab.getAuctionItems().addListener(c -> this.UpdateAuctionItems());
 
@@ -96,15 +96,15 @@ public class AuctionCreateClientTab extends TraderStorageClientTab<AuctionCreate
         this.timeInput.setTime(this.timeInput.minDuration);
 
         //Submit Button
-        this.buttonSubmitAuction = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 40, this.screen.getGuiTop() - 20, this.screen.getImageWidth() - 80, 20, Text.translatable("button.lightmanscurrency.auction.create"), b -> this.submitAuction()));
+        this.buttonSubmitAuction = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 40, this.screen.getGuiTop() - 20, this.screen.getImageWidth() - 80, 20, EasyText.translatable("button.lightmanscurrency.auction.create"), b -> this.submitAuction()));
         this.buttonSubmitAuction.active = false;
 
         this.buttonSubmitPersistentAuction = this.screen.addRenderableTabWidget(new IconButton(this.screen.getGuiLeft() + this.screen.getImageWidth() - 20, this.screen.getGuiTop() - 20, this::submitPersistentAuction, IconAndButtonUtil.ICON_PERSISTENT_DATA, IconAndButtonUtil.TOOLTIP_PERSISTENT_AUCTION));
         this.buttonSubmitPersistentAuction.visible = CommandLCAdmin.isAdminPlayer(this.screen.getScreenHandler().player);
         this.buttonSubmitPersistentAuction.active = false;
 
-        int idWidth = this.font.getWidth(Text.translatable("gui.lightmanscurrency.settings.persistent.id"));
-        this.persistentAuctionIDInput = this.screen.addRenderableTabWidget(new TextFieldWidget(this.font, this.screen.getGuiLeft() + idWidth + 2, this.screen.getGuiTop() - 40, this.screen.getImageWidth() - idWidth - 2, 18, Text.empty()));
+        int idWidth = this.font.getWidth(EasyText.translatable("gui.lightmanscurrency.settings.persistent.id"));
+        this.persistentAuctionIDInput = this.screen.addRenderableTabWidget(new TextFieldWidget(this.font, this.screen.getGuiLeft() + idWidth + 2, this.screen.getGuiTop() - 40, this.screen.getImageWidth() - idWidth - 2, 18, EasyText.empty()));
         this.persistentAuctionIDInput.visible = CommandLCAdmin.isAdminPlayer(this.screen.getScreenHandler().player);
 
     }
@@ -126,14 +126,14 @@ public class AuctionCreateClientTab extends TraderStorageClientTab<AuctionCreate
         }
 
         //Item Slot label
-        this.font.draw(pose, Text.translatable("gui.lightmanscurrency.auction.auctionitems"), this.screen.getGuiLeft() + TraderMenu.SLOT_OFFSET + 7, this.screen.getGuiTop() + 112, 0x404040);
+        this.font.draw(pose, EasyText.translatable("gui.lightmanscurrency.auction.auctionitems"), this.screen.getGuiLeft() + TraderMenu.SLOT_OFFSET + 7, this.screen.getGuiTop() + 112, 0x404040);
 
         if(this.locked && this.successTime != 0)
-            TextRenderUtil.drawCenteredText(pose, Text.translatable("gui.lightmanscurrency.auction.create.success").formatted(Formatting.BOLD), this.screen.getGuiLeft() + this.screen.getImageWidth() / 2, 34, 0x404040);
+            TextRenderUtil.drawCenteredText(pose, EasyText.translatable("gui.lightmanscurrency.auction.create.success").formatted(Formatting.BOLD), this.screen.getGuiLeft() + this.screen.getImageWidth() / 2, 34, 0x404040);
 
         if(CommandLCAdmin.isAdminPlayer(this.screen.getScreenHandler().player))
         {
-            this.font.draw(pose, Text.translatable("gui.lightmanscurrency.settings.persistent.id"), this.screen.getGuiLeft(), this.screen.getGuiTop() - 35, 0xFFFFFF);
+            this.font.draw(pose, EasyText.translatable("gui.lightmanscurrency.settings.persistent.id"), this.screen.getGuiLeft(), this.screen.getGuiTop() - 35, 0xFFFFFF);
         }
 
     }
@@ -194,7 +194,7 @@ public class AuctionCreateClientTab extends TraderStorageClientTab<AuctionCreate
 
     private void TogglePriceTarget() {
         this.startingBidMode = !this.startingBidMode;
-        this.buttonTogglePriceMode.setMessage(Text.translatable(this.startingBidMode ? "button.lightmanscurrency.auction.toggleprice.startingbid" : "button.lightmanscurrency.auction.toggleprice.mindeltabid"));
+        this.buttonTogglePriceMode.setMessage(EasyText.translatable(this.startingBidMode ? "button.lightmanscurrency.auction.toggleprice.startingbid" : "button.lightmanscurrency.auction.toggleprice.mindeltabid"));
         if(this.startingBidMode)
             this.priceSelect.setCoinValue(this.pendingAuction.getLastBidAmount());
         else

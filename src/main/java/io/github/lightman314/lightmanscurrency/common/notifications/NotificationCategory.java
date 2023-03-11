@@ -3,11 +3,12 @@ package io.github.lightman314.lightmanscurrency.common.notifications;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab.ITab;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public abstract class NotificationCategory implements ITab
 
     private static final Map<String,Function<NbtCompound,NotificationCategory>> DESERIALIZERS = new HashMap<>();
 
-    public static final void register(Identifier type, Function<NbtCompound,NotificationCategory> deserializer) {
+    public static void register(Identifier type, Function<NbtCompound,NotificationCategory> deserializer) {
         String t = type.toString();
         if(DESERIALIZERS.containsKey(t))
         {
@@ -35,7 +36,7 @@ public abstract class NotificationCategory implements ITab
         DESERIALIZERS.put(t, deserializer);
     }
 
-    public static final NotificationCategory deserialize(NbtCompound compound) {
+    public static NotificationCategory deserialize(NbtCompound compound) {
         if(compound.contains("type"))
         {
             String type = compound.getString("type");
@@ -68,9 +69,9 @@ public abstract class NotificationCategory implements ITab
 
     public static final NotificationCategory GENERAL = new NotificationCategory() {
         @Override
-        public IconData getIcon() { return IconData.of(Items.CHEST); }
+        public @NotNull IconData getIcon() { return IconData.of(Items.CHEST); }
         @Override
-        public MutableText getName() { return Text.translatable("notifications.source.general"); }
+        public MutableText getName() { return EasyText.translatable("notifications.source.general"); }
         @Override
         public boolean matches(NotificationCategory other) { return other == GENERAL; }
         @Override

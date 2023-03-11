@@ -8,6 +8,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.TraderSettingsS
 import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.SettingsTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.DirectionalSettingsWidget;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.InputTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
@@ -15,7 +16,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.NotNull;
 
@@ -87,7 +87,7 @@ public class InputTab extends SettingsTab {
         InputTraderData trader = this.getInputTrader();
         if(trader != null)
             return trader.inputSettingsTabTooltip();
-        return Text.translatable("tooltip.lightmanscurrency.settings.iteminput");
+        return EasyText.translatable("tooltip.lightmanscurrency.settings.iteminput");
     }
 
     public List<InputTabAddon> getAddons() {
@@ -120,8 +120,8 @@ public class InputTab extends SettingsTab {
         //ItemTraderSettings settings = this.getSetting(ItemTraderSettings.class);
 
         //Side Widget Labels
-        this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.settings.iteminput.side"), screen.guiLeft() + 20, screen.guiTop() + 7, this.getTextColor());
-        this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.settings.itemoutput.side"), screen.guiLeft() + 110, screen.guiTop() + 7, this.getTextColor());
+        this.getFont().draw(pose, EasyText.translatable("gui.lightmanscurrency.settings.iteminput.side"), screen.guiLeft() + 20, screen.guiTop() + 7, this.getTextColor());
+        this.getFont().draw(pose, EasyText.translatable("gui.lightmanscurrency.settings.itemoutput.side"), screen.guiLeft() + 110, screen.guiTop() + 7, this.getTextColor());
 
         this.getAddons().forEach(a -> a.preRender(screen, pose, mouseX, mouseY, partialTicks));
 

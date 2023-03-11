@@ -10,6 +10,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.Di
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.DisplayEntry;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderStorageMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.TraderStorageTab;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.item.ItemTradeEditTab;
@@ -483,27 +484,27 @@ public class ItemTradeData extends TradeData implements IBarterTrade {
             //Price difference (intended - actual = difference)
             long difference = differences.priceDifference();
             if(difference < 0) //More expensive
-                list.add(Text.translatable("gui.lightmanscurrency.interface.difference.expensive", MoneyUtil.getStringOfValue(-difference)).formatted(Formatting.RED));
+                list.add(EasyText.translatable("gui.lightmanscurrency.interface.difference.expensive", MoneyUtil.getStringOfValue(-difference)).formatted(Formatting.RED));
             else //Cheaper
-                list.add(Text.translatable("gui.lightmanscurrency.interface.difference.cheaper", MoneyUtil.getStringOfValue(difference)).formatted(Formatting.RED));
+                list.add(EasyText.translatable("gui.lightmanscurrency.interface.difference.cheaper", MoneyUtil.getStringOfValue(difference)).formatted(Formatting.RED));
         }
         for(int i = 0; i < differences.getProductResultCount(); ++i)
         {
-            Text slotName = Text.translatable("gui.lightmanscurrency.interface.item.difference.product." + i);
+            Text slotName = EasyText.translatable("gui.lightmanscurrency.interface.item.difference.product." + i);
             ProductComparisonResult productCheck = differences.getProductResult(i);
             if(!productCheck.SameProductType())
-                list.add(Text.translatable("gui.lightmanscurrency.interface.item.difference.itemtype", slotName).formatted(Formatting.RED));
+                list.add(EasyText.translatable("gui.lightmanscurrency.interface.item.difference.itemtype", slotName).formatted(Formatting.RED));
             else
             {
                 if(!productCheck.SameProductNBT()) //Don't announce changes in NBT if the item is also different
-                    list.add(Text.translatable("gui.lightmanscurrency.interface.item.difference.itemnbt").formatted(Formatting.RED));
+                    list.add(EasyText.translatable("gui.lightmanscurrency.interface.item.difference.itemnbt").formatted(Formatting.RED));
                 else if(!productCheck.SameProductQuantity()) //Don't announce changes in quantity if the item or nbt is also different
                 {
                     int quantityDifference = productCheck.ProductQuantityDifference();
                     if(quantityDifference < 0) //More items
-                        list.add(Text.translatable("gui.lightmanscurrency.interface.item.difference.quantity.more", slotName, -quantityDifference).formatted(Formatting.RED));
+                        list.add(EasyText.translatable("gui.lightmanscurrency.interface.item.difference.quantity.more", slotName, -quantityDifference).formatted(Formatting.RED));
                     else //Less items
-                        list.add(Text.translatable("gui.lightmanscurrency.interface.item.difference.quantity.less", slotName, quantityDifference).formatted(Formatting.RED));
+                        list.add(EasyText.translatable("gui.lightmanscurrency.interface.item.difference.quantity.less", slotName, quantityDifference).formatted(Formatting.RED));
                 }
             }
         }
@@ -514,7 +515,7 @@ public class ItemTradeData extends TradeData implements IBarterTrade {
     public List<DisplayEntry> getInputDisplays(TradeContext context) {
         //If this is a sale, this is the price
         if(this.isSale())
-            return Lists.newArrayList(DisplayEntry.of(this.getCost(context), context.isStorageMode ? Lists.newArrayList(Text.translatable("tooltip.lightmanscurrency.trader.price_edit")) : null));
+            return Lists.newArrayList(DisplayEntry.of(this.getCost(context), context.isStorageMode ? Lists.newArrayList(EasyText.translatable("tooltip.lightmanscurrency.trader.price_edit")) : null));
         if(this.isPurchase())
             return this.getSaleItemEntries(context);
         if(this.isBarter())
@@ -540,7 +541,7 @@ public class ItemTradeData extends TradeData implements IBarterTrade {
             if(!item.isEmpty())
                 entries.add(DisplayEntry.of(item, item.getCount(), this.getSaleItemTooltip(item, this.getCustomName(i), context)));
             else if(context.isStorageMode)
-                entries.add(DisplayEntry.of(this.restriction.getEmptySlotBG(), Lists.newArrayList(Text.translatable("tooltip.lightmanscurrency.trader.item_edit"))));
+                entries.add(DisplayEntry.of(this.restriction.getEmptySlotBG(), Lists.newArrayList(EasyText.translatable("tooltip.lightmanscurrency.trader.item_edit"))));
         }
         return entries;
     }
@@ -550,7 +551,7 @@ public class ItemTradeData extends TradeData implements IBarterTrade {
         if(stack.isEmpty())
         {
             if(context.isStorageMode)
-                return Lists.newArrayList(Text.translatable("tooltip.lightmanscurrency.trader.item_edit"));
+                return Lists.newArrayList(EasyText.translatable("tooltip.lightmanscurrency.trader.item_edit"));
             return null;
         }
 
@@ -559,17 +560,17 @@ public class ItemTradeData extends TradeData implements IBarterTrade {
         if(!customName.isEmpty() && (this.isSale() || this.isBarter()))
         {
             originalName = tooltips.get(0);
-            tooltips.set(0, Text.literal(customName).formatted(Formatting.GOLD));
+            tooltips.set(0, EasyText.literal(customName).formatted(Formatting.GOLD));
         }
         //Stop here if this is in storage mode, and there's no custom name
         if(context.isStorageMode && originalName == null)
             return tooltips;
 
         //Trade Info
-        tooltips.add(Text.translatable("tooltip.lightmanscurrency.trader.info").formatted(Formatting.GOLD));
+        tooltips.add(EasyText.translatable("tooltip.lightmanscurrency.trader.info").formatted(Formatting.GOLD));
         //Custom Name
         if(originalName != null)
-            tooltips.add(Text.translatable("tooltip.lightmanscurrency.trader.originalname", originalName).formatted(Formatting.GOLD));
+            tooltips.add(EasyText.translatable("tooltip.lightmanscurrency.trader.originalname", originalName).formatted(Formatting.GOLD));
 
         if(context.hasTrader() && context.hasPlayerReference())
         {
@@ -577,7 +578,7 @@ public class ItemTradeData extends TradeData implements IBarterTrade {
             if(context.getTrader() instanceof ItemTraderData)
             {
                 ItemTraderData trader = (ItemTraderData)context.getTrader();
-                tooltips.add(Text.translatable("tooltip.lightmanscurrency.trader.stock", trader.isCreative() ? Text.translatable("tooltip.lightmanscurrency.trader.stock.infinite").formatted(Formatting.GOLD) : Text.literal(String.valueOf(this.stockCount(context))).formatted(Formatting.GOLD)).formatted(Formatting.GOLD));
+                tooltips.add(EasyText.translatable("tooltip.lightmanscurrency.trader.stock", trader.isCreative() ? EasyText.translatable("tooltip.lightmanscurrency.trader.stock.infinite").formatted(Formatting.GOLD) : EasyText.literal(String.valueOf(this.stockCount(context))).formatted(Formatting.GOLD)).formatted(Formatting.GOLD));
             }
         }
 
@@ -593,7 +594,7 @@ public class ItemTradeData extends TradeData implements IBarterTrade {
             if(!item.isEmpty())
                 entries.add(DisplayEntry.of(item, item.getCount(), ItemRenderUtil.getTooltipFromItem(item)));
             else if(context.isStorageMode)
-                entries.add(DisplayEntry.of(ItemRenderUtil.BACKGROUND, Lists.newArrayList(Text.translatable("tooltip.lightmanscurrency.trader.item_edit"))));
+                entries.add(DisplayEntry.of(ItemRenderUtil.BACKGROUND, Lists.newArrayList(EasyText.translatable("tooltip.lightmanscurrency.trader.item_edit"))));
         }
         return entries;
     }
@@ -620,14 +621,14 @@ public class ItemTradeData extends TradeData implements IBarterTrade {
             {
                 //Check Stock
                 if(this.stockCount(context) <= 0)
-                    alerts.add(AlertData.warn(Text.translatable("tooltip.lightmanscurrency.outofstock")));
+                    alerts.add(AlertData.warn(EasyText.translatable("tooltip.lightmanscurrency.outofstock")));
                 //Check Space
                 if(!this.hasSpace(trader))
-                    alerts.add(AlertData.warn(Text.translatable("tooltip.lightmanscurrency.outofspace")));
+                    alerts.add(AlertData.warn(EasyText.translatable("tooltip.lightmanscurrency.outofspace")));
             }
             //Check whether they can afford the cost
             if(!this.canAfford(context))
-                alerts.add(AlertData.warn(Text.translatable("tooltip.lightmanscurrency.cannotafford")));
+                alerts.add(AlertData.warn(EasyText.translatable("tooltip.lightmanscurrency.cannotafford")));
         }
     }
 

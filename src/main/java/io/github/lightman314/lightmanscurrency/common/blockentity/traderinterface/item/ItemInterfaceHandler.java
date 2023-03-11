@@ -104,7 +104,7 @@ public class ItemInterfaceHandler extends ConfigurableSidedHandler {
         }
 
         @Override
-        public Iterator<StorageView<ItemVariant>> iterator() {
+        public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction) {
             List<StorageView<ItemVariant>> slotView = new ArrayList<>();
             List<ItemStack> bufferItems = this.getBuffer().getContents();
             for(int i = 0; i < bufferItems.size(); ++i)

@@ -23,33 +23,39 @@ public class FabricStorageUtil {
 
     public static int getItemCount(Storage<ItemVariant> storage, ItemStack stack) {
         int foundCount = 0;
-        Iterator<StorageView<ItemVariant>> iterator = storage.iterator();
+        Transaction transaction = newTransaction();
+        Iterator<? extends StorageView<ItemVariant>> iterator = storage.iterator(transaction);
         while(iterator.hasNext())
         {
             StorageView<ItemVariant> slot = iterator.next();
             if(slot.getResource().matches(stack))
                 foundCount += slot.getAmount();
         }
+        transaction.close();
         return foundCount;
     }
 
     public static int getItemCount(Storage<ItemVariant> storage, Function<ItemVariant,Boolean> filter)
     {
         int foundCount = 0;
-        Iterator<StorageView<ItemVariant>> iterator = storage.iterator();
+        Transaction transaction = newTransaction();
+        Iterator<? extends StorageView<ItemVariant>> iterator = storage.iterator(transaction);
         while(iterator.hasNext())
         {
             StorageView<ItemVariant> slot = iterator.next();
             if(filter.apply(slot.getResource()))
                 foundCount += slot.getAmount();
         }
+        transaction.close();
         return foundCount;
     }
 
     public static List<ItemStack> getMatchingItems(Storage<ItemVariant> storage, Function<ItemVariant,Boolean> filter)
     {
         List<ItemStack> results = new ArrayList<>();
-        Iterator<StorageView<ItemVariant>> iterator = storage.iterator();
+        Transaction transaction = newTransaction();
+        Iterator<? extends StorageView<ItemVariant>> iterator = storage.iterator(transaction);
+        transaction.close();
         while(iterator.hasNext())
         {
             StorageView<ItemVariant> slot = iterator.next();
@@ -68,7 +74,9 @@ public class FabricStorageUtil {
     public static long getFluidQuantity(Storage<FluidVariant> storage, FluidStack stack)
     {
         long foundQuantity = 0;
-        Iterator<StorageView<FluidVariant>> iterator = storage.iterator();
+        Transaction transaction = newTransaction();
+        Iterator<? extends StorageView<FluidVariant>> iterator = storage.iterator(transaction);
+        transaction.close();
         while(iterator.hasNext())
         {
             FluidStack fluidEntry = getStack(iterator.next());

@@ -8,10 +8,10 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.common.atm.ATMConversionButtonData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.network.server.messages.bank.CMessageATMExchange;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class ExchangeTab extends ATMTab{
@@ -51,6 +51,6 @@ public class ExchangeTab extends ATMTab{
     public @NotNull IconData getIcon() { return IconData.of(ModBlocks.MACHINE_ATM); }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.atm.conversion"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.atm.conversion"); }
 
 }

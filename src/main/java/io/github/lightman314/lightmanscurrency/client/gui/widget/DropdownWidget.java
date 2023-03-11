@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.DropdownButton;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -49,7 +50,7 @@ public class DropdownWidget extends ClickableWidget {
     }
 
     public DropdownWidget(int x, int y, int width, TextRenderer font, int selected, Consumer<Integer> onSelect, Function<Integer,Boolean> optionActive, Function<ButtonWidget,ButtonWidget> addButton, List<Text> options) {
-        super(x, y, width, HEIGHT, Text.empty());
+        super(x, y, width, HEIGHT, EasyText.empty());
         this.font = font;
         this.options = options;
         this.currentlySelected = MathUtil.clamp(selected, 0, this.options.size() - 1);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.TooltipItem;
 import net.minecraft.text.Text;
 
@@ -19,9 +20,9 @@ public class LCTooltips {
 	public static final Supplier<List<Text>> COIN_MINT = () -> {
 		List<Text> result = new ArrayList<>();
 		//if(Config.SERVER.allowCoinMinting.get())
-			result.add(Text.translatable("tooltip.lightmanscurrency.coinmint.mintable").fillStyle(TooltipItem.DEFAULT_STYLE));
+			result.add(EasyText.translatable("tooltip.lightmanscurrency.coinmint.mintable").fillStyle(TooltipItem.DEFAULT_STYLE));
 		//if(Config.SERVER.allowCoinMelting.get())
-			result.add(Text.translatable("tooltip.lightmanscurrency.coinmint.meltable").fillStyle(TooltipItem.DEFAULT_STYLE));
+			result.add(EasyText.translatable("tooltip.lightmanscurrency.coinmint.meltable").fillStyle(TooltipItem.DEFAULT_STYLE));
 		return result;
 	};
 	

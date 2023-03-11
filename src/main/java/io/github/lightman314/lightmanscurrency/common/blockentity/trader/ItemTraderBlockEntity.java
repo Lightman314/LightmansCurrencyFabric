@@ -11,7 +11,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.inventory.SidedInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Quaternion;
@@ -21,7 +20,7 @@ public class ItemTraderBlockEntity extends TraderBlockEntity<ItemTraderData> {
 
     protected long rotationTime = 0;
     protected int tradeCount;
-    protected boolean networkTrader = false;
+    protected boolean networkTrader;
 
     public ItemTraderBlockEntity(BlockPos pos, BlockState state) { this(ModBlockEntities.ITEM_TRADER, pos, state, 1, false); }
 
@@ -51,9 +50,8 @@ public class ItemTraderBlockEntity extends TraderBlockEntity<ItemTraderData> {
     public List<Vec3f> GetStackRenderPos(int tradeSlot, boolean isDoubleTrade)
     {
         Block block = this.getCachedState().getBlock();
-        if(block instanceof IItemTraderBlock)
+        if(block instanceof IItemTraderBlock traderBlock)
         {
-            IItemTraderBlock traderBlock = (IItemTraderBlock)block;
             return traderBlock.GetStackRenderPos(tradeSlot, this.getCachedState(), isDoubleTrade);
         }
         else
@@ -68,9 +66,8 @@ public class ItemTraderBlockEntity extends TraderBlockEntity<ItemTraderData> {
     public List<Quaternion> GetStackRenderRot(int tradeSlot, float partialTicks)
     {
         Block block = this.getCachedState().getBlock();
-        if(block instanceof IItemTraderBlock)
+        if(block instanceof IItemTraderBlock traderBlock)
         {
-            IItemTraderBlock traderBlock = (IItemTraderBlock)block;
             List<Quaternion> rotation = traderBlock.GetStackRenderRot(tradeSlot, this.getCachedState());
             //If null received. Rotate item based on world time
             if(rotation == null)
@@ -92,9 +89,8 @@ public class ItemTraderBlockEntity extends TraderBlockEntity<ItemTraderData> {
     public float GetStackRenderScale(int tradeSlot)
     {
         Block block = this.getCachedState().getBlock();
-        if(block instanceof IItemTraderBlock)
+        if(block instanceof IItemTraderBlock traderBlock)
         {
-            IItemTraderBlock traderBlock = (IItemTraderBlock)block;
             return traderBlock.GetStackRenderScale(tradeSlot, this.getCachedState());
         }
         else
@@ -105,9 +101,8 @@ public class ItemTraderBlockEntity extends TraderBlockEntity<ItemTraderData> {
     public int maxRenderIndex()
     {
         Block block = this.getCachedState().getBlock();
-        if(block instanceof IItemTraderBlock)
+        if(block instanceof IItemTraderBlock traderBlock)
         {
-            IItemTraderBlock traderBlock = (IItemTraderBlock)block;
             return traderBlock.maxRenderIndex();
         }
         else

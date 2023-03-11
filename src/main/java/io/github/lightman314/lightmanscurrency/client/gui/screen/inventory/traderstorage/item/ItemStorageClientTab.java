@@ -14,6 +14,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollListener.
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.item.ItemStorageTab;
 import io.github.lightman314.lightmanscurrency.common.traders.item.ItemTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.item.storage.TraderItemStorage;
@@ -43,7 +44,7 @@ public class ItemStorageClientTab extends TraderStorageClientTab<ItemStorageTab>
     public @NotNull IconData getIcon() { return IconAndButtonUtil.ICON_STORAGE; }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.trader.storage"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.trader.storage"); }
 
     @Override
     public boolean tabButtonVisible() { return true; }
@@ -66,7 +67,7 @@ public class ItemStorageClientTab extends TraderStorageClientTab<ItemStorageTab>
     @Override
     public void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
 
-        this.font.draw(pose, Text.translatable("gui.lightmanscurrency.storage"), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040);
+        this.font.draw(pose, EasyText.translatable("gui.lightmanscurrency.storage"), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040);
 
         this.scrollBar.beforeWidgetRender(mouseY);
 
@@ -117,7 +118,7 @@ public class ItemStorageClientTab extends TraderStorageClientTab<ItemStorageTab>
         {
             String countText = String.valueOf(count / 1000);
             if((count % 1000) / 100 > 0)
-                countText += "." + String.valueOf((count % 1000) / 100);
+                countText += "." + ((count % 1000) / 100);
             return countText + "k";
         }
         return String.valueOf(count);
@@ -137,13 +138,13 @@ public class ItemStorageClientTab extends TraderStorageClientTab<ItemStorageTab>
                 {
                     ItemStack stack = storage.getContents().get(hoveredSlot);
                     List<Text> tooltip = ItemRenderUtil.getTooltipFromItem(stack);
-                    tooltip.add(Text.translatable("tooltip.lightmanscurrency.itemstorage", stack.getCount()));
+                    tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.itemstorage", stack.getCount()));
                     if(stack.getCount() >= 64)
                     {
                         if(stack.getCount() % 64 == 0)
-                            tooltip.add(Text.translatable("tooltip.lightmanscurrency.itemstorage.stacks.single", stack.getCount() / 64));
+                            tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.itemstorage.stacks.single", stack.getCount() / 64));
                         else
-                            tooltip.add(Text.translatable("tooltip.lightmanscurrency.itemstorage.stacks.multi", stack.getCount() / 64, stack.getCount() % 64));
+                            tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.itemstorage.stacks.multi", stack.getCount() / 64, stack.getCount() % 64));
                     }
                     this.screen.renderTooltip(pose, tooltip, mouseX, mouseY);
                 }

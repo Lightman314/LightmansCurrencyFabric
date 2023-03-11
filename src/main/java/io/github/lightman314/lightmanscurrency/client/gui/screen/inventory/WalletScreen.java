@@ -7,6 +7,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletMenu;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageOpenWalletBankMenu;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageWalletExchangeCoins;
@@ -68,7 +69,7 @@ public class WalletScreen extends MenuScreen<WalletMenu> {
 
     private Text getWalletName() {
         ItemStack wallet = this.handler.getWallet();
-        return wallet.isEmpty() ? Text.empty() : wallet.getName();
+        return wallet.isEmpty() ? EasyText.empty() : wallet.getName();
     }
 
     @Override
@@ -146,18 +147,18 @@ public class WalletScreen extends MenuScreen<WalletMenu> {
 
         if(this.buttonConvert != null && this.buttonConvert.isMouseOver(mouseX, mouseY))
         {
-            this.renderTooltip(matrixStack, Text.translatable("tooltip.lightmanscurrency.wallet.convert"), mouseX, mouseY);
+            this.renderTooltip(matrixStack, EasyText.translatable("tooltip.lightmanscurrency.wallet.convert"), mouseX, mouseY);
         }
         else if(this.buttonToggleAutoConvert != null && this.buttonToggleAutoConvert.isMouseOver(mouseX, mouseY))
         {
             if(this.autoConvert)
-                this.renderTooltip(matrixStack, Text.translatable("tooltip.lightmanscurrency.wallet.autoconvert.disable"), mouseX, mouseY);
+                this.renderTooltip(matrixStack, EasyText.translatable("tooltip.lightmanscurrency.wallet.autoconvert.disable"), mouseX, mouseY);
             else
-                this.renderTooltip(matrixStack, Text.translatable("tooltip.lightmanscurrency.wallet.autoconvert.enable"), mouseX, mouseY);
+                this.renderTooltip(matrixStack, EasyText.translatable("tooltip.lightmanscurrency.wallet.autoconvert.enable"), mouseX, mouseY);
         }
         else if(this.buttonOpenBank != null && this.buttonOpenBank.isMouseOver(mouseX, mouseY))
         {
-            this.renderTooltip(matrixStack, Text.translatable("tooltip.lightmanscurrency.wallet.openbank"), mouseX, mouseY);
+            this.renderTooltip(matrixStack, EasyText.translatable("tooltip.lightmanscurrency.wallet.openbank"), mouseX, mouseY);
         }
     }
 

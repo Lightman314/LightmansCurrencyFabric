@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.items;
 import java.util.List;
 import java.util.UUID;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import org.jetbrains.annotations.Nullable;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
@@ -35,7 +36,7 @@ public class TicketItem extends Item{
 		{
 			UUID ticketID = GetTicketID(stack);
 			if(ticketID != null)
-				tooltip.add(Text.translatable("tooltip.lightmanscurrency.ticket.id", ticketID));
+				tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.ticket.id", ticketID));
 		}
 	}
 	
@@ -79,12 +80,12 @@ public class TicketItem extends Item{
 	}
 	
 	public static Text getTicketMaterialsList() {
-		MutableText list = Text.empty();
+		MutableText list = EasyText.empty();
 		
 		try {
 			Registry.ITEM.getEntryList(TICKET_MATERIAL_KEY).ifPresent(itemList -> {
 				for(RegistryEntry<Item> item : itemList)
-					list.append(Text.literal("\n")).append(new ItemStack(item.value()).getName());
+					list.append(EasyText.literal("\n")).append(new ItemStack(item.value()).getName());
 			});
 		} catch(Throwable t) { t.printStackTrace(); }
 		

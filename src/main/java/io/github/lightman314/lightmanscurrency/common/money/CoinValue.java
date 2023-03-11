@@ -12,6 +12,7 @@ import com.google.gson.JsonPrimitive;
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
@@ -386,7 +387,7 @@ public class CoinValue
     {
 
         if(this.isFree)
-            return Text.translatable("gui.coinvalue.free").getString();
+            return EasyText.translatable("gui.coinvalue.free").getString();
 
         switch(LCConfigCommon.INSTANCE.coinValueType.get())
         {
@@ -415,7 +416,7 @@ public class CoinValue
 
     public MutableText getComponent() { return this.getComponent(""); }
 
-    public MutableText getComponent(String emptyFiller) { return Text.literal(this.getString(emptyFiller)); }
+    public MutableText getComponent(String emptyFiller) { return EasyText.literal(this.getString(emptyFiller)); }
 
     public long getRawValue()
     {

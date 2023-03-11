@@ -2,6 +2,7 @@ package io.github.lightman314.lightmanscurrency.client.gui.widget.button.invento
 
 import io.github.lightman314.lightmanscurrency.client.LCConfigClient;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TeamManagerScreen;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.config.options.custom.values.ScreenPosition;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -32,7 +33,7 @@ public class TeamManagerButton extends InventoryButton {
 
     public static void tryRenderTooltip(MatrixStack pose, int mouseX, int mouseY) {
         if(lastButton != null && lastButton.isMouseOver(mouseX, mouseY))
-            lastButton.screen.renderTooltip(pose, Text.translatable("tooltip.button.team_manager"), mouseX, mouseY);
+            lastButton.screen.renderTooltip(pose, EasyText.translatable("tooltip.button.team_manager"), mouseX, mouseY);
     }
 
 }

@@ -9,6 +9,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextInputUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.events.TradeEvent;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
@@ -47,9 +48,9 @@ public class TimedSale extends TradeRule {
         {
             switch (event.getTrade().getTradeDirection()) {
                 case SALE ->
-                        event.addHelpful(Text.translatable("traderule.lightmanscurrency.timed_sale.info.sale", this.discount, this.getTimeRemaining().getString()));
+                        event.addHelpful(EasyText.translatable("traderule.lightmanscurrency.timed_sale.info.sale", this.discount, this.getTimeRemaining().getString()));
                 case PURCHASE ->
-                        event.addHelpful(Text.translatable("traderule.lightmanscurrency.timed_sale.info.purchase", this.discount, this.getTimeRemaining().getString()));
+                        event.addHelpful(EasyText.translatable("traderule.lightmanscurrency.timed_sale.info.purchase", this.discount, this.getTimeRemaining().getString()));
                 default -> {
                 } //Nothing if direction is NONE
             }
@@ -209,10 +210,10 @@ public class TimedSale extends TradeRule {
         public void initTab() {
 
 
-            this.discountInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 9, 20, 20, Text.empty()));
+            this.discountInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 9, 20, 20, EasyText.empty()));
             this.discountInput.setMaxLength(2);
             this.discountInput.setText(Integer.toString(this.getRule().discount));
-            this.buttonSetDiscount = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 110, screen.guiTop() + 10, 50, 20, Text.translatable("gui.button.lightmanscurrency.discount.set"), this::PressSetDiscountButton));
+            this.buttonSetDiscount = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 110, screen.guiTop() + 10, 50, 20, EasyText.translatable("gui.button.lightmanscurrency.discount.set"), this::PressSetDiscountButton));
 
             this.buttonStartSale = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 45, 156, 20, this.getButtonText(), this::PressStartButton));
 
@@ -227,11 +228,11 @@ public class TimedSale extends TradeRule {
             if(getRule() == null)
                 return;
 
-            this.screen.getFont().draw(matrixStack, Text.translatable("gui.lightmanscurrency.discount.tooltip"), this.discountInput.x + this.discountInput.getWidth() + 4, this.discountInput.y + 3, 0xFFFFFF);
+            this.screen.getFont().draw(matrixStack, EasyText.translatable("gui.lightmanscurrency.discount.tooltip"), this.discountInput.x + this.discountInput.getWidth() + 4, this.discountInput.y + 3, 0xFFFFFF);
 
-            Text infoText = Text.translatable("gui.button.lightmanscurrency.timed_sale.info.inactive", new TimeData(this.getRule().duration).getShortString());
+            Text infoText = EasyText.translatable("gui.button.lightmanscurrency.timed_sale.info.inactive", new TimeData(this.getRule().duration).getShortString());
             if(this.getRule().timerActive())
-                infoText = Text.translatable("gui.button.lightmanscurrency.timed_sale.info.active", this.getRule().getTimeRemaining().getShortString(3));
+                infoText = EasyText.translatable("gui.button.lightmanscurrency.timed_sale.info.active", this.getRule().getTimeRemaining().getShortString(3));
 
             this.screen.getFont().draw(matrixStack, infoText.getString(), screen.guiLeft() + 10, screen.guiTop() + 35, 0xFFFFFF);
 
@@ -251,9 +252,9 @@ public class TimedSale extends TradeRule {
 
         }
 
-        private Text getButtonText()  { return Text.translatable("gui.button.lightmanscurrency.timed_sale." + (this.getRule().timerActive() ? "stop" : "start")); }
+        private Text getButtonText()  { return EasyText.translatable("gui.button.lightmanscurrency.timed_sale." + (this.getRule().timerActive() ? "stop" : "start")); }
 
-        private Text getButtonTooltip()  { return Text.translatable("gui.button.lightmanscurrency.timed_sale." + (this.getRule().timerActive() ? "stop" : "start") + ".tooltip"); }
+        private Text getButtonTooltip()  { return EasyText.translatable("gui.button.lightmanscurrency.timed_sale." + (this.getRule().timerActive() ? "stop" : "start") + ".tooltip"); }
 
         @Override
         public void onTabClose() {

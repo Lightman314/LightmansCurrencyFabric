@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderSaveData;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
@@ -12,7 +13,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class CMessageAddPersistentTrader extends ClientToServerPacket {
                                 //Overwrite the existing entry with the same id.
                                 persistentTraders.set(i, traderJson);
                                 TraderSaveData.setPersistentTraderSection(TraderSaveData.PERSISTENT_TRADER_SECTION, persistentTraders);
-                                player.sendMessage(Text.translatable("lightmanscurrency.message.persistent.trader.overwrite", id));
+                                player.sendMessage(EasyText.translatable("lightmanscurrency.message.persistent.trader.overwrite", id), false);
                                 return;
                             }
                         }
@@ -72,7 +72,7 @@ public class CMessageAddPersistentTrader extends ClientToServerPacket {
                         //If no trader found with the id, add to list
                         persistentTraders.add(traderJson);
                         TraderSaveData.setPersistentTraderSection(TraderSaveData.PERSISTENT_TRADER_SECTION, persistentTraders);
-                        player.sendMessage(Text.translatable("lightmanscurrency.message.persistent.trader.add", id));
+                        player.sendMessage(EasyText.translatable("lightmanscurrency.message.persistent.trader.add", id), false);
                         return;
                     } catch (Throwable t) { t.printStackTrace(); }
                 }
@@ -99,7 +99,7 @@ public class CMessageAddPersistentTrader extends ClientToServerPacket {
                             {
                                 persistentTraders.add(getTraderJson(trader, genID, owner));
                                 TraderSaveData.setPersistentTraderSection(TraderSaveData.PERSISTENT_TRADER_SECTION, persistentTraders);
-                                player.sendMessage(Text.translatable("lightmanscurrency.message.persistent.trader.add", genID));
+                                player.sendMessage(EasyText.translatable("lightmanscurrency.message.persistent.trader.add", genID), false);
                                 return;
                             }
                         }

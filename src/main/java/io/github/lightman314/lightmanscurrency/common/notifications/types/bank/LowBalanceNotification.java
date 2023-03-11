@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types.bank;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
@@ -32,7 +33,7 @@ public class LowBalanceNotification extends Notification{
 
     @Override
     public MutableText getMessage() {
-        return Text.translatable("notifications.message.bank_low_balance", this.value.getString());
+        return EasyText.translatable("notifications.message.bank_low_balance", this.value.getString());
     }
 
     @Override

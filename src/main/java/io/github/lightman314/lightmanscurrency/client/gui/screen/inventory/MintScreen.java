@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.client.gui.screen.inventory;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.MintMenu;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -9,7 +10,6 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainBut
 import io.github.lightman314.lightmanscurrency.network.server.messages.coinmint.CMessageMintCoin;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.realms.dto.PlayerInfo;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
@@ -76,9 +76,9 @@ public class MintScreen extends MenuScreen<MintMenu>{
         if(this.buttonMint != null && this.buttonMint.visible && this.buttonMint.isMouseOver(mouseX, mouseY))
         {
             if(this.handler.isMeltInput())
-                this.renderTooltip(matrixStack, Text.translatable("gui.button.lightmanscurrency.melt"), mouseX, mouseY);
+                this.renderTooltip(matrixStack, EasyText.translatable("gui.button.lightmanscurrency.melt"), mouseX, mouseY);
             else
-                this.renderTooltip(matrixStack, Text.translatable("gui.button.lightmanscurrency.mint"), mouseX, mouseY);
+                this.renderTooltip(matrixStack, EasyText.translatable("gui.button.lightmanscurrency.mint"), mouseX, mouseY);
         }
 
     }

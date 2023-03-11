@@ -1,5 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.menu.factory;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -11,7 +12,7 @@ public class SimpleMenuFactory implements NamedScreenHandlerFactory{
 	private final IMenuFactory factory;
 	private final Text name;
 	
-	public SimpleMenuFactory(IMenuFactory factory) { this(factory, Text.empty()); }
+	public SimpleMenuFactory(IMenuFactory factory) { this(factory, EasyText.empty()); }
 	
 	public SimpleMenuFactory(IMenuFactory factory, Text name) {
 		this.factory = factory;

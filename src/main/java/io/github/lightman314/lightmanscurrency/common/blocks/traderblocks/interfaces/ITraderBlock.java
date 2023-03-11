@@ -28,6 +28,6 @@ public interface ITraderBlock extends IOwnableBlock, ICapabilityBlock {
 
     default ItemStack getDropBlockItem(World level, BlockPos pos, BlockState state) { return state != null ? new ItemStack(state.getBlock()) : ItemStack.EMPTY; }
 
-    public default BlockEntity getCapabilityBlockEntity(BlockState state, World level, BlockPos pos) { return this.getBlockEntity(state, level, pos); }
+    default BlockEntity getCapabilityBlockEntity(BlockState state, World level, BlockPos pos) { return this.getBlockEntity(state, level, pos); }
 
 }

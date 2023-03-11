@@ -14,6 +14,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.notifica
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab.TabButton;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationData;
@@ -65,7 +66,7 @@ public class NotificationScreen extends Screen implements IScrollable{
 
     int notificationScroll = 0;
 
-    public NotificationScreen() { super(Text.empty()); }
+    public NotificationScreen() { super(EasyText.empty()); }
 
     @Override
     public boolean shouldPause() { return false; }
@@ -94,7 +95,7 @@ public class NotificationScreen extends Screen implements IScrollable{
 
         this.notificationScroller = this.addDrawableChild(new ScrollBarWidget(this.guiLeft() + TabButton.SIZE + this.xSize - 15, this.guiTop() + 15, this.NOTIFICATIONS_PER_PAGE * this.NOTIFICATION_HEIGHT, this));
 
-        this.buttonMarkAsSeen = this.addDrawableChild(new MarkAsSeenButton(this.guiLeft() + this.xSize  + TabButton.SIZE - 15, this.guiTop() + 4, Text.translatable("gui.button.notifications.mark_read"), this::markAsRead));
+        this.buttonMarkAsSeen = this.addDrawableChild(new MarkAsSeenButton(this.guiLeft() + this.xSize  + TabButton.SIZE - 15, this.guiTop() + 4, EasyText.translatable("gui.button.notifications.mark_read"), this::markAsRead));
 
         this.tick();
 

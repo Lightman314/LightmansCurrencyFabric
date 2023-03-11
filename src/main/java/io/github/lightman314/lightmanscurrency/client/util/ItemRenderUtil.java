@@ -7,12 +7,9 @@ import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.MenuScreen;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.Font;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.texture.Sprite;
@@ -41,7 +38,7 @@ public class ItemRenderUtil {
     {
         if(alexHead != null)
             return alexHead;
-        ItemStack alexHead = new ItemStack(Items.PLAYER_HEAD);
+        alexHead = new ItemStack(Items.PLAYER_HEAD);
         NbtCompound headData = new NbtCompound();
         NbtCompound skullOwner = new NbtCompound();
         skullOwner.putIntArray("Id", new int[] {-731408145, -304985227, -1778597514, 158507129 });
@@ -76,7 +73,7 @@ public class ItemRenderUtil {
         if(screen != null)
             imageWidth = screen.width;
         if(screen instanceof MenuScreen<?>)
-            imageWidth = ((MenuScreen) screen).getImageWidth();
+            imageWidth = ((MenuScreen<?>) screen).getImageWidth();
 
         if(font == null)
             font = minecraft.textRenderer;

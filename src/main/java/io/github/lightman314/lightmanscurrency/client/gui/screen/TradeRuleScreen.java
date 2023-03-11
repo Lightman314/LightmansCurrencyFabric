@@ -10,6 +10,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderSaveData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
@@ -26,7 +27,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
@@ -82,7 +82,7 @@ public class TradeRuleScreen extends Screen {
 
     public TradeRuleScreen(long traderID, int tradeIndex)
     {
-        super(Text.empty());
+        super(EasyText.empty());
         this.traderID = traderID;
         this.tradeIndex = tradeIndex;
     }
@@ -159,7 +159,7 @@ public class TradeRuleScreen extends Screen {
             if(this.openTab >= 0)
                 this.openTab = -1;
 
-            this.textRenderer.draw(poseStack, Text.translatable("traderule.list.blurb").formatted(Formatting.BOLD), guiLeft() + 20, guiTop() + 10, 0xFFFFFF);
+            this.textRenderer.draw(poseStack, EasyText.translatable("traderule.list.blurb").formatted(Formatting.BOLD), guiLeft() + 20, guiTop() + 10, 0xFFFFFF);
 
             List<TradeRule> rules = this.getTradeRules();
             for(int i = 0; i < this.getTradeRules().size(); ++i)
@@ -176,7 +176,7 @@ public class TradeRuleScreen extends Screen {
 
         if(this.managerTab.isMouseOver(mouseX, mouseY))
         {
-            this.renderTooltip(poseStack, Text.translatable("gui.button.lightmanscurrency.manager"), mouseX, mouseY);
+            this.renderTooltip(poseStack, EasyText.translatable("gui.button.lightmanscurrency.manager"), mouseX, mouseY);
         }
         else
         {

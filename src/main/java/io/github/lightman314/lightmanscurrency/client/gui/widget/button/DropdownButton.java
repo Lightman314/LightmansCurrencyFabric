@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.widget.DropdownWidget;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -16,7 +17,7 @@ public class DropdownButton extends ButtonWidget {
 
     public DropdownButton(int x, int y, int width, TextRenderer font, Text optionText, PressAction pressable)
     {
-        super(x , y, width, DropdownWidget.HEIGHT, Text.empty(), pressable);
+        super(x , y, width, DropdownWidget.HEIGHT, EasyText.empty(), pressable);
         this.optionText = optionText;
         this.font = font;
     }

@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.enchantments.WalletEnchantment;
 import io.github.lightman314.lightmanscurrency.common.menu.factory.WalletMenuFactory;
 import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletMenuBase;
@@ -142,30 +143,30 @@ public class WalletItem extends Item{
 		
 		if(CanPickup(this))
 		{
-			tooltip.add(Text.translatable("tooltip.lightmanscurrency.wallet.pickup").formatted(Formatting.YELLOW));
+			tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.pickup").formatted(Formatting.YELLOW));
 		}
 		if(CanExchange(this))
 		{
 			if(CanPickup(this))
 			{
-				Text onOffText = getAutoConvert(stack) ? Text.translatable("tooltip.lightmanscurrency.wallet.autoConvert.on").formatted(Formatting.GREEN) : Text.translatable("tooltip.lightmanscurrency.wallet.autoConvert.off").formatted(Formatting.RED);
-				tooltip.add(Text.translatable("tooltip.lightmanscurrency.wallet.autoConvert", onOffText).formatted(Formatting.YELLOW));
+				Text onOffText = getAutoConvert(stack) ? EasyText.translatable("tooltip.lightmanscurrency.wallet.autoConvert.on").formatted(Formatting.GREEN) : EasyText.translatable("tooltip.lightmanscurrency.wallet.autoConvert.off").formatted(Formatting.RED);
+				tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.autoConvert", onOffText).formatted(Formatting.YELLOW));
 			}
 			else
 			{
-				tooltip.add(Text.translatable("tooltip.lightmanscurrency.wallet.manualConvert").formatted(Formatting.YELLOW));
+				tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.manualConvert").formatted(Formatting.YELLOW));
 			}
 		}
 		if(HasBankAccess(this))
 		{
-			tooltip.add(Text.translatable("tooltip.lightmanscurrency.wallet.bankaccount").formatted(Formatting.YELLOW));
+			tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.bankaccount").formatted(Formatting.YELLOW));
 		}
 		
 		WalletEnchantment.addWalletEnchantmentTooltips(tooltip, stack);
 		
 		CoinValue contents = new CoinValue(getWalletInventory(stack));
 		if(contents.getRawValue() > 0)
-			tooltip.add(Text.translatable("tooltip.lightmanscurrency.wallet.storedmoney", Text.literal(contents.getString()).formatted(Formatting.DARK_GREEN)).formatted(Formatting.YELLOW));
+			tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.storedmoney", EasyText.literal(contents.getString()).formatted(Formatting.DARK_GREEN)).formatted(Formatting.YELLOW));
 		
 	}
 	

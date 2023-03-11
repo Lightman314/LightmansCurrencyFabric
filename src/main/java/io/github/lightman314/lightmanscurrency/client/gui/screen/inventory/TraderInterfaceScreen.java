@@ -15,6 +15,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab.TabB
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.blockentity.traderinterface.TraderInterfaceBlockEntity;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderInterfaceMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.traderinterface.TraderInterfaceTab;
 import net.minecraft.client.gui.Element;
@@ -72,7 +73,7 @@ public class TraderInterfaceScreen extends MenuScreen<TraderInterfaceMenu> imple
 
         this.modeToggle = this.addDrawableChild(new IconButton(this.x + this.backgroundWidth, this.y, this::ToggleMode, () -> IconAndButtonUtil.GetIcon(this.handler.getTraderInterface().getMode()), new IconAndButtonUtil.SuppliedTooltip(() -> this.getMode().getDisplayText())));
 
-        this.onlineModeToggle = this.addDrawableChild(new IconButton(this.x + this.backgroundWidth, this.y + 20, this::ToggleOnlineMode, () -> this.handler.getTraderInterface().isOnlineMode() ? IconAndButtonUtil.ICON_ONLINEMODE_TRUE : IconAndButtonUtil.ICON_ONLINEMODE_FALSE, new IconAndButtonUtil.SuppliedTooltip(() -> Text.translatable("gui.lightmanscurrency.interface.onlinemode." + this.handler.getTraderInterface().isOnlineMode()))));
+        this.onlineModeToggle = this.addDrawableChild(new IconButton(this.x + this.backgroundWidth, this.y + 20, this::ToggleOnlineMode, () -> this.handler.getTraderInterface().isOnlineMode() ? IconAndButtonUtil.ICON_ONLINEMODE_TRUE : IconAndButtonUtil.ICON_ONLINEMODE_FALSE, new IconAndButtonUtil.SuppliedTooltip(() -> EasyText.translatable("gui.lightmanscurrency.interface.onlinemode." + this.handler.getTraderInterface().isOnlineMode()))));
 
         //Initialize the current tab
         this.currentTab().onOpen();

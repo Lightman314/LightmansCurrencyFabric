@@ -11,15 +11,15 @@ import java.util.List;
 public interface IItemTraderBlock extends ITraderBlock {
 
     @Environment(EnvType.CLIENT)
-    public List<Vec3f> GetStackRenderPos(int tradeSlot, BlockState state, boolean isDoubleTrade);
+    List<Vec3f> GetStackRenderPos(int tradeSlot, BlockState state, boolean isDoubleTrade);
 
     @Environment(EnvType.CLIENT)
-    public List<Quaternion> GetStackRenderRot(int tradeSlot, BlockState state);
+    List<Quaternion> GetStackRenderRot(int tradeSlot, BlockState state);
 
     @Environment(EnvType.CLIENT)
-    public float GetStackRenderScale(int tradeSlot, BlockState state);
+    float GetStackRenderScale(int tradeSlot, BlockState state);
 
     @Environment(EnvType.CLIENT)
-    public int maxRenderIndex();
+    int maxRenderIndex();
 
 }

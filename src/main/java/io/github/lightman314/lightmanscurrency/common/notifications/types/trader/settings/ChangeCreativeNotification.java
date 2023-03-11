@@ -1,13 +1,13 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types.trader.settings;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import io.github.lightman314.lightmanscurrency.common.notifications.categories.NullCategory;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class ChangeCreativeNotification extends Notification {
@@ -27,7 +27,7 @@ public class ChangeCreativeNotification extends Notification {
 
     @Override
     public MutableText getMessage() {
-        return Text.translatable("log.settings.creativemode", this.player.getName(true), Text.translatable(this.creative ? "log.settings.enabled" : "log.settings.disabled"));
+        return EasyText.translatable("log.settings.creativemode", this.player.getName(true), EasyText.translatable(this.creative ? "log.settings.enabled" : "log.settings.disabled"));
     }
 
     @Override

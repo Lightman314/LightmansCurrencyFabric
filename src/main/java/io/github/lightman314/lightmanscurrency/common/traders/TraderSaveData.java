@@ -78,7 +78,7 @@ public class TraderSaveData extends PersistentState {
     }
 
     private long nextID = 0;
-    private final long getNextID() {
+    private long getNextID() {
         long id = nextID;
         this.nextID++;
         this.markDirty();
@@ -370,7 +370,7 @@ public class TraderSaveData extends PersistentState {
         }
         if(hadNone)
             throw new Exception("Json Data has no 'Traders' or 'Auctions' entry.");
-    };
+    }
 
     private void savePersistentTraderJson(File ptf) {
         File dir = new File(ptf.getParent());

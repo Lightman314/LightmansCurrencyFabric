@@ -5,11 +5,11 @@ import java.util.List;
 import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.blockentity.CoinMintBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.RotatableBlock;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.TooltipItem;
 import io.github.lightman314.lightmanscurrency.common.items.tooltips.LCTooltips;
 import io.github.lightman314.lightmanscurrency.common.menu.MintMenu;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CoinMintBlock extends RotatableBlock implements BlockEntityProvider {
 
-	private static final MutableText TITLE = Text.translatable("gui.lightmanscurrency.coinmint.title");
+	private static final MutableText TITLE = EasyText.translatable("gui.lightmanscurrency.coinmint.title");
 	
 	public CoinMintBlock(Settings properties) { super(properties, createCuboidShape(1d,0d,1d,15d,16d,15d)); }
 	

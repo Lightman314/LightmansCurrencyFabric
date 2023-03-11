@@ -7,6 +7,6 @@ import net.minecraft.world.World;
 
 public interface ICapabilityBlock {
 
-    public BlockEntity getCapabilityBlockEntity(BlockState state, World level, BlockPos pos);
+    BlockEntity getCapabilityBlockEntity(BlockState state, World level, BlockPos pos);
 
 }

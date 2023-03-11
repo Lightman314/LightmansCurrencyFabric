@@ -3,11 +3,11 @@ package io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -24,31 +24,31 @@ public class IconButton extends ButtonWidget {
 
     public IconButton(int x, int y, PressAction pressable, @NotNull IconData icon)
     {
-        super(x, y, SIZE, SIZE, Text.empty(), pressable);
+        super(x, y, SIZE, SIZE, EasyText.empty(), pressable);
         this.setIcon(icon);
     }
 
     public IconButton(int x, int y, PressAction pressable, @NotNull Supplier<IconData> iconSource)
     {
-        super(x, y, SIZE, SIZE, Text.empty(), pressable);
+        super(x, y, SIZE, SIZE, EasyText.empty(), pressable);
         this.setIcon(iconSource);
     }
 
     public IconButton(int x, int y, PressAction pressable, @NotNull IconData icon, TooltipSupplier tooltip)
     {
-        super(x, y, SIZE, SIZE, Text.empty(), pressable, tooltip);
+        super(x, y, SIZE, SIZE, EasyText.empty(), pressable, tooltip);
         this.setIcon(icon);
     }
 
     public IconButton(int x, int y, PressAction pressable, @NotNull Supplier<IconData> iconSource, TooltipSupplier tooltip)
     {
-        super(x, y, SIZE, SIZE, Text.empty(), pressable, tooltip);
+        super(x, y, SIZE, SIZE, EasyText.empty(), pressable, tooltip);
         this.setIcon(iconSource);
     }
 
     public IconButton(int x, int y, PressAction pressable, @NotNull Function<IconButton,IconData> iconSource, TooltipSupplier tooltip)
     {
-        super(x,y,SIZE, SIZE, Text.empty(), pressable, tooltip);
+        super(x,y,SIZE, SIZE, EasyText.empty(), pressable, tooltip);
         this.setIcon(iconSource);
     }
 

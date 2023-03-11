@@ -16,6 +16,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.NetworkT
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.blockentity.traderinterface.TraderInterfaceBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.traderinterface.base.TraderSelectTab;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderSaveData;
@@ -24,7 +25,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class TraderSelectClientTab extends TraderInterfaceClientTab<TraderSelectTab> implements IScrollable{
@@ -35,7 +35,7 @@ public class TraderSelectClientTab extends TraderInterfaceClientTab<TraderSelect
     public @NotNull IconData getIcon() { return IconData.of(ModBlocks.TERMINAL); }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.interface.trader"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.interface.trader"); }
 
     @Override
     public boolean blockInventoryClosing() { return true; }
@@ -77,7 +77,7 @@ public class TraderSelectClientTab extends TraderInterfaceClientTab<TraderSelect
     @Override
     public void onOpen() {
 
-        this.searchField = this.screen.addRenderableTabWidget(new TextFieldWidget(this.font, this.screen.getGuiLeft() + 43, this.screen.getGuiTop() + 6, 101, 9, Text.translatable("gui.lightmanscurrency.terminal.search")));
+        this.searchField = this.screen.addRenderableTabWidget(new TextFieldWidget(this.font, this.screen.getGuiLeft() + 43, this.screen.getGuiTop() + 6, 101, 9, EasyText.translatable("gui.lightmanscurrency.terminal.search")));
         this.searchField.setDrawsBackground(false);
         this.searchField.setMaxLength(32);
         this.searchField.setEditableColor(0xFFFFFF);

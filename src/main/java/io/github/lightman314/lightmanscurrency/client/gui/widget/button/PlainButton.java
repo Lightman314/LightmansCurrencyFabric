@@ -2,6 +2,7 @@ package io.github.lightman314.lightmanscurrency.client.gui.widget.button;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -22,7 +23,7 @@ public class PlainButton extends ButtonWidget {
 
     public PlainButton(int x, int y, int sizeX, int sizeY, PressAction pressable, Identifier buttonResource, Supplier<Pair<Integer, Integer>> resourceSource)
     {
-        super(x, y, sizeX, sizeY, Text.empty(), pressable);
+        super(x, y, sizeX, sizeY, EasyText.empty(), pressable);
         this.buttonResource = buttonResource;
         this.resourceSource = resourceSource;
     }

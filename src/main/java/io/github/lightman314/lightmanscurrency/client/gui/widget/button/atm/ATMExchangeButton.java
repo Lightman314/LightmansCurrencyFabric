@@ -8,6 +8,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.ATMSc
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMConversionButtonData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -19,7 +20,7 @@ public class ATMExchangeButton extends ButtonWidget {
     private final ATMConversionButtonData data;
 
     public ATMExchangeButton(int left, int top, ATMConversionButtonData data, Consumer<String> commandHandler) {
-        super(left + data.xPos, top + data.yPos, data.width, HEIGHT, Text.empty(), b -> commandHandler.accept(data.command));
+        super(left + data.xPos, top + data.yPos, data.width, HEIGHT, EasyText.empty(), b -> commandHandler.accept(data.command));
         this.data = data;
     }
 

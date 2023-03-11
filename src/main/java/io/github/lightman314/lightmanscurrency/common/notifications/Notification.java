@@ -1,10 +1,10 @@
 package io.github.lightman314.lightmanscurrency.common.notifications;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
@@ -17,7 +17,7 @@ public abstract class Notification {
 
     private static final Map<String,Function<NbtCompound,Notification>> DESERIALIZERS = new HashMap<>();
 
-    public static final void register(Identifier type, Supplier<Notification> deserializer) {
+    public static void register(Identifier type, Supplier<Notification> deserializer) {
         register(type, c -> {
             Notification n = deserializer.get();
             n.load(c);
@@ -25,7 +25,7 @@ public abstract class Notification {
         });
     }
 
-    public static final void register(Identifier type, Function<NbtCompound,Notification> deserializer) {
+    public static void register(Identifier type, Function<NbtCompound,Notification> deserializer) {
         String t = type.toString();
         if(DESERIALIZERS.containsKey(t))
         {
@@ -40,7 +40,7 @@ public abstract class Notification {
         DESERIALIZERS.put(t, deserializer);
     }
 
-    public static final Notification deserialize(NbtCompound compound) {
+    public static Notification deserialize(NbtCompound compound) {
         if(compound.contains("Type") || compound.contains("type"))
         {
             String type = compound.contains("Type") ? compound.getString("Type") : compound.getString("type");
@@ -75,12 +75,12 @@ public abstract class Notification {
     public abstract MutableText getMessage();
 
     public MutableText getGeneralMessage() {
-        return Text.translatable("notifications.source.general.format", this.getCategory().getName(), this.getMessage());
+        return EasyText.translatable("notifications.source.general.format", this.getCategory().getName(), this.getMessage());
     }
 
     public MutableText getChatMessage() {
-        return Text.translatable("notifications.chat.format",
-                Text.translatable("notifications.chat.format.title", this.getCategory().getName()).formatted(Formatting.GOLD),
+        return EasyText.translatable("notifications.chat.format",
+                EasyText.translatable("notifications.chat.format.title", this.getCategory().getName()).formatted(Formatting.GOLD),
                 this.getMessage());
     }
 

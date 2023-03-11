@@ -8,13 +8,13 @@ import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.SettingsTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.options.PermissionOption;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.options.PermissionOption.OptionWidgets;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class PermissionsTab extends SettingsTab {
@@ -39,7 +39,7 @@ public class PermissionsTab extends SettingsTab {
     public @NotNull IconData getIcon() { return IconData.of(Items.BOOKSHELF); }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.settings.allyperms"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.settings.allyperms"); }
 
     @Override
     public boolean canOpen() { return this.hasPermissions(Permissions.EDIT_PERMISSIONS); }

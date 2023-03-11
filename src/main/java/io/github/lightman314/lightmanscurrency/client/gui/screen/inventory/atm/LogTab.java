@@ -6,13 +6,13 @@ import java.util.List;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.ATMScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.notifications.NotificationDisplayWidget;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.SimpleSlot;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class LogTab extends ATMTab{
@@ -25,7 +25,7 @@ public class LogTab extends ATMTab{
     public @NotNull IconData getIcon() { return IconData.of(Items.WRITABLE_BOOK); }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.atm.log"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.atm.log"); }
 
     @Override
     public void init() {

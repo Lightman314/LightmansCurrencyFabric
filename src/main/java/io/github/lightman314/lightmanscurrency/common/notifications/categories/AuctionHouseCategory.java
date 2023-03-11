@@ -2,12 +2,13 @@ package io.github.lightman314.lightmanscurrency.common.notifications.categories;
 
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.AuctionHouseTrader;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class AuctionHouseCategory extends NotificationCategory {
 
@@ -18,10 +19,10 @@ public class AuctionHouseCategory extends NotificationCategory {
     private AuctionHouseCategory() { }
 
     @Override
-    public IconData getIcon() { return AuctionHouseTrader.ICON; }
+    public @NotNull IconData getIcon() { return AuctionHouseTrader.ICON; }
 
     @Override
-    public MutableText getName() { return Text.translatable("gui.lightmanscurrency.universaltrader.auction"); }
+    public MutableText getName() { return EasyText.translatable("gui.lightmanscurrency.universaltrader.auction"); }
 
     @Override
     public Identifier getType() { return TYPE; }

@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types.auction;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.types.trader.item.ItemTradeNotification;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.tradedata.AuctionTradeData;
 import net.minecraft.nbt.NbtCompound;
@@ -38,7 +39,7 @@ public class AuctionHouseCancelNotification extends AuctionHouseNotification{
         Text itemText = getItemNames(this.items);
 
         //Create log from stored data
-        return Text.translatable("notifications.message.auction.canceled", itemText);
+        return EasyText.translatable("notifications.message.auction.canceled", itemText);
 
     }
 

@@ -4,13 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
@@ -30,7 +30,7 @@ public class NetworkTraderButton extends ButtonWidget {
 
     public NetworkTraderButton(int x, int y, PressAction pressable, TextRenderer font)
     {
-        super(x, y, WIDTH, HEIGHT, Text.empty(), pressable);
+        super(x, y, WIDTH, HEIGHT, EasyText.empty(), pressable);
         this.font = font;
     }
 

@@ -6,13 +6,13 @@ import net.minecraft.util.ActionResult;
 
 public interface DefaultMoneyDataCollection {
 
-    public final Event<DefaultMoneyDataCollection> EVENT = EventFactory.createArrayBacked(DefaultMoneyDataCollection.class,
+    Event<DefaultMoneyDataCollection> EVENT = EventFactory.createArrayBacked(DefaultMoneyDataCollection.class,
             (listeners) -> (dataCollector) -> {
                 for(DefaultMoneyDataCollection listener : listeners) {
                     listener.appendMoneyData(dataCollector);
                 }
             });
 
-    public void appendMoneyData(MoneyData.CoinDataCollector dataCollector);
+    void appendMoneyData(MoneyData.CoinDataCollector dataCollector);
 
 }

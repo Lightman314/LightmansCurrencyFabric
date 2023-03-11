@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderSaveData;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.tradedata.AuctionTradeData;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
@@ -60,7 +61,7 @@ public class CMessageAddPersistentAuction extends ClientToServerPacket {
                         //Overwrite the existing entry with the same id.
                         persistentAuctions.set(i, auctionJson);
                         TraderSaveData.setPersistentTraderSection(TraderSaveData.PERSISTENT_AUCTION_SECTION, persistentAuctions);
-                        player.sendMessage(Text.translatable("lightmanscurrency.message.persistent.auction.overwrite", id));
+                        player.sendMessage(EasyText.translatable("lightmanscurrency.message.persistent.auction.overwrite", id), false);
                         return;
                     }
                 }
@@ -68,7 +69,7 @@ public class CMessageAddPersistentAuction extends ClientToServerPacket {
                 //If no trader found with the id, add to list
                 persistentAuctions.add(auctionJson);
                 TraderSaveData.setPersistentTraderSection(TraderSaveData.PERSISTENT_AUCTION_SECTION, persistentAuctions);
-                player.sendMessage(Text.translatable("lightmanscurrency.message.persistent.auction.add", id));
+                player.sendMessage(EasyText.translatable("lightmanscurrency.message.persistent.auction.add", id), false);
                 return;
             }
             else
@@ -93,7 +94,7 @@ public class CMessageAddPersistentAuction extends ClientToServerPacket {
                     {
                         persistentAuctions.add(getAuctionJson(auctionNbt, genID));
                         TraderSaveData.setPersistentTraderSection(TraderSaveData.PERSISTENT_AUCTION_SECTION, persistentAuctions);
-                        player.sendMessage(Text.translatable("lightmanscurrency.message.persistent.auction.add", genID));
+                        player.sendMessage(EasyText.translatable("lightmanscurrency.message.persistent.auction.add", genID), false);
                         return;
                     }
                 }

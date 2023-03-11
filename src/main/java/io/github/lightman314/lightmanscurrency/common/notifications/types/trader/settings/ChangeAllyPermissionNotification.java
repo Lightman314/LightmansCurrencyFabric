@@ -1,13 +1,13 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types.trader.settings;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import io.github.lightman314.lightmanscurrency.common.notifications.categories.NullCategory;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class ChangeAllyPermissionNotification extends Notification {
@@ -37,9 +37,9 @@ public class ChangeAllyPermissionNotification extends Notification {
     @Override
     public MutableText getMessage() {
         if(this.oldValue == 0)
-            return Text.translatable("log.settings.permission.ally.simple", this.player.getName(true), this.permission, this.newValue);
+            return EasyText.translatable("log.settings.permission.ally.simple", this.player.getName(true), this.permission, this.newValue);
         else
-            return Text.translatable("log.settings.permission.ally", this.player.getName(true), this.permission, this.oldValue, this.newValue);
+            return EasyText.translatable("log.settings.permission.ally", this.player.getName(true), this.permission, this.oldValue, this.newValue);
     }
 
     @Override

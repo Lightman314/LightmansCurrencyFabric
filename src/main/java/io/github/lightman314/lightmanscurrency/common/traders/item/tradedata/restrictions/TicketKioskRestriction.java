@@ -6,6 +6,7 @@ import java.util.List;
 import com.mojang.datafixers.util.Pair;
 
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.TicketItem;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.ticket.TicketSlot;
 import io.github.lightman314.lightmanscurrency.common.traders.item.storage.TraderItemStorage;
@@ -29,7 +30,7 @@ public class TicketKioskRestriction extends ItemTradeRestriction{
     public ItemStack modifySellItem(ItemStack sellItem, String customName, ItemTradeData trade)
     {
         if(sellItem.getItem() instanceof TicketItem && !customName.isBlank())
-            sellItem.setCustomName(Text.literal(customName));
+            sellItem.setCustomName(EasyText.literal(customName));
         return sellItem;
     }
 

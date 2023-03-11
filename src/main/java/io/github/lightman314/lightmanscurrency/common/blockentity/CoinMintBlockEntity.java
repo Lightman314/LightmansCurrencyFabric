@@ -3,7 +3,6 @@ package io.github.lightman314.lightmanscurrency.common.blockentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
 import io.github.lightman314.lightmanscurrency.common.crafting.CoinMintRecipe;
 import io.github.lightman314.lightmanscurrency.common.crafting.RecipeValidator;
@@ -27,14 +26,14 @@ public class CoinMintBlockEntity extends BlockEntity implements SidedInventory {
     SimpleInventory storage = new SimpleInventory(2);
     public SimpleInventory getStorage() { return this.storage; }
 
-    private final List<CoinMintRecipe> getCoinMintRecipes()
+    private List<CoinMintRecipe> getCoinMintRecipes()
     {
         if(this.world != null)
             return getCoinMintRecipes(this.world);
         return new ArrayList<>();
     }
 
-    public static final List<CoinMintRecipe> getCoinMintRecipes(World level) {
+    public static List<CoinMintRecipe> getCoinMintRecipes(World level) {
         return RecipeValidator.getValidRecipes(level).getCoinMintRecipes();
     }
 

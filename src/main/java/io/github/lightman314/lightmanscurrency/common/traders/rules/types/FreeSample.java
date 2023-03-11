@@ -10,6 +10,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.TradeRuleScreen
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.events.TradeEvent;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
@@ -20,7 +21,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class FreeSample extends TradeRule {
@@ -36,7 +36,7 @@ public class FreeSample extends TradeRule {
     public void beforeTrade(TradeEvent.PreTradeEvent event)
     {
         if(this.giveDiscount(event))
-            event.addHelpful(Text.translatable("traderule.lightmanscurrency.free_sample.alert"));
+            event.addHelpful(EasyText.translatable("traderule.lightmanscurrency.free_sample.alert"));
     }
 
     @Override
@@ -148,7 +148,7 @@ public class FreeSample extends TradeRule {
         @Override
         public void initTab() {
 
-            this.buttonClearMemory = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 50, screen.xSize - 20, 20, Text.translatable("gui.button.lightmanscurrency.free_sample.reset"), this::PressClearMemoryButton));
+            this.buttonClearMemory = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 50, screen.xSize - 20, 20, EasyText.translatable("gui.button.lightmanscurrency.free_sample.reset"), this::PressClearMemoryButton));
 
         }
 
@@ -156,7 +156,7 @@ public class FreeSample extends TradeRule {
         public void renderTab(MatrixStack poseStack, int mouseX, int mouseY, float partialTicks) {
 
             if(this.buttonClearMemory.isMouseOver(mouseX, mouseY))
-                screen.renderTooltip(poseStack, Text.translatable("gui.button.lightmanscurrency.free_sample.reset.tooltip"), mouseX, mouseY);
+                screen.renderTooltip(poseStack, EasyText.translatable("gui.button.lightmanscurrency.free_sample.reset.tooltip"), mouseX, mouseY);
 
         }
 

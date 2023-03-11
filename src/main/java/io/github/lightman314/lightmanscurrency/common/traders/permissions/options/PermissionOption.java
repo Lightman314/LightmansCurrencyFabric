@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TraderSettingsScreen;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 
 public abstract class PermissionOption {
 
@@ -17,7 +17,7 @@ public abstract class PermissionOption {
 
     protected PermissionOption(String permission) { this.permission = permission; }
 
-    public MutableText widgetName() { return Text.translatable("permission." + permission); }
+    public MutableText widgetName() { return EasyText.translatable("permission." + permission); }
 
     protected TraderSettingsScreen screen;
 

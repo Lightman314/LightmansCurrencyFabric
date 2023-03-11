@@ -1,6 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.items;
 
-import net.minecraft.block.AbstractBlock;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
@@ -35,14 +35,14 @@ public class CoinJarItem extends BlockItem {
                 {
                     ItemStack coin = jarStorage.get(i);
                     if(coin.getCount() > 1)
-                        tooltip.add(Text.translatable("tooptip.lightmanscurrency.coinjar.storedcoins.multiple", coin.getCount(), coin.getName()));
+                        tooltip.add(EasyText.translatable("tooptip.lightmanscurrency.coinjar.storedcoins.multiple", coin.getCount(), coin.getName()));
                     else
-                        tooltip.add(Text.translatable("tooptip.lightmanscurrency.coinjar.storedcoins.single", coin.getName()));
+                        tooltip.add(EasyText.translatable("tooptip.lightmanscurrency.coinjar.storedcoins.single", coin.getName()));
                 }
             }
             else
             {
-                tooltip.add(Text.translatable("tooptip.lightmanscurrency.coinjar.holdshift").formatted(Formatting.YELLOW));
+                tooltip.add(EasyText.translatable("tooptip.lightmanscurrency.coinjar.holdshift").formatted(Formatting.YELLOW));
             }
         }
 

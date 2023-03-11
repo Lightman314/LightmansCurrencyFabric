@@ -4,6 +4,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.Trade
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trader.TraderClientTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.CoinValueInput;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.TradeButton;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderSaveData;
@@ -12,7 +13,6 @@ import io.github.lightman314.lightmanscurrency.common.traders.auction.tradedata.
 import io.github.lightman314.lightmanscurrency.network.server.messages.auction.CMessageSubmitBid;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class AuctionBidTab extends TraderClientTab {
@@ -59,14 +59,14 @@ public class AuctionBidTab extends TraderClientTab {
         this.tradeDisplay = this.screen.addRenderableTabWidget(new TradeButton(() -> this.menu.getContext(this.getAuctionHouse()), this::getTrade, b -> {}));
         this.tradeDisplay.move(this.screen.getGuiLeft() + this.screen.getImageWidth() / 2 - this.tradeDisplay.getWidth() / 2, this.screen.getGuiTop() + 5);
 
-        this.bidAmount = this.screen.addRenderableTabWidget(new CoinValueInput(this.screen.getGuiLeft() + this.screen.getImageWidth() / 2 - CoinValueInput.DISPLAY_WIDTH / 2, this.screen.getGuiTop() + 10 + this.tradeDisplay.getHeight(), Text.translatable("gui.lightmanscurrency.auction.bidamount"), this.getTrade().getMinNextBid(), this.font, v -> {}, this.screen::addRenderableTabWidget));
+        this.bidAmount = this.screen.addRenderableTabWidget(new CoinValueInput(this.screen.getGuiLeft() + this.screen.getImageWidth() / 2 - CoinValueInput.DISPLAY_WIDTH / 2, this.screen.getGuiTop() + 10 + this.tradeDisplay.getHeight(), EasyText.translatable("gui.lightmanscurrency.auction.bidamount"), this.getTrade().getMinNextBid(), this.font, v -> {}, this.screen::addRenderableTabWidget));
         this.bidAmount.init();
         this.bidAmount.allowFreeToggle = false;
         this.bidAmount.drawBG = false;
 
-        this.bidButton = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 22, this.screen.getGuiTop() + 119, 68, 20, Text.translatable("gui.lightmanscurrency.auction.bid"), this::SubmitBid));
+        this.bidButton = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 22, this.screen.getGuiTop() + 119, 68, 20, EasyText.translatable("gui.lightmanscurrency.auction.bid"), this::SubmitBid));
 
-        this.closeButton = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + this.screen.getImageWidth() - 25, this.screen.getGuiTop() + 5, 20, 20, Text.literal("X").formatted(Formatting.RED, Formatting.BOLD), this::close));
+        this.closeButton = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + this.screen.getImageWidth() - 25, this.screen.getGuiTop() + 5, 20, 20, EasyText.literal("X").formatted(Formatting.RED, Formatting.BOLD), this::close));
 
         this.tick();
 

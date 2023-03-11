@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,7 +17,6 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 
 public class PlayerReference {
 
@@ -35,7 +35,7 @@ public class PlayerReference {
             return n;
         }
     }
-    public MutableText getNameComponent(boolean isClient) { return Text.literal(this.getName(isClient)); }
+    public MutableText getNameComponent(boolean isClient) { return EasyText.literal(this.getName(isClient)); }
 
     private PlayerReference(UUID playerID, String name)
     {

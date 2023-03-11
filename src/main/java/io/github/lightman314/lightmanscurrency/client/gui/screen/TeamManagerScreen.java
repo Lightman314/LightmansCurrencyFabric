@@ -10,6 +10,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.team.*;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab.TabButton;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
@@ -21,7 +22,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class TeamManagerScreen extends Screen {
@@ -39,7 +39,7 @@ public class TeamManagerScreen extends Screen {
     public static final Identifier GUI_TEXTURE =  new Identifier(LightmansCurrency.MODID, "textures/gui/teammanager.png");
 
     public TeamManagerScreen() {
-        super(Text.empty());
+        super(EasyText.empty());
         this.tabs.forEach(tab -> tab.setScreen(this));
     }
 

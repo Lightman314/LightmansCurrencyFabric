@@ -1,5 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.menu.factory;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletBankMenu;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +20,7 @@ public class WalletBankMenuFactory implements ExtendedScreenHandlerFactory {
     @Override
     public ScreenHandler createMenu(int windowID, PlayerInventory inventory, PlayerEntity player) { return new WalletBankMenu(windowID, inventory, this.walletSlot); }
     @Override
-    public Text getDisplayName() { return Text.empty(); }
+    public Text getDisplayName() { return EasyText.empty(); }
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buffer) { buffer.writeInt(this.walletSlot); }
 

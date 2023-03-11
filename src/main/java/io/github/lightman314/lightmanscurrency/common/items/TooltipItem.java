@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.gui.screen.Screen;
@@ -42,7 +43,7 @@ public class TooltipItem extends Item{
 	
 	private static MutableText getTooltipLine(String tooltipTranslation, int page) {
 		String tt = (tooltipTranslation.endsWith(".") ? tooltipTranslation : tooltipTranslation + ".") + String.valueOf(page);
-		MutableText result = Text.translatable(tt);
+		MutableText result = EasyText.translatable(tt);
 		//Returns null if the translated text is the translation key.
 		if(result.getString().contentEquals(tt))
 			return null;
@@ -58,12 +59,12 @@ public class TooltipItem extends Item{
 	
 	public static void addTooltip(List<Text> tooltip, Supplier<List<Text>> tooltipSource) {
 		List<Text> addableTooltips = tooltipSource.get();
-		if(addableTooltips == null || addableTooltips.size() <= 0)
+		if(addableTooltips == null || addableTooltips.size() == 0)
 			return;
 		if(Screen.hasShiftDown())
 			tooltip.addAll(tooltipSource.get());
 		else
-			tooltip.add(Text.translatable("tooltip.lightmanscurrency.tooltip").fillStyle(DEFAULT_STYLE));
+			tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.tooltip").fillStyle(DEFAULT_STYLE));
 	}
 	
 	public static void addTooltipAlways(List<Text> tooltip, Supplier<List<Text>> tooltipSource) {

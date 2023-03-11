@@ -39,7 +39,7 @@ public class ATMConversionButtonData {
                 try {
                     JsonObject iconData = iconListData.get(i).getAsJsonObject();
                     this.icons.add(ATMIconData.parse(iconData));
-                } catch(Exception e) { LightmansCurrency.LogError("Error parsing ATM Icon #" + String.valueOf(i + 1) + ".", e);}
+                } catch(Exception e) { LightmansCurrency.LogError("Error parsing ATM Icon #" + (i + 1) + ".", e);}
             }
         }
         else
@@ -65,8 +65,8 @@ public class ATMConversionButtonData {
         data.addProperty("command", this.command);
 
         JsonArray iconListData = new JsonArray();
-        for(int i = 0; i < this.icons.size(); ++i)
-            iconListData.add(this.icons.get(i).save());
+        for (ATMIconData icon : this.icons)
+            iconListData.add(icon.save());
         data.add("icons", iconListData);
 
         return data;

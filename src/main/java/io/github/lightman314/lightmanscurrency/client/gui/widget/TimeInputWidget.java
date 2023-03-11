@@ -6,13 +6,13 @@ import java.util.function.Consumer;
 
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainButton;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.util.TimeUtil.TimeData;
 import io.github.lightman314.lightmanscurrency.util.TimeUtil.TimeUnit;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 
 public class TimeInputWidget extends ClickableWidget {
 
@@ -33,7 +33,7 @@ public class TimeInputWidget extends ClickableWidget {
     private List<ButtonWidget> buttons = new ArrayList<>();
 
     public TimeInputWidget(int x, int y, int spacing, TimeUnit largestUnit, TimeUnit smallestUnit, Consumer<ClickableWidget> widgetAdder, Consumer<TimeData> timeConsumer) {
-        super(x, y, 0, 0, Text.empty());
+        super(x, y, 0, 0, EasyText.empty());
         this.timeConsumer = timeConsumer;
         this.relevantUnits = this.getRelevantUnits(largestUnit, smallestUnit);
         this.spacing = spacing;

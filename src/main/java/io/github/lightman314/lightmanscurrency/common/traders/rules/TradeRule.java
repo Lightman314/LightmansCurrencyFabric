@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TradeRuleScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.events.TradeEvent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -24,13 +25,12 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public abstract class TradeRule {
 
     public final Identifier type;
-    public final MutableText getName() { return Text.translatable("traderule." + type.getNamespace() + "." + type.getPath()); }
+    public final MutableText getName() { return EasyText.translatable("traderule." + type.getNamespace() + "." + type.getPath()); }
 
     private boolean isActive = false;
     public boolean isActive() { return this.isActive; }

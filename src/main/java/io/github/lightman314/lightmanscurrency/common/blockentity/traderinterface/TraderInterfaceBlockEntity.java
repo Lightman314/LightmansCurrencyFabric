@@ -6,8 +6,10 @@ import java.util.function.Function;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.blockentity.TickableBlockEntity;
+import io.github.lightman314.lightmanscurrency.common.blockentity.interfaces.SidedStorageBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.interfaces.IRotatableBlock;
 import io.github.lightman314.lightmanscurrency.common.blocks.traderinterface.templates.TraderInterfaceBlock;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.IDumpable;
 import io.github.lightman314.lightmanscurrency.common.items.UpgradeItem;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderInterfaceMenu;
@@ -36,7 +38,6 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -78,7 +79,7 @@ public abstract class TraderInterfaceBlockEntity extends TickableBlockEntity imp
         public final boolean drains;
         public final boolean trades;
         public final int index;
-        public final Text getDisplayText() { return Text.translatable("gui.lightmanscurrency.interface.type." + this.name().toLowerCase()); }
+        public final Text getDisplayText() { return EasyText.translatable("gui.lightmanscurrency.interface.type." + this.name().toLowerCase()); }
 
         public final InteractionType getNext() { return fromIndex(this.index + 1); }
         InteractionType(boolean requiresPermissions, boolean restocks, boolean drains, boolean trades, int index) {
@@ -117,7 +118,7 @@ public abstract class TraderInterfaceBlockEntity extends TickableBlockEntity imp
         ALWAYS_ON(3, be -> true);
 
         public final int index;
-        public final Text getDisplayText() { return Text.translatable("gui.lightmanscurrency.interface.mode." + this.name().toLowerCase()); }
+        public final Text getDisplayText() { return EasyText.translatable("gui.lightmanscurrency.interface.mode." + this.name().toLowerCase()); }
         public final ActiveMode getNext() { return fromIndex(this.index + 1); }
 
         private final Function<TraderInterfaceBlockEntity,Boolean> active;
@@ -552,7 +553,7 @@ public abstract class TraderInterfaceBlockEntity extends TickableBlockEntity imp
         @Override
         public ScreenHandler createMenu(int windowID, PlayerInventory inventory, PlayerEntity player) { return new TraderInterfaceMenu(windowID, inventory, this.blockPos); }
         @Override
-        public Text getDisplayName() { return Text.empty(); }
+        public Text getDisplayName() { return EasyText.empty(); }
         @Override
         public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) { buf.writeBlockPos(this.blockPos); }
     }

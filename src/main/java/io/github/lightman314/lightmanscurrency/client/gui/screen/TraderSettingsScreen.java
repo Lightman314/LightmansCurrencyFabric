@@ -11,6 +11,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab.TabButton;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.CMessageOpenStorage;
@@ -23,7 +24,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class TraderSettingsScreen extends Screen {
@@ -55,7 +55,7 @@ public class TraderSettingsScreen extends Screen {
 
     public TraderSettingsScreen(Supplier<TraderData> trader)
     {
-        super(Text.empty());
+        super(EasyText.empty());
 
         this.trader = trader;
 

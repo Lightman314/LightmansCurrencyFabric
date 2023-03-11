@@ -18,12 +18,12 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.blockentity.traderinterface.TraderInterfaceBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
 import net.minecraft.client.gui.widget.ButtonWidget.TooltipSupplier;
@@ -55,7 +55,7 @@ public class IconAndButtonUtil {
     public static final IconData ICON_SHOW_LOGGER = IconData.of(Items.WRITABLE_BOOK);
     public static final IconData ICON_CLEAR_LOGGER = IconData.of(PotionUtil.setPotion(new ItemStack(Items.POTION), Potions.WATER));
 
-    public static final Function<IconButton,IconData> ICON_CREATIVE(Supplier<Boolean> isCreative) {
+    public static Function<IconButton,IconData> ICON_CREATIVE(Supplier<Boolean> isCreative) {
         return b -> {
             boolean creative = b.isNarratable() ? !isCreative.get() : isCreative.get();
             return creative ? ICON_CREATIVE_ON : ICON_CREATIVE_OFF;
@@ -69,7 +69,7 @@ public class IconAndButtonUtil {
     public static final IconData ICON_TICKET = IconData.of(ModItems.TICKET_MASTER);
     public static final IconData ICON_PAYGATE_ACTIVATE = IconData.of(Items.REDSTONE);
 
-    public static final Supplier<IconData> ICON_INTERFACE_ACTIVE(Supplier<Boolean> isActive) {
+    public static Supplier<IconData> ICON_INTERFACE_ACTIVE(Supplier<Boolean> isActive) {
         return () -> isActive.get() ? ICON_INTERFACE_ON : ICON_INTERFACE_OFF;
     }
     private static final IconData ICON_INTERFACE_ON = IconData.of(Items.REDSTONE_TORCH);
@@ -94,7 +94,7 @@ public class IconAndButtonUtil {
     public static final IconData ICON_MODE_REDSTONE = IconData.of(Items.REDSTONE_TORCH);
     public static final IconData ICON_MODE_ALWAYS_ON = IconData.of(Items.REDSTONE_BLOCK);
 
-    public static final IconData GetIcon(TraderInterfaceBlockEntity.ActiveMode mode) {
+    public static IconData GetIcon(TraderInterfaceBlockEntity.ActiveMode mode) {
         switch(mode) {
             case DISABLED:
                 return ICON_MODE_DISABLED;
@@ -114,35 +114,35 @@ public class IconAndButtonUtil {
     public static final IconData ICON_ONLINEMODE_TRUE = IconData.of(Items.PLAYER_HEAD);
     public static final IconData ICON_ONLINEMODE_FALSE = ICON_CHECKMARK;
 
-    public static final SimpleTooltip TOOLTIP_TRADER = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.trader.opentrades"));
-    public static final SimpleTooltip TOOLTIP_STORAGE = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.trader.openstorage"));
+    public static final SimpleTooltip TOOLTIP_TRADER = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.trader.opentrades"));
+    public static final SimpleTooltip TOOLTIP_STORAGE = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.trader.openstorage"));
 
     public static final String TOOLTIP_COLLECT_COINS = "tooltip.lightmanscurrency.trader.collectcoins";
-    public static final SimpleTooltip TOOLTIP_STORE_COINS = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.trader.storecoins"));
+    public static final SimpleTooltip TOOLTIP_STORE_COINS = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.trader.storecoins"));
 
-    public static final SimpleTooltip TOOLTIP_BACK_TO_TERMINAL = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.trader.universaltrader.back"));
+    public static final SimpleTooltip TOOLTIP_BACK_TO_TERMINAL = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.trader.universaltrader.back"));
 
-    public static final Text TOOLTIP_SHOW_LOGGER = Text.translatable("tooltip.lightmanscurrency.trader.log.show");
-    public static final Text TOOLTIP_HIDE_LOGGER = Text.translatable("tooltip.lightmanscurrency.trader.log.hide");
-    public static final SimpleTooltip TOOLTIP_CLEAR_LOGGER = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.trader.log.clear"));
+    public static final Text TOOLTIP_SHOW_LOGGER = EasyText.translatable("tooltip.lightmanscurrency.trader.log.show");
+    public static final Text TOOLTIP_HIDE_LOGGER = EasyText.translatable("tooltip.lightmanscurrency.trader.log.hide");
+    public static final SimpleTooltip TOOLTIP_CLEAR_LOGGER = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.trader.log.clear"));
 
-    public static final SimpleTooltip TOOLTIP_TRADE_RULES = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.trader.traderules"));
-    public static final Text TOOLTIP_TRADE_RULES_TRADER = Text.translatable("tooltip.lightmanscurrency.trader.traderules.trader");
-    public static final Text TOOLTIP_TRADE_RULES_TRADE = Text.translatable("tooltip.lightmanscurrency.trader.traderules.trade");
-    public static final SimpleTooltip TOOLTIP_OPEN_SETTINGS = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.trader.settings"));
+    public static final SimpleTooltip TOOLTIP_TRADE_RULES = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.trader.traderules"));
+    public static final Text TOOLTIP_TRADE_RULES_TRADER = EasyText.translatable("tooltip.lightmanscurrency.trader.traderules.trader");
+    public static final Text TOOLTIP_TRADE_RULES_TRADE = EasyText.translatable("tooltip.lightmanscurrency.trader.traderules.trade");
+    public static final SimpleTooltip TOOLTIP_OPEN_SETTINGS = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.trader.settings"));
 
-    public static final Text TOOLTIP_CREATIVE_ENABLE = Text.translatable("tooltip.lightmanscurrency.trader.creative.enable");
-    public static final Text TOOLTIP_CREATIVE_DISABLE = Text.translatable("tooltip.lightmanscurrency.trader.creative.disable");
+    public static final Text TOOLTIP_CREATIVE_ENABLE = EasyText.translatable("tooltip.lightmanscurrency.trader.creative.enable");
+    public static final Text TOOLTIP_CREATIVE_DISABLE = EasyText.translatable("tooltip.lightmanscurrency.trader.creative.disable");
 
-    public static final Text TOOLTIP_INTERFACE_ENABLE = Text.translatable("tooltip.lightmanscurrency.interface.enable");
-    public static final Text TOOLTIP_INTERFACE_DISABLE = Text.translatable("tooltip.lightmanscurrency.interface.disable");
+    public static final Text TOOLTIP_INTERFACE_ENABLE = EasyText.translatable("tooltip.lightmanscurrency.interface.enable");
+    public static final Text TOOLTIP_INTERFACE_DISABLE = EasyText.translatable("tooltip.lightmanscurrency.interface.disable");
 
-    public static final SimpleTooltip TOOLTIP_PERSISTENT_TRADER = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.persistent.add.trader"));
-    public static final SimpleTooltip TOOLTIP_PERSISTENT_AUCTION = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.persistent.add.auction"));
+    public static final SimpleTooltip TOOLTIP_PERSISTENT_TRADER = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.persistent.add.trader"));
+    public static final SimpleTooltip TOOLTIP_PERSISTENT_AUCTION = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.persistent.add.auction"));
 
-    public static final SimpleTooltip TOOLTIP_PAIR_TICKET = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.paygate.setticket"));
+    public static final SimpleTooltip TOOLTIP_PAIR_TICKET = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.paygate.setticket"));
 
-    public static final SimpleTooltip TOOLTIP_PAYGATE_ACTIVATE = new SimpleTooltip(Text.translatable("tooltip.lightmanscurrency.paygate.paybutton"));
+    public static final SimpleTooltip TOOLTIP_PAYGATE_ACTIVATE = new SimpleTooltip(EasyText.translatable("tooltip.lightmanscurrency.paygate.paybutton"));
 
     public static IconButton traderButton(int x, int y, PressAction pressable) { return new IconButton(x, y, pressable, ICON_TRADER, TOOLTIP_TRADER); }
     public static IconButton storageButton(int x, int y, PressAction pressable) { return new IconButton(x, y, pressable, ICON_STORAGE, TOOLTIP_STORAGE); }
@@ -254,7 +254,7 @@ public class IconAndButtonUtil {
         private final Supplier<Object[]> inputSource;
         public AdditiveTooltip(String translationKey, Supplier<Object[]> inputSource) { this.translationKey = translationKey; this.inputSource = inputSource; }
         @Override
-        protected Text getTooltip() { return Text.translatable(translationKey, inputSource.get()); }
+        protected Text getTooltip() { return EasyText.translatable(translationKey, inputSource.get()); }
     }
 
     public static class ToggleTooltip extends BaseTooltip

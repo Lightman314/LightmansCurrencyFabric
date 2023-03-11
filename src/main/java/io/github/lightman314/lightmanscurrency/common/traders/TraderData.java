@@ -13,6 +13,7 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.blockentity.trader.TraderBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.traderblocks.interfaces.ITraderBlock;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.IDumpable;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderStorageMenu;
@@ -218,21 +219,21 @@ public abstract class TraderData implements IClientTracker, IDumpable, UpgradeTy
 
     public MutableText getName() {
         if(this.hasCustomName())
-            return Text.literal(this.customName);
+            return EasyText.literal(this.customName);
         return this.getDefaultName();
     }
 
     public final MutableText getTitle() {
         if(this.creative)
             return this.getName();
-        return Text.translatable("gui.lightmanscurrency.trading.title", this.getName(), this.owner.getOwnerName(this.isClient));
+        return EasyText.translatable("gui.lightmanscurrency.trading.title", this.getName(), this.owner.getOwnerName(this.isClient));
     }
 
     private Item traderBlock;
     protected MutableText getDefaultName() {
         if(this.traderBlock != null)
-            return Text.literal(new ItemStack(this.traderBlock).getName().getString());
-        return Text.translatable("gui.lightmanscurrency.universaltrader.default");
+            return EasyText.literal(new ItemStack(this.traderBlock).getName().getString());
+        return EasyText.translatable("gui.lightmanscurrency.universaltrader.default");
     }
 
     private CoinValue storedMoney = new CoinValue();
@@ -679,7 +680,7 @@ public abstract class TraderData implements IClientTracker, IDumpable, UpgradeTy
     private record TraderMenuProvider(long traderID) implements ExtendedScreenHandlerFactory {
 
         @Override
-        public Text getDisplayName() { return Text.empty(); }
+        public Text getDisplayName() { return EasyText.empty(); }
 
         @Override
         public ScreenHandler createMenu(int windowID, PlayerInventory inv, PlayerEntity player) { return new TraderMenu(windowID, inv, this.traderID); }
@@ -703,7 +704,7 @@ public abstract class TraderData implements IClientTracker, IDumpable, UpgradeTy
         public ScreenHandler createMenu(int windowID, PlayerInventory inventory, PlayerEntity player) { return new TraderStorageMenu(windowID, inventory, this.traderID); }
 
         @Override
-        public Text getDisplayName() { return Text.empty(); }
+        public Text getDisplayName() { return EasyText.empty(); }
 
         @Override
         public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) { buf.writeLong(this.traderID); }
@@ -1232,7 +1233,7 @@ public abstract class TraderData implements IClientTracker, IDumpable, UpgradeTy
         public ScreenHandler createMenu(int windowID, PlayerInventory inventory, PlayerEntity player) { return new TraderMenu.TraderMenuBlockSource(windowID, inventory, this.traderSourcePosition); }
 
         @Override
-        public Text getDisplayName() { return Text.empty(); }
+        public Text getDisplayName() { return EasyText.empty(); }
 
         @Override
         public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) { buf.writeBlockPos(this.traderSourcePosition); }

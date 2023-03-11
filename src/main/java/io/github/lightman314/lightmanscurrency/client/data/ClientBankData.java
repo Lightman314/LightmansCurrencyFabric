@@ -30,7 +30,7 @@ public class ClientBankData {
     public static void InitBankAccounts(Map<UUID,BankAccount> bankAccounts)
     {
         loadedBankAccounts.clear();
-        bankAccounts.forEach((id,account) -> loadedBankAccounts.put(id, account));
+        loadedBankAccounts.putAll(bankAccounts);
     }
 
     public static void UpdateBankAccount(NbtCompound compound)
@@ -38,7 +38,7 @@ public class ClientBankData {
         try {
             UUID owner = compound.getUuid("Player");
             BankAccount account = new BankAccount(compound);
-            if(owner != null && account != null)
+            if(owner != null)
                 loadedBankAccounts.put(owner, account);
         } catch(Exception e) { e.printStackTrace(); }
     }

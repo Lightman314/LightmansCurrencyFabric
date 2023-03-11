@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import io.github.lightman314.lightmanscurrency.client.data.ClientBankData;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
@@ -26,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 public class BankAccount {
@@ -80,7 +80,7 @@ public class BankAccount {
     private String ownerName = "Unknown";
     public String getOwnersName() { return this.ownerName; }
     public void updateOwnersName(String ownerName) { this.ownerName = ownerName; }
-    public MutableText getName() { return Text.translatable("lightmanscurrency.bankaccount", this.ownerName); }
+    public MutableText getName() { return EasyText.translatable("lightmanscurrency.bankaccount", this.ownerName); }
 
     public void depositCoins(CoinValue depositAmount) {
         this.coinStorage = new CoinValue(this.coinStorage.getRawValue() + depositAmount.getRawValue());
@@ -181,23 +181,23 @@ public class BankAccount {
     public static MutableText TransferCoins(PlayerEntity player, BankAccount fromAccount, CoinValue amount, BankAccount destinationAccount)
     {
         if(fromAccount == null)
-            return Text.translatable("gui.bank.transfer.error.null.from");
+            return EasyText.translatable("gui.bank.transfer.error.null.from");
         if(destinationAccount == null)
-            return Text.translatable("gui.bank.transfer.error.null.to");
+            return EasyText.translatable("gui.bank.transfer.error.null.to");
         if(amount.getRawValue() <= 0)
-            return Text.translatable("gui.bank.transfer.error.amount", amount.getString("nothing"));
+            return EasyText.translatable("gui.bank.transfer.error.amount", amount.getString("nothing"));
         if(fromAccount == destinationAccount)
-            return Text.translatable("gui.bank.transfer.error.same");
+            return EasyText.translatable("gui.bank.transfer.error.same");
 
         CoinValue withdrawnAmount = fromAccount.withdrawCoins(amount);
         if(withdrawnAmount.getRawValue() <= 0)
-            return Text.translatable("gui.bank.transfer.error.nobalance", amount.getString());
+            return EasyText.translatable("gui.bank.transfer.error.nobalance", amount.getString());
 
         destinationAccount.depositCoins(withdrawnAmount);
         fromAccount.LogTransfer(player, withdrawnAmount, destinationAccount.getName(), false);
         destinationAccount.LogTransfer(player, withdrawnAmount, fromAccount.getName(), true);
 
-        return Text.translatable("gui.bank.transfer.success", withdrawnAmount.getString(), destinationAccount.getName());
+        return EasyText.translatable("gui.bank.transfer.success", withdrawnAmount.getString(), destinationAccount.getName());
 
     }
 

@@ -1,13 +1,13 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types.trader.settings;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import io.github.lightman314.lightmanscurrency.common.notifications.categories.NullCategory;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public abstract class ChangeSettingNotification extends Notification {
@@ -49,7 +49,7 @@ public abstract class ChangeSettingNotification extends Notification {
         protected Identifier getType() { return ADVANCED_TYPE; }
 
         @Override
-        public MutableText getMessage() { return Text.translatable("log.settings.change", this.player.getName(true), this.setting, this.oldValue, this.newValue); }
+        public MutableText getMessage() { return EasyText.translatable("log.settings.change", this.player.getName(true), this.setting, this.oldValue, this.newValue); }
 
         @Override
         protected void saveAdditional(NbtCompound compound) {
@@ -90,7 +90,7 @@ public abstract class ChangeSettingNotification extends Notification {
 
         @Override
         public MutableText getMessage() {
-            return Text.translatable("log.settings.change.simple", this.player.getName(true), this.setting, this.newValue);
+            return EasyText.translatable("log.settings.change.simple", this.player.getName(true), this.setting, this.newValue);
         }
 
         @Override

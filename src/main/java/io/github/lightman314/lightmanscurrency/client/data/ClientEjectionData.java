@@ -28,13 +28,8 @@ public class ClientEjectionData {
         {
             try {
                 EjectionData e = EjectionData.loadData(ejectionList.getCompound(i));
-                if(e != null)
-                {
-                    emergencyEjectionData.add(e);
-                    e.flagAsClient();
-                }
-                else
-                    throw new RuntimeException("EmergencyEjectionData entry " + i + " loaded as null.");
+                emergencyEjectionData.add(e);
+                e.flagAsClient();
             } catch(Throwable t) { t.printStackTrace(); }
         }
         LightmansCurrency.LogDebug("Client loaded " + emergencyEjectionData.size() + " ejection data entries from the server.");

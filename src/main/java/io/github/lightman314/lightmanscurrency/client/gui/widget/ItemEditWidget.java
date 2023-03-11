@@ -14,6 +14,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollBarWidget.IScrollable;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.ItemTradeData;
 import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.restrictions.ItemTradeRestriction;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
@@ -30,7 +31,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
@@ -67,7 +67,7 @@ public class ItemEditWidget extends ClickableWidget implements IScrollable{
     private final TextRenderer font;
 
     public ItemEditWidget(int x, int y, int columns, int rows, IItemEditListener listener) {
-        super(x, y, columns * 18, rows * 18, Text.empty());
+        super(x, y, columns * 18, rows * 18, EasyText.empty());
         this.listener = listener;
 
         this.columns = columns;
@@ -228,7 +228,7 @@ public class ItemEditWidget extends ClickableWidget implements IScrollable{
 
     public void init(Function<TextFieldWidget,TextFieldWidget> addWidget, Function<ScrollListener,ScrollListener> addListener) {
 
-        this.searchInput = addWidget.apply(new TextFieldWidget(this.font, this.x + this.searchOffX + 2, this.y + this.searchOffY + 2, 79, 9, Text.translatable("gui.lightmanscurrency.item_edit.search")));
+        this.searchInput = addWidget.apply(new TextFieldWidget(this.font, this.x + this.searchOffX + 2, this.y + this.searchOffY + 2, 79, 9, EasyText.translatable("gui.lightmanscurrency.item_edit.search")));
         this.searchInput.setDrawsBackground(false);
         this.searchInput.setMaxLength(32);
         this.searchInput.setEditableColor(0xFFFFFF);
@@ -297,7 +297,7 @@ public class ItemEditWidget extends ClickableWidget implements IScrollable{
             }
         }
         if(this.isMouseOverStackSizeScroll(mouseX,mouseY))
-            screen.renderTooltip(pose, Text.translatable("tooltip.lightmanscurrency.item_edit.scroll"), mouseX, mouseY);
+            screen.renderTooltip(pose, EasyText.translatable("tooltip.lightmanscurrency.item_edit.scroll"), mouseX, mouseY);
     }
 
     private boolean isMouseOverStackSizeScroll(int mouseX, int mouseY) {

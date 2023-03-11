@@ -16,6 +16,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.auction.AuctionStorageTab;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.AuctionHouseTrader;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.AuctionPlayerStorage;
@@ -25,7 +26,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStorageTab> implements IScrollListener, IScrollable {
@@ -49,7 +49,7 @@ public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStora
     public @NotNull IconData getIcon() { return IconAndButtonUtil.ICON_STORAGE; }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.auction.storage"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.auction.storage"); }
 
     @Override
     public boolean tabButtonVisible() { return true; }
@@ -73,7 +73,7 @@ public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStora
     @Override
     public void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
 
-        this.font.draw(pose, Text.translatable("tooltip.lightmanscurrency.auction.storage"), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040);
+        this.font.draw(pose, EasyText.translatable("tooltip.lightmanscurrency.auction.storage"), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040);
 
         this.scrollBar.beforeWidgetRender(mouseY);
 
@@ -108,8 +108,8 @@ public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStora
                     }
                 }
 
-                if(storedItems.size() <= 0)
-                    TextRenderUtil.drawCenteredMultilineText(pose, Text.translatable("tooltip.lightmanscurrency.auction.storage.items.none"), this.screen.getGuiLeft() + 10, this.screen.getImageWidth() - 20, this.screen.getGuiTop() + X_OFFSET + (18 * ROWS / 2), 0x404040);
+                if(storedItems.size() == 0)
+                    TextRenderUtil.drawCenteredMultilineText(pose, EasyText.translatable("tooltip.lightmanscurrency.auction.storage.items.none"), this.screen.getGuiLeft() + 10, this.screen.getImageWidth() - 20, this.screen.getGuiTop() + X_OFFSET + (18 * ROWS / 2), 0x404040);
 
                 this.buttonCollectItems.active = storedItems.size() > 0;
 
@@ -117,12 +117,12 @@ public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStora
                 if(storage.getStoredCoins().hasAny())
                 {
                     this.buttonCollectMoney.active = true;
-                    this.font.draw(pose, Text.translatable("tooltip.lightmanscurrency.auction.storage.money", storage.getStoredCoins().getString("0")), this.screen.getGuiLeft() + 50, this.screen.getGuiTop() + 118, 0x404040);
+                    this.font.draw(pose, EasyText.translatable("tooltip.lightmanscurrency.auction.storage.money", storage.getStoredCoins().getString("0")), this.screen.getGuiLeft() + 50, this.screen.getGuiTop() + 118, 0x404040);
                 }
                 else
                 {
                     this.buttonCollectMoney.active = false;
-                    this.font.draw(pose, Text.translatable("tooltip.lightmanscurrency.auction.storage.money.none"), this.screen.getGuiLeft() + 50, this.screen.getGuiTop() + 118, 0x404040);
+                    this.font.draw(pose, EasyText.translatable("tooltip.lightmanscurrency.auction.storage.money.none"), this.screen.getGuiLeft() + 50, this.screen.getGuiTop() + 118, 0x404040);
                 }
 
             }

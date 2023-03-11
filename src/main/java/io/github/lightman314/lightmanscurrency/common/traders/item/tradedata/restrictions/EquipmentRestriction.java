@@ -1,7 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.restrictions;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.restrictions.ItemTradeRestriction;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.EquipmentSlot;

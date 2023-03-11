@@ -1,6 +1,5 @@
 package io.github.lightman314.lightmanscurrency.common.traders.item.handler;
 
-import io.github.lightman314.lightmanscurrency.common.blockentity.traderinterface.item.ItemInterfaceHandler;
 import io.github.lightman314.lightmanscurrency.common.traders.item.ItemTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.item.storage.TraderItemStorage;
 import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.ItemTradeData;
@@ -111,7 +110,7 @@ public class TraderItemHandler {
         }
 
         @Override
-        public Iterator<StorageView<ItemVariant>> iterator() {
+        public Iterator<StorageView<ItemVariant>> iterator(TransactionContext context) {
             List<StorageView<ItemVariant>> slotView = new ArrayList<>();
             List<ItemStack> storageItems = this.getStorage().getContents();
             for(int i = 0; i < storageItems.size(); ++i)

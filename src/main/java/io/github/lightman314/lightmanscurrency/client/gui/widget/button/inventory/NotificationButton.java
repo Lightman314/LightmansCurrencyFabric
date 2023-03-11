@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.client.LCConfigClient;
 import io.github.lightman314.lightmanscurrency.client.data.ClientNotificationData;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.NotificationScreen;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.config.options.custom.values.ScreenPosition;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -33,7 +34,7 @@ public class NotificationButton extends InventoryButton {
 
     public static void tryRenderTooltip(MatrixStack pose, int mouseX, int mouseY) {
         if(lastButton != null && lastButton.isMouseOver(mouseX, mouseY))
-            lastButton.parent.renderTooltip(pose, Text.translatable("tooltip.button.notification"), mouseX, mouseY);
+            lastButton.parent.renderTooltip(pose, EasyText.translatable("tooltip.button.notification"), mouseX, mouseY);
     }
 
 }

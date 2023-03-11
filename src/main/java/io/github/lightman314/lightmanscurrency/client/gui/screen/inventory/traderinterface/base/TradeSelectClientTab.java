@@ -7,13 +7,13 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trade
 import io.github.lightman314.lightmanscurrency.client.gui.widget.TradeButtonArea;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.traderinterface.TraderInterfaceTab;
 import io.github.lightman314.lightmanscurrency.common.menu.traderinterface.base.TradeSelectTab;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class TradeSelectClientTab extends TraderInterfaceClientTab<TradeSelectTab> {
@@ -24,7 +24,7 @@ public class TradeSelectClientTab extends TraderInterfaceClientTab<TradeSelectTa
     public @NotNull IconData getIcon() { return IconData.of(ModItems.TRADING_CORE); }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.interface.trade"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.interface.trade"); }
 
     @Override
     public boolean blockInventoryClosing() { return false; }

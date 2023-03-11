@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.blocks;
 import io.github.lightman314.lightmanscurrency.common.blockentity.TicketMachineBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.RotatableBlock;
 import io.github.lightman314.lightmanscurrency.common.blocks.util.LazyShapes;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.TooltipItem;
 import io.github.lightman314.lightmanscurrency.common.items.tooltips.LCTooltips;
 import io.github.lightman314.lightmanscurrency.common.menu.TicketMachineMenu;
@@ -38,7 +39,7 @@ public class TicketMachineBlock extends RotatableBlock implements BlockEntityPro
     private static final VoxelShape SHAPE_EAST = createCuboidShape(8d,0d,4d,16d,16d,12d);
     private static final VoxelShape SHAPE_WEST = createCuboidShape(0d,0d,4d,8d,16d,12d);
 
-    private static final MutableText TITLE = Text.translatable("gui.lightmanscurrency.ticket_machine.title");
+    private static final MutableText TITLE = EasyText.translatable("gui.lightmanscurrency.ticket_machine.title");
 
     public TicketMachineBlock(Settings properties) { super(properties, LazyShapes.lazyDirectionalShape(SHAPE_NORTH, SHAPE_EAST, SHAPE_SOUTH, SHAPE_WEST)); }
 

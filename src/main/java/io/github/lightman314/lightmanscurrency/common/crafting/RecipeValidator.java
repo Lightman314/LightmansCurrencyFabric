@@ -1,13 +1,10 @@
 package io.github.lightman314.lightmanscurrency.common.crafting;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
 import io.github.lightman314.lightmanscurrency.common.core.ModRecipes;
-import io.github.lightman314.lightmanscurrency.common.crafting.CoinMintRecipe;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;

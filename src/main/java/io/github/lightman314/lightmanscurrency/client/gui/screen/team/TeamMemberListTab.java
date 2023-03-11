@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TeamManagerScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollTextDisplay;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +27,7 @@ public class TeamMemberListTab extends TeamTab {
     public @NotNull IconData getIcon() { return IconData.of(Items.PLAYER_HEAD); }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.team.members"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.team.members"); }
 
     @Override
     public boolean allowViewing(PlayerEntity player, Team team) { return team != null; }

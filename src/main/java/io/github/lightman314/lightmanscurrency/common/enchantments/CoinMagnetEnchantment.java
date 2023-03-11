@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.enchantments;
 import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.core.ModEnchantments;
 import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletMenuBase;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
@@ -90,7 +91,7 @@ public class CoinMagnetEnchantment extends WalletEnchantment {
     public static Text getCollectionRangeDisplay(int enchantLevel) {
         float range = getCollectionRange(enchantLevel);
         String display = range %1f > 0f ? String.valueOf(range) : String.valueOf(Math.round(range));
-        return Text.literal(display).formatted(Formatting.GREEN);
+        return EasyText.literal(display).formatted(Formatting.GREEN);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class CoinMagnetEnchantment extends WalletEnchantment {
         {
             if(enchantLevel > 0 && WalletItem.CanPickup((WalletItem)wallet.getItem()))
             {
-                tooltips.add(Text.translatable("tooltip.lightmanscurrency.wallet.pickup.magnet", getCollectionRangeDisplay(enchantLevel)).formatted(Formatting.YELLOW));
+                tooltips.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.pickup.magnet", getCollectionRangeDisplay(enchantLevel)).formatted(Formatting.YELLOW));
             }
         }
     }

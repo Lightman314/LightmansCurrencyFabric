@@ -27,6 +27,7 @@ public class FileUtil {
         json.addProperty("Count", item.getCount());
         if(item.hasNbt())
         {
+            assert item.getNbt() != null;
             String tag = item.getNbt().asString();
             json.addProperty("Tag", tag);
         }

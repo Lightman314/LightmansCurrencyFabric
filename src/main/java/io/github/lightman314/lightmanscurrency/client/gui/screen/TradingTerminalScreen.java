@@ -13,6 +13,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.NetworkT
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
 import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderSaveData;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.AuctionHouseTrader;
@@ -24,7 +25,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
@@ -63,7 +63,7 @@ public class TradingTerminalScreen extends Screen implements IScrollable{
     }
     private List<TraderData> filteredTraderList = new ArrayList<>();
 
-    public TradingTerminalScreen() { super(Text.translatable("block.lightmanscurrency.terminal")); }
+    public TradingTerminalScreen() { super(EasyText.translatable("block.lightmanscurrency.terminal")); }
 
     @Override
     protected void init()
@@ -74,8 +74,8 @@ public class TradingTerminalScreen extends Screen implements IScrollable{
         int guiLeft = (this.width - this.xSize) / 2;
         int guiTop = (this.height - this.ySize) / 2;
 
-        this.searchField = this.addDrawable(new TextFieldWidget(this.textRenderer, guiLeft + 28, guiTop + 6, 101, 9, Text.translatable("gui.lightmanscurrency.terminal.search")));
-        this.searchField.setDrawsBackground(false);;
+        this.searchField = this.addDrawable(new TextFieldWidget(this.textRenderer, guiLeft + 28, guiTop + 6, 101, 9, EasyText.translatable("gui.lightmanscurrency.terminal.search")));
+        this.searchField.setDrawsBackground(false);
         this.searchField.setMaxLength(32);
         this.searchField.setEditableColor(0xFFFFFF);
 

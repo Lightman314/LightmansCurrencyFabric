@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.TeamButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.TeamButton.Size;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
@@ -16,7 +17,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 
 public class TeamSelectWidget extends ClickableWidget {
 
@@ -32,7 +32,7 @@ public class TeamSelectWidget extends ClickableWidget {
     }
 
     public TeamSelectWidget(int x, int y, int rows, Size size, Supplier<List<Team>> teamSource, Supplier<Team> selectedTeam, Consumer<Integer> onPress) {
-        super(x, y, size.width, TeamButton.HEIGHT * rows, Text.empty());
+        super(x, y, size.width, TeamButton.HEIGHT * rows, EasyText.empty());
         this.rows = rows;
         this.size = size;
         this.teamSource = teamSource;

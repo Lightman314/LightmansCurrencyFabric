@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
@@ -62,7 +63,7 @@ public class ItemTradeNotification extends Notification{
     @Override
     public MutableText getMessage() {
 
-        Text boughtText = Text.translatable("log.shoplog." + this.tradeType.name().toLowerCase());
+        Text boughtText = EasyText.translatable("log.shoplog." + this.tradeType.name().toLowerCase());
 
         Text itemText = getItemNames(this.items.get(0), this.items.get(1));
 
@@ -74,16 +75,16 @@ public class ItemTradeNotification extends Notification{
             itemText = getItemNames(this.items.get(2), this.items.get(3));
         }
         else
-            cost = Text.literal(this.cost.getString("0"));
+            cost = EasyText.literal(this.cost.getString("0"));
 
         //Create log from stored data
-        return Text.translatable("notifications.message.item_trade", this.customer, boughtText, itemText, cost);
+        return EasyText.translatable("notifications.message.item_trade", this.customer, boughtText, itemText, cost);
 
     }
 
     private Text getItemNames(ItemData item1, ItemData item2) {
         if(item1.isEmpty && item2.isEmpty)
-            return Text.literal("ERROR");
+            return EasyText.literal("ERROR");
         else if(item2.isEmpty)
             return item1.format();
         else if(item1.isEmpty)
@@ -164,14 +165,14 @@ public class ItemTradeNotification extends Notification{
             this.isEmpty = item.isEmpty();
             if(this.isEmpty)
             {
-                this.itemName = Text.empty();
+                this.itemName = EasyText.empty();
                 this.count = 0;
                 return;
             }
             if(customName.isEmpty())
                 itemName = item.getName();
             else
-                this.itemName = Text.literal(customName);
+                this.itemName = EasyText.literal(customName);
             this.count = item.getCount();
         }
 
@@ -179,7 +180,7 @@ public class ItemTradeNotification extends Notification{
             this.isEmpty = compound.contains("Empty");
             if(this.isEmpty)
             {
-                this.itemName = Text.empty();
+                this.itemName = EasyText.empty();
                 this.count = 0;
                 return;
             }
@@ -199,11 +200,11 @@ public class ItemTradeNotification extends Notification{
             return compound;
         }
 
-        public Text format() { return Text.translatable("log.shoplog.item.itemformat", this.count, this.itemName); }
+        public Text format() { return EasyText.translatable("log.shoplog.item.itemformat", this.count, this.itemName); }
 
-        public Text formatWith(Text other) { return Text.translatable("log.shoplog.and", this.format(), other); }
+        public Text formatWith(Text other) { return EasyText.translatable("log.shoplog.and", this.format(), other); }
 
-        public Text formatWith(ItemData other) { return Text.translatable("log.shoplog.and", this.format(), other.format()); }
+        public Text formatWith(ItemData other) { return EasyText.translatable("log.shoplog.and", this.format(), other.format()); }
 
     }
 

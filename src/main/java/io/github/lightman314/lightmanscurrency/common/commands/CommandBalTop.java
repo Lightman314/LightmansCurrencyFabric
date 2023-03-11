@@ -9,6 +9,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankSaveData;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
@@ -44,7 +45,7 @@ public class CommandBalTop {
 
         ServerCommandSource source = commandContext.getSource();
 
-        //Get and sort all of the bank accounts
+        //Get and sort all the bank accounts
         //Get player bank accounts
         List<BankAccount.AccountReference> allAccounts = BankSaveData.GetPlayerBankAccounts();
         //Get team bank accounts
@@ -63,20 +64,20 @@ public class CommandBalTop {
 
         if(startIndex >= allAccounts.size())
         {
-            source.sendError(Text.translatable("command.lightmanscurrency.lcbaltop.error.page"));
+            source.sendError(EasyText.translatable("command.lightmanscurrency.lcbaltop.error.page"));
             return 0;
         }
 
 
-        source.sendFeedback(Text.translatable("command.lightmanscurrency.lcbaltop.title").formatted(Formatting.BOLD).formatted(Formatting.GOLD), false);
-        source.sendFeedback(Text.translatable("command.lightmanscurrency.lcbaltop.page", page, getMaxPage(allAccounts.size())).formatted(Formatting.BOLD).formatted(Formatting.GOLD), false);
+        source.sendFeedback(EasyText.translatable("command.lightmanscurrency.lcbaltop.title").formatted(Formatting.BOLD).formatted(Formatting.GOLD), false);
+        source.sendFeedback(EasyText.translatable("command.lightmanscurrency.lcbaltop.page", page, getMaxPage(allAccounts.size())).formatted(Formatting.BOLD).formatted(Formatting.GOLD), false);
         for(int i = startIndex; i < startIndex + ENTRIES_PER_PAGE && i < allAccounts.size(); ++i)
         {
             try {
                 BankAccount account = allAccounts.get(i).get();
                 Text name = account.getName();
                 String amount = account.getCoinStorage().getString("0");
-                source.sendFeedback(Text.translatable("command.lightmanscurrency.lcbaltop.entry", i + 1, name, amount), false);
+                source.sendFeedback(EasyText.translatable("command.lightmanscurrency.lcbaltop.entry", i + 1, name, amount), false);
             } catch(Exception e) { }
         }
 

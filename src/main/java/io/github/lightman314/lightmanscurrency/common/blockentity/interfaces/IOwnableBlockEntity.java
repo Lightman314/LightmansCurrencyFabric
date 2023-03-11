@@ -4,6 +4,6 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public interface IOwnableBlockEntity {
 
-    public boolean canBreak(PlayerEntity entity);
+    boolean canBreak(PlayerEntity entity);
 
 }

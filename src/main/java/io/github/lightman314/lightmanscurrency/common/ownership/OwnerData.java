@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.common.ownership;
 
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
 import io.github.lightman314.lightmanscurrency.common.util.IClientTracker;
@@ -112,7 +113,7 @@ public class OwnerData {
         return "NULL";
     }
 
-    public void SetCustomOwner(String customOwner) { this.customOwner = Text.literal(customOwner); }
+    public void SetCustomOwner(String customOwner) { this.customOwner = EasyText.literal(customOwner); }
     public void SetCustomOwner(MutableText customOwner) { this.customOwner = customOwner; }
 
     public void SetOwner(PlayerReference player) {

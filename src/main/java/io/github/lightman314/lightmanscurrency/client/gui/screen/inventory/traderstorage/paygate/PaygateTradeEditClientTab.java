@@ -11,6 +11,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.In
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.TradeButton;
 import io.github.lightman314.lightmanscurrency.client.util.TextInputUtil;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.TicketItem;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.paygate.PaygateTradeEditTab;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
@@ -22,7 +23,6 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class PaygateTradeEditClientTab extends TraderStorageClientTab<PaygateTradeEditTab> implements InteractionConsumer {
@@ -35,7 +35,7 @@ public class PaygateTradeEditClientTab extends TraderStorageClientTab<PaygateTra
     public @NotNull IconData getIcon() { return IconData.of(ModItems.TRADING_CORE); }
 
     @Override
-    public MutableText getTooltip() { return Text.empty(); }
+    public MutableText getTooltip() { return EasyText.empty(); }
 
     @Override
     public boolean tabButtonVisible() { return false; }
@@ -57,13 +57,13 @@ public class PaygateTradeEditClientTab extends TraderStorageClientTab<PaygateTra
 
         this.tradeDisplay = this.screen.addRenderableTabWidget(new TradeButton(this.menu::getContext, this.commonTab::getTrade, button -> {}));
         this.tradeDisplay.move(this.screen.getGuiLeft() + 10, this.screen.getGuiTop() + 18);
-        this.priceSelection = this.screen.addRenderableTabWidget(new CoinValueInput(this.screen.getGuiLeft() + TraderScreen.WIDTH / 2 - CoinValueInput.DISPLAY_WIDTH / 2, this.screen.getGuiTop() + 55, Text.empty(), trade == null ? CoinValue.EMPTY : trade.getCost(), this.font, this::onValueChanged, this.screen::addRenderableTabWidget));
+        this.priceSelection = this.screen.addRenderableTabWidget(new CoinValueInput(this.screen.getGuiLeft() + TraderScreen.WIDTH / 2 - CoinValueInput.DISPLAY_WIDTH / 2, this.screen.getGuiTop() + 55, EasyText.empty(), trade == null ? CoinValue.EMPTY : trade.getCost(), this.font, this::onValueChanged, this.screen::addRenderableTabWidget));
         this.priceSelection.drawBG = false;
         this.priceSelection.init();
 
-        int labelWidth = this.font.getWidth(Text.translatable("gui.lightmanscurrency.duration"));
-        int unitWidth = this.font.getWidth(Text.translatable("gui.lightmanscurrency.duration.unit"));
-        this.durationInput = this.screen.addRenderableTabWidget(new TextFieldWidget(this.font, this.screen.getGuiLeft() + 15 + labelWidth, this.screen.getGuiTop() + 38, this.screen.getImageWidth() - 30 - labelWidth - unitWidth, 18, Text.empty()));
+        int labelWidth = this.font.getWidth(EasyText.translatable("gui.lightmanscurrency.duration"));
+        int unitWidth = this.font.getWidth(EasyText.translatable("gui.lightmanscurrency.duration.unit"));
+        this.durationInput = this.screen.addRenderableTabWidget(new TextFieldWidget(this.font, this.screen.getGuiLeft() + 15 + labelWidth, this.screen.getGuiTop() + 38, this.screen.getImageWidth() - 30 - labelWidth - unitWidth, 18, EasyText.empty()));
         this.durationInput.setText(String.valueOf(trade == null ? "" : trade.getDuration()));
 
     }
@@ -76,9 +76,9 @@ public class PaygateTradeEditClientTab extends TraderStorageClientTab<PaygateTra
 
         this.validateRenderables();
 
-        this.font.draw(pose, Text.translatable("gui.lightmanscurrency.duration"), this.screen.getGuiLeft() + 13, this.screen.getGuiTop() + 42, 0x404040);
-        int unitWidth = this.font.getWidth(Text.translatable("gui.lightmanscurrency.duration.unit"));
-        this.font.draw(pose, Text.translatable("gui.lightmanscurrency.duration.unit"), this.screen.getGuiLeft() + this.screen.getImageWidth() - unitWidth - 13, this.screen.getGuiTop() + 42, 0x404040);
+        this.font.draw(pose, EasyText.translatable("gui.lightmanscurrency.duration"), this.screen.getGuiLeft() + 13, this.screen.getGuiTop() + 42, 0x404040);
+        int unitWidth = this.font.getWidth(EasyText.translatable("gui.lightmanscurrency.duration.unit"));
+        this.font.draw(pose, EasyText.translatable("gui.lightmanscurrency.duration.unit"), this.screen.getGuiLeft() + this.screen.getImageWidth() - unitWidth - 13, this.screen.getGuiTop() + 42, 0x404040);
 
 
     }
@@ -120,12 +120,10 @@ public class PaygateTradeEditClientTab extends TraderStorageClientTab<PaygateTra
             {
                 UUID ticketID = TicketItem.GetTicketID(this.menu.getCursorStack());
                 this.commonTab.setTicket(ticketID);
-                return;
             }
             else if(t.isTicketTrade())
             {
                 this.commonTab.setTicket(null);
-                return;
             }
         }
     }

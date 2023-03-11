@@ -1,11 +1,11 @@
 package io.github.lightman314.lightmanscurrency.common.blockentity;
 
+import io.github.lightman314.lightmanscurrency.common.blockentity.interfaces.SidedStorageBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.interfaces.ICapabilityBlock;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -29,7 +29,7 @@ public class SidedStorageExtensionBlockEntity extends BlockEntity implements Sid
         return source == null ? null : source.getItemStorage(side);
     }
 
-    private final SidedStorageBlockEntity getSource() {
+    private SidedStorageBlockEntity getSource() {
         Block block = this.getCachedState().getBlock();
         if(block instanceof ICapabilityBlock handlerBlock)
         {

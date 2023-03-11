@@ -11,6 +11,7 @@ import io.github.lightman314.lightmanscurrency.common.blockentity.trader.TraderB
 import io.github.lightman314.lightmanscurrency.common.blocks.traderblocks.interfaces.ITraderBlock;
 import io.github.lightman314.lightmanscurrency.common.blocks.util.LazyShapes;
 import io.github.lightman314.lightmanscurrency.common.blocks.util.TickerUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionData;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionSaveData;
 import io.github.lightman314.lightmanscurrency.common.items.TooltipItem;
@@ -87,7 +88,7 @@ public abstract class TraderBlockBase extends Block implements ITraderBlock, Blo
                 if(trader == null)
                 {
                     LightmansCurrency.LogWarning("Trader Data for block at " + pos.getX() + "," + pos.getY() + "," + pos.getZ() + " had to be re-initialized on interaction.");
-                    player.sendMessage(Text.translatable("trader.warning.reinitialized").formatted(Formatting.RED));
+                    player.sendMessage(EasyText.translatable("trader.warning.reinitialized").formatted(Formatting.RED), false);
                     traderSource.initialize(player, ItemStack.EMPTY);
                     trader = traderSource.getTraderData();
                 }

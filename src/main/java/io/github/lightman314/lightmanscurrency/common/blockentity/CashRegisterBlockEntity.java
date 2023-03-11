@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.github.lightman314.lightmanscurrency.common.blockentity.trader.TraderBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.ITraderSource;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import net.minecraft.block.BlockState;
@@ -13,7 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +38,7 @@ public class CashRegisterBlockEntity extends BlockEntity implements ITraderSourc
         if(this.getTraders().size() > 0)
             player.openHandledScreen(TraderData.getTraderMenuProvider(this.pos));
         else
-            player.sendMessage(Text.translatable("message.lightmanscurrency.cash_register.notlinked"));
+            player.sendMessage(EasyText.translatable("message.lightmanscurrency.cash_register.notlinked"), false);
     }
 
     @Override

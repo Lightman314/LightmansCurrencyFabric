@@ -3,16 +3,13 @@ package io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TraderSettingsScreen;
-import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
 
 public class TabButton extends ButtonWidget {
 
@@ -27,7 +24,7 @@ public class TabButton extends ButtonWidget {
 
     public TabButton(PressAction pressable, TextRenderer font, ITab tab)
     {
-        super(0, 0, SIZE, SIZE, Text.empty(), pressable);
+        super(0, 0, SIZE, SIZE, EasyText.empty(), pressable);
         this.font = font;
         this.tab = tab;
     }

@@ -4,13 +4,11 @@ import com.mojang.brigadier.CommandDispatcher;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandBalTop;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandReloadData;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 
 public class CommandLoader {
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
         CommandLCAdmin.register(dispatcher);
         CommandReloadData.register(dispatcher);
         CommandBalTop.register(dispatcher);

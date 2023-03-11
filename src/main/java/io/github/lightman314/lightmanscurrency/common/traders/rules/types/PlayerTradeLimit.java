@@ -15,6 +15,7 @@ import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextInputUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.events.TradeEvent;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
@@ -55,17 +56,17 @@ public class PlayerTradeLimit extends TradeRule {
         if(tradeCount >= this.limit)
         {
             if(this.enforceTimeLimit())
-                event.addDenial(Text.translatable("traderule.lightmanscurrency.tradelimit.denial.timed", tradeCount, new TimeUtil.TimeData(this.getTimeLimit()).getString()));
+                event.addDenial(EasyText.translatable("traderule.lightmanscurrency.tradelimit.denial.timed", tradeCount, new TimeUtil.TimeData(this.getTimeLimit()).getString()));
             else
-                event.addDenial(Text.translatable("traderule.lightmanscurrency.tradelimit.denial", tradeCount));
-            event.addDenial(Text.translatable("traderule.lightmanscurrency.tradelimit.denial.limit", this.limit));
+                event.addDenial(EasyText.translatable("traderule.lightmanscurrency.tradelimit.denial", tradeCount));
+            event.addDenial(EasyText.translatable("traderule.lightmanscurrency.tradelimit.denial.limit", this.limit));
         }
         else
         {
             if(this.enforceTimeLimit())
-                event.addHelpful(Text.translatable("traderule.lightmanscurrency.tradelimit.info.timed", tradeCount, this.limit, new TimeUtil.TimeData(this.getTimeLimit()).getString()));
+                event.addHelpful(EasyText.translatable("traderule.lightmanscurrency.tradelimit.info.timed", tradeCount, this.limit, new TimeUtil.TimeData(this.getTimeLimit()).getString()));
             else
-                event.addHelpful(Text.translatable("traderule.lightmanscurrency.tradelimit.info", tradeCount, this.limit));
+                event.addHelpful(EasyText.translatable("traderule.lightmanscurrency.tradelimit.info", tradeCount, this.limit));
         }
     }
 
@@ -274,12 +275,12 @@ public class PlayerTradeLimit extends TradeRule {
         @Override
         public void initTab() {
 
-            this.limitInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 19, 30, 20, Text.empty()));
+            this.limitInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 19, 30, 20, EasyText.empty()));
             this.limitInput.setMaxLength(3);
             this.limitInput.setText(Integer.toString(this.getRule().limit));
 
-            this.buttonSetLimit = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 41, screen.guiTop() + 19, 40, 20, Text.translatable("gui.button.lightmanscurrency.playerlimit.setlimit"), this::PressSetLimitButton));
-            this.buttonClearMemory = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 50, screen.xSize - 20, 20, Text.translatable("gui.button.lightmanscurrency.playerlimit.clearmemory"), this::PressClearMemoryButton));
+            this.buttonSetLimit = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 41, screen.guiTop() + 19, 40, 20, EasyText.translatable("gui.button.lightmanscurrency.playerlimit.setlimit"), this::PressSetLimitButton));
+            this.buttonClearMemory = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 50, screen.xSize - 20, 20, EasyText.translatable("gui.button.lightmanscurrency.playerlimit.clearmemory"), this::PressClearMemoryButton));
 
             this.timeInput = this.addCustomRenderable(new TimeInputWidget(screen.guiLeft() + 48, screen.guiTop() + 87, 10, TimeUtil.TimeUnit.DAY, TimeUtil.TimeUnit.MINUTE, this::addCustomRenderable, this::onTimeSet));
             this.timeInput.setTime(this.getRule().timeLimit);
@@ -289,13 +290,13 @@ public class PlayerTradeLimit extends TradeRule {
         @Override
         public void renderTab(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
 
-            screen.getFont().draw(pose, Text.translatable("gui.button.lightmanscurrency.playerlimit.info", this.getRule().limit).getString(), screen.guiLeft() + 10, screen.guiTop() + 9, 0xFFFFFF);
+            screen.getFont().draw(pose, EasyText.translatable("gui.button.lightmanscurrency.playerlimit.info", this.getRule().limit).getString(), screen.guiLeft() + 10, screen.guiTop() + 9, 0xFFFFFF);
 
-            Text text = this.getRule().timeLimit > 0 ? Text.translatable("gui.widget.lightmanscurrency.playerlimit.duration", new TimeUtil.TimeData(this.getRule().timeLimit).getShortString()) : Text.translatable("gui.widget.lightmanscurrency.playerlimit.noduration");
+            Text text = this.getRule().timeLimit > 0 ? EasyText.translatable("gui.widget.lightmanscurrency.playerlimit.duration", new TimeUtil.TimeData(this.getRule().timeLimit).getShortString()) : EasyText.translatable("gui.widget.lightmanscurrency.playerlimit.noduration");
             TextRenderUtil.drawCenteredText(pose, text, this.screen.guiLeft() + this.screen.xSize / 2, this.screen.guiTop() + 75, 0xFFFFFF);
 
             if(this.buttonClearMemory.isMouseOver(mouseX, mouseY))
-                screen.renderTooltip(pose, Text.translatable("gui.button.lightmanscurrency.playerlimit.clearmemory.tooltip"), mouseX, mouseY);
+                screen.renderTooltip(pose, EasyText.translatable("gui.button.lightmanscurrency.playerlimit.clearmemory.tooltip"), mouseX, mouseY);
 
         }
 

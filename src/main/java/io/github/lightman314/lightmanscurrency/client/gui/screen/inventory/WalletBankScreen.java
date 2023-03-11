@@ -11,6 +11,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab.TabButton;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletBankMenu;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageOpenWalletMenu;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
@@ -110,7 +111,7 @@ public class WalletBankScreen extends MenuScreen<WalletBankMenu>{
 
     private Text getWalletName() {
         ItemStack wallet = this.handler.getWallet();
-        return wallet.isEmpty() ? Text.empty() : wallet.getName();
+        return wallet.isEmpty() ? EasyText.empty() : wallet.getName();
     }
 
     @Override
@@ -135,7 +136,7 @@ public class WalletBankScreen extends MenuScreen<WalletBankMenu>{
         this.drawMouseoverTooltip(pose, mouseX,  mouseY);
 
         if(this.buttonOpenWallet != null && this.buttonOpenWallet.isMouseOver(mouseX, mouseY))
-            this.renderTooltip(pose, Text.translatable("tooltip.lightmanscurrency.wallet.openwallet"), mouseX, mouseY);
+            this.renderTooltip(pose, EasyText.translatable("tooltip.lightmanscurrency.wallet.openwallet"), mouseX, mouseY);
 
         //Render the tab button tooltips
         for (TabButton tabButton : this.tabButtons) {

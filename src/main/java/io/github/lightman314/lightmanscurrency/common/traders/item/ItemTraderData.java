@@ -6,6 +6,7 @@ import java.util.List;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.items.UpgradeItem;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderStorageMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.TraderStorageTab;
@@ -32,7 +33,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -222,7 +222,7 @@ public class ItemTraderData extends InputTraderData implements TraderItemStorage
     public IconData inputSettingsTabIcon() { return IconData.of(Items.HOPPER); }
 
     @Override
-    public MutableText inputSettingsTabTooltip() { return Text.translatable("tooltip.lightmanscurrency.settings.iteminput"); }
+    public MutableText inputSettingsTabTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.settings.iteminput"); }
 
     @Override
     public int inputSettingsTabColor() { return 0x00BF00; }

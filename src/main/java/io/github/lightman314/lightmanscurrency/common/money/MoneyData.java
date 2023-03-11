@@ -2,7 +2,6 @@ package io.github.lightman314.lightmanscurrency.common.money;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;

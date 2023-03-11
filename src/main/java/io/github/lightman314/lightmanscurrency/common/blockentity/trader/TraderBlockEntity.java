@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.blockentity.trader;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.blockentity.TickableBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blockentity.interfaces.IOwnableBlockEntity;
+import io.github.lightman314.lightmanscurrency.common.blockentity.interfaces.SidedStorageBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.interfaces.IRotatableBlock;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
@@ -12,7 +13,6 @@ import io.github.lightman314.lightmanscurrency.network.util.BlockEntityUtil;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -174,6 +174,7 @@ public abstract class TraderBlockEntity<D extends TraderData> extends TickableBl
     @Override
     public void onLoad()
     {
+        assert this.world != null;
         if(this.world.isClient)
             BlockEntityUtil.requestUpdatePacket(this);
     }
@@ -217,14 +218,6 @@ public abstract class TraderBlockEntity<D extends TraderData> extends TickableBl
             return IRotatableBlock.getRelativeSide(block.getFacing(this.getCachedState()), side);
         return side;
     }
-
-    /*@Override
-    public AABB getRenderBoundingBox()
-    {
-        if(this.getBlockState() != null)
-            return this.getBlockState().getCollisionShape(this.level, this.worldPosition).bounds().move(this.worldPosition);
-        return super.getRenderBoundingBox();
-    }*/
 
 
 }

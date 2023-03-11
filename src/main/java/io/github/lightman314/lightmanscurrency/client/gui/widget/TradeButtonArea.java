@@ -13,6 +13,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollBarWidget
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.InteractionConsumer;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.TradeButton;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.ITraderSource;
 import io.github.lightman314.lightmanscurrency.common.traders.TradeContext;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
@@ -64,7 +65,7 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
 
     public TradeButtonArea(ITraderSource traderSource, Function<TraderData, TradeContext> getContext, int x, int y, int width, int height, Consumer<ClickableWidget> addWidget, Consumer<TradeButton> removeButton, BiConsumer<TraderData,TradeData> onPress, Function<TradeData,Boolean> tradeFilter)
     {
-        super(x, y, width, height, Text.empty());
+        super(x, y, width, height, EasyText.empty());
         this.traderSource = traderSource;
         this.getContext = getContext;
         this.addWidget = addWidget;
@@ -148,8 +149,8 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
     public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
         if(this.validTrades() <= 0)
         {
-            int textWidth = this.font.getWidth(Text.translatable("gui.lightmanscurrency.notrades"));
-            this.font.draw(pose, Text.translatable("gui.lightmanscurrency.notrades"), this.x + (this.width / 2f) - (textWidth / 2f), this.y + (this.height / 2f) - (this.font.fontHeight / 2f), 0x404040);
+            int textWidth = this.font.getWidth(EasyText.translatable("gui.lightmanscurrency.notrades"));
+            this.font.draw(pose, EasyText.translatable("gui.lightmanscurrency.notrades"), this.x + (this.width / 2f) - (textWidth / 2f), this.y + (this.height / 2f) - (this.font.fontHeight / 2f), 0x404040);
         }
     }
 
@@ -287,7 +288,7 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
             if(text.length() == 0)
                 text = new StringBuilder(renderTitle ? trader.getTitle().getString() : trader.getName().getString());
             else
-                text.append(Text.translatable("gui.lightmanscurrency.trading.listseperator").getString()).append(renderTitle ? trader.getTitle().getString() : trader.getName().getString());
+                text.append(EasyText.translatable("gui.lightmanscurrency.trading.listseperator").getString()).append(renderTitle ? trader.getTitle().getString() : trader.getName().getString());
         }
 
         this.font.draw(pose, TextRenderUtil.fitString(text.toString(), maxWidth), x, y, 0x404040);

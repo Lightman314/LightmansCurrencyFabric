@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainButton;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.TicketMachineMenu;
 import io.github.lightman314.lightmanscurrency.network.server.messages.ticket_machine.CMessageCraftTicket;
 import net.minecraft.client.gui.screen.Screen;
@@ -74,9 +75,9 @@ public class TicketMachineScreen extends MenuScreen<TicketMachineMenu>{
         if(this.buttonCraft != null && this.buttonCraft.active && this.buttonCraft.isMouseOver(mouseX, mouseY))
         {
             if(this.handler.hasMasterTicket())
-                this.renderTooltip(matrixStack, Text.translatable("gui.button.lightmanscurrency.craft_ticket"), mouseX, mouseY);
+                this.renderTooltip(matrixStack, EasyText.translatable("gui.button.lightmanscurrency.craft_ticket"), mouseX, mouseY);
             else
-                this.renderTooltip(matrixStack, Text.translatable("gui.button.lightmanscurrency.craft_master_ticket"), mouseX, mouseY);
+                this.renderTooltip(matrixStack, EasyText.translatable("gui.button.lightmanscurrency.craft_master_ticket"), mouseX, mouseY);
         }
 
     }

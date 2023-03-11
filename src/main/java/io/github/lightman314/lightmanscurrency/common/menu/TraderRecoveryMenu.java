@@ -109,7 +109,7 @@ public class TraderRecoveryMenu extends Menu {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) { return this.getValidEjectionData().size() > 0; }
+    public boolean canUse(PlayerEntity player) { return true; }
 
     @Override
     public void close(PlayerEntity player) {

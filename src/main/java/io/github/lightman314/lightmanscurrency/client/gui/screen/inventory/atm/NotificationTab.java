@@ -4,6 +4,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.ATMSc
 import io.github.lightman314.lightmanscurrency.client.gui.widget.CoinValueInput;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.SimpleSlot;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
@@ -24,7 +25,7 @@ public class NotificationTab extends ATMTab {
     public @NotNull IconData getIcon() { return IconData.of(Items.ENDER_PEARL); }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.atm.notification"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.atm.notification"); }
 
     @Override
     public void init() {
@@ -48,7 +49,7 @@ public class NotificationTab extends ATMTab {
 
         BankAccount account = this.screen.getScreenHandler().getBankAccount();
         if(account != null)
-            TextRenderUtil.drawCenteredMultilineText(pose, account.getNotificationLevel() > 0 ? Text.translatable("gui.lightmanscurrency.notification.details", account.getNotificationValue().getString()) : Text.translatable("gui.lightmanscurrency.notification.disabled"), this.screen.getGuiLeft() + 5, this.screen.getImageWidth() - 10, this.screen.getGuiTop() + 70, 0x404040);
+            TextRenderUtil.drawCenteredMultilineText(pose, account.getNotificationLevel() > 0 ? EasyText.translatable("gui.lightmanscurrency.notification.details", account.getNotificationValue().getString()) : EasyText.translatable("gui.lightmanscurrency.notification.disabled"), this.screen.getGuiLeft() + 5, this.screen.getImageWidth() - 10, this.screen.getGuiTop() + 70, 0x404040);
 
     }
 
@@ -56,7 +57,7 @@ public class NotificationTab extends ATMTab {
     public void postRender(MatrixStack pose, int mouseX, int mouseY) { }
 
     @Override
-    public void tick() { this.notificationSelection.tick();; }
+    public void tick() { this.notificationSelection.tick(); }
 
     @Override
     public void onClose() { SimpleSlot.SetActive(this.screen.getScreenHandler()); }

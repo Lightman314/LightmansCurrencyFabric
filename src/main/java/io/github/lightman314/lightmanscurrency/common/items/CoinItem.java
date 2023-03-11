@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinData;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import net.minecraft.util.Formatting;
@@ -39,18 +40,18 @@ public class CoinItem extends Item{
 			switch (LCConfigCommon.INSTANCE.coinTooltipType.get()) {
 				case DEFAULT -> {
 					if (coinData.convertsDownwards()) {
-						tooltip.add(Text.translatable("tooltip.lightmanscurrency.coinworth.down", coinData.getDownwardConversion().getSecond(), MoneyUtil.getPluralName(coinData.getDownwardConversion().getFirst()).getString()).formatted(Formatting.YELLOW));
+						tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.down", coinData.getDownwardConversion().getSecond(), MoneyUtil.getPluralName(coinData.getDownwardConversion().getFirst()).getString()).formatted(Formatting.YELLOW));
 					}
 					Pair<Item, Integer> upwardConversion = MoneyUtil.getUpwardConversion(stack.getItem());
 					if (upwardConversion != null) {
-						tooltip.add(Text.translatable("tooltip.lightmanscurrency.coinworth.up", upwardConversion.getSecond(), upwardConversion.getFirst().getName(new ItemStack(upwardConversion.getFirst())).getString()).formatted(Formatting.YELLOW));
+						tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.up", upwardConversion.getSecond(), upwardConversion.getFirst().getName(new ItemStack(upwardConversion.getFirst())).getString()).formatted(Formatting.YELLOW));
 					}
 				}
 				case VALUE -> {
 					double value = coinData.getDisplayValue();
-					tooltip.add(Text.translatable("tooltip.lightmanscurrency.coinworth.value", LCConfigCommon.INSTANCE.formatValueDisplay(value)).formatted(Formatting.YELLOW));
+					tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value", LCConfigCommon.INSTANCE.formatValueDisplay(value)).formatted(Formatting.YELLOW));
 					if (stack.getCount() > 1)
-						tooltip.add(Text.translatable("tooltip.lightmanscurrency.coinworth.value.stack", LCConfigCommon.INSTANCE.formatValueDisplay(value * stack.getCount())).formatted(Formatting.YELLOW));
+						tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value.stack", LCConfigCommon.INSTANCE.formatValueDisplay(value * stack.getCount())).formatted(Formatting.YELLOW));
 				}
 				default -> {
 				} //Default is NONE

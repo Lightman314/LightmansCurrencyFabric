@@ -70,7 +70,6 @@ public abstract class TradeEvent {
 
         /**
          * Adds an alert to the trade display.
-         *
          * Use addHelpful, addWarning, addError, or addDenial for easier to use templates if you don't wish to add any special formatting to your alert.
          * @param cancelTrade Whether to also cancel the trade/event.
          */

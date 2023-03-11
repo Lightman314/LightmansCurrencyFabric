@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types.auction;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.notifications.types.trader.item.ItemTradeNotification;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.tradedata.AuctionTradeData;
@@ -45,7 +46,7 @@ public class AuctionHouseBuyerNotification extends AuctionHouseNotification{
         Text cost = this.cost.getComponent("0");
 
         //Create log from stored data
-        return Text.translatable("notifications.message.auction.buyer", itemText, cost);
+        return EasyText.translatable("notifications.message.auction.buyer", itemText, cost);
 
     }
 

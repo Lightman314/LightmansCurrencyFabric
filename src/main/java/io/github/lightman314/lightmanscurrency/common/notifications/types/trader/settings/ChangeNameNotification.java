@@ -1,13 +1,13 @@
 package io.github.lightman314.lightmanscurrency.common.notifications.types.trader.settings;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationCategory;
 import io.github.lightman314.lightmanscurrency.common.notifications.categories.NullCategory;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class ChangeNameNotification extends Notification {
@@ -30,11 +30,11 @@ public class ChangeNameNotification extends Notification {
     @Override
     public MutableText getMessage() {
         if(oldName.isBlank())
-            return Text.translatable("log.settings.changename.set", this.player.getName(true), this.newName);
+            return EasyText.translatable("log.settings.changename.set", this.player.getName(true), this.newName);
         else if(newName.isBlank())
-            return Text.translatable("log.settings.changename.reset", this.player.getName(true), this.oldName);
+            return EasyText.translatable("log.settings.changename.reset", this.player.getName(true), this.oldName);
         else
-            return Text.translatable("log.settings.changename", this.player.getName(true), this.oldName, this.newName);
+            return EasyText.translatable("log.settings.changename", this.player.getName(true), this.oldName, this.newName);
     }
 
     @Override

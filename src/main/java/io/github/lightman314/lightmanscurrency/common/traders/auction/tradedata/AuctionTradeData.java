@@ -13,6 +13,7 @@ import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderStorageMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.TraderStorageTab;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.trades_basic.BasicTradeEditTab;
@@ -32,7 +33,6 @@ import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
 import io.github.lightman314.lightmanscurrency.util.TimeUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
@@ -385,16 +385,16 @@ public class AuctionTradeData extends TradeData {
         if(this.lastBidPlayer == null)
         {
             //First bid info
-            bidInfo.add(Text.translatable("tooltip.lightmanscurrency.auction.nobidder"));
-            bidInfo.add(Text.translatable("tooltip.lightmanscurrency.auction.minbid", this.lastBidAmount.getString()));
+            bidInfo.add(EasyText.translatable("tooltip.lightmanscurrency.auction.nobidder"));
+            bidInfo.add(EasyText.translatable("tooltip.lightmanscurrency.auction.minbid", this.lastBidAmount.getString()));
         }
         else
         {
             //Last bid info
-            bidInfo.add(Text.translatable("tooltip.lightmanscurrency.auction.lastbidder", this.lastBidPlayer.getName(true)));
-            bidInfo.add(Text.translatable("tooltip.lightmanscurrency.auction.currentbid", this.lastBidAmount.getString()));
+            bidInfo.add(EasyText.translatable("tooltip.lightmanscurrency.auction.lastbidder", this.lastBidPlayer.getName(true)));
+            bidInfo.add(EasyText.translatable("tooltip.lightmanscurrency.auction.currentbid", this.lastBidAmount.getString()));
             //Next bid info
-            bidInfo.add(Text.translatable("tooltip.lightmanscurrency.auction.minbid", this.getMinNextBid().getString()));
+            bidInfo.add(EasyText.translatable("tooltip.lightmanscurrency.auction.minbid", this.getMinNextBid().getString()));
         }
         return bidInfo;
     }
@@ -451,7 +451,7 @@ public class AuctionTradeData extends TradeData {
 
     public List<Text> getAdditionalTooltips(TradeContext context, int mouseX, int mouseY) {
         TimeUtil.TimeData time = new TimeUtil.TimeData(this.getRemainingTime(TimeUtil.getCurrentTime()));
-        return Lists.newArrayList(Text.translatable("gui.lightmanscurrency.auction.time_remaining", Text.literal(time.getString()).styled(s -> s.withColor(this.getTextColor(time)))));
+        return Lists.newArrayList(EasyText.translatable("gui.lightmanscurrency.auction.time_remaining", EasyText.literal(time.getString()).styled(s -> s.withColor(this.getTextColor(time)))));
     }
 
     private int getTextColor(TimeUtil.TimeData remainingTime) {

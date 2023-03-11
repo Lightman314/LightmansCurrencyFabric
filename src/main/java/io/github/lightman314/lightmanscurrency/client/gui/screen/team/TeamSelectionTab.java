@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TeamManagerScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.TeamSelectWidget;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
+import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
 import io.github.lightman314.lightmanscurrency.network.server.messages.team.CMessageCreateTeam;
@@ -16,7 +17,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
 
 public class TeamSelectionTab extends TeamTab {
 
@@ -25,10 +26,10 @@ public class TeamSelectionTab extends TeamTab {
     private TeamSelectionTab() { }
 
     @Override
-    public IconData getIcon() { return IconData.of(Items.PAPER); }
+    public @NotNull IconData getIcon() { return IconData.of(Items.PAPER); }
 
     @Override
-    public MutableText getTooltip() { return Text.translatable("tooltip.lightmanscurrency.team.selection"); }
+    public MutableText getTooltip() { return EasyText.translatable("tooltip.lightmanscurrency.team.selection"); }
 
     @Override
     public boolean allowViewing(PlayerEntity player, Team team) { return true; }
@@ -49,10 +50,10 @@ public class TeamSelectionTab extends TeamTab {
         this.teamSelection = screen.addRenderableTabWidget(new TeamSelectWidget(screen.guiLeft() + 10, screen.guiTop() + 20, 5, () -> this.teamList, () -> this.getActiveTeam(), this::selectTeamButton));
         this.teamSelection.init(screen::addRenderableTabWidget, this.getFont());
 
-        this.newTeamName = screen.addRenderableTabWidget(new TextFieldWidget(this.getFont(), screen.guiLeft() + 20, screen.guiTop() + 140, 160, 20, Text.empty()));
+        this.newTeamName = screen.addRenderableTabWidget(new TextFieldWidget(this.getFont(), screen.guiLeft() + 20, screen.guiTop() + 140, 160, 20, EasyText.empty()));
         this.newTeamName.setMaxLength(32);
 
-        this.buttonCreateTeam = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 120, screen.guiTop() + 165, 60, 20, Text.translatable("gui.button.lightmanscurrency.team.create"), this::createTeam));
+        this.buttonCreateTeam = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 120, screen.guiTop() + 165, 60, 20, EasyText.translatable("gui.button.lightmanscurrency.team.create"), this::createTeam));
         this.buttonCreateTeam.active = false;
 
     }
@@ -81,8 +82,8 @@ public class TeamSelectionTab extends TeamTab {
         TeamManagerScreen screen = this.getScreen();
 
         //Render the text
-        this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.team.select"), screen.guiLeft() + 20, screen.guiTop() + 10, 0x404040);
-        this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.team.create"), screen.guiLeft() + 20, screen.guiTop() + 130, 0x404040);
+        this.getFont().draw(pose, EasyText.translatable("gui.lightmanscurrency.team.select"), screen.guiLeft() + 20, screen.guiTop() + 10, 0x404040);
+        this.getFont().draw(pose, EasyText.translatable("gui.lightmanscurrency.team.create"), screen.guiLeft() + 20, screen.guiTop() + 130, 0x404040);
 
     }
 
