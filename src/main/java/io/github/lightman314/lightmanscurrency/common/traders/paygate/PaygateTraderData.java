@@ -243,14 +243,14 @@ public class PaygateTraderData extends TraderData implements ITradeSource<Paygat
             //Abort if not enough room to put the ticket stub
             if(!context.canFitItem(new ItemStack(ModItems.TICKET_STUB)))
             {
-                LightmansCurrency.LogInfo("Not enough room for the ticket stub. Aborting trade!");
+                LightmansCurrency.LogDebug("Not enough room for the ticket stub. Aborting trade!");
                 return TradeResult.FAIL_NO_OUTPUT_SPACE;
             }
 
             //Trade is valid, collect the ticket
             if(!context.collectTicket(trade.getTicketID()))
             {
-                LightmansCurrency.LogError("Unable to collect the ticket. Aborting Trade!");
+                LightmansCurrency.LogDebug("Unable to collect the ticket. Aborting Trade!");
                 return TradeResult.FAIL_CANNOT_AFFORD;
             }
 

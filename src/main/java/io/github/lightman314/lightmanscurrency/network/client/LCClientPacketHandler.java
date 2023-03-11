@@ -86,7 +86,7 @@ public class LCClientPacketHandler implements PlayChannelHandler {
 	public void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
 		try {
 			Identifier type = new Identifier(buffer.readString());
-			LightmansCurrency.LogInfo("Received client packet of type '" + type + "'!");
+			LightmansCurrency.LogDebug("Received client packet of type '" + type + "'!");
 			if(PACKET_HANDLERS.containsKey(type))
 				PACKET_HANDLERS.get(type).handle(client, handler, buffer, responseSender);
 			else

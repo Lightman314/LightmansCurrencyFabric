@@ -111,7 +111,7 @@ public abstract class TraderInterfaceBlock extends RotatableBlock implements Blo
                     } catch(Throwable t) { t.printStackTrace(); }
                 }
                 else
-                    LightmansCurrency.LogInfo("Trader block was broken by legal means!");
+                    LightmansCurrency.LogDebug("Trader block was broken by legal means!");
             }
         }
 

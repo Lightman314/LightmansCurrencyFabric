@@ -50,7 +50,6 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 
-		LightmansCurrency.LogInfo("Hello from client init!");
 		ClientPlayNetworking.registerGlobalReceiver(PacketChannels.SERVER_TO_CLIENT, new LCClientPacketHandler());
 		ClientPlayNetworking.registerGlobalReceiver(PacketChannels.CONFIG_SYNC, new SynchronizedConfigPacketHandler());
 

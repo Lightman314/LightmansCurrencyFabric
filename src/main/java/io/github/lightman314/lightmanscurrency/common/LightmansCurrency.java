@@ -5,7 +5,6 @@ import io.github.lightman314.lightmanscurrency.common.Reference.*;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
 import io.github.lightman314.lightmanscurrency.common.callbacks.EntityDeathCallback;
-import io.github.lightman314.lightmanscurrency.common.callbacks.ItemEntityCollisionCallback;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.core.*;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionSaveData;
@@ -66,8 +65,6 @@ public class LightmansCurrency implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		
-		LightmansCurrency.LogInfo("Hello from common init!");
 
 		//Trigger registration
 		ModItems.registerItems();
@@ -251,34 +248,22 @@ public class LightmansCurrency implements ModInitializer {
     
     public static void LogInfo(String message)
     {
-    	/*if(Config.COMMON != null && Config.COMMON.debugLevel.get() > 0)
-    		LOGGER.debug("INFO: " + message);
-    	else*/
-    		LOGGER.info(message);
+        LOGGER.info(message);
     }
     
     public static void LogWarning(String message)
     {
-    	/*if(Config.COMMON != null && Config.COMMON.debugLevel.get() > 1)
-    		LOGGER.debug("WARN: " + message);
-    	else*/
-    		LOGGER.warn(message);
+        LOGGER.warn(message);
     }
     
     public static void LogError(String message, Object... objects)
     {
-    	/*if(Config.COMMON != null && Config.COMMON.debugLevel.get() > 2)
-    		LOGGER.debug("ERROR: " + message, objects);
-    	else*/
-    		LOGGER.error(message, objects);
+        LOGGER.error(message, objects);
     }
     
     public static void LogError(String message)
     {
-    	/*if(Config.COMMON != null && Config.COMMON.debugLevel.get() > 2)
-    		LOGGER.debug("ERROR: " + message);
-    	else*/
-    		LOGGER.error(message);
+        LOGGER.error(message);
     }
 
 }

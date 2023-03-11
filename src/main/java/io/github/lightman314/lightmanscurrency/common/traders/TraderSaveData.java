@@ -386,7 +386,7 @@ public class TraderSaveData extends PersistentState {
 
                 FileUtil.writeStringToFile(ptf, jsonString);
 
-                LightmansCurrency.LogInfo("persistentTraders.json does not exist. Creating a fresh copy.");
+                LightmansCurrency.LogInfo("PersistentTraders.json does not exist. Creating a fresh copy.");
 
             } catch(Throwable e) { LightmansCurrency.LogError("Error attempting to create 'persistentTraders.json' file.", e); }
         }

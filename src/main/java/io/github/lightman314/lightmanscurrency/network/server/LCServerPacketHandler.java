@@ -106,7 +106,7 @@ public class LCServerPacketHandler implements PlayChannelHandler {
 	public void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
 		try {
 			Identifier type = new Identifier(buffer.readString());
-			LightmansCurrency.LogInfo("Received server packet of type '" + type + "'!");
+			LightmansCurrency.LogDebug("Received server packet of type '" + type + "'!");
 			if(PACKET_HANDLERS.containsKey(type))
 				PACKET_HANDLERS.get(type).handle(server, player, handler, buffer, responseSender);
 			else

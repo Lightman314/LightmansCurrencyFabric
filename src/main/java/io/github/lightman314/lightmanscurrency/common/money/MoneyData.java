@@ -74,7 +74,7 @@ public class MoneyData extends ServerToClientPacket {
 
     private static MoneyData decode(PacketByteBuf buffer) {
         try {
-            LightmansCurrency.LogInfo("Decoding money data packet:");
+            LightmansCurrency.LogDebug("Decoding money data packet:");
             int stringSize = buffer.readInt();
             String jsonString = buffer.readString(stringSize);
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();

@@ -93,7 +93,7 @@ public class ATMData extends ServerToClientPacket {
 
     public static ATMData decode(PacketByteBuf buffer) {
         try {
-            LightmansCurrency.LogInfo("Decoding atm data packet:");
+            LightmansCurrency.LogDebug("Decoding atm data packet:");
             int stringSize = buffer.readInt();
             String jsonString = buffer.readString(stringSize);
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();

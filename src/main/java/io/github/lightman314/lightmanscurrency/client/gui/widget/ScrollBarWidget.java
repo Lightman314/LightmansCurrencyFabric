@@ -175,7 +175,7 @@ public class ScrollBarWidget extends ClickableWidget {
         this.isDragging = false;
         if(this.isMouseOver(mouseX, mouseY) && this.visible() && button == 0)
         {
-            LightmansCurrency.LogInfo("Started dragging.");
+            LightmansCurrency.LogDebug("Started dragging.");
             this.isDragging = true;
             this.dragKnob(mouseY);
         }
@@ -187,7 +187,7 @@ public class ScrollBarWidget extends ClickableWidget {
             //One last drag calculation
             this.dragKnob(mouseY);
             this.isDragging = false;
-            LightmansCurrency.LogInfo("Stopped dragging.");
+            LightmansCurrency.LogDebug("Stopped dragging.");
         }
     }
 

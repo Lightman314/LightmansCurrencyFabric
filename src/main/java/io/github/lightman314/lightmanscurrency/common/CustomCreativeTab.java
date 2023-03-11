@@ -118,7 +118,7 @@ public class CustomCreativeTab extends ItemGroup {
 			for (ItemConvertible extra : extras) {
 				this.sortList.add(extra.asItem());
 			}
-			LightmansCurrency.LogInfo("Added " + extras.size() + " items to the creative tab sorting list.");
+			LightmansCurrency.LogDebug("Added " + extras.size() + " items to the creative tab sorting list.");
 		}
 		
 		@Override

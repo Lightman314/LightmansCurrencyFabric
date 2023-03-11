@@ -443,7 +443,7 @@ public class ItemTraderData extends InputTraderData implements TraderItemStorage
             //Abort if not enough room to put the sold item
             if(!context.canFitItems(trade.getSellItem(0), trade.getSellItem(1)))
             {
-                LightmansCurrency.LogInfo("Not enough room for the output item. Aborting trade!");
+                LightmansCurrency.LogDebug("Not enough room for the output item. Aborting trade!");
                 return TradeResult.FAIL_NO_OUTPUT_SPACE;
             }
 

@@ -13,7 +13,7 @@ public class IntegerPermission extends PermissionOption{
 
     @Override
     protected void createWidget(int x, int y, OptionWidgets widgets) {
-        LightmansCurrency.LogInfo("Integer Permission Widget is not yet built.");
+        LightmansCurrency.LogWarning("Integer Permission Widget is not yet built.");
     }
 
     @Override

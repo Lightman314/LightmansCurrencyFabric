@@ -129,7 +129,7 @@ public class TraderMenu extends Menu {
             }
             TradeResult result = trader.ExecuteTrade(this.getContext(trader), tradeIndex);
             if(result.hasMessage())
-                LightmansCurrency.LogInfo(result.failMessage.getString());
+                LightmansCurrency.LogDebug(result.failMessage.getString());
         }
         else
             LightmansCurrency.LogWarning("Trader " + traderIndex + " is not a valid trader index.");
@@ -196,7 +196,7 @@ public class TraderMenu extends Menu {
     public void CollectCoinStorage() {
         if(this.isSingleTrader())
         {
-            LightmansCurrency.LogInfo("Attempting to collect coins from trader.");
+            LightmansCurrency.LogDebug("Attempting to collect coins from trader.");
             TraderData trader = this.getSingleTrader();
             if(trader.hasPermission(this.player, Permissions.COLLECT_COINS))
             {

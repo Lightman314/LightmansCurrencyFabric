@@ -187,7 +187,7 @@ public abstract class TraderBlockBase extends Block implements ITraderBlock, Blo
                     traderSource.deleteTrader();
                 }
                 else
-                    LightmansCurrency.LogInfo("Trader block was broken by legal means!");
+                    LightmansCurrency.LogDebug("Trader block was broken by legal means!");
 
                 //Flag the block as broken, so that the trader gets deleted.
                 traderSource.deleteTrader();

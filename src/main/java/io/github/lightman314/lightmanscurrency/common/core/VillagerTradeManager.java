@@ -515,7 +515,7 @@ public class VillagerTradeManager {
             if(priceStacks.size() > 1)
                 price2 = priceStacks.get(1);
 
-            LightmansCurrency.LogInfo("EnchantedItemForCoinsTrade.getOffer() -> \n" +
+            LightmansCurrency.LogDebug("EnchantedItemForCoinsTrade.getOffer() -> \n" +
                     "i=" + i +
                     "\ncoinValue=" + coinValue +
                     "\nbaseValue=" + baseValue +
@@ -570,7 +570,7 @@ public class VillagerTradeManager {
             if(coins.size() > 1)
                 price2 = coins.get(1);
 
-            LightmansCurrency.LogInfo("EnchantedBookForCoinsTrade.getOffer() -> \n" +
+            LightmansCurrency.LogDebug("EnchantedBookForCoinsTrade.getOffer() -> \n" +
                     "baseValue=" + baseValue +
                     "\ncoinValue=" + coinValue +
                     "\nlevel=" + level +

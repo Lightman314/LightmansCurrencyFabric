@@ -192,7 +192,7 @@ public class BankSaveData extends PersistentState {
         {
             if(!account.allowedAccess(player))
             {
-                LightmansCurrency.LogInfo("Player does not have access to the selected account. Canceling selection.");
+                LightmansCurrency.LogDebug("Player does not have access to the selected account. Canceling selection.");
                 return;
             }
             BankSaveData bsd = get();

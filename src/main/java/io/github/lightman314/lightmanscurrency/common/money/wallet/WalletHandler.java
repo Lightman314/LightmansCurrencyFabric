@@ -88,7 +88,7 @@ public class WalletHandler{
     public static void WalletSlotInteraction(PlayerEntity player, int clickedSlot, boolean heldShift, ItemStack heldItem)
     {
 
-        LightmansCurrency.LogInfo("Wallet Slot interaction for slot " + clickedSlot + " (shift " + (heldShift ? "held" : "not held") + ") on the " + DebugUtil.getSideText(player));
+        LightmansCurrency.LogDebug("Wallet Slot interaction for slot " + clickedSlot + " (shift " + (heldShift ? "held" : "not held") + ") on the " + DebugUtil.getSideText(player));
         ScreenHandler menu = player.currentScreenHandler;
         if(menu == null)
             return;
