@@ -72,7 +72,7 @@ public class TraderRecoveryScreen extends MenuScreen<TraderRecoveryMenu> {
     protected void handledScreenTick() {
 
         this.buttonLeft.active = this.handler.getSelectedIndex() > 0;
-        this.buttonRight.active = this.handler.getSelectedIndex() < this.handler.getValidEjectionData().size() - 2;
+        this.buttonRight.active = this.handler.getSelectedIndex() < this.handler.getValidEjectionData().size() - 1;
 
     }
 
