@@ -74,12 +74,12 @@ public class TradingTerminalScreen extends Screen implements IScrollable{
         int guiLeft = (this.width - this.xSize) / 2;
         int guiTop = (this.height - this.ySize) / 2;
 
-        this.searchField = this.addDrawable(new TextFieldWidget(this.textRenderer, guiLeft + 28, guiTop + 6, 101, 9, Text.translatable("gui.lightmanscurrency.terminal.search")));
-        this.searchField.setDrawsBackground(false);;
+        this.searchField = this.addDrawableChild(new TextFieldWidget(this.textRenderer, guiLeft + 28, guiTop + 6, 101, 9, Text.translatable("gui.lightmanscurrency.terminal.search")));
+        this.searchField.setDrawsBackground(false);
         this.searchField.setMaxLength(32);
         this.searchField.setEditableColor(0xFFFFFF);
 
-        this.scrollBar = this.addDrawable(new ScrollBarWidget(guiLeft + 16 + NetworkTraderButton.WIDTH, guiTop + 17, NetworkTraderButton.HEIGHT * 5 + 2, this));
+        this.scrollBar = this.addDrawableChild(new ScrollBarWidget(guiLeft + 16 + NetworkTraderButton.WIDTH, guiTop + 17, NetworkTraderButton.HEIGHT * 5 + 2, this));
 
         this.initTraderButtons(guiLeft, guiTop);
 
@@ -99,7 +99,7 @@ public class TradingTerminalScreen extends Screen implements IScrollable{
         this.traderButtons = new ArrayList<>();
         for(int y = 0; y < 5; y++)
         {
-            NetworkTraderButton newButton = this.addDrawable(new NetworkTraderButton(guiLeft + 15, guiTop + 18 + (y * NetworkTraderButton.HEIGHT), this::OpenTrader, this.textRenderer));
+            NetworkTraderButton newButton = this.addDrawableChild(new NetworkTraderButton(guiLeft + 15, guiTop + 18 + (y * NetworkTraderButton.HEIGHT), this::OpenTrader, this.textRenderer));
             this.traderButtons.add(newButton);
         }
     }

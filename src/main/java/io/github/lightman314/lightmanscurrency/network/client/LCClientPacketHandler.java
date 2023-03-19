@@ -15,6 +15,7 @@ import io.github.lightman314.lightmanscurrency.network.client.messages.ejectiond
 import io.github.lightman314.lightmanscurrency.network.client.messages.enchantments.SMessageMoneyMendingClink;
 import io.github.lightman314.lightmanscurrency.network.client.messages.notifications.SMessageClientNotification;
 import io.github.lightman314.lightmanscurrency.network.client.messages.team.SMessageCreateTeamResponse;
+import io.github.lightman314.lightmanscurrency.network.client.messages.time.SMessageSyncTime;
 import io.github.lightman314.lightmanscurrency.network.client.messages.trader.SMessageStorageInteraction;
 import io.github.lightman314.lightmanscurrency.network.client.messages.trader.SMessageSyncUserCount;
 import net.fabricmc.api.EnvType;
@@ -43,6 +44,7 @@ public class LCClientPacketHandler implements PlayChannelHandler {
 
 		//Block Entity
 		this.registerPacketType(SMessageSendArmorStandID.PACKET_ID, SMessageSendArmorStandID::handle);
+		this.registerPacketType(SMessageSyncTime.PACKET_ID, SMessageSyncTime::handle);
 
 		//Enchantments
 		this.registerPacketType(SMessageMoneyMendingClink.PACKET_ID, SMessageMoneyMendingClink::handle);
@@ -79,6 +81,8 @@ public class LCClientPacketHandler implements PlayChannelHandler {
 
 		//Ejection Data
 		this.registerPacketType(SMessageChangeSelectedData.PACKET_ID, SMessageChangeSelectedData::handle);
+
+
 
 	}
 

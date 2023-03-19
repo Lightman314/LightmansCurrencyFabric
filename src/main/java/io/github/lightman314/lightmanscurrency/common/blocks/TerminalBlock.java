@@ -1,6 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.blocks;
 
-import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.client.gui.screen.TradingTerminalScreen;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.RotatableBlock;
 import io.github.lightman314.lightmanscurrency.common.items.TooltipItem;
 import io.github.lightman314.lightmanscurrency.common.items.tooltips.LCTooltips;
@@ -31,7 +31,8 @@ public class TerminalBlock extends RotatableBlock {
     {
         if(level.isClient)
         {
-            //TODO open terminal screen
+            try{ TradingTerminalScreen.open();
+            } catch(Throwable ignored) {}
         }
         return ActionResult.SUCCESS;
     }

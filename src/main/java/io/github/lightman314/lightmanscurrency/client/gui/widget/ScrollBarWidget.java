@@ -7,7 +7,6 @@ import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -91,11 +90,11 @@ public class ScrollBarWidget extends ClickableWidget {
     }
 
     public interface IScrollable {
-        public int currentScroll();
-        public void setScroll(int newScroll);
-        public default int getMinScroll() { return 0; }
-        public int getMaxScroll();
-        public default boolean handleScrollWheel(double delta) {
+        int currentScroll();
+        void setScroll(int newScroll);
+        default int getMinScroll() { return 0; }
+        int getMaxScroll();
+        default boolean handleScrollWheel(double delta) {
             int scroll = this.currentScroll();
             if(delta < 0)
             {
@@ -115,7 +114,7 @@ public class ScrollBarWidget extends ClickableWidget {
             }
             return false;
         }
-        public static int calculateMaxScroll(int visibleCount, int totalCount) { return Math.max(0, totalCount - visibleCount); }
+        static int calculateMaxScroll(int visibleCount, int totalCount) { return Math.max(0, totalCount - visibleCount); }
     }
 
     @Override

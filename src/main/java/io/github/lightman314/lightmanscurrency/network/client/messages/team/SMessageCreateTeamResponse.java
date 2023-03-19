@@ -27,5 +27,4 @@ public class SMessageCreateTeamResponse extends ServerToClientPacket {
             screen.setActiveTeam(buffer.readLong());
     }
 
-
 }
