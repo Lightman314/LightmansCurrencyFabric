@@ -13,13 +13,16 @@ public class TimeUtil {
     public static final long DURATION_HOUR = 60 * DURATION_MINUTE;
     public static final long DURATION_DAY = 24 * DURATION_HOUR;
 
+    private static long timeDesync = 0;
+
+    public static void setTimeDesync(long value) { timeDesync = value; }
+
     /**
      * Gets the current system time in milliseconds
      */
     public static long getCurrentTime()
     {
-        //TODO get and/or store time desync on client
-        return System.currentTimeMillis();// + LightmansCurrency.PROXY.getTimeDesync();
+        return System.currentTimeMillis() + timeDesync;
     }
 
     /**

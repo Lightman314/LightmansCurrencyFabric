@@ -19,7 +19,10 @@ public class PortableTerminalItem extends TooltipItem {
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand)
 	{
 		if(world.isClient)
-			TradingTerminalScreen.open();
+		{
+			try{ TradingTerminalScreen.open();
+			} catch(Throwable ignored) {}
+		}
 		return TypedActionResult.success(player.getStackInHand(hand));
 	}
 	

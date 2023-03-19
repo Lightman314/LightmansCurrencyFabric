@@ -40,6 +40,7 @@ import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.*
 import io.github.lightman314.lightmanscurrency.config.Config;
 import io.github.lightman314.lightmanscurrency.config.SynchronizedConfig;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
+import io.github.lightman314.lightmanscurrency.network.client.messages.time.SMessageSyncTime;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -184,6 +185,7 @@ public class LightmansCurrency implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> NotificationSaveData.OnPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> CommandLCAdmin.SendAdminList(sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> SynchronizedConfig.sendConfigSyncPackets(sender));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> SMessageSyncTime.CreatePacket().sendTo(sender));
 
         //Killed by other entity event
         LootTableLoadingCallback.EVENT.register(LootManager::onLootTableLoaded);
