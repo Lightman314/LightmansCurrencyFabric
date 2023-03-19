@@ -72,8 +72,8 @@ public class ModBlocks {
 	public static final BlockItemPair COINPILE_COPPER = build(new CoinpileBlock(FabricBlockSettings.of(Material.METAL).strength(3f, 6f).sounds(BlockSoundGroup.METAL).nonOpaque(), ModItems.COIN_COPPER), LightmansCurrency.COIN_GROUP, COINBLOCK_ITEM);
 	public static final BlockItemPair COINPILE_IRON = build(new CoinpileBlock(FabricBlockSettings.of(Material.METAL).strength(3f, 6f).sounds(BlockSoundGroup.METAL).nonOpaque(), ModItems.COIN_IRON), LightmansCurrency.COIN_GROUP, COINBLOCK_ITEM);
 	public static final BlockItemPair COINPILE_GOLD = build(new CoinpileBlock(FabricBlockSettings.of(Material.METAL).strength(3f, 6f).sounds(BlockSoundGroup.METAL).nonOpaque(), ModItems.COIN_GOLD), LightmansCurrency.COIN_GROUP, COINBLOCK_ITEM);
-	public static final BlockItemPair COINPILE_DIAMOND = build(new CoinpileBlock(FabricBlockSettings.of(Material.METAL).strength(3f, 6f).sounds(BlockSoundGroup.METAL).nonOpaque(), ModItems.COIN_EMERALD), LightmansCurrency.COIN_GROUP, COINBLOCK_ITEM);
-	public static final BlockItemPair COINPILE_EMERALD = build(new CoinpileBlock(FabricBlockSettings.of(Material.METAL).strength(3f, 6f).sounds(BlockSoundGroup.METAL).nonOpaque(), ModItems.COIN_DIAMOND), LightmansCurrency.COIN_GROUP, COINBLOCK_ITEM);
+	public static final BlockItemPair COINPILE_EMERALD = build(new CoinpileBlock(FabricBlockSettings.of(Material.METAL).strength(3f, 6f).sounds(BlockSoundGroup.METAL).nonOpaque(), ModItems.COIN_EMERALD), LightmansCurrency.COIN_GROUP, COINBLOCK_ITEM);
+	public static final BlockItemPair COINPILE_DIAMOND = build(new CoinpileBlock(FabricBlockSettings.of(Material.METAL).strength(3f, 6f).sounds(BlockSoundGroup.METAL).nonOpaque(), ModItems.COIN_DIAMOND), LightmansCurrency.COIN_GROUP, COINBLOCK_ITEM);
 	public static final BlockItemPair COINPILE_NETHERITE = build(new CoinpileBlock(FabricBlockSettings.of(Material.METAL).strength(3f, 6f).sounds(BlockSoundGroup.METAL).nonOpaque(), ModItems.COIN_NETHERITE), LightmansCurrency.COIN_GROUP, COINBLOCK_ITEM_FIREPROOF);
 	
 	//Coin blocks
