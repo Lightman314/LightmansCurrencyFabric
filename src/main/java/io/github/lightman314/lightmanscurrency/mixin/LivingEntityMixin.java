@@ -1,6 +1,8 @@
 package io.github.lightman314.lightmanscurrency.mixin;
 
 import io.github.lightman314.lightmanscurrency.common.callbacks.EntityDeathCallback;
+import io.github.lightman314.lightmanscurrency.common.loot.EntityLootBlocker;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;

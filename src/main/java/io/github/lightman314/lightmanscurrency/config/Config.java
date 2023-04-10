@@ -144,6 +144,8 @@ public abstract class Config {
         }
 
         public ConfigBuilder comment(String... comments) { this.pendingComments.addAll(Arrays.asList(comments)); return this; }
+        public ConfigBuilder commentNonWorking() { return this.comment("This feature is currently WIP, and does not function at this time."); }
+
 
         public ConfigBuilder push(String path) { this.tryAddComments(); this.addAction(PushAction.of(path)); return this; }
 

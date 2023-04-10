@@ -15,14 +15,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class WalletSaveData extends PersistentState {
 
     private final Map<UUID,WalletHandler> playerWalletData = new HashMap<>();
+    private final List<UUID> relevantPlayers = new ArrayList<>();
 
     private WalletSaveData() {}
 
@@ -96,13 +94,15 @@ public class WalletSaveData extends PersistentState {
         WalletSaveData wsd = get();
         if(wsd != null)
         {
-            wsd.playerWalletData.forEach((player, handler) -> {
+            for(UUID player : wsd.relevantPlayers)
+            {
+                WalletHandler handler = GetPlayerWallet(player, false);
                 if(handler.isDirty())
                 {
                     handler.clean();
                     wsd.markWalletHandlerDirty(player, handler);
                 }
-            });
+            }
         }
     }
 
@@ -126,7 +126,29 @@ public class WalletSaveData extends PersistentState {
         });
         compound.put("PlayerWalletData", walletData);
 
+        //Add player to the relevant player list
+        if(!wsd.relevantPlayers.contains(player.getUuid()))
+            wsd.relevantPlayers.add(player.getUuid());
+
         new SMessageSetupClientWallet(compound).sendTo(sender);
+    }
+
+    public static void OnPlayerDisconnect(ServerPlayerEntity player)
+    {
+        WalletSaveData wsd = get();
+        if(wsd == null)
+            return;
+        //One last check for changed wallet data before they leave
+        WalletHandler handler = GetPlayerWallet(player);
+        if(handler.isDirty())
+        {
+            handler.clean();
+            wsd.markWalletHandlerDirty(player.getUuid(), handler);
+        }
+
+        //Clear the player id from the relevant player list
+        wsd.relevantPlayers.remove(player.getUuid());
+
     }
 
 }

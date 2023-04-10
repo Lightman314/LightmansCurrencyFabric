@@ -10,11 +10,6 @@ import io.github.lightman314.lightmanscurrency.common.traders.item.ItemTraderDat
 import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.ItemTradeData;
 import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.restrictions.EquipmentRestriction;
 import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.restrictions.ItemTradeRestriction;
-import io.github.lightman314.lightmanscurrency.network.client.messages.blockentity.SMessageSendArmorStandID;
-import io.github.lightman314.lightmanscurrency.network.server.messages.blockentity.CMessageRequestArmorStandID;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -31,10 +26,8 @@ public class ArmorDisplayTraderBlockEntity extends ItemTraderBlockEntity{
     private static final int TICK_DELAY = 20;
 
     UUID armorStandID = null;
-    private int armorStandEntityId = -1;
-    int requestTimer = TICK_DELAY;
 
-    int updateTimer = TICK_DELAY;
+    int updateTimer = 0;
 
     private boolean loaded = false;
     public void flagAsLoaded() { this.loaded = true; }
@@ -46,23 +39,6 @@ public class ArmorDisplayTraderBlockEntity extends ItemTraderBlockEntity{
 
     @Override
     public ItemTraderData buildNewTrader() { return new ItemTraderDataArmor(this.world, this.pos); }
-
-    @Override
-    public void clientTick() {
-
-        super.clientTick();
-
-        if(this.getArmorStand() == null)
-        {
-            if(this.requestTimer <= 0)
-            {
-                this.requestTimer = TICK_DELAY;
-                new CMessageRequestArmorStandID(this.pos).sendToServer();
-            }
-            else
-                this.requestTimer--;
-        }
-    }
 
     @Override
     public void serverTick()
@@ -152,15 +128,6 @@ public class ArmorDisplayTraderBlockEntity extends ItemTraderBlockEntity{
         }
     }
 
-    public void sendArmorStandSyncMessageToClient(PacketSender responseSender) {
-        ArmorStandEntity armorStand = this.getArmorStand();
-        if(armorStand != null)
-            new SMessageSendArmorStandID(this.pos, armorStand.getId()).sendTo(responseSender);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void receiveArmorStandID(int entityId) { this.armorStandEntityId = entityId; }
-
     protected void validateArmorStandValues()
     {
         ArmorStandEntity armorStand = this.getArmorStand();
@@ -211,14 +178,13 @@ public class ArmorDisplayTraderBlockEntity extends ItemTraderBlockEntity{
 
     protected ArmorStandEntity getArmorStand()
     {
-        Entity entity;
-        if(this.world instanceof ServerWorld)
-            entity = ((ServerWorld)this.world).getEntity(this.armorStandID);
-        else
-            entity = this.world.getEntityById(this.armorStandEntityId);
 
-        if(entity instanceof ArmorStandEntity)
-            return (ArmorStandEntity)entity;
+        if(this.world instanceof ServerWorld level)
+        {
+            Entity entity = level.getEntity(this.armorStandID);
+            if(entity instanceof ArmorStandEntity as)
+                return as;
+        }
 
         return null;
     }

@@ -19,6 +19,7 @@ import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -35,9 +36,9 @@ public class BankAccount {
 
         public final int id;
 
-        private AccountType(int id) { this.id = id; }
+        AccountType(int id) { this.id = id; }
 
-        public static final AccountType fromID(int id) {
+        public static AccountType fromID(int id) {
             for(AccountType type : AccountType.values())
                 if(type.id == id)
                     return type;
@@ -266,6 +267,23 @@ public class BankAccount {
         } catch(Exception e) { e.printStackTrace(); return null; }
     }
 
+    public static AccountReference LoadReference(boolean isClient, LazyPacketData data) {
+        try {
+            AccountType accountType = AccountType.fromID(data.getInt("BankAccountType"));
+            if(accountType == AccountType.Player)
+            {
+                UUID id = data.getUUID("BankAccountPlayer");
+                return GenerateReference(isClient, id);
+            }
+            if(accountType == AccountType.Team)
+            {
+                long id = data.getLong("BankAccountTeam");
+                return GenerateReference(isClient, id);
+            }
+            return null;
+        } catch(Exception e) { e.printStackTrace(); return null; }
+    }
+
     public static class AccountReference {
 
         private final boolean isClient;
@@ -293,6 +311,12 @@ public class BankAccount {
                 buffer.writeUuid(this.playerID);
             if(this.teamID >= 0)
                 buffer.writeLong(this.teamID);
+        }
+
+        public void writeToBuffer(LazyPacketData.Builder builder) {
+            builder.setInt("BankAccountType", this.accountType.id);
+            builder.setUUID("BankAccountPlayer", this.playerID);
+            builder.setLong("BankAccountTeam", this.teamID);
         }
 
         public BankAccount get() {
@@ -328,14 +352,14 @@ public class BankAccount {
 
     public interface IBankAccountMenu
     {
-        public PlayerEntity getPlayer();
-        public Inventory getCoinInput();
-        public default void onDepositOrWithdraw() {}
-        public boolean isClient();
-        public default AccountReference getBankAccountReference() {
+        PlayerEntity getPlayer();
+        Inventory getCoinInput();
+        default void onDepositOrWithdraw() {}
+        boolean isClient();
+        default AccountReference getBankAccountReference() {
             return this.isClient() ? ClientBankData.GetLastSelectedAccount() : BankSaveData.GetSelectedBankAccount(this.getPlayer());
         }
-        public default BankAccount getBankAccount() {
+        default BankAccount getBankAccount() {
             AccountReference reference = this.getBankAccountReference();
             return reference == null ? null : reference.get();
         }

@@ -6,7 +6,6 @@ import java.util.Map;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.network.server.messages.auction.CMessageSubmitBid;
 import io.github.lightman314.lightmanscurrency.network.server.messages.bank.*;
-import io.github.lightman314.lightmanscurrency.network.server.messages.blockentity.CMessageRequestArmorStandID;
 import io.github.lightman314.lightmanscurrency.network.server.messages.blockentity.CPacketRequestNBT;
 import io.github.lightman314.lightmanscurrency.network.server.messages.coinmint.CMessageMintCoin;
 import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageChangeSelectedData;
@@ -41,7 +40,6 @@ public class LCServerPacketHandler implements PlayChannelHandler {
 
 		//Block Entity
 		this.registerPacketType(CPacketRequestNBT.PACKET_ID, CPacketRequestNBT::handle);
-		this.registerPacketType(CMessageRequestArmorStandID.PACKET_ID, CMessageRequestArmorStandID::handle);
 
 		//Bank
 		this.registerPacketType(CMessageSelectBankAccount.PACKET_ID, CMessageSelectBankAccount::handle);

@@ -2,12 +2,10 @@ package io.github.lightman314.lightmanscurrency.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -556,14 +554,13 @@ public class InventoryUtil {
     }
 
     public static void GiveToPlayer(PlayerEntity player, ItemStack stack) {
-        if(player.giveItemStack(stack))
+        if(stack.isEmpty())
             return;
-        if(!stack.isEmpty())
-        {
-            //Spawn item entity
-            ItemEntity item = new ItemEntity(player.world, player.getX(), player.getY(), player.getZ(), stack);
-            player.world.spawnEntity(item);
-        }
+        player.getInventory().offerOrDrop(stack);
+    }
+    public static void GiveToPlayer(PlayerEntity player, List<ItemStack> stacks) {
+        for(ItemStack stack : stacks)
+            GiveToPlayer(player, stack);
     }
 
 }

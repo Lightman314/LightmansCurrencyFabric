@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.config.options.ConfigOption;
 import net.minecraft.util.Identifier;
 
@@ -26,7 +27,9 @@ public class IdentifierListOption extends ConfigOption<List<Identifier>> {
         for(int i = 0; i < list.size(); ++i)
         {
             try{ this.value.add(new Identifier(list.get(i).getAsString()));
-            } catch(Throwable ignored) { }
+            } catch(Throwable t) {
+                LightmansCurrency.LogError("Error reading value '" + this.getName() + "[" + i + "]' from the config file.", t);
+            }
         }
     }
 

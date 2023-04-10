@@ -198,7 +198,7 @@ public class TraderMenu extends Menu {
         {
             LightmansCurrency.LogDebug("Attempting to collect coins from trader.");
             TraderData trader = this.getSingleTrader();
-            if(trader.hasPermission(this.player, Permissions.COLLECT_COINS))
+            if(trader != null && trader.hasPermission(this.player, Permissions.COLLECT_COINS))
             {
                 CoinValue payment = trader.getInternalStoredMoney();
                 if(this.getContext(trader).givePayment(payment))

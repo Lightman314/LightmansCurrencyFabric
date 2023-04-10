@@ -5,6 +5,7 @@ import io.github.lightman314.lightmanscurrency.common.Reference.*;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
 import io.github.lightman314.lightmanscurrency.common.callbacks.EntityDeathCallback;
+import io.github.lightman314.lightmanscurrency.common.callbacks.MobInitializationCallback;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.core.*;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionSaveData;
@@ -177,6 +178,7 @@ public class LightmansCurrency implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> TraderSaveData.OnPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> TeamSaveData.OnPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> WalletSaveData.OnPlayerLogin(handler.player, sender));
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> WalletSaveData.OnPlayerDisconnect(handler.player));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> MoneyUtil.onPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> NotificationSaveData.OnPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> CommandLCAdmin.SendAdminList(sender));
@@ -186,6 +188,9 @@ public class LightmansCurrency implements ModInitializer {
         //Killed by other entity event
         LootTableEvents.MODIFY.register(LootManager::onLootTableLoaded);
         EntityDeathCallback.EVENT.register(LootManager::entityDeath);
+
+        //Entity spawn event
+        MobInitializationCallback.EVENT.register((entity, world, difficulty, spawnReason, entityData, nbt) -> LootManager.onEntitySpawned(entity, spawnReason));
 
         //Money Data init event
         DefaultMoneyDataCollection.EVENT.register(MoneyUtil::initializeDefaultCoins);
