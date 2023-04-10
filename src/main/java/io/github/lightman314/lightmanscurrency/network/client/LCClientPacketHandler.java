@@ -9,7 +9,6 @@ import io.github.lightman314.lightmanscurrency.common.money.MoneyData;
 import io.github.lightman314.lightmanscurrency.network.client.messages.admin.SMessageSyncAdminList;
 import io.github.lightman314.lightmanscurrency.network.client.messages.bank.SMessageATMPlayerAccountResponse;
 import io.github.lightman314.lightmanscurrency.network.client.messages.bank.SMessageBankTransferResponse;
-import io.github.lightman314.lightmanscurrency.network.client.messages.blockentity.SMessageSendArmorStandID;
 import io.github.lightman314.lightmanscurrency.network.client.messages.data.*;
 import io.github.lightman314.lightmanscurrency.network.client.messages.ejectiondata.SMessageChangeSelectedData;
 import io.github.lightman314.lightmanscurrency.network.client.messages.enchantments.SMessageMoneyMendingClink;
@@ -43,7 +42,6 @@ public class LCClientPacketHandler implements PlayChannelHandler {
 		this.registerPacketType(SMessageBankTransferResponse.PACKET_ID, SMessageBankTransferResponse::handle);
 
 		//Block Entity
-		this.registerPacketType(SMessageSendArmorStandID.PACKET_ID, SMessageSendArmorStandID::handle);
 		this.registerPacketType(SMessageSyncTime.PACKET_ID, SMessageSyncTime::handle);
 
 		//Enchantments

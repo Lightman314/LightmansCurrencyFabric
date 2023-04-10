@@ -553,14 +553,14 @@ public class InventoryUtil {
     }
 
     public static void GiveToPlayer(PlayerEntity player, ItemStack stack) {
-        if(player.giveItemStack(stack))
+        if(stack.isEmpty())
             return;
-        if(!stack.isEmpty())
-        {
-            //Spawn item entity
-            ItemEntity item = new ItemEntity(player.world, player.getX(), player.getY(), player.getZ(), stack);
-            player.world.spawnEntity(item);
-        }
+        player.getInventory().offerOrDrop(stack);
+    }
+
+    public static void GiveToPlayer(PlayerEntity player, List<ItemStack> stacks) {
+        for(ItemStack stack : stacks)
+            GiveToPlayer(player, stack);
     }
 
 }

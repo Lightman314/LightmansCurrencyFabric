@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.config.options;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,10 @@ public class IntegerListOption extends ConfigOption<List<Integer>> {
         JsonArray array = element.getAsJsonArray();
         this.value = new ArrayList<>();
         for(int i = 0; i < array.size(); ++i)
-            this.value.add(array.get(i).getAsInt());
+        {
+            try{ this.value.add(array.get(i).getAsInt());
+            } catch (Throwable t) { LightmansCurrency.LogError("Error reading value '" + this.getName() + "[" + i + "]' from the config file.", t); }
+        }
     }
     @Override
     protected void resetToDefaultValue() {

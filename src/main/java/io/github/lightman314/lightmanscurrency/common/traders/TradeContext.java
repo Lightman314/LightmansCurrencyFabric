@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 
+@SuppressWarnings("experimental")
 public class TradeContext {
 
     public enum TradeResult {
@@ -250,33 +251,29 @@ public class TradeContext {
         else if(this.hasPlayer())
         {
             List<ItemStack> coins = MoneyUtil.getCoinsOfValue(price);
-            List<ItemStack> change = new ArrayList<>();
             WalletHandler walletHandler = WalletHandler.getWallet(this.player);
             ItemStack wallet = walletHandler.getWallet();
             if(WalletItem.isWallet(wallet.getItem()))
             {
-                for(int i = 0; i < coins.size(); ++i)
-                {
-                    ItemStack coin = WalletItem.PickupCoin(wallet, coins.get(i));
-                    if(!coin.isEmpty())
+                List<ItemStack> change = new ArrayList<>();
+                for (ItemStack itemStack : coins) {
+                    ItemStack coin = WalletItem.PickupCoin(wallet, itemStack);
+                    if (!coin.isEmpty())
                         change.add(coin);
                 }
+                coins = change;
             }
-            if(this.hasCoinSlots() && change.size() > 0)
+            if(this.hasCoinSlots() && coins.size() > 0)
             {
-                for(int i = 0; i < change.size(); ++i)
-                {
-                    ItemStack remainder = InventoryUtil.TryPutItemStack(this.coinSlots, change.get(i));
-                    if(!remainder.isEmpty())
+                for (ItemStack itemStack : coins) {
+                    ItemStack remainder = InventoryUtil.TryPutItemStack(this.coinSlots, itemStack);
+                    if (!remainder.isEmpty())
                         InventoryUtil.GiveToPlayer(this.player, remainder);
                 }
             }
-            else if(change.size() > 0)
+            else if(coins.size() > 0)
             {
-                for(int i = 0; i < change.size(); ++i)
-                {
-                    InventoryUtil.GiveToPlayer(this.player, change.get(i));
-                }
+                InventoryUtil.GiveToPlayer(this.player, coins);
             }
             return true;
         }

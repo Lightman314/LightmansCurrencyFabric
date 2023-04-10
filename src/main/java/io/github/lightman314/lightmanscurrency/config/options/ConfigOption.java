@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 public abstract class ConfigOption<T> implements IConfigAction, Supplier<T> {
 
     private String name = null;
+    protected String getName() { return this.name; }
     private Config parent;
     public final void init(String name, Config parent) { if(this.name == null) this.name = name; if(this.parent == null) this.parent = parent; }
 
@@ -25,10 +26,10 @@ public abstract class ConfigOption<T> implements IConfigAction, Supplier<T> {
 
     public final void CollectValue(JsonObject json)
     {
-        if(json.has(name))
+        if(json.has(this.name))
         {
-            try{ this.readValue(json.get(name));
-            } catch(Throwable t) {LightmansCurrency.LogError("Error reading value '" + name + "' from the config file.", t); this.resetToDefaultValue(); }
+            try{ this.readValue(json.get(this.name));
+            } catch(Throwable t) {LightmansCurrency.LogError("Error reading value '" + this.name + "' from the config file.", t); this.resetToDefaultValue(); }
         }
         else
             this.resetToDefaultValue();
@@ -39,7 +40,7 @@ public abstract class ConfigOption<T> implements IConfigAction, Supplier<T> {
     public final void PlaceValue(JsonObject json)
     {
         try{ this.writeValue(json, this.name);
-        } catch (Throwable t) { LightmansCurrency.LogError("Error writing value '" + name + "' to the config file!", t); }
+        } catch (Throwable t) { LightmansCurrency.LogError("Error writing value '" + this.name + "' to the config file!", t); }
     }
     protected abstract void writeValue(JsonObject json, String name);
     public final T get() {

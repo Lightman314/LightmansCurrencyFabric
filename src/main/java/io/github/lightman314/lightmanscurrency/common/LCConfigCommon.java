@@ -190,10 +190,12 @@ public class LCConfigCommon extends SynchronizedConfig {
         this.canCraftNetworkTraders = builder.comment("Whether Network Traders can be crafted.",
                 "Disabling will not remove any existing Network Traders from the world, nor prevent their use.",
                 "Disabling does NOT disable the recipes of Network Upgrades or the Trading Terminals.")
+                .commentNonWorking()
                 .option("allowNetworkTraderCrafting", BooleanOption.create(true));
 
         this.canCraftTraderInterface = builder.comment("Whether Trader Interface blocks can be crafted.",
                         "Disabling will not remove any existing Trader Interfaces from the world, nor prevent their use.")
+                .commentNonWorking()
                 .option("allowTraderInterfaceCrafting", BooleanOption.create(true));
 
         builder.pop();
@@ -205,9 +207,11 @@ public class LCConfigCommon extends SynchronizedConfig {
                 .option("addCustomWanderingTrades", BooleanOption.create(true));
 
         this.addBankerVillager = builder.comment("Whether the banker villager profession will have any registered trades. The banker sells Lightmans Currency items for coins.")
+                .commentNonWorking()
                 .option("addCBanker", BooleanOption.create(true));
 
         this.addCashierVillager = builder.comment("Whether the cashier villager profession will have any registered trades. The cashier sells an amalgamation of vanilla traders products for coins.")
+                .commentNonWorking()
                 .option("addCashier", BooleanOption.create(true));
 
         builder.comment("Settings Related to other Villagers").push("other_villagers");

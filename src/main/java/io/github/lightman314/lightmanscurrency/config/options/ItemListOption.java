@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.config.options;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -23,7 +24,10 @@ public class ItemListOption extends ConfigOption<List<Item>> {
         this.value = new ArrayList<>();
         JsonArray list = element.getAsJsonArray();
         for(int i = 0; i < list.size(); ++i)
-            this.value.add(new Identifier(list.get(i).getAsString()));
+        {
+            try{ this.value.add(new Identifier(list.get(i).getAsString()));
+            } catch (Throwable t) { LightmansCurrency.LogError("Error reading value '" + this.getName() + "[" + i + "]' from the config file.", t); }
+        }
     }
     @Override
     protected void resetToDefaultValue() {

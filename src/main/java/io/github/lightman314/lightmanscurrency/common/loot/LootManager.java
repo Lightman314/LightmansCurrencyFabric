@@ -197,7 +197,7 @@ public class LootManager {
     }
 
     private static String getValueList(IdentifierListOption option) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         List<Identifier> list = option.get();
         for(Identifier value : list)
         {
@@ -241,27 +241,29 @@ public class LootManager {
      * Listens to LootTableEvents.MODIFY to modify the chest loot tables safely.
      */
     public static void onLootTableLoaded(ResourceManager resourceManager, net.minecraft.loot.LootManager lootManager, Identifier id, FabricLootSupplierBuilder tableBuilder, LootTableLoadingCallback.LootTableSetter source) {
+        if(!LCConfigCommon.INSTANCE.enableChestLoot.get())
+            return;
         PoolLevel level = GetChestPoolLevel(id);
         if(level != null)
             AddChestLootToTable(tableBuilder, level);
     }
 
-
-    //TODO check for spawn reason
     public static void onEntitySpawned(LivingEntity entity, SpawnReason reason)
     {
         if(entity instanceof PlayerEntity)
             return;
 
-        //SpawnTrackerCapability.getSpawnerTracker(entity).ifPresent(spawnerTracker -> spawnerTracker.setSpawnReason(event.getSpawnReason()));
-        //if(!SpawnTrackerCapability.getSpawnerTracker(entity).isPresent())
-        //    LightmansCurrency.LogWarning(entity.getName().getString() + " does not have a ISpawnerTracker attached. Unable to flag it's SpawnReason.");
+        if(reason == SpawnReason.SPAWNER)
+            EntityLootBlocker.FlagEntity(entity);
     }
 
     public static void entityDeath(LivingEntity entity, DamageSource damageSource)
     {
         //Check if this is the server
         if(entity.world.isClient)
+            return;
+
+        if(!LCConfigCommon.INSTANCE.enableEntityDrops.get())
             return;
 
         if(!LCConfigCommon.INSTANCE.enableSpawnerEntityDrops.get())
