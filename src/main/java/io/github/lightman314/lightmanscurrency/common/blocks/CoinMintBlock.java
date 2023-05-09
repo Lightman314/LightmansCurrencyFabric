@@ -2,14 +2,13 @@ package io.github.lightman314.lightmanscurrency.common.blocks;
 
 import java.util.List;
 
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.blockentity.CoinMintBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.RotatableBlock;
 import io.github.lightman314.lightmanscurrency.common.items.TooltipItem;
 import io.github.lightman314.lightmanscurrency.common.items.tooltips.LCTooltips;
 import io.github.lightman314.lightmanscurrency.common.menu.MintMenu;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -46,7 +45,7 @@ public class CoinMintBlock extends RotatableBlock implements BlockEntityProvider
 		if(!level.isClient)
 		{
 			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if(blockEntity instanceof CoinMintBlockEntity && LCConfigCommon.INSTANCE.allowCoinMinting.get() || LCConfigCommon.INSTANCE.allowCoinMelting.get())
+			if(blockEntity instanceof CoinMintBlockEntity && LCConfig.SERVER.allowCoinMinting.get() || LCConfig.SERVER.allowCoinMelting.get())
 			{
 				player.openHandledScreen(new CoinMintMenuProvider(pos));
 				return ActionResult.SUCCESS;

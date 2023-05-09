@@ -1,7 +1,6 @@
 package io.github.lightman314.lightmanscurrency.client.util;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.MenuScreen;
-import io.github.lightman314.lightmanscurrency.config.options.custom.values.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.mixin.client.HandledScreenAccessor;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.client.MinecraftClient;

@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.traders.item.storage;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class TraderItemStorage {
 
     private final ITraderItemFilter filter;
-    private List<ItemStack> storage = new ArrayList<>();
+    private final List<ItemStack> storage = new ArrayList<>();
 
     public TraderItemStorage(@NotNull ITraderItemFilter filter) { this.filter = filter; }
 
@@ -71,14 +72,14 @@ public class TraderItemStorage {
     }
 
     public final boolean allowExternalInput(ItemStack stack) {
-        if(this.filter instanceof ITraderInputOutputFilter filter)
-            return this.filter.isItemRelevant(stack) && filter.allowInput(stack);
+        if(this.filter instanceof ITraderInputOutputFilter f)
+            return this.filter.isItemRelevant(stack) && f.allowInput(stack);
         return this.filter.isItemRelevant(stack);
     }
 
     public final boolean allowExternalOutput(ItemStack stack) {
-        if(this.filter instanceof ITraderInputOutputFilter filter)
-            return !this.filter.isItemRelevant(stack) || filter.allowOutput(stack);
+        if(this.filter instanceof ITraderInputOutputFilter f)
+            return !this.filter.isItemRelevant(stack) || f.allowOutput(stack);
         return !this.filter.isItemRelevant(stack);
     }
 
@@ -131,7 +132,8 @@ public class TraderItemStorage {
      * @return
      */
     public int getItemCount(ItemStack item) {
-        for(ItemStack stack : this.storage)
+        List<ItemStack> storageCopy = ImmutableList.copyOf(this.storage);
+        for(ItemStack stack : storageCopy)
         {
             if(InventoryUtil.ItemMatches(item, stack))
                 return stack.getCount();
@@ -147,7 +149,8 @@ public class TraderItemStorage {
 
         List<Item> blacklist = Lists.newArrayList(blacklistItems);
         int count = 0;
-        for(ItemStack stack : this.storage)
+        List<ItemStack> storageCopy = ImmutableList.copyOf(this.storage);
+        for(ItemStack stack : storageCopy)
         {
             if(InventoryUtil.ItemHasTag(stack, itemTag) && !blacklist.contains(stack.getItem()))
                 count += stack.getCount();
@@ -164,9 +167,7 @@ public class TraderItemStorage {
     /**
      * Returns the amount of the given item that this storage can fit.
      */
-    public boolean canFitItem(ItemStack item) {
-        return this.getFittableAmount(item) >= item.getCount();
-    }
+    public boolean canFitItem(ItemStack item) { return this.getFittableAmount(item) >= item.getCount(); }
 
     /**
      * Returns the amount of the given item that this storage can fit.
@@ -311,64 +312,22 @@ public class TraderItemStorage {
 
     public interface ITraderItemFilter
     {
-        public boolean isItemRelevant(ItemStack item);
-        public int getStorageStackLimit();
+        boolean isItemRelevant(ItemStack item);
+        int getStorageStackLimit();
     }
 
     public interface ITraderInputOutputFilter extends ITraderItemFilter
     {
-        public boolean allowInput(ItemStack item);
-        public boolean allowOutput(ItemStack item);
+        boolean allowInput(ItemStack item);
+        boolean allowOutput(ItemStack item);
     }
 
-    public int getSlots() {
-        return this.storage.size() + 1;
-    }
+    public int getSlots() { return this.storage.size(); }
 
     public ItemStack getStackInSlot(int slot) {
         if(slot >= 0 && slot < this.storage.size())
             return this.storage.get(slot);
         return ItemStack.EMPTY;
-    }
-
-    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        int amountToAdd = Math.min(stack.getCount(), this.getFittableAmount(stack));
-        ItemStack remainder = stack.copy();
-        if(amountToAdd >= stack.getCount())
-            remainder = ItemStack.EMPTY;
-        else
-            remainder.decrement(amountToAdd);
-        if(!simulate && amountToAdd > 0)
-        {
-            ItemStack addedStack = stack.copy();
-            addedStack.setCount(amountToAdd);
-            //Place the item in storage
-            this.forceAddItem(addedStack);
-        }
-        return remainder;
-    }
-
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        ItemStack stackInSlot = this.getStackInSlot(slot);
-        int amountToRemove = Math.min(amount, stackInSlot.getCount());
-        ItemStack removedStack = stackInSlot.copy();
-        if(amountToRemove > 0)
-            removedStack.setCount(amountToRemove);
-        else
-            removedStack = ItemStack.EMPTY;
-        if(!simulate && amountToRemove > 0)
-        {
-            this.removeItem(removedStack);
-        }
-        return removedStack;
-    }
-
-    public int getSlotLimit(int slot) {
-        return this.getMaxAmount();
-    }
-
-    public boolean isItemValid(int slot, ItemStack stack) {
-        return this.allowItem(stack);
     }
 
 }

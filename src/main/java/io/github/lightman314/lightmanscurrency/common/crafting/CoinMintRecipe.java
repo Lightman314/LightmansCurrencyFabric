@@ -3,7 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.crafting;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.core.ModRecipes;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
@@ -62,12 +62,12 @@ public class CoinMintRecipe implements Recipe<Inventory> {
     {
         if(this.type == MintType.MINT)
         {
-            return LCConfigCommon.INSTANCE.allowCoinMinting.get() && LCConfigCommon.INSTANCE.canMint(this.result);
+            return LCConfig.SERVER.allowCoinMinting.get() && LCConfig.canMint(this.result);
         }
         else if(this.type == MintType.MELT)
         {
             try {
-                return LCConfigCommon.INSTANCE.allowCoinMelting.get() && LCConfigCommon.INSTANCE.canMelt(this.ingredient.getMatchingStacks()[0].getItem());
+                return LCConfig.SERVER.allowCoinMelting.get() && LCConfig.canMelt(this.ingredient.getMatchingStacks()[0].getItem());
             } catch(Exception e) { return false; }
         }
         return true;

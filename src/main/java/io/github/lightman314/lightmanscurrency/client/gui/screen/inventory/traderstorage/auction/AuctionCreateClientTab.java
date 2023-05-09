@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trad
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.TraderScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.TraderStorageScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.traderstorage.TraderStorageClientTab;
@@ -13,7 +14,6 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.TradeButton;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.SimpleSlot;
@@ -91,8 +91,8 @@ public class AuctionCreateClientTab extends TraderStorageClientTab<AuctionCreate
 
         //Duration Input
         this.timeInput = this.screen.addRenderableTabWidget(new TimeInputWidget(this.screen.getGuiLeft() + 80, this.screen.getGuiTop() + 112, 10, TimeUnit.DAY, TimeUnit.HOUR, this.screen::addRenderableTabWidget, this::updateDuration));
-        this.timeInput.minDuration = Math.max(LCConfigCommon.INSTANCE.minAuctionDuration.get() * TimeUtil.DURATION_DAY, TimeUtil.DURATION_HOUR);
-        this.timeInput.maxDuration = Math.max(LCConfigCommon.INSTANCE.maxAuctionDuration.get(), LCConfigCommon.INSTANCE.minAuctionDuration.get()) * TimeUtil.DURATION_DAY;
+        this.timeInput.minDuration = Math.max(LCConfig.SERVER.minAuctionDuration.get() * TimeUtil.DURATION_DAY, TimeUtil.DURATION_HOUR);
+        this.timeInput.maxDuration = Math.max(LCConfig.SERVER.maxAuctionDuration.get(), LCConfig.SERVER.minAuctionDuration.get()) * TimeUtil.DURATION_DAY;
         this.timeInput.setTime(this.timeInput.minDuration);
 
         //Submit Button

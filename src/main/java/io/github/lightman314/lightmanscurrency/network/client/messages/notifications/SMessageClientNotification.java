@@ -1,6 +1,6 @@
 package io.github.lightman314.lightmanscurrency.network.client.messages.notifications;
 
-import io.github.lightman314.lightmanscurrency.client.LCConfigClient;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.data.ClientNotificationData;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
@@ -29,7 +29,7 @@ public class SMessageClientNotification extends ServerToClientPacket {
         {
             if(!NotificationEvent.CLIENT_NOTIFICATION_EVENT.invoker().display(new NotificationEvent.NotificationReceivedOnClient(client.player.getUuid(), ClientNotificationData.GetNotifications(), notification)))
                 return;
-            if(LCConfigClient.INSTANCE.pushNotificationsToChat.get())
+            if(LCConfig.CLIENT.pushNotificationsToChat.get())
                 client.inGameHud.getChatHud().addMessage(notification.getChatMessage());
         }
     }

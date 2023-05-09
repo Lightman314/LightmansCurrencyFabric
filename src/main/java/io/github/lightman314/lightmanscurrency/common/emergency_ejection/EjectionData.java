@@ -39,8 +39,6 @@ public class EjectionData implements Inventory, IClientTracker {
     public boolean canAccess(PlayerEntity player) {
         if(CommandLCAdmin.isAdminPlayer(player))
             return true;
-        if(this.owner == null)
-            return false;
         return this.owner.isMember(player);
     }
 
@@ -53,10 +51,8 @@ public class EjectionData implements Inventory, IClientTracker {
         compound.putString("Name", Text.Serializer.toJson(this.traderName));
 
         NbtList itemList = new NbtList();
-        for(int i = 0; i < this.items.size(); ++i)
-        {
-            itemList.add(this.items.get(i).writeNbt(new NbtCompound()));
-        }
+        for (ItemStack item : this.items)
+            itemList.add(item.writeNbt(new NbtCompound()));
         compound.put("Items", itemList);
 
         return compound;
@@ -147,7 +143,7 @@ public class EjectionData implements Inventory, IClientTracker {
         this.items.set(slot, item);
     }
 
-    private void clearEmptySlots() { this.items.removeIf(stack -> stack.isEmpty()); }
+    private void clearEmptySlots() { this.items.removeIf(ItemStack::isEmpty); }
 
     @Override
     public void markDirty() {

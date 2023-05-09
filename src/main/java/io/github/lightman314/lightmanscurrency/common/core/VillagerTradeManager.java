@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import com.google.common.collect.Lists;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.Reference.*;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
@@ -320,24 +320,24 @@ public class VillagerTradeManager {
 
     private static void modifyGenericWandererTrades(List<TradeOffers.Factory> existingOffers)
     {
-        if(LCConfigCommon.INSTANCE.changeWanderingTrades.get())
-            replaceExistingTrades(LCConfigCommon.INSTANCE.defaultVillagerCoin, existingOffers);
-        if(LCConfigCommon.INSTANCE.addCustomWanderingTrades.get())
+        if(LCConfig.COMMON.changeWanderingTrades.get())
+            replaceExistingTrades(LCConfig.COMMON.defaultTraderCoin, existingOffers);
+        if(LCConfig.COMMON.addCustomWanderingTrades.get())
             existingOffers.addAll(getGenericWandererTrades());
     }
 
     private static void modifyRareWandererTrades(List<TradeOffers.Factory> existingOffers)
     {
-        if(LCConfigCommon.INSTANCE.changeWanderingTrades.get())
-            replaceExistingTrades(LCConfigCommon.INSTANCE.defaultVillagerCoin, existingOffers);
-        if(LCConfigCommon.INSTANCE.addCustomWanderingTrades.get())
+        if(LCConfig.COMMON.changeWanderingTrades.get())
+            replaceExistingTrades(LCConfig.COMMON.defaultTraderCoin, existingOffers);
+        if(LCConfig.COMMON.addCustomWanderingTrades.get())
             existingOffers.addAll(getRareWandererTrades());
     }
 
     private static void modifyOtherVillagerTrades(Identifier profession, List<TradeOffers.Factory> existingOffers)
     {
-        if(profession.getNamespace().contentEquals("minecraft") ? LCConfigCommon.INSTANCE.changeVanillaTrades.get() : LCConfigCommon.INSTANCE.changeModdedTrades.get())
-            replaceExistingTrades(() -> LCConfigCommon.INSTANCE.getVillagerOverrideItem(profession), existingOffers);
+        if(profession.getNamespace().contentEquals("minecraft") ? LCConfig.COMMON.changeVanillaTrades.get() : LCConfig.COMMON.changeModdedTrades.get())
+            replaceExistingTrades(() -> LCConfig.getEmeraldReplacementItem(profession.toString()), existingOffers);
     }
 
     private static void addBankerTrades(int level, List<TradeOffers.Factory> existingOffers)

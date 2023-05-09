@@ -10,7 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.datafixers.util.Pair;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.inventory.Inventory;
@@ -26,7 +26,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 
 
 public class CoinValue
@@ -388,7 +387,7 @@ public class CoinValue
         if(this.isFree)
             return Text.translatable("gui.coinvalue.free").getString();
 
-        switch(LCConfigCommon.INSTANCE.coinValueType.get())
+        switch(LCConfig.SERVER.coinValueType.get())
         {
             case DEFAULT:
                 String string = "";
@@ -406,7 +405,7 @@ public class CoinValue
                     return emptyFiller;
                 return string;
             case VALUE:
-                return LCConfigCommon.INSTANCE.formatValueDisplay(this.getDisplayValue());
+                return LCConfig.formatValueDisplay(this.getDisplayValue());
             default:
                 return "?";
         }

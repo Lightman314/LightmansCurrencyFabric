@@ -33,7 +33,10 @@
     "fabricloader": ">=0.14.9",
     "fabric-api": "*",
     "minecraft": "~1.19",
-    "java": ">=17"
+    "java": ">=17",
+    "forgeconfigapiport": "*",
+    "com_electronwill_night-config_core": "*",
+    "com_electronwill_night-config_toml": "*"
   },
   "suggests": {
     "another-mod": "*"

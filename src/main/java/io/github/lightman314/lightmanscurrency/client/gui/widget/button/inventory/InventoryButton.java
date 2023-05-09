@@ -2,8 +2,8 @@ package io.github.lightman314.lightmanscurrency.client.gui.widget.button.invento
 
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainButton;
+import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
-import io.github.lightman314.lightmanscurrency.config.options.custom.values.ScreenPosition;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -32,7 +32,7 @@ public abstract class InventoryButton extends PlainButton {
 
     @Override
     public void render(MatrixStack matrix, int mouseX, int mouseY, float partialTick) {
-        this.getScreenPosition(ScreenUtil.getScreenCorner(this.parent), this.isParentCreative).moveWidget(this);
+        this.getScreenPosition(ScreenUtil.getScreenCorner(this.parent), this.isParentCreative).setPosition(this);
         if(this.parent instanceof CreativeInventoryScreen cs)
             this.visible = cs.getSelectedTab() == ItemGroup.INVENTORY.getIndex();
         super.render(matrix, mouseX, mouseY, partialTick);

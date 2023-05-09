@@ -1,6 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.notifications;
 
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -62,7 +62,7 @@ public class NotificationData {
 
     private void validateListSize()
     {
-        int limit = LCConfigCommon.INSTANCE.notificationLimit.get();
+        int limit = LCConfig.SERVER.notificationLimit.get();
         while(this.notifications.size() > limit)
             this.notifications.remove(this.notifications.get(this.notifications.size() - 1));
     }

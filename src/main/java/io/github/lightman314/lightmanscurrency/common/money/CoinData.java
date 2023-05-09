@@ -2,7 +2,7 @@ package io.github.lightman314.lightmanscurrency.common.money;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -73,7 +73,7 @@ public class CoinData
     public double getDisplayValue()
     {
         double coreValue = this.getValue();
-        double baseValue = MoneyUtil.getValue(LCConfigCommon.INSTANCE.valueBaseCoin.get());
+        double baseValue = MoneyUtil.getValue(LCConfig.SERVER.valueBaseCoin.get());
         //LightmansCurrency.LogInfo("Core Value of " + this.getCoinItem().getRegistryName() + "=" + coreValue + "\nBase Value of " + Config.getBaseCoinItem().getRegistryName() + "=" + baseValue + "\nDisplay Value: " + coreValue/baseValue);
         return coreValue / baseValue;
     }

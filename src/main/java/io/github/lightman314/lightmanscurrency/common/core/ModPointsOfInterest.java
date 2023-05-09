@@ -3,6 +3,8 @@ package io.github.lightman314.lightmanscurrency.common.core;
 import com.google.common.collect.ImmutableSet;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
+import io.github.lightman314.lightmanscurrency.util.DebugUtil;
+import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Identifier;
@@ -21,6 +23,8 @@ public class ModPointsOfInterest {
 
         Registry.register(Registry.POINT_OF_INTEREST_TYPE, new Identifier(LightmansCurrency.MODID, "banker"), BANKER);
         Registry.register(Registry.POINT_OF_INTEREST_TYPE, new Identifier(LightmansCurrency.MODID, "cashier"), CASHIER);
+
+        DebugUtil.DebugRegistryEntries("Registered Poi Types:", Registry.POINT_OF_INTEREST_TYPE);
 
     }
 

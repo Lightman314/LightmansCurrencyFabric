@@ -1,15 +1,17 @@
 package io.github.lightman314.lightmanscurrency.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.lightman314.lightmanscurrency.LCConfig;
+import io.github.lightman314.lightmanscurrency.client.callbacks.RenderInventoryCallback;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.inventory.*;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
+import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.WalletSlot;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
-import io.github.lightman314.lightmanscurrency.config.options.custom.values.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageOpenWalletMenu;
 import io.github.lightman314.lightmanscurrency.network.server.messages.walletslot.CMessageSetWalletVisible;
 import io.github.lightman314.lightmanscurrency.network.server.messages.walletslot.CMessageWalletInteraction;
@@ -20,6 +22,7 @@ import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -51,6 +54,7 @@ public class ClientEventListeners {
 
         ClientTickEvents.END_CLIENT_TICK.register(ClientEventListeners::onClientTick);
         ScreenEvents.AFTER_INIT.register(ClientEventListeners::onInventoryScreenInit);
+        RenderInventoryCallback.RENDER_BACKGROUND.register(ClientEventListeners::renderInventoryScreen);
 
     }
 
@@ -90,7 +94,7 @@ public class ClientEventListeners {
 
             //Register screen-specific events
             ScreenExtensions extension = ScreenExtensions.getExtensions(screen);
-            extension.fabric_getAfterRenderEvent().register(ClientEventListeners::renderInventoryScreen);
+            extension.fabric_getAfterRenderEvent().register(ClientEventListeners::renderInventoryTooltips);
             extension.fabric_getAllowMouseClickEvent().register(ClientEventListeners::onInventoryClick);
 
         }
@@ -107,66 +111,80 @@ public class ClientEventListeners {
 
     public static void renderInventoryScreen(Screen screen, MatrixStack pose, int mouseX, int mouseY, float tickDelta)
     {
-        if(screen instanceof InventoryScreen || screen instanceof CreativeInventoryScreen)
+        if(screen instanceof AbstractInventoryScreen<?> gui)
         {
             if(screen instanceof CreativeInventoryScreen creativeScreen) {
                 if(creativeScreen.getSelectedTab() != ItemGroup.INVENTORY.getIndex())
                     return;
             }
-            HandledScreen<?> gui = (HandledScreen<?>)screen;
 
             MinecraftClient client = Screens.getClient(screen);
             WalletHandler walletHandler = WalletHandler.getWallet(client.player);
 
-            ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfigClient.INSTANCE.walletSlotCreative.get() : LCConfigClient.INSTANCE.walletSlot.get();
+            ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfig.CLIENT.walletSlotCreative.get() : LCConfig.CLIENT.walletSlot.get();
             RenderSystem.setShaderTexture(0, WALLET_SLOT_TEXTURE);
             RenderSystem.setShaderColor(1f,1f,1f,1f);
 
             //Render slot background
-            slotPosition = slotPosition.withOffset(ScreenUtil.getScreenCorner(gui));
+            slotPosition = slotPosition.offset(ScreenUtil.getScreenCorner(gui));
             screen.drawTexture(pose, slotPosition.x, slotPosition.y, 0,0,18,18);
             //Render slot item
             ItemStack wallet = walletHandler.getWallet();
-            slotPosition = slotPosition.withOffset(1,1);
+            slotPosition = slotPosition.offset(1,1);
             if(wallet.isEmpty())
                 ItemRenderUtil.drawSlotBackground(pose, slotPosition.x, slotPosition.y, WalletSlot.BACKGROUND);
             else
                 ItemRenderUtil.drawItemStack(screen, null, wallet, slotPosition.x, slotPosition.y);
+
             //Render slot highlight
-            if(isMouseOverWalletSlot(mouseX, mouseY, slotPosition.withOffset(-1,-1)))
-            {
+            if(isMouseOverWalletSlot(mouseX, mouseY, slotPosition.offset(-1,-1)))
                 HandledScreen.drawSlotHighlight(pose, slotPosition.x, slotPosition.y, screen.getZOffset());
 
-                //Render Inventory Tooltips
-                if(!gui.getScreenHandler().getCursorStack().isEmpty())
-                    return;
+        }
+    }
 
+    public static void renderInventoryTooltips(Screen screen, MatrixStack pose, int mouseX, int mouseY, float tickDelta)
+    {
+        if(screen instanceof AbstractInventoryScreen<?> gui)
+        {
+            if(screen instanceof CreativeInventoryScreen creativeScreen) {
+                if(creativeScreen.getSelectedTab() != ItemGroup.INVENTORY.getIndex())
+                    return;
+            }
+
+            MinecraftClient client = Screens.getClient(screen);
+            WalletHandler walletHandler = WalletHandler.getWallet(client.player);
+            ItemStack wallet = walletHandler.getWallet();
+
+            ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfig.CLIENT.walletSlotCreative.get() : LCConfig.CLIENT.walletSlot.get();
+            slotPosition = slotPosition.offset(ScreenUtil.getScreenCorner(gui));
+
+            //Render slot tooltip
+            if(isMouseOverWalletSlot(mouseX, mouseY, slotPosition.offset(-1,-1)))
+            {
                 if(!wallet.isEmpty())
                     screen.renderTooltip(pose, ItemRenderUtil.getTooltipFromItem(wallet), mouseX, mouseY);
             }
 
             //Render Notification & Team Manager Tooltips
-            if(!gui.getScreenHandler().getCursorStack().isEmpty())
-                return;
-
             NotificationButton.tryRenderTooltip(pose, mouseX, mouseY);
             TeamManagerButton.tryRenderTooltip(pose, mouseX, mouseY);
             TraderRecoveryButton.tryRenderTooltip(pose, mouseX, mouseY);
+
         }
     }
 
     private static boolean onInventoryClick(Screen screen, double mouseX, double mouseY, int button)
     {
-        if(screen instanceof InventoryScreen || screen instanceof CreativeInventoryScreen)
+        if(screen instanceof AbstractInventoryScreen<?> gui)
         {
-            HandledScreen<?> gui = (HandledScreen<?>) screen;
             if(gui instanceof CreativeInventoryScreen creativeScreen) {
                 if(creativeScreen.getSelectedTab() != ItemGroup.INVENTORY.getIndex())
                     return true;
             }
 
-            ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfigClient.INSTANCE.walletSlotCreative.get() : LCConfigClient.INSTANCE.walletSlot.get();
-            slotPosition = slotPosition.withOffset(ScreenUtil.getScreenCorner(gui));
+            ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfig.CLIENT.walletSlotCreative.get() : LCConfig.CLIENT.walletSlot.get();
+            slotPosition = slotPosition.offset(ScreenUtil.getScreenCorner(gui));
 
             //Wallet Slot click detection
             if(isMouseOverWalletSlot(mouseX, mouseY, slotPosition) && !isMouseOverVisibilityButton(mouseX, mouseY, slotPosition))

@@ -1,9 +1,9 @@
 package io.github.lightman314.lightmanscurrency.client.gui.widget.button.inventory;
 
-import io.github.lightman314.lightmanscurrency.client.LCConfigClient;
+import io.github.lightman314.lightmanscurrency.LCConfig;
+import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionSaveData;
-import io.github.lightman314.lightmanscurrency.config.options.custom.values.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageOpenRecoveryMenu;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.MinecraftClient;
@@ -41,7 +41,7 @@ public class TraderRecoveryButton extends InventoryButton {
     @Override
     @NotNull
     protected ScreenPosition getScreenPosition(ScreenPosition parentCorner, boolean isParentCreative) {
-        return parentCorner.withOffset(isParentCreative ? LCConfigClient.INSTANCE.buttonGroupCreative.get() : LCConfigClient.INSTANCE.buttonGroup.get()).withOffset(OFFSET);
+        return parentCorner.offset(isParentCreative ? ScreenPosition.of(LCConfig.CLIENT.notificationAndTeamButtonXCreative.get(), LCConfig.CLIENT.notificationAndTeamButtonYCreative.get()): ScreenPosition.of(LCConfig.CLIENT.notificationAndTeamButtonX.get(), LCConfig.CLIENT.notificationAndTeamButtonY.get())).offset(OFFSET);
     }
 
     @Override

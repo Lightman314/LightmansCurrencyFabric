@@ -3,7 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.items;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
 import io.github.lightman314.lightmanscurrency.common.enchantments.WalletEnchantment;
 import io.github.lightman314.lightmanscurrency.common.menu.factory.WalletMenuFactory;
@@ -90,7 +90,7 @@ public class WalletItem extends Item{
 	{
 		if(wallet == null)
 			return false;
-		return wallet.level >= LCConfigCommon.INSTANCE.walletExchangeLevel.get() || wallet.level >= LCConfigCommon.INSTANCE.walletPickupLevel.get();
+		return wallet.level >= LCConfig.SERVER.walletConvertLevel.get() || wallet.level >= LCConfig.SERVER.walletPickupLevel.get();
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public class WalletItem extends Item{
 	{
 		if(wallet == null)
 			return false;
-		return wallet.level >= LCConfigCommon.INSTANCE.walletPickupLevel.get();
+		return wallet.level >= LCConfig.SERVER.walletPickupLevel.get();
 	}
 	
 	/**
@@ -110,7 +110,7 @@ public class WalletItem extends Item{
 	{
 		if(wallet == null)
 			return false;
-		return wallet.level >= LCConfigCommon.INSTANCE.walletBankLevel.get();
+		return wallet.level >= LCConfig.SERVER.walletBankLevel.get();
 	}
 	
 	/**

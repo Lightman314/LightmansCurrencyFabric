@@ -7,11 +7,11 @@ import java.util.function.Consumer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainButton;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextInputUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.money.CoinData;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
@@ -81,7 +81,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
 
         super((parent.getWidth() - DISPLAY_WIDTH) /  2, y, DISPLAY_WIDTH, HEIGHT, title);
 
-        this.inputType = LCConfigCommon.INSTANCE.coinValueInputType.get();
+        this.inputType = LCConfig.SERVER.coinValueInputType.get();
         this.title = title;
 
         this.coinValue = startingValue.copy();
@@ -99,7 +99,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
     public CoinValueInput(int x, int y, Text title, CoinValue startingValue, TextRenderer font, Consumer<CoinValue> onValueChanged, Consumer<ClickableWidget> addWidget) {
         super(x, y, DISPLAY_WIDTH, HEIGHT, title);
 
-        this.inputType = LCConfigCommon.INSTANCE.coinValueInputType.get();
+        this.inputType = LCConfig.SERVER.coinValueInputType.get();
         this.title = title;
 
         this.font = font;
@@ -117,7 +117,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
 
     private void setPrefixAndPostfix()
     {
-        String format = LCConfigCommon.INSTANCE.valueFormat.get();
+        String format = LCConfig.SERVER.valueFormat.get();
         //Have to replace the {value} with a non-illegal character in order to split the string
         String[] splitFormat = format.replace("{value}", "`").split("`",2);
         if(splitFormat.length < 2)
@@ -410,7 +410,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
     {
         this.coinValue = newValue.copy();
         if(this.inputType == CoinValue.ValueType.VALUE)
-            this.valueInput.setText(LCConfigCommon.INSTANCE.formatValueOnly(newValue.getDisplayValue()));
+            this.valueInput.setText(LCConfig.formatValueOnly(newValue.getDisplayValue()));
     }
 
     @Deprecated

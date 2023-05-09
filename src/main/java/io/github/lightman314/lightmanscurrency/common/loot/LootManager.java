@@ -7,10 +7,9 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
-import io.github.lightman314.lightmanscurrency.config.options.custom.IdentifierListOption;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
 import net.fabricmc.fabric.api.loot.v2.LootTableSource;
 import net.minecraft.entity.Entity;
@@ -37,6 +36,7 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class LootManager {
 
@@ -63,7 +63,7 @@ public class LootManager {
 
         private PoolLevel(int level, boolean requiresPlayerKill) { this.level = level; this.requiresPlayerKill = requiresPlayerKill; }
 
-    };
+    }
 
     public static boolean isValidSpawnReason(String reasonString)
     {
@@ -137,9 +137,6 @@ public class LootManager {
     public static final List<Identifier> CHEST_DIAMOND_DROPLIST = ImmutableList.of(new Identifier(CHEST + "buried_treasure"), new Identifier(CHEST + "bastion_hoglin_stable"), new Identifier(CHEST + "bastion_bridge"), new Identifier(CHEST + "bastion_other"), new Identifier(CHEST + "bastion_treasure"), new Identifier(CHEST + "end_city_treasure"));
     public static final List<Identifier> CHEST_NETHERITE_DROPLIST = ImmutableList.of();
 
-    private static final Map<Identifier,PoolLevel> EXTERNAL_ENTITY_ENTRIES = new HashMap<>();
-    private static final Map<Identifier,PoolLevel> EXTERNAL_CHEST_ENTRIES = new HashMap<>();
-
     private static boolean lootTablesBuilt = false;
 
     //Normal entity loot
@@ -198,10 +195,9 @@ public class LootManager {
 
     }
 
-    private static String getValueList(IdentifierListOption option) {
+    private static String getValueList(ForgeConfigSpec.ConfigValue<List <? extends String>> option) {
         StringBuilder buffer = new StringBuilder();
-        List<Identifier> list = option.get();
-        for(Identifier value : list)
+        for(String value : option.get())
         {
             if(buffer.length() > 0)
                 buffer.append(", ");
@@ -214,28 +210,28 @@ public class LootManager {
 
         LightmansCurrency.LogDebug("Lightman's Currency common configs have been loaded. Coin loot values are as follows.");
         //Chests
-        LightmansCurrency.LogDebug("Chest Copper: " + getValueList(LCConfigCommon.INSTANCE.copperChestDrops));
-        LightmansCurrency.LogDebug("Chest Iron: " + getValueList(LCConfigCommon.INSTANCE.ironChestDrops));
-        LightmansCurrency.LogDebug("Chest Gold: " + getValueList(LCConfigCommon.INSTANCE.goldChestDrops));
-        LightmansCurrency.LogDebug("Chest Emerald: " + getValueList(LCConfigCommon.INSTANCE.emeraldChestDrops));
-        LightmansCurrency.LogDebug("Chest Diamond: " + getValueList(LCConfigCommon.INSTANCE.diamondChestDrops));
-        LightmansCurrency.LogDebug("Chest Netherite: " + getValueList(LCConfigCommon.INSTANCE.netheriteChestDrops));
+        LightmansCurrency.LogDebug("Chest T1: " + getValueList(LCConfig.COMMON.chestDropsT1));
+        LightmansCurrency.LogDebug("Chest T2: " + getValueList(LCConfig.COMMON.chestDropsT2));
+        LightmansCurrency.LogDebug("Chest T3: " + getValueList(LCConfig.COMMON.chestDropsT3));
+        LightmansCurrency.LogDebug("Chest T4: " + getValueList(LCConfig.COMMON.chestDropsT4));
+        LightmansCurrency.LogDebug("Chest T5: " + getValueList(LCConfig.COMMON.chestDropsT5));
+        LightmansCurrency.LogDebug("Chest T6: " + getValueList(LCConfig.COMMON.chestDropsT6));
 
         //Entity (normal)
-        LightmansCurrency.LogDebug("Entity Copper (Normal): " + getValueList(LCConfigCommon.INSTANCE.copperEntityDrops));
-        LightmansCurrency.LogDebug("Entity Iron (Normal): " + getValueList(LCConfigCommon.INSTANCE.ironEntityDrops));
-        LightmansCurrency.LogDebug("Entity Gold (Normal): " + getValueList(LCConfigCommon.INSTANCE.goldEntityDrops));
-        LightmansCurrency.LogDebug("Entity Emerald (Normal): " + getValueList(LCConfigCommon.INSTANCE.emeraldEntityDrops));
-        LightmansCurrency.LogDebug("Entity Diamond (Normal): " + getValueList(LCConfigCommon.INSTANCE.diamondEntityDrops));
-        LightmansCurrency.LogDebug("Entity Netherite (Normal): " + getValueList(LCConfigCommon.INSTANCE.netheriteEntityDrops));
+        LightmansCurrency.LogDebug("Entity T1 (Normal): " + getValueList(LCConfig.COMMON.entityDropsT1));
+        LightmansCurrency.LogDebug("Entity T2 (Normal): " + getValueList(LCConfig.COMMON.entityDropsT2));
+        LightmansCurrency.LogDebug("Entity T3 (Normal): " + getValueList(LCConfig.COMMON.entityDropsT3));
+        LightmansCurrency.LogDebug("Entity T4 (Normal): " + getValueList(LCConfig.COMMON.entityDropsT4));
+        LightmansCurrency.LogDebug("Entity T5 (Normal): " + getValueList(LCConfig.COMMON.entityDropsT5));
+        LightmansCurrency.LogDebug("Entity T6 (Normal): " + getValueList(LCConfig.COMMON.entityDropsT6));
 
         //Entity (boss)
-        LightmansCurrency.LogDebug("Entity Copper (Boss): " + getValueList(LCConfigCommon.INSTANCE.bossCopperEntityDrops));
-        LightmansCurrency.LogDebug("Entity Iron (Boss): " + getValueList(LCConfigCommon.INSTANCE.bossIronEntityDrops));
-        LightmansCurrency.LogDebug("Entity Gold (Boss): " + getValueList(LCConfigCommon.INSTANCE.bossGoldEntityDrops));
-        LightmansCurrency.LogDebug("Entity Emerald (Boss): " + getValueList(LCConfigCommon.INSTANCE.bossEmeraldEntityDrops));
-        LightmansCurrency.LogDebug("Entity Diamond (Boss): " + getValueList(LCConfigCommon.INSTANCE.bossDiamondEntityDrops));
-        LightmansCurrency.LogDebug("Entity Netherite (Boss): " + getValueList(LCConfigCommon.INSTANCE.bossNetheriteEntityDrops));
+        LightmansCurrency.LogDebug("Entity T1 (Boss): " + getValueList(LCConfig.COMMON.bossEntityDropsT1));
+        LightmansCurrency.LogDebug("Entity T2 (Boss): " + getValueList(LCConfig.COMMON.bossEntityDropsT2));
+        LightmansCurrency.LogDebug("Entity T3 (Boss): " + getValueList(LCConfig.COMMON.bossEntityDropsT3));
+        LightmansCurrency.LogDebug("Entity T4 (Boss): " + getValueList(LCConfig.COMMON.bossEntityDropsT4));
+        LightmansCurrency.LogDebug("Entity T5 (Boss): " + getValueList(LCConfig.COMMON.bossEntityDropsT5));
+        LightmansCurrency.LogDebug("Entity T6 (Boss): " + getValueList(LCConfig.COMMON.bossEntityDropsT6));
 
     }
 
@@ -243,9 +239,9 @@ public class LootManager {
      * Listens to LootTableEvents.MODIFY to modify the chest loot tables safely.
      */
     public static void onLootTableLoaded(ResourceManager resourceManager, net.minecraft.loot.LootManager lootManager, Identifier id, LootTable.Builder tableBuilder, LootTableSource source) {
-        if(!LCConfigCommon.INSTANCE.enableChestLoot.get())
+        if(!LCConfig.COMMON.enableChestLoot.get())
             return;
-        PoolLevel level = GetChestPoolLevel(id);
+        PoolLevel level = GetChestPoolLevel(id.toString());
         if(level != null)
             AddChestLootToTable(tableBuilder, level);
     }
@@ -266,121 +262,102 @@ public class LootManager {
         if(entity.world.isClient)
             return;
 
-        if(!LCConfigCommon.INSTANCE.enableEntityDrops.get())
+        if(!LCConfig.COMMON.enableEntityDrops.get())
             return;
 
-        if(!LCConfigCommon.INSTANCE.enableSpawnerEntityDrops.get())
+        if(!LCConfig.COMMON.enableSpawnerEntityDrops.get())
         {
             //Spawner drops aren't allowed. Check if the entity was spawner-spawned
             if(EntityLootBlocker.BlockEntityDrops(entity))
                 return;
         }
 
-        Identifier killedType = Registry.ENTITY_TYPE.getId(entity.getType());
+        String killedType = Registry.ENTITY_TYPE.getId(entity.getType()).toString();
 
         if(damageSource.getAttacker() instanceof PlayerEntity player)
         {
 
-            if(LCConfigCommon.INSTANCE.copperEntityDrops.get().contains(killedType))
+            if(LCConfig.COMMON.entityDropsT1.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.COPPER);
             }
-            else if(LCConfigCommon.INSTANCE.ironEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.entityDropsT2.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.IRON);
             }
-            else if(LCConfigCommon.INSTANCE.goldEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.entityDropsT3.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.GOLD);
             }
-            else if(LCConfigCommon.INSTANCE.emeraldEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.entityDropsT4.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.EMERALD);
             }
-            else if(LCConfigCommon.INSTANCE.diamondEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.entityDropsT5.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.DIAMOND);
             }
-            else if(LCConfigCommon.INSTANCE.netheriteEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.entityDropsT6.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.NETHERITE);
             }
-            else if(LCConfigCommon.INSTANCE.bossCopperEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.bossEntityDropsT1.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.BOSS_COPPER);
             }
-            else if(LCConfigCommon.INSTANCE.bossIronEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.bossEntityDropsT2.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.BOSS_IRON);
             }
-            else if(LCConfigCommon.INSTANCE.bossGoldEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.bossEntityDropsT3.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.BOSS_GOLD);
             }
-            else if(LCConfigCommon.INSTANCE.bossEmeraldEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.bossEntityDropsT4.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.BOSS_EMERALD);
             }
-            else if(LCConfigCommon.INSTANCE.bossDiamondEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.bossEntityDropsT5.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.BOSS_DIAMOND);
             }
-            else if(LCConfigCommon.INSTANCE.bossNetheriteEntityDrops.get().contains(killedType))
+            else if(LCConfig.COMMON.bossEntityDropsT6.get().contains(killedType))
             {
                 DropEntityLoot(entity, player, PoolLevel.BOSS_NETHERITE);
-            }
-            else
-            {
-                EXTERNAL_ENTITY_ENTRIES.forEach((e,level) -> {
-                    if(e.equals(killedType))
-                    {
-                        DropEntityLoot(entity, player, level);
-                        return;
-                    }
-                });
             }
             return;
         }
         //Boss deaths don't require a player kill to drop coins
-        if(LCConfigCommon.INSTANCE.bossCopperEntityDrops.get().contains(killedType))
+        if(LCConfig.COMMON.bossEntityDropsT1.get().contains(killedType))
         {
             DropEntityLoot(entity, null, PoolLevel.BOSS_COPPER);
         }
-        else if(LCConfigCommon.INSTANCE.bossIronEntityDrops.get().contains(killedType))
+        else if(LCConfig.COMMON.bossEntityDropsT2.get().contains(killedType))
         {
             DropEntityLoot(entity, null, PoolLevel.BOSS_IRON);
         }
-        else if(LCConfigCommon.INSTANCE.bossGoldEntityDrops.get().contains(killedType))
+        else if(LCConfig.COMMON.bossEntityDropsT3.get().contains(killedType))
         {
             DropEntityLoot(entity, null, PoolLevel.BOSS_GOLD);
         }
-        else if(LCConfigCommon.INSTANCE.bossEmeraldEntityDrops.get().contains(killedType))
+        else if(LCConfig.COMMON.bossEntityDropsT4.get().contains(killedType))
         {
             DropEntityLoot(entity, null, PoolLevel.BOSS_EMERALD);
         }
-        else if(LCConfigCommon.INSTANCE.bossDiamondEntityDrops.get().contains(killedType))
+        else if(LCConfig.COMMON.bossEntityDropsT5.get().contains(killedType))
         {
             DropEntityLoot(entity, null, PoolLevel.BOSS_DIAMOND);
         }
-        else if(LCConfigCommon.INSTANCE.bossNetheriteEntityDrops.get().contains(killedType))
+        else if(LCConfig.COMMON.bossEntityDropsT6.get().contains(killedType))
         {
             DropEntityLoot(entity, null, PoolLevel.BOSS_NETHERITE);
-        }
-        else
-        {
-            EXTERNAL_ENTITY_ENTRIES.forEach((e,level) -> {
-                if(e.equals(killedType) && !level.requiresPlayerKill)
-                {
-                    DropEntityLoot(entity, null, level);
-                }
-            });
         }
     }
 
     private static void DropEntityLoot(Entity entity, PlayerEntity player, PoolLevel coinPool)
     {
 
-        if(!LCConfigCommon.INSTANCE.enableEntityDrops.get())
+        if(!LCConfig.COMMON.enableEntityDrops.get())
             return;
 
         generateLootTables();
@@ -570,22 +547,19 @@ public class LootManager {
         return results;
     }
 
-    public static PoolLevel GetChestPoolLevel(Identifier lootTable) {
-        if(LCConfigCommon.INSTANCE.copperChestDrops.get().contains(lootTable))
+    public static PoolLevel GetChestPoolLevel(String lootTable) {
+        if(LCConfig.COMMON.chestDropsT1.get().contains(lootTable))
             return PoolLevel.COPPER;
-        if(LCConfigCommon.INSTANCE.ironChestDrops.get().contains(lootTable))
+        if(LCConfig.COMMON.chestDropsT2.get().contains(lootTable))
             return PoolLevel.IRON;
-        if(LCConfigCommon.INSTANCE.goldChestDrops.get().contains(lootTable))
+        if(LCConfig.COMMON.chestDropsT3.get().contains(lootTable))
             return PoolLevel.GOLD;
-        if(LCConfigCommon.INSTANCE.emeraldChestDrops.get().contains(lootTable))
+        if(LCConfig.COMMON.chestDropsT5.get().contains(lootTable))
             return PoolLevel.EMERALD;
-        if(LCConfigCommon.INSTANCE.diamondChestDrops.get().contains(lootTable))
+        if(LCConfig.COMMON.chestDropsT5.get().contains(lootTable))
             return PoolLevel.DIAMOND;
-        if(LCConfigCommon.INSTANCE.netheriteChestDrops.get().contains(lootTable))
+        if(LCConfig.COMMON.chestDropsT6.get().contains(lootTable))
             return PoolLevel.NETHERITE;
-
-        if(EXTERNAL_CHEST_ENTRIES.containsKey(lootTable))
-            return EXTERNAL_CHEST_ENTRIES.get(lootTable);
 
         return null;
     }
@@ -594,31 +568,6 @@ public class LootManager {
     {
         //LightmansCurrency.LOGGER.info("Spawning " + lootDrops.size() + " coin drops.");
         InventoryUtil.dumpContents(entity.world, entity.getBlockPos(), lootDrops);
-    }
-
-    /**
-     * Adds the given entity's loot table to the list so that it will drop coins in addition to its already given loot.
-     * @param resource String format of the loot tables ResourceLocation (e.g. "minecraft:entities/zombie"), or of the entities id (e.g. "minecraft:sheep")
-     * @param coinPool The highest level coin that the entity should be allowed to drop.
-     */
-    public static void AddEntityCoinPoolToTable(Identifier resource, PoolLevel coinPool)
-    {
-        EXTERNAL_ENTITY_ENTRIES.put(resource, coinPool);
-    }
-
-    /**
-     * Adds the given chest's loot table to the list so that it will spawn coins in addition to its already given loot.
-     * @param resource String format of the loot tables ResourceLocation (e.g. "minecraft:chests/buried_treasure")
-     * @param coinPool The highest level coin that the chest should spawn. Should not include the BOSS pool levels, as those are for entities only.
-     */
-    public static void AddChestCoinPoolToTable(Identifier resource, PoolLevel coinPool)
-    {
-        if(coinPool.level > PoolLevel.NETHERITE.level)
-        {
-            LightmansCurrency.LogError("Attempted to add a chest to the coin pool at level " + coinPool.name() + ", but that level is not valid for chests.");
-            return;
-        }
-        EXTERNAL_CHEST_ENTRIES.put(resource, coinPool);
     }
 
 

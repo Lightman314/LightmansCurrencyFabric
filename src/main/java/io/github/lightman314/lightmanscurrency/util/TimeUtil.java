@@ -20,11 +20,7 @@ public class TimeUtil {
     /**
      * Gets the current system time in milliseconds
      */
-    public static long getCurrentTime()
-    {
-        //TODO get and/or store time desync on client
-        return System.currentTimeMillis() + timeDesync;
-    }
+    public static long getCurrentTime() { return System.currentTimeMillis() + timeDesync; }
 
     /**
      * Calculates if the compareTime is less than the duration before the current time.

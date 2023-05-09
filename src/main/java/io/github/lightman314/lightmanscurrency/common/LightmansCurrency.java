@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.common;
 
 import com.google.common.collect.Lists;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.Reference.*;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
@@ -37,8 +38,6 @@ import io.github.lightman314.lightmanscurrency.common.traders.paygate.PaygateTra
 import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.types.*;
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.*;
-import io.github.lightman314.lightmanscurrency.config.Config;
-import io.github.lightman314.lightmanscurrency.config.SynchronizedConfig;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.network.client.messages.time.SMessageSyncTime;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
@@ -47,6 +46,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraftforge.api.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +69,7 @@ public class LightmansCurrency implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
-		//Trigger registration
+		//Trigger registration  xcvdbfghn
 		ModItems.registerItems();
 		ModBlocks.registerBlocks();
 		ModBlockEntities.registerBlockEntities();
@@ -80,6 +81,13 @@ public class LightmansCurrency implements ModInitializer {
 		ModRecipes.registerRecipes();
 		ModSounds.registerSounds();
         ModGameRules.registerGameRules();
+
+        //Register Configs
+        ModLoadingContext.registerConfig(MODID, ModConfig.Type.CLIENT, LCConfig.clientSpec);
+        ModLoadingContext.registerConfig(MODID, ModConfig.Type.COMMON, LCConfig.commonSpec);
+        ModLoadingContext.registerConfig(MODID, ModConfig.Type.SERVER, LCConfig.serverSpec);
+
+        //Register villager trades
         VillagerTradeManager.registerVillagerTrades();
 
         //Setup Server Packet Listener
@@ -147,9 +155,6 @@ public class LightmansCurrency implements ModInitializer {
 
         this.initItemGroupSorting();
 
-        //Register Configs
-        Config.register(LCConfigCommon.INSTANCE);
-
 	}
 
     private void registerEventListeners()
@@ -163,8 +168,6 @@ public class LightmansCurrency implements ModInitializer {
         //Add non-ServerHook listeners to the Server Hook event so that any subclasses can get the server from the ServerHook storage.
         ServerHook.addServerStartListener(server -> MoneyUtil.reloadMoneyData());
         ServerHook.addServerStartListener(server -> ATMData.reloadATMData());
-        //Reload configs on server start
-        ServerHook.addServerStartListener(server -> Config.reloadConfigs());
 
         //Server Tick Event
         ServerTickEvents.START_SERVER_TICK.register(TraderSaveData::onServerTick);
@@ -182,7 +185,6 @@ public class LightmansCurrency implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> MoneyUtil.onPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> NotificationSaveData.OnPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> CommandLCAdmin.SendAdminList(sender));
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> SynchronizedConfig.sendConfigSyncPackets(sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> SMessageSyncTime.CreatePacket().sendTo(sender));
 
         //Killed by other entity event

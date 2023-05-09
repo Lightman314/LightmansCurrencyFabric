@@ -1,6 +1,5 @@
 package io.github.lightman314.lightmanscurrency.common.traders.item.handler;
 
-import io.github.lightman314.lightmanscurrency.common.blockentity.traderinterface.item.ItemInterfaceHandler;
 import io.github.lightman314.lightmanscurrency.common.traders.item.ItemTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.item.storage.TraderItemStorage;
 import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.ItemTradeData;
