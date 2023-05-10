@@ -23,8 +23,7 @@ public class ScreenPositionConfig implements Supplier<ScreenPosition> {
         this.specSupplier = specSupplier;
 
         //Register to the mod event bus
-        ModConfigEvents.loading(CustomConfigUtil.getActiveModid()).register(this::onConfigReloaded);
-        ModConfigEvents.reloading(CustomConfigUtil.getActiveModid()).register(this::onConfigReloaded);
+        CustomConfigUtil.RegisterConfigListeners(this::onConfigReloaded);
     }
 
     public void onConfigReloaded(ModConfig config)

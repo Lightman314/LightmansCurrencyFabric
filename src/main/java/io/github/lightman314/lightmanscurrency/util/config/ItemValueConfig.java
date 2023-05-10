@@ -26,8 +26,7 @@ public class ItemValueConfig implements Supplier<Item> {
         this.specSupplier = specSupplier;
         this.isAllowed = isAllowed;
         //Register to the mod event bus
-        ModConfigEvents.loading(CustomConfigUtil.getActiveModid()).register(this::onConfigReloaded);
-        ModConfigEvents.reloading(CustomConfigUtil.getActiveModid()).register(this::onConfigReloaded);
+        CustomConfigUtil.RegisterConfigListeners(this::onConfigReloaded);
     }
 
     public void onConfigReloaded(ModConfig config)

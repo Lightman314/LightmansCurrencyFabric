@@ -10,6 +10,7 @@ import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.loot.LootManager;
 import io.github.lightman314.lightmanscurrency.util.config.CoinValueConfig;
+import io.github.lightman314.lightmanscurrency.util.config.CustomConfigUtil;
 import io.github.lightman314.lightmanscurrency.util.config.ItemValueConfig;
 import io.github.lightman314.lightmanscurrency.util.config.ScreenPositionConfig;
 import net.minecraft.item.Item;
@@ -166,6 +167,9 @@ public class LCConfig {
 
         Client(ForgeConfigSpec.Builder builder)
         {
+
+            CustomConfigUtil.setActiveModid(LightmansCurrency.MODID);
+
             builder.comment("Client configuration settings").push("client");
 
             builder.comment("Quality Settings").push("quality");
@@ -235,6 +239,8 @@ public class LCConfig {
 
             builder.pop();
 
+            CustomConfigUtil.resetActiveModid();
+
         }
 
     }
@@ -298,6 +304,8 @@ public class LCConfig {
 
         Common(ForgeConfigSpec.Builder builder)
         {
+
+            CustomConfigUtil.setActiveModid(LightmansCurrency.MODID);
 
             builder.comment("Common configuration settings").push("common");
 
@@ -483,6 +491,7 @@ public class LCConfig {
 
             builder.pop();
 
+            CustomConfigUtil.resetActiveModid();
 
         }
 
@@ -565,6 +574,8 @@ public class LCConfig {
 
         Server(ForgeConfigSpec.Builder builder)
         {
+
+            CustomConfigUtil.setActiveModid(LightmansCurrency.MODID);
 
             builder.comment("Server Config Settings").push("server");
 
@@ -763,6 +774,8 @@ public class LCConfig {
             builder.pop();
 
             builder.pop();
+
+            CustomConfigUtil.resetActiveModid();
 
         }
 
