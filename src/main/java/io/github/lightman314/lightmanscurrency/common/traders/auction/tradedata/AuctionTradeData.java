@@ -7,11 +7,11 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.DisplayData;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.DisplayEntry;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderStorageMenu;
@@ -45,14 +45,14 @@ import net.minecraft.text.Text;
 
 public class AuctionTradeData extends TradeData {
 
-    public static final long GetMinimumDuration() {
-        if(LCConfigCommon.INSTANCE.minAuctionDuration.get() > 0)
-            return TimeUtil.DURATION_DAY * LCConfigCommon.INSTANCE.minAuctionDuration.get();
+    public static long GetMinimumDuration() {
+        if(LCConfig.SERVER.minAuctionDuration.get() > 0)
+            return TimeUtil.DURATION_DAY * LCConfig.SERVER.minAuctionDuration.get();
         return TimeUtil.DURATION_HOUR;
     }
-    public static final long GetDefaultDuration() {
-        if(LCConfigCommon.INSTANCE.minAuctionDuration.get() > 0)
-            return TimeUtil.DURATION_DAY * LCConfigCommon.INSTANCE.minAuctionDuration.get();
+    public static long GetDefaultDuration() {
+        if(LCConfig.SERVER.minAuctionDuration.get() > 0)
+            return TimeUtil.DURATION_DAY * LCConfig.SERVER.minAuctionDuration.get();
         return TimeUtil.DURATION_DAY;
     }
 

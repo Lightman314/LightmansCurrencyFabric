@@ -1,6 +1,6 @@
 package io.github.lightman314.lightmanscurrency.network.client.messages.enchantments;
 
-import io.github.lightman314.lightmanscurrency.client.LCConfigClient;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
 import io.github.lightman314.lightmanscurrency.network.client.ServerToClientPacket;
@@ -28,7 +28,7 @@ public class SMessageMoneyMendingClink extends ServerToClientPacket {
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
 
-        if(System.currentTimeMillis() - lastClink < CLINK_DELAY || !LCConfigClient.INSTANCE.moneyMendingClink.get())
+        if(System.currentTimeMillis() - lastClink < CLINK_DELAY || !LCConfig.CLIENT.moneyMendingClink.get())
             return;
         lastClink = System.currentTimeMillis();
         //Play a coin clinking sound

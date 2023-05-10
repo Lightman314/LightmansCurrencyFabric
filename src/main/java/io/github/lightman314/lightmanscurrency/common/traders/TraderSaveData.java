@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.data.ClientTraderData;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionData;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionSaveData;
@@ -46,7 +46,7 @@ public class TraderSaveData extends PersistentState {
     public static final String PERSISTENT_AUCTION_SECTION = "Auctions";
 
     private void validateAuctionHouse() {
-        if(!LCConfigCommon.INSTANCE.enableAuctionHouse.get())
+        if(!LCConfig.SERVER.enableAuctionHouse.get())
         {
             LightmansCurrency.LogInfo("Will not create or validate the auction house as the auction house is disabled.");
             return;
@@ -501,7 +501,7 @@ public class TraderSaveData extends PersistentState {
                 tsd.traderData.values().removeIf(traderData -> {
                     if(!traderData.isPersistent() && traderData.shouldRemove(server))
                     {
-                        if(LCConfigCommon.INSTANCE.safelyEjectIllegalBreaks.get())
+                        if(LCConfig.SERVER.safelyEjectIllegalBreaks.get())
                         {
                             try {
                                 World level = server.getWorld(traderData.getLevel());

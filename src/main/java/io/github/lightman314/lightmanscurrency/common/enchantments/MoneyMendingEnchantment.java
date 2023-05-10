@@ -2,10 +2,11 @@ package io.github.lightman314.lightmanscurrency.common.enchantments;
 
 import java.util.Map.Entry;
 
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.core.ModEnchantments;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletMenuBase;
+import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
 import io.github.lightman314.lightmanscurrency.network.client.messages.enchantments.SMessageMoneyMendingClink;
@@ -41,7 +42,7 @@ public class MoneyMendingEnchantment extends Enchantment {
         return otherEnchant != Enchantments.MENDING && super.canAccept(otherEnchant);
     }
 
-    public static long getRepairCost() { return MoneyUtil.getValue(LCConfigCommon.INSTANCE.moneyMendingCoinCost.get()); }
+    public static CoinValue getRepairCost() { return LCConfig.SERVER.moneyMendingCoinCost.get(); }
 
     public static void runPlayerTick(ServerPlayerEntity player) {
         WalletHandler walletHandler = WalletHandler.getWallet(player);
@@ -49,7 +50,7 @@ public class MoneyMendingEnchantment extends Enchantment {
         if (WalletItem.isWallet(wallet)) {
             DefaultedList<ItemStack> walletInventory = WalletItem.getWalletInventory(wallet);
             long currentWalletValue = MoneyUtil.getValue(walletInventory);
-            final long repairCost = MoneyMendingEnchantment.getRepairCost();
+            final long repairCost = MoneyMendingEnchantment.getRepairCost().getRawValue();
             if (repairCost > currentWalletValue)
                 return;
             //Go through the players inventory searching for items with the money mending enchantment

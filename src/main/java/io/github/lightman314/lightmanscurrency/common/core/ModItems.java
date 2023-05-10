@@ -1,6 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.core;
 
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.items.*;
 import io.github.lightman314.lightmanscurrency.common.upgrades.UpgradeType;
@@ -36,9 +36,9 @@ public class ModItems {
 	public static final PortableTerminalItem PORTABLE_GEM_TERMINAL = new PortableTerminalItem(new FabricItemSettings().group(LightmansCurrency.MACHINE_GROUP));
 	public static final PortableATMItem PORTABLE_ATM = new PortableATMItem(new FabricItemSettings().group(LightmansCurrency.MACHINE_GROUP));
 
-	public static final CapacityUpgradeItem ITEM_CAPACITY_UPGRADE_1 = new CapacityUpgradeItem(UpgradeType.ITEM_CAPACITY, () -> LCConfigCommon.INSTANCE.itemUpgradeCapacity1.get(), new FabricItemSettings().group(LightmansCurrency.UPGRADE_GROUP));
-	public static final CapacityUpgradeItem ITEM_CAPACITY_UPGRADE_2 = new CapacityUpgradeItem(UpgradeType.ITEM_CAPACITY, () -> LCConfigCommon.INSTANCE.itemUpgradeCapacity2.get(), new FabricItemSettings().group(LightmansCurrency.UPGRADE_GROUP));
-	public static final CapacityUpgradeItem ITEM_CAPACITY_UPGRADE_3 = new CapacityUpgradeItem(UpgradeType.ITEM_CAPACITY, () -> LCConfigCommon.INSTANCE.itemUpgradeCapacity3.get(), new FabricItemSettings().group(LightmansCurrency.UPGRADE_GROUP));
+	public static final CapacityUpgradeItem ITEM_CAPACITY_UPGRADE_1 = new CapacityUpgradeItem(UpgradeType.ITEM_CAPACITY, LCConfig.SERVER.itemUpgradeCapacity1::get, new FabricItemSettings().group(LightmansCurrency.UPGRADE_GROUP));
+	public static final CapacityUpgradeItem ITEM_CAPACITY_UPGRADE_2 = new CapacityUpgradeItem(UpgradeType.ITEM_CAPACITY, LCConfig.SERVER.itemUpgradeCapacity2::get, new FabricItemSettings().group(LightmansCurrency.UPGRADE_GROUP));
+	public static final CapacityUpgradeItem ITEM_CAPACITY_UPGRADE_3 = new CapacityUpgradeItem(UpgradeType.ITEM_CAPACITY, LCConfig.SERVER.itemUpgradeCapacity3::get, new FabricItemSettings().group(LightmansCurrency.UPGRADE_GROUP));
 	
 	public static final SpeedUpgradeItem SPEED_UPGRADE_1 = new SpeedUpgradeItem(4, new FabricItemSettings().group(LightmansCurrency.UPGRADE_GROUP));
 	public static final SpeedUpgradeItem SPEED_UPGRADE_2 = new SpeedUpgradeItem(8, new FabricItemSettings().group(LightmansCurrency.UPGRADE_GROUP));
@@ -53,7 +53,7 @@ public class ModItems {
 	//Hidden item(s)
 	public static final Item FREEZER_DOOR = new Item(new FabricItemSettings());
 		
-	public static final void registerItems() {
+	public static void registerItems() {
 		
 		//Coins
 		Registry.register(Registry.ITEM, new Identifier(LightmansCurrency.MODID, "coin_copper"), COIN_COPPER);

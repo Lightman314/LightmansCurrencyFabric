@@ -7,11 +7,11 @@ import java.util.Objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollBarWidget;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollBarWidget.IScrollable;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.NetworkTraderButton;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
@@ -57,7 +57,7 @@ public class TradingTerminalScreen extends Screen implements IScrollable{
 
     private List<TraderData> traderList(){
         List<TraderData> traderList = TraderSaveData.GetAllTerminalTraders(true);
-        traderList.removeIf(d -> d instanceof AuctionHouseTrader && !LCConfigCommon.INSTANCE.enableAuctionHouse.get());
+        traderList.removeIf(d -> d instanceof AuctionHouseTrader && !LCConfig.SERVER.enableAuctionHouse.get());
         traderList.sort(TERMINAL_SORTER);
         return traderList;
     }

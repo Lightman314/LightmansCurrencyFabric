@@ -10,7 +10,9 @@
 	"ItemEntityMixin"
   ],
   "client": [
-    "client.HandledScreenAccessor"
+    "client.HandledScreenAccessor",
+    "client.InventoryScreenMixin",
+    "client.CreativeInventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -3,7 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.items;
 import java.util.List;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinData;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
@@ -37,7 +37,7 @@ public class CoinItem extends Item{
 		CoinData coinData = MoneyUtil.getData(stack.getItem());
 		if(coinData != null)
 		{
-			switch (LCConfigCommon.INSTANCE.coinTooltipType.get()) {
+			switch (LCConfig.SERVER.coinTooltipType.get()) {
 				case DEFAULT -> {
 					if (coinData.convertsDownwards()) {
 						tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.down", coinData.getDownwardConversion().getSecond(), MoneyUtil.getPluralName(coinData.getDownwardConversion().getFirst()).getString()).formatted(Formatting.YELLOW));
@@ -49,9 +49,9 @@ public class CoinItem extends Item{
 				}
 				case VALUE -> {
 					double value = coinData.getDisplayValue();
-					tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value", LCConfigCommon.INSTANCE.formatValueDisplay(value)).formatted(Formatting.YELLOW));
+					tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value", LCConfig.formatValueDisplay(value)).formatted(Formatting.YELLOW));
 					if (stack.getCount() > 1)
-						tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value.stack", LCConfigCommon.INSTANCE.formatValueDisplay(value * stack.getCount())).formatted(Formatting.YELLOW));
+						tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value.stack", LCConfig.formatValueDisplay(value * stack.getCount())).formatted(Formatting.YELLOW));
 				}
 				default -> {
 				} //Default is NONE

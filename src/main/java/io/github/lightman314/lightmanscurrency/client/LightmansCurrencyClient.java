@@ -21,11 +21,8 @@ import io.github.lightman314.lightmanscurrency.common.menu.slots.WalletSlot;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.ticket.TicketSlot;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.trader.UpgradeInputSlot;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
-import io.github.lightman314.lightmanscurrency.config.Config;
-import io.github.lightman314.lightmanscurrency.config.network.SynchronizedConfigPacketHandler;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.network.client.LCClientPacketHandler;
-import io.github.lightman314.lightmanscurrency.server.ServerHook;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -50,7 +47,6 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 	public void onInitializeClient() {
 
 		ClientPlayNetworking.registerGlobalReceiver(PacketChannels.SERVER_TO_CLIENT, new LCClientPacketHandler());
-		ClientPlayNetworking.registerGlobalReceiver(PacketChannels.CONFIG_SYNC, new SynchronizedConfigPacketHandler());
 
 		//Set certain blocks as cutout layer
 		this.setRenderLayer(RenderLayer.getCutout(), ModBlocks.DISPLAY_CASE, ModBlocks.VENDING_MACHINE, ModBlocks.VENDING_MACHINE_LARGE, ModBlocks.ARMOR_DISPLAY);
@@ -79,15 +75,9 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		//Register extra player layers
 		EntityModelLayerRegistry.registerModelLayer(ModLayerDefinitions.WALLET, WalletLayer::createLayer);
 
-		//Reload configs on server start
-		ServerHook.addServerStartListener(server -> LCConfigClient.INSTANCE.reloadFromFile());
-
 		//Register Event Listeners
 		this.registerEventListeners();
 		ClientEventListeners.init();
-
-		//Register Config
-		Config.register(LCConfigClient.INSTANCE);
 
 	}
 

@@ -1,14 +1,13 @@
 package io.github.lightman314.lightmanscurrency.client.gui.widget.button.inventory;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.lightman314.lightmanscurrency.client.LCConfigClient;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.data.ClientNotificationData;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.NotificationScreen;
+import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
-import io.github.lightman314.lightmanscurrency.config.options.custom.values.ScreenPosition;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class NotificationButton extends InventoryButton {
@@ -27,7 +26,7 @@ public class NotificationButton extends InventoryButton {
     @Override
     @NotNull
     protected ScreenPosition getScreenPosition(ScreenPosition parentCorner, boolean isParentCreative) {
-        return parentCorner.withOffset(isParentCreative ? LCConfigClient.INSTANCE.buttonGroupCreative.get() : LCConfigClient.INSTANCE.buttonGroup.get()).withOffset(OFFSET);
+        return parentCorner.offset(isParentCreative ? ScreenPosition.of(LCConfig.CLIENT.notificationAndTeamButtonXCreative.get(), LCConfig.CLIENT.notificationAndTeamButtonYCreative.get()): ScreenPosition.of(LCConfig.CLIENT.notificationAndTeamButtonX.get(), LCConfig.CLIENT.notificationAndTeamButtonY.get())).offset(OFFSET);
     }
 
     private static Pair<Integer,Integer> getNotificationResourcePosition() { return Pair.of(ClientNotificationData.GetNotifications().unseenNotification() ? 200 + SIZE : 200, 0); }

@@ -8,7 +8,7 @@ import java.util.List;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import io.github.lightman314.lightmanscurrency.common.LCConfigCommon;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
 import io.github.lightman314.lightmanscurrency.common.core.ModItems;
@@ -247,6 +247,8 @@ public class MoneyUtil {
             return false;
         return data.isHidden;
     }
+
+    public static boolean isVisibleCoin(Item item) { return isCoin(item, false); }
 
     /**
      * Checks if the given item is in the master coin list.
@@ -997,7 +999,7 @@ public class MoneyUtil {
 
     public static long displayValueToLong(double displayValue)
     {
-        long baseCoinValue = getValue(LCConfigCommon.INSTANCE.valueBaseCoin.get());
+        long baseCoinValue = getValue(LCConfig.SERVER.valueBaseCoin.get());
         double totalValue = displayValue * baseCoinValue;
         long value = (long)totalValue;
         return totalValue % 1d >= 0.5d ? value + 1 : value;

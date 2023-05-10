@@ -1,10 +1,10 @@
 package io.github.lightman314.lightmanscurrency.client.gui.widget.button.inventory;
 
 import com.mojang.datafixers.util.Pair;
+import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.ClientEventListeners;
-import io.github.lightman314.lightmanscurrency.client.LCConfigClient;
+import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
-import io.github.lightman314.lightmanscurrency.config.options.custom.values.ScreenPosition;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -30,7 +30,7 @@ public class WalletVisibilityToggleButton extends InventoryButton {
     @Override
     protected @NotNull ScreenPosition getScreenPosition(ScreenPosition screenCorner, boolean isParentCreative) {
         return screenCorner
-                .withOffset(isParentCreative ? LCConfigClient.INSTANCE.walletSlotCreative.get() : LCConfigClient.INSTANCE.walletSlot.get());
+                .offset(isParentCreative ? LCConfig.CLIENT.walletSlotCreative.get() : LCConfig.CLIENT.walletSlot.get());
     }
 
     @Override
