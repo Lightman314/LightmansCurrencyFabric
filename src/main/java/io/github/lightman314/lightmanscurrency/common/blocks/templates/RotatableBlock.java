@@ -33,7 +33,7 @@ public class RotatableBlock extends Block implements IRotatableBlock{
 	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) { return this.shape.apply(this.getFacing(state)); }
 
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext context) { return super.getPlacementState(context).with(FACING, context.getPlayerFacing()); }
+	public BlockState getPlacementState(ItemPlacementContext context) { return super.getPlacementState(context).with(FACING, context.getHorizontalPlayerFacing()); }
 	
 	@Override
 	public BlockState rotate(BlockState state, BlockRotation rotation) { return state.with(FACING, rotation.rotate(state.get(FACING))); }

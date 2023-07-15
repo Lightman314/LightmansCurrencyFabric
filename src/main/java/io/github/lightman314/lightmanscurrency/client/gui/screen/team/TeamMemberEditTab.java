@@ -6,13 +6,14 @@ import com.google.common.collect.Lists;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TeamManagerScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollTextDisplay;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.network.server.messages.team.CMessageEditTeam;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -48,9 +49,9 @@ public class TeamMemberEditTab extends TeamTab {
         this.memberNameInput = screen.addRenderableTabWidget(new TextFieldWidget(this.getFont(), screen.guiLeft() + 11, screen.guiTop() + 9, 178, 20, Text.empty()));
         this.memberNameInput.setMaxLength(16);
 
-        this.buttonAddMember = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 30, 60, 20, Text.translatable("gui.button.lightmanscurrency.team.member.add"), this::addMember));
-        this.buttonPromoteMember = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 70, screen.guiTop() + 30, 60, 20, Text.translatable("gui.button.lightmanscurrency.team.member.promote"), this::addAdmin));
-        this.buttonRemoveMember = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 130, screen.guiTop() + 30, 60, 20, Text.translatable("gui.button.lightmanscurrency.team.member.remove"), this::removeMember));
+        this.buttonAddMember = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 10, screen.guiTop() + 30, 60, 20, Text.translatable("gui.button.lightmanscurrency.team.member.add"), this::addMember));
+        this.buttonPromoteMember = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 70, screen.guiTop() + 30, 60, 20, Text.translatable("gui.button.lightmanscurrency.team.member.promote"), this::addAdmin));
+        this.buttonRemoveMember = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 130, screen.guiTop() + 30, 60, 20, Text.translatable("gui.button.lightmanscurrency.team.member.remove"), this::removeMember));
         this.buttonAddMember.active = this.buttonPromoteMember.active = this.buttonRemoveMember.active = false;
 
         this.memberDisplay = screen.addRenderableTabWidget(new ScrollTextDisplay(screen.guiLeft() + 10, screen.guiTop() + 55, screen.xSize - 20, screen.ySize - 65, this.getFont(), this::getMemberList));
@@ -76,10 +77,10 @@ public class TeamMemberEditTab extends TeamTab {
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) { }
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) { }
+    public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
     @Override
     public void tick() {

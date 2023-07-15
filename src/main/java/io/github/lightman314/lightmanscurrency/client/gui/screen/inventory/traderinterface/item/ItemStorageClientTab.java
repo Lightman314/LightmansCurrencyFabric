@@ -2,8 +2,6 @@ package io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trad
 
 import java.util.List;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.TraderInterfaceScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.traderinterface.TraderInterfaceClientTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.DirectionalSettingsWidget;
@@ -18,9 +16,9 @@ import io.github.lightman314.lightmanscurrency.common.blockentity.traderinterfac
 import io.github.lightman314.lightmanscurrency.common.menu.traderinterface.item.ItemStorageTab;
 import io.github.lightman314.lightmanscurrency.common.traderinterface.handlers.ConfigurableSidedHandler.DirectionalSettings;
 import io.github.lightman314.lightmanscurrency.common.traders.item.storage.TraderItemStorage;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.MutableText;
@@ -83,9 +81,9 @@ public class ItemStorageClientTab extends TraderInterfaceClientTab<ItemStorageTa
     }
 
     @Override
-    public void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void renderBG(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.font.draw(pose, Text.translatable("tooltip.lightmanscurrency.interface.storage"), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040);
+        gui.drawText(this.font, Text.translatable("tooltip.lightmanscurrency.interface.storage"), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040, false);
 
         this.scrollBar.beforeWidgetRender(mouseY);
 
@@ -105,30 +103,28 @@ public class ItemStorageClientTab extends TraderInterfaceClientTab<ItemStorageTa
                     //Get the slot position
                     int xPos = this.screen.getGuiLeft() + X_OFFSET + x * 18;
                     //Render the slot background
-                    RenderSystem.setShaderTexture(0, TraderInterfaceScreen.GUI_TEXTURE);
-                    RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-                    this.screen.drawTexture(pose, xPos, yPos, TraderInterfaceScreen.WIDTH, 0, 18, 18);
+                    gui.setShaderColor(1f, 1f, 1f, 1f);
+                    gui.drawTexture(TraderInterfaceScreen.GUI_TEXTURE, xPos, yPos, TraderInterfaceScreen.WIDTH, 0, 18, 18);
                     //Render the slots item
                     if(index < storage.getSlotCount())
-                        ItemRenderUtil.drawItemStack(this.screen, this.font, storage.getContents().get(index), xPos + 1, yPos + 1, this.getCountText(storage.getContents().get(index)));
+                        ItemRenderUtil.drawItemStack(gui, this.font, storage.getContents().get(index), xPos + 1, yPos + 1, this.getCountText(storage.getContents().get(index)));
                     if(index == hoveredSlot)
-                        HandledScreen.drawSlotHighlight(pose, xPos + 1, yPos + 1, this.screen.getZOffset());
+                        HandledScreen.drawSlotHighlight(gui, xPos + 1, yPos + 1, 0);
                     index++;
                 }
             }
 
             //Render the slot bg for the upgrade slots
-            RenderSystem.setShaderTexture(0, TraderInterfaceScreen.GUI_TEXTURE);
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+            gui.setShaderColor(1f, 1f, 1f, 1f);
             for(Slot slot : this.commonTab.getSlots())
             {
-                this.screen.drawTexture(pose, this.screen.getGuiLeft() + slot.x - 1, this.screen.getGuiTop() + slot.y - 1, TraderInterfaceScreen.WIDTH, 0, 18, 18);
+                gui.drawTexture(TraderInterfaceScreen.GUI_TEXTURE, this.screen.getGuiLeft() + slot.x - 1, this.screen.getGuiTop() + slot.y - 1, TraderInterfaceScreen.WIDTH, 0, 18, 18);
             }
 
             //Render the input/output labels
-            this.font.draw(pose, Text.translatable("gui.lightmanscurrency.settings.iteminput.side"), this.screen.getGuiLeft() + 33, this.screen.getGuiTop() + WIDGET_OFFSET, 0x404040);
+            gui.drawText(this.font, Text.translatable("gui.lightmanscurrency.settings.iteminput.side"), this.screen.getGuiLeft() + 33, this.screen.getGuiTop() + WIDGET_OFFSET, 0x404040, false);
             int textWidth = this.font.getWidth(Text.translatable("gui.lightmanscurrency.settings.itemoutput.side"));
-            this.font.draw(pose, Text.translatable("gui.lightmanscurrency.settings.itemoutput.side"), this.screen.getGuiLeft() + 173 - textWidth, this.screen.getGuiTop() + WIDGET_OFFSET, 0x404040);
+            gui.drawText(this.font, Text.translatable("gui.lightmanscurrency.settings.itemoutput.side"), this.screen.getGuiLeft() + 173 - textWidth, this.screen.getGuiTop() + WIDGET_OFFSET, 0x404040, false);
         }
 
     }
@@ -141,14 +137,14 @@ public class ItemStorageClientTab extends TraderInterfaceClientTab<ItemStorageTa
         {
             String countText = String.valueOf(count / 1000);
             if((count % 1000) / 100 > 0)
-                countText += "." + String.valueOf((count % 1000) / 100);
+                countText += "." + ((count % 1000) / 100);
             return countText + "k";
         }
         return String.valueOf(count);
     }
 
     @Override
-    public void renderTooltips(MatrixStack pose, int mouseX, int mouseY) {
+    public void renderTooltips(DrawContext gui, int mouseX, int mouseY) {
 
         if(this.menu.getTraderInterface() instanceof ItemTraderInterfaceBlockEntity itemInterface)
         {
@@ -171,13 +167,13 @@ public class ItemStorageClientTab extends TraderInterfaceClientTab<ItemStorageTa
                             else
                                 tooltip.add(Text.translatable("tooltip.lightmanscurrency.itemstorage.stacks.multi", stack.getCount() / 64, stack.getCount() % 64));
                         }
-                        this.screen.renderTooltip(pose, tooltip, mouseX, mouseY);
+                        gui.drawTooltip(this.font, tooltip, mouseX, mouseY);
                     }
                 }
             }
 
-            this.inputSettings.renderTooltips(pose, mouseX, mouseY, this.screen);
-            this.outputSettings.renderTooltips(pose, mouseX, mouseY, this.screen);
+            this.inputSettings.renderTooltips(gui, mouseX, mouseY, this.font);
+            this.outputSettings.renderTooltips(gui, mouseX, mouseY, this.font);
 
         }
     }

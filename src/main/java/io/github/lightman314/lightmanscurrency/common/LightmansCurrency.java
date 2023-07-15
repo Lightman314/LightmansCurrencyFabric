@@ -1,8 +1,7 @@
 package io.github.lightman314.lightmanscurrency.common;
 
-import com.google.common.collect.Lists;
+import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
 import io.github.lightman314.lightmanscurrency.LCConfig;
-import io.github.lightman314.lightmanscurrency.common.Reference.*;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
 import io.github.lightman314.lightmanscurrency.common.callbacks.EntityDeathCallback;
@@ -46,7 +45,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraftforge.api.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,15 +59,12 @@ public class LightmansCurrency implements ModInitializer {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-	public static final CustomCreativeTab COIN_GROUP = new CustomCreativeTab(MODID + ".coins", () -> ModBlocks.COINPILE_GOLD);
-    public static final CustomCreativeTab MACHINE_GROUP = new CustomCreativeTab(MODID + ".machines", () -> ModBlocks.MACHINE_ATM);
-    public static final CustomCreativeTab UPGRADE_GROUP = new CustomCreativeTab(MODID + ".upgrades", () -> ModItems.ITEM_CAPACITY_UPGRADE_1);
-    public static final CustomCreativeTab TRADING_GROUP = new CustomCreativeTab(MODID + ".trading", () -> ModBlocks.DISPLAY_CASE);
-
 	@Override
 	public void onInitialize() {
 
-		//Trigger registration  xcvdbfghn
+        LightmansCurrency.LogInfo("Registering Lightman's Currency Items/Blocks");
+
+		//Trigger registration
 		ModItems.registerItems();
 		ModBlocks.registerBlocks();
 		ModBlockEntities.registerBlockEntities();
@@ -80,12 +75,15 @@ public class LightmansCurrency implements ModInitializer {
 		ModCommandArguments.registerCommandArguments();
 		ModRecipes.registerRecipes();
 		ModSounds.registerSounds();
+        ModCreativeGroups.registerItemGroups();
         ModGameRules.registerGameRules();
 
+        LightmansCurrency.LogInfo("Done registering Lightman's Currency Items/Blocks");
+
         //Register Configs
-        ModLoadingContext.registerConfig(MODID, ModConfig.Type.CLIENT, LCConfig.clientSpec);
-        ModLoadingContext.registerConfig(MODID, ModConfig.Type.COMMON, LCConfig.commonSpec);
-        ModLoadingContext.registerConfig(MODID, ModConfig.Type.SERVER, LCConfig.serverSpec);
+        ForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.CLIENT, LCConfig.clientSpec);
+        ForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.COMMON, LCConfig.commonSpec);
+        ForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.SERVER, LCConfig.serverSpec);
 
         //Register villager trades
         VillagerTradeManager.registerVillagerTrades();
@@ -153,8 +151,6 @@ public class LightmansCurrency implements ModInitializer {
 
         ATMIconData.init();
 
-        this.initItemGroupSorting();
-
 	}
 
     private void registerEventListeners()
@@ -200,55 +196,8 @@ public class LightmansCurrency implements ModInitializer {
 
         EnchantmentEvents.registerEventListeners();
 
-    }
 
-    private void initItemGroupSorting() {
 
-        //Initialize the sorting lists
-        COIN_GROUP.addEnchantments(ModEnchantments.MONEY_MENDING);
-        COIN_GROUP.initSortingList(Lists.newArrayList(ModItems.COIN_COPPER, ModItems.COIN_IRON, ModItems.COIN_GOLD,
-                ModItems.COIN_EMERALD, ModItems.COIN_DIAMOND, ModItems.COIN_NETHERITE, ModBlocks.COINPILE_COPPER,
-                ModBlocks.COINPILE_IRON, ModBlocks.COINPILE_GOLD, ModBlocks.COINPILE_EMERALD,
-                ModBlocks.COINPILE_DIAMOND, ModBlocks.COINPILE_NETHERITE, ModBlocks.COINBLOCK_COPPER,
-                ModBlocks.COINBLOCK_IRON, ModBlocks.COINBLOCK_GOLD, ModBlocks.COINBLOCK_EMERALD,
-                ModBlocks.COINBLOCK_DIAMOND, ModBlocks.COINBLOCK_NETHERITE, ModItems.TRADING_CORE, ModItems.TICKET,
-                ModItems.TICKET_MASTER, ModItems.TICKET_STUB, ModItems.WALLET_COPPER, ModItems.WALLET_IRON, ModItems.WALLET_GOLD,
-                ModItems.WALLET_EMERALD, ModItems.WALLET_DIAMOND, ModItems.WALLET_NETHERITE
-        ));
-
-        MACHINE_GROUP.initSortingList(Lists.newArrayList(ModBlocks.MACHINE_ATM, ModItems.PORTABLE_ATM, ModBlocks.MACHINE_MINT, ModBlocks.CASH_REGISTER,
-                ModBlocks.TERMINAL, ModItems.PORTABLE_TERMINAL, ModBlocks.GEM_TERMINAL, ModItems.PORTABLE_GEM_TERMINAL, ModBlocks.ITEM_TRADER_INTERFACE,
-                ModBlocks.PAYGATE, ModBlocks.TICKET_MACHINE
-        ));
-
-        UPGRADE_GROUP.initSortingList(Lists.newArrayList(ModItems.ITEM_CAPACITY_UPGRADE_1, ModItems.ITEM_CAPACITY_UPGRADE_2,
-                ModItems.ITEM_CAPACITY_UPGRADE_3, ModItems.SPEED_UPGRADE_1, ModItems.SPEED_UPGRADE_2, ModItems.SPEED_UPGRADE_3,
-                ModItems.SPEED_UPGRADE_4, ModItems.SPEED_UPGRADE_5, ModItems.NETWORK_UPGRADE, ModItems.HOPPER_UPGRADE
-        ));
-
-        TRADING_GROUP.initSortingList(Lists.newArrayList(ModBlocks.SHELF.get(WoodType.OAK), ModBlocks.SHELF.get(WoodType.BIRCH),
-                ModBlocks.SHELF.get(WoodType.SPRUCE), ModBlocks.SHELF.get(WoodType.JUNGLE), ModBlocks.SHELF.get(WoodType.ACACIA),
-                ModBlocks.SHELF.get(WoodType.DARK_OAK), ModBlocks.SHELF.get(WoodType.CRIMSON), ModBlocks.SHELF.get(WoodType.WARPED),
-                ModBlocks.DISPLAY_CASE, ModBlocks.ARMOR_DISPLAY, ModBlocks.CARD_DISPLAY.get(WoodType.OAK),
-                ModBlocks.CARD_DISPLAY.get(WoodType.BIRCH), ModBlocks.CARD_DISPLAY.get(WoodType.SPRUCE), ModBlocks.CARD_DISPLAY.get(WoodType.JUNGLE),
-                ModBlocks.CARD_DISPLAY.get(WoodType.ACACIA), ModBlocks.CARD_DISPLAY.get(WoodType.DARK_OAK), ModBlocks.CARD_DISPLAY.get(WoodType.CRIMSON),
-                ModBlocks.CARD_DISPLAY.get(WoodType.WARPED), ModBlocks.VENDING_MACHINE.get(Color.WHITE), ModBlocks.VENDING_MACHINE.get(Color.ORANGE),
-                ModBlocks.VENDING_MACHINE.get(Color.MAGENTA), ModBlocks.VENDING_MACHINE.get(Color.LIGHTBLUE),ModBlocks.VENDING_MACHINE.get(Color.YELLOW),
-                ModBlocks.VENDING_MACHINE.get(Color.LIME), ModBlocks.VENDING_MACHINE.get(Color.PINK), ModBlocks.VENDING_MACHINE.get(Color.GRAY),
-                ModBlocks.VENDING_MACHINE.get(Color.LIGHTGRAY), ModBlocks.VENDING_MACHINE.get(Color.CYAN), ModBlocks.VENDING_MACHINE.get(Color.PURPLE),
-                ModBlocks.VENDING_MACHINE.get(Color.BLUE), ModBlocks.VENDING_MACHINE.get(Color.BROWN), ModBlocks.VENDING_MACHINE.get(Color.GREEN),
-                ModBlocks.VENDING_MACHINE.get(Color.RED), ModBlocks.VENDING_MACHINE.get(Color.BLACK), ModBlocks.FREEZER,
-                ModBlocks.VENDING_MACHINE_LARGE.get(Color.WHITE), ModBlocks.VENDING_MACHINE_LARGE.get(Color.ORANGE),
-                ModBlocks.VENDING_MACHINE_LARGE.get(Color.MAGENTA), ModBlocks.VENDING_MACHINE_LARGE.get(Color.LIGHTBLUE),
-                ModBlocks.VENDING_MACHINE_LARGE.get(Color.YELLOW), ModBlocks.VENDING_MACHINE_LARGE.get(Color.LIME),
-                ModBlocks.VENDING_MACHINE_LARGE.get(Color.PINK), ModBlocks.VENDING_MACHINE_LARGE.get(Color.GRAY),
-                ModBlocks.VENDING_MACHINE_LARGE.get(Color.LIGHTGRAY), ModBlocks.VENDING_MACHINE_LARGE.get(Color.CYAN),
-                ModBlocks.VENDING_MACHINE_LARGE.get(Color.PURPLE), ModBlocks.VENDING_MACHINE_LARGE.get(Color.BLUE),
-                ModBlocks.VENDING_MACHINE_LARGE.get(Color.BROWN), ModBlocks.VENDING_MACHINE_LARGE.get(Color.GREEN),
-                ModBlocks.VENDING_MACHINE_LARGE.get(Color.RED), ModBlocks.VENDING_MACHINE_LARGE.get(Color.BLACK),
-                ModBlocks.TICKET_KIOSK, ModBlocks.ITEM_NETWORK_TRADER_1, ModBlocks.ITEM_NETWORK_TRADER_2,
-                ModBlocks.ITEM_NETWORK_TRADER_3, ModBlocks.ITEM_NETWORK_TRADER_4
-        ));
     }
 
 	public static void LogDebug(String message)

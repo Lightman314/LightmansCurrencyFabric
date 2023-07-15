@@ -3,12 +3,13 @@ package io.github.lightman314.lightmanscurrency.client.gui.screen.settings.core;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TraderSettingsScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.SettingsTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainButton;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
@@ -46,23 +47,23 @@ public class NotificationTab extends SettingsTab {
 
         this.buttonToggleChatNotifications = screen.addRenderableTabWidget(new PlainButton(screen.guiLeft() + 20, screen.guiTop() + 55, 10, 10, this::ToggleChatNotifications, TraderSettingsScreen.GUI_TEXTURE, 10, 200));
 
-        this.buttonToggleTeamLevel = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 80, screen.xSize - 40, 20, Text.empty(), this::ToggleTeamNotificationLevel));
+        this.buttonToggleTeamLevel = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 20, screen.guiTop() + 80, screen.xSize - 40, 20, Text.empty(), this::ToggleTeamNotificationLevel));
 
         this.tick();
 
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         TraderSettingsScreen screen = this.getScreen();
         TraderData trader = this.getTrader();
 
         //Render the enable notification test
-        this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.notifications.enabled"), screen.guiLeft() + 32, screen.guiTop() + 35, 0x404040);
+        gui.drawText(this.getFont(), Text.translatable("gui.lightmanscurrency.notifications.enabled"), screen.guiLeft() + 32, screen.guiTop() + 35, 0x404040, false);
 
         //Render the enable chat notification text
-        this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.notifications.chat"), screen.guiLeft() + 32, screen.guiTop() + 55, 0x404040);
+        gui.drawText(this.getFont(), Text.translatable("gui.lightmanscurrency.notifications.chat"), screen.guiLeft() + 32, screen.guiTop() + 55, 0x404040, false);
 
         this.buttonToggleTeamLevel.visible = trader.getOwner().hasTeam();
         if(this.buttonToggleTeamLevel.visible)
@@ -74,7 +75,7 @@ public class NotificationTab extends SettingsTab {
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) { }
+    public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
     @Override
     public void tick() {

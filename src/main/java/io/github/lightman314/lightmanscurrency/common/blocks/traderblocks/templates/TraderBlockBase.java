@@ -24,6 +24,7 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -47,7 +48,7 @@ public abstract class TraderBlockBase extends Block implements ITraderBlock, Blo
 
     public TraderBlockBase(Settings properties)  { this(properties, LazyShapes.BOX); }
 
-    public TraderBlockBase(Settings properties, VoxelShape shape)  { super(properties); this.shape = shape != null ? shape : LazyShapes.BOX; }
+    public TraderBlockBase(Settings properties, VoxelShape shape)  { super(properties.pistonBehavior(PistonBehavior.BLOCK)); this.shape = shape != null ? shape : LazyShapes.BOX; }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)   {return this.shape; }

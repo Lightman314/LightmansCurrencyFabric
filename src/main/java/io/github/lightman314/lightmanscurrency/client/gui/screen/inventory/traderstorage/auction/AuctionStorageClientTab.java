@@ -2,8 +2,6 @@ package io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trad
 
 import java.util.List;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.TraderScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.TraderStorageScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.traderstorage.TraderStorageClientTab;
@@ -19,10 +17,10 @@ import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.auction.AuctionStorageTab;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.AuctionHouseTrader;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.AuctionPlayerStorage;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -71,9 +69,9 @@ public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStora
     }
 
     @Override
-    public void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void renderBG(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.font.draw(pose, Text.translatable("tooltip.lightmanscurrency.auction.storage"), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040);
+        gui.drawText(this.font, Text.translatable("tooltip.lightmanscurrency.auction.storage"), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040, false);
 
         this.scrollBar.beforeWidgetRender(mouseY);
 
@@ -96,20 +94,19 @@ public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStora
                         //Get the slot position
                         int xPos = this.screen.getGuiLeft() + X_OFFSET + x * 18;
                         //Render the slot background
-                        RenderSystem.setShaderTexture(0, TraderScreen.GUI_TEXTURE);
-                        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-                        this.screen.drawTexture(pose, xPos, yPos, TraderScreen.WIDTH, 0, 18, 18);
+                        gui.setShaderColor(1f, 1f, 1f, 1f);
+                        gui.drawTexture(TraderScreen.GUI_TEXTURE, xPos, yPos, TraderScreen.WIDTH, 0, 18, 18);
                         //Render the slots item
                         if(index < storedItems.size())
-                            ItemRenderUtil.drawItemStack(this.screen, this.font, storedItems.get(index), xPos + 1, yPos + 1);
+                            ItemRenderUtil.drawItemStack(gui, this.font, storedItems.get(index), xPos + 1, yPos + 1);
                         if(index == hoverSlot)
-                            HandledScreen.drawSlotHighlight(pose, xPos + 1, yPos + 1, this.screen.getZOffset());
+                            HandledScreen.drawSlotHighlight(gui, xPos + 1, yPos + 1, 0);
                         index++;
                     }
                 }
 
-                if(storedItems.size() <= 0)
-                    TextRenderUtil.drawCenteredMultilineText(pose, Text.translatable("tooltip.lightmanscurrency.auction.storage.items.none"), this.screen.getGuiLeft() + 10, this.screen.getImageWidth() - 20, this.screen.getGuiTop() + X_OFFSET + (18 * ROWS / 2), 0x404040);
+                if(storedItems.size() == 0)
+                    TextRenderUtil.drawCenteredMultilineText(gui, Text.translatable("tooltip.lightmanscurrency.auction.storage.items.none"), this.screen.getGuiLeft() + 10, this.screen.getImageWidth() - 20, this.screen.getGuiTop() + X_OFFSET + (18 * ROWS / 2), 0x404040);
 
                 this.buttonCollectItems.active = storedItems.size() > 0;
 
@@ -117,12 +114,12 @@ public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStora
                 if(storage.getStoredCoins().hasAny())
                 {
                     this.buttonCollectMoney.active = true;
-                    this.font.draw(pose, Text.translatable("tooltip.lightmanscurrency.auction.storage.money", storage.getStoredCoins().getString("0")), this.screen.getGuiLeft() + 50, this.screen.getGuiTop() + 118, 0x404040);
+                    gui.drawText(this.font, Text.translatable("tooltip.lightmanscurrency.auction.storage.money", storage.getStoredCoins().getString("0")), this.screen.getGuiLeft() + 50, this.screen.getGuiTop() + 118, 0x404040, false);
                 }
                 else
                 {
                     this.buttonCollectMoney.active = false;
-                    this.font.draw(pose, Text.translatable("tooltip.lightmanscurrency.auction.storage.money.none"), this.screen.getGuiLeft() + 50, this.screen.getGuiTop() + 118, 0x404040);
+                    gui.drawText(this.font, Text.translatable("tooltip.lightmanscurrency.auction.storage.money.none"), this.screen.getGuiLeft() + 50, this.screen.getGuiTop() + 118, 0x404040, false);
                 }
 
             }
@@ -132,7 +129,7 @@ public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStora
     }
 
     @Override
-    public void renderTooltips(MatrixStack pose, int mouseX, int mouseY) {
+    public void renderTooltips(DrawContext gui, int mouseX, int mouseY) {
 
         if(this.menu.getTrader() instanceof AuctionHouseTrader && this.menu.getCursorStack().isEmpty())
         {
@@ -144,7 +141,7 @@ public class AuctionStorageClientTab extends TraderStorageClientTab<AuctionStora
                 if(hoveredSlot < storage.getStoredItems().size())
                 {
                     ItemStack stack = storage.getStoredItems().get(hoveredSlot);
-                    this.screen.renderTooltip(pose, ItemRenderUtil.getTooltipFromItem(stack), mouseX, mouseY);
+                    gui.drawTooltip(this.font, ItemRenderUtil.getTooltipFromItem(stack), mouseX, mouseY);
                 }
             }
         }

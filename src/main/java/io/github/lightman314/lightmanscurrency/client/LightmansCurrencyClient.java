@@ -7,7 +7,6 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.ItemEditWidget;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.FreezerTraderBlockEntityRenderer;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.ItemTraderBlockEntityRenderer;
 import io.github.lightman314.lightmanscurrency.client.renderer.entity.layers.WalletLayer;
-import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
@@ -16,10 +15,6 @@ import io.github.lightman314.lightmanscurrency.common.core.ModMenus;
 import io.github.lightman314.lightmanscurrency.common.core.groups.BlockConvertible;
 import io.github.lightman314.lightmanscurrency.common.items.CoinBlockItem;
 import io.github.lightman314.lightmanscurrency.common.items.CoinItem;
-import io.github.lightman314.lightmanscurrency.common.menu.slots.CoinSlot;
-import io.github.lightman314.lightmanscurrency.common.menu.slots.WalletSlot;
-import io.github.lightman314.lightmanscurrency.common.menu.slots.ticket.TicketSlot;
-import io.github.lightman314.lightmanscurrency.common.menu.slots.trader.UpgradeInputSlot;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.network.client.LCClientPacketHandler;
@@ -29,14 +24,11 @@ import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -97,8 +89,6 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 
 		LivingEntityFeatureRendererRegistrationCallback.EVENT.register(WalletLayer::registerLayer);
 
-		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(this::stitchTextures);
-
 		ClientPlayConnectionEvents.INIT.register(((handler, client) -> ItemEditWidget.initItemList()));
 
 		ClientPlayConnectionEvents.DISCONNECT.register(ClientBankData::onClientLogout);
@@ -109,17 +99,6 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		ClientPlayConnectionEvents.DISCONNECT.register(ClientWalletData::onClientLogout);
 
 		ItemTooltipCallback.EVENT.register(this::appendTooltips);
-
-	}
-
-	private void stitchTextures(SpriteAtlasTexture atlasTexture, ClientSpriteRegistryCallback.Registry registry) {
-
-		//Register extra textures to the PlayerScreenHandler.BLOCK_ATLAS_TEXTURE
-		registry.register(CoinSlot.EMPTY_COIN_SLOT);
-		registry.register(TicketSlot.EMPTY_TICKET_SLOT);
-		registry.register(WalletSlot.EMPTY_WALLET_SLOT);
-		registry.register(ItemRenderUtil.EMPTY_SLOT_BG);
-		registry.register(UpgradeInputSlot.EMPTY_UPGRADE_SLOT);
 
 	}
 

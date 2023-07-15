@@ -15,9 +15,8 @@ import io.github.lightman314.lightmanscurrency.common.traders.events.TradeEvent;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -234,7 +233,6 @@ public abstract class TradeData {
             private final boolean sameNBT;
             /**
              * Whether the two products have the same NBT data.
-             * @return
              */
             public boolean SameProductNBT() { return this.sameNBT; }
             private final int quantityDifference;
@@ -402,13 +400,13 @@ public abstract class TradeData {
     /**
      * Render trade-specific icons for the trade, such as the fluid traders drainable/fillable icons.
      * @param button The button that is rendering the trade
-     * @param pose The pose stack
+     * @param gui The draw context
      * @param mouseX The x position of the mouse.
      * @param mouseY The y position of the mouse.
      * @param context The context of the trade.
      */
     @Environment(EnvType.CLIENT)
-    public void renderAdditional(ClickableWidget button, MatrixStack pose, int mouseX, int mouseY, TradeContext context) { }
+    public void renderAdditional(ClickableWidget button, DrawContext gui, int mouseX, int mouseY, TradeContext context) { }
 
     /**
      * Render trade-specific tooltips for the trade, such as the fluid traders drainable/fillable icons.

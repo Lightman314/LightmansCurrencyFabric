@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.traders.TradeContext;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.AlertData;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +37,7 @@ public class TradeButton extends ButtonWidget {
     public boolean displayOnly = false;
 
     public TradeButton(Supplier<TradeContext> contextSource, Supplier<TradeData> tradeSource, PressAction onPress) {
-        super(0, 0, 0, BUTTON_HEIGHT, Text.empty(), onPress);
+        super(0, 0, 0, BUTTON_HEIGHT, Text.empty(), onPress, DEFAULT_NARRATION_SUPPLIER);
         this.tradeSource = tradeSource;
         this.contextSource = contextSource;
         this.recalculateSize();
@@ -54,13 +53,8 @@ public class TradeButton extends ButtonWidget {
         }
     }
 
-    public void move(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
     @Override
-    public void renderButton(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         TradeData trade = this.getTrade();
         if(trade == null)
@@ -70,87 +64,84 @@ public class TradeButton extends ButtonWidget {
 
         this.recalculateSize();
 
-        this.renderBackground(pose, context.isStorageMode || this.displayOnly ? false : this.hovered);
+        this.renderBackground(gui, context.isStorageMode || this.displayOnly ? false : this.hovered);
 
         try {
-            trade.renderAdditional(this, pose, mouseX, mouseY, context);
+            trade.renderAdditional(this, gui, mouseX, mouseY, context);
         } catch(Exception e) { LightmansCurrency.LogError("Error on additional Trade Button rendering.", e); }
 
         if(trade.hasArrow(context))
-            this.renderArrow(pose, trade.arrowPosition(context), context.isStorageMode || this.displayOnly ? false : this.hovered);
+            this.renderArrow(gui, trade.arrowPosition(context), context.isStorageMode || this.displayOnly ? false : this.hovered);
 
-        this.renderAlert(pose, trade.alertPosition(context), trade.getAlertData(context));
+        this.renderAlert(gui, trade.alertPosition(context), trade.getAlertData(context));
 
-        this.renderDisplays(pose, trade, context);
+        this.renderDisplays(gui, trade, context);
 
     }
 
-    private void renderBackground(MatrixStack pose, boolean isHovered)
+    private void renderBackground(DrawContext gui, boolean isHovered)
     {
         if(this.width < 8)
         {
             LightmansCurrency.LogError("Cannot render a trade button that is less than 8 pixels wide!");
             return;
         }
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
         if(this.active)
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+            gui.setShaderColor(1f, 1f, 1f, 1f);
         else
-            RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1f);
+            gui.setShaderColor(0.5f, 0.5f, 0.5f, 1f);
 
         int vOffset = isHovered ? BUTTON_HEIGHT : 0;
 
         //Render the left
-        this.drawTexture(pose, this.x, this.y, 0, vOffset, 4, BUTTON_HEIGHT);
+        gui.drawTexture(GUI_TEXTURE, this.getX(), this.getY(), 0, vOffset, 4, BUTTON_HEIGHT);
         //Render the middle
         int xOff = 4;
         while(xOff < this.width - 4)
         {
             int xRend = Math.min(this.width - 4 - xOff, TEMPLATE_WIDTH - 8);
-            this.drawTexture(pose, this.x + xOff, this.y, 4, vOffset, xRend, BUTTON_HEIGHT);
+            gui.drawTexture(GUI_TEXTURE, this.getX() + xOff, this.getY(), 4, vOffset, xRend, BUTTON_HEIGHT);
             xOff += xRend;
         }
         //Render the right
-        this.drawTexture(pose, this.x + this.width - 4, this.y, TEMPLATE_WIDTH - 4, vOffset, 4, BUTTON_HEIGHT);
+        gui.drawTexture(GUI_TEXTURE, this.getX() + this.width - 4, this.getY(), TEMPLATE_WIDTH - 4, vOffset, 4, BUTTON_HEIGHT);
     }
 
-    private void renderArrow(MatrixStack pose, Pair<Integer,Integer> position, boolean isHovered)
+    private void renderArrow(DrawContext gui, Pair<Integer,Integer> position, boolean isHovered)
     {
 
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
         if(this.active)
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+            gui.setShaderColor(1f, 1f, 1f, 1f);
         else
-            RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1f);
+            gui.setShaderColor(0.5f, 0.5f, 0.5f, 1f);
 
         int vOffset = isHovered ? ARROW_HEIGHT : 0;
 
-        this.drawTexture(pose, this.x + position.getFirst(), this.y + position.getSecond(), TEMPLATE_WIDTH, vOffset, ARROW_WIDTH, ARROW_HEIGHT);
+        gui.drawTexture(GUI_TEXTURE, this.getX() + position.getFirst(), this.getY() + position.getSecond(), TEMPLATE_WIDTH, vOffset, ARROW_WIDTH, ARROW_HEIGHT);
 
     }
 
-    private void renderAlert(MatrixStack pose, Pair<Integer,Integer> position, List<AlertData> alerts)
+    private void renderAlert(DrawContext gui, Pair<Integer,Integer> position, List<AlertData> alerts)
     {
 
-        if(alerts == null || alerts.size() <= 0)
+        if(alerts == null || alerts.size() == 0)
             return;
         alerts.sort(AlertData::compare);
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        alerts.get(0).setShaderColor(this.active ? 1f : 0.5f);
+        alerts.get(0).setShaderColor(gui, this.active ? 1f : 0.5f);
 
-        this.drawTexture(pose, this.x + position.getFirst(), this.y + position.getSecond(), TEMPLATE_WIDTH + ARROW_WIDTH, 0, ARROW_WIDTH, ARROW_HEIGHT);
+        gui.drawTexture(GUI_TEXTURE, this.getX() + position.getFirst(), this.getY() + position.getSecond(), TEMPLATE_WIDTH + ARROW_WIDTH, 0, ARROW_WIDTH, ARROW_HEIGHT);
 
     }
 
-    public void renderDisplays(MatrixStack pose, TradeData trade, TradeContext context)
+    public void renderDisplays(DrawContext gui, TradeData trade, TradeContext context)
     {
         for(Pair<DisplayEntry,DisplayData> display : getInputDisplayData(trade, context))
-            display.getFirst().render(this, pose, this.x, this.y, display.getSecond());
+            display.getFirst().render(this, gui, this.getX(), this.getY(), display.getSecond());
         for(Pair<DisplayEntry,DisplayData> display : getOutputDisplayData(trade, context))
-            display.getFirst().render(this, pose, this.x, this.y, display.getSecond());
+            display.getFirst().render(this, gui, this.getX(), this.getY(), display.getSecond());
     }
 
-    public void renderTooltips(MatrixStack pose, int mouseX, int mouseY)
+    public void renderTooltips(DrawContext gui, TextRenderer font, int mouseX, int mouseY)
     {
         if(!this.visible || !this.isMouseOver(mouseX, mouseY))
             return;
@@ -163,17 +154,17 @@ public class TradeButton extends ButtonWidget {
 
         List<Text> tooltips = new ArrayList<>();
 
-        this.tryAddTooltip(tooltips, trade.getAdditionalTooltips(context, mouseX - this.x, mouseY - this.y));
+        this.tryAddTooltip(tooltips, trade.getAdditionalTooltips(context, mouseX - this.getX(), mouseY - this.getY()));
 
         for(Pair<DisplayEntry,DisplayData> display : getInputDisplayData(trade, context))
         {
-            if(display.getFirst().isMouseOver(this.x, this.y, display.getSecond(), mouseX, mouseY))
+            if(display.getFirst().isMouseOver(this.getX(), this.getY(), display.getSecond(), mouseX, mouseY))
                 this.tryAddTooltip(tooltips, display.getFirst().getTooltip());
         }
 
         for(Pair<DisplayEntry,DisplayData> display : getOutputDisplayData(trade, context))
         {
-            if(display.getFirst().isMouseOver(this.x, this.y, display.getSecond(), mouseX, mouseY))
+            if(display.getFirst().isMouseOver(this.getX(), this.getY(), display.getSecond(), mouseX, mouseY))
             {
                 this.tryAddTooltip(tooltips, display.getFirst().getTooltip());
             }
@@ -182,7 +173,7 @@ public class TradeButton extends ButtonWidget {
         if(this.isMouseOverAlert(mouseX, mouseY, trade, context) && trade.hasAlert(context))
             this.tryAddAlertTooltips(tooltips, trade.getAlertData(context));
 
-        DrawTooltip(pose, mouseX, mouseY, tooltips);
+        DrawTooltip(gui, font, mouseX, mouseY, tooltips);
 
     }
 
@@ -217,7 +208,7 @@ public class TradeButton extends ButtonWidget {
         for(int i = 0; i < inputDisplays.size(); ++i)
         {
             Pair<DisplayEntry,DisplayData> display = inputDisplays.get(i);
-            if(display.getFirst().isMouseOver(this.x, this.y, display.getSecond(), mouseX, mouseY))
+            if(display.getFirst().isMouseOver(this.getX(), this.getY(), display.getSecond(), mouseX, mouseY))
             {
                 consumer.onTradeButtonInputInteraction(context.getTrader(), trade, i, button);
                 return;
@@ -228,7 +219,7 @@ public class TradeButton extends ButtonWidget {
         for(int i = 0; i < outputDisplays.size(); ++i)
         {
             Pair<DisplayEntry,DisplayData> display = outputDisplays.get(i);
-            if(display.getFirst().isMouseOver(this.x, this.y, display.getSecond(), mouseX, mouseY))
+            if(display.getFirst().isMouseOver(this.getX(), this.getY(), display.getSecond(), mouseX, mouseY))
             {
                 consumer.onTradeButtonOutputInteraction(context.getTrader(), trade, i, button);
                 return;
@@ -236,18 +227,18 @@ public class TradeButton extends ButtonWidget {
         }
 
         //Only run the default interaction code if you didn't hit an input or output display
-        consumer.onTradeButtonInteraction(context.getTrader(), trade, mouseX - this.x, mouseY - this.y, button);
+        consumer.onTradeButtonInteraction(context.getTrader(), trade, mouseX - this.getX(), mouseY - this.getY(), button);
 
     }
 
-    private static void DrawTooltip(MatrixStack pose, int mouseX, int mouseY, List<Text> tooltips)
+    private static void DrawTooltip(DrawContext gui, TextRenderer font, int mouseX, int mouseY, List<Text> tooltips)
     {
-        if(tooltips == null || tooltips.size() <= 0)
+        if(tooltips == null || tooltips.size() == 0)
             return;
 
         MinecraftClient mc = MinecraftClient.getInstance();
         if(mc != null)
-            mc.currentScreen.renderTooltip(pose, tooltips, mouseX, mouseY);
+            gui.drawTooltip(font, tooltips, mouseX, mouseY);
 
     }
 
@@ -259,7 +250,7 @@ public class TradeButton extends ButtonWidget {
         List<Pair<DisplayEntry,DisplayData>> inputDisplays = getInputDisplayData(trade, this.getContext());
         for(int i = 0; i < inputDisplays.size(); ++i)
         {
-            if(inputDisplays.get(i).getFirst().isMouseOver(this.x, this.y, inputDisplays.get(i).getSecond(), mouseX, mouseY))
+            if(inputDisplays.get(i).getFirst().isMouseOver(this.getX(), this.getY(), inputDisplays.get(i).getSecond(), mouseX, mouseY))
                 return i;
         }
         return -1;
@@ -273,7 +264,7 @@ public class TradeButton extends ButtonWidget {
         List<Pair<DisplayEntry,DisplayData>> inputDisplays = getInputDisplayData(trade, this.getContext());
         for(int i = 0; i < inputDisplays.size(); ++i)
         {
-            if(inputDisplays.get(i).getFirst().isMouseOver(this.x, this.y, inputDisplays.get(i).getSecond(), mouseX, mouseY))
+            if(inputDisplays.get(i).getFirst().isMouseOver(this.getX(), this.getY(), inputDisplays.get(i).getSecond(), mouseX, mouseY))
                 return i;
         }
         return -1;
@@ -282,8 +273,8 @@ public class TradeButton extends ButtonWidget {
     public boolean isMouseOverAlert(int mouseX, int mouseY, TradeData trade, TradeContext context)
     {
         Pair<Integer,Integer> position = trade.alertPosition(context);
-        int left = this.x + position.getFirst();
-        int top = this.y + position.getSecond();
+        int left = this.getX() + position.getFirst();
+        int top = this.getY() + position.getSecond();
         return mouseX >= left && mouseX < left + ARROW_WIDTH && mouseY >= top && mouseY < top + ARROW_HEIGHT;
     }
 
@@ -335,7 +326,7 @@ public class TradeButton extends ButtonWidget {
         if(index < 0 || index >= count)
             return Pair.of(0, 0);
 
-        return Pair.of(this.x + xPos, this.y + yPos);
+        return Pair.of(this.getX() + xPos, this.getY() + yPos);
 
     }
 

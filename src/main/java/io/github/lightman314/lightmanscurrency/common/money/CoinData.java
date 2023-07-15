@@ -7,10 +7,10 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 public class CoinData
@@ -62,7 +62,7 @@ public class CoinData
         }
         else
         {
-            LightmansCurrency.LogError("CoinData.getValue() for " + Registry.ITEM.getId(this.coinItem) + " returning 1 due it's dependent coin (" + Registry.ITEM.getId(this.worthOtherCoin) + ") not being registered.");
+            LightmansCurrency.LogError("CoinData.getValue() for " + Registries.ITEM.getId(this.coinItem) + " returning 1 due it's dependent coin (" + Registries.ITEM.getId(this.worthOtherCoin) + ") not being registered.");
             return 1;
         }
     }
@@ -105,12 +105,12 @@ public class CoinData
 
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("coinitem", Registry.ITEM.getId(this.coinItem).toString());
+        json.addProperty("coinitem", Registries.ITEM.getId(this.coinItem).toString());
         json.addProperty("chain", this.chain);
         if(this.worthOtherCoin != null && this.worthOtherCoinCount > 0)
         {
             JsonObject worth = new JsonObject();
-            worth.addProperty("coin", Registry.ITEM.getId(this.worthOtherCoin).toString());
+            worth.addProperty("coin", Registries.ITEM.getId(this.worthOtherCoin).toString());
             worth.addProperty("count", this.worthOtherCoinCount);
             json.add("worth", worth);
         }
@@ -132,14 +132,14 @@ public class CoinData
     public static Builder getBuilder(JsonObject json)
     {
         //Coin Item
-        Item coinItem = Registry.ITEM.get(new Identifier(json.get("coinitem").getAsString()));
+        Item coinItem = Registries.ITEM.get(new Identifier(json.get("coinitem").getAsString()));
         String chain = json.get("chain").getAsString();
         Builder builder = new Builder(coinItem, chain);
         //Relative Worth
         if(json.has("worth"))
         {
             JsonObject worthData = json.get("worth").getAsJsonObject();
-            Item otherCoin = Registry.ITEM.get(new Identifier(worthData.get("coin").getAsString()));
+            Item otherCoin = Registries.ITEM.get(new Identifier(worthData.get("coin").getAsString()));
             int count = worthData.get("count").getAsInt();
             builder.defineConversion(otherCoin, count);
         }
@@ -190,13 +190,13 @@ public class CoinData
             if(this.worthOtherCoinCount > new ItemStack(this.worthOtherCoin).getMaxCount())
             {
                 this.worthOtherCoinCount = new ItemStack(this.worthOtherCoin).getMaxCount();
-                LightmansCurrency.LogError("Coin conversion for '" + Registry.ITEM.getId(this.coinItem).toString() + "' is larger than 1 stack of '" + Registry.ITEM.getId(this.worthOtherCoin).toString() + "'\nValue will be shrunk to " + this.worthOtherCoinCount);
+                LightmansCurrency.LogError("Coin conversion for '" + Registries.ITEM.getId(this.coinItem).toString() + "' is larger than 1 stack of '" + Registries.ITEM.getId(this.worthOtherCoin).toString() + "'\nValue will be shrunk to " + this.worthOtherCoinCount);
             }
             return this;
         }
 
         /**
-         * Defines the coins initial used in displaying the short form of an price/value;
+         * Defines the coins initial used in displaying the short form of a price/value;
          */
         public Builder defineInitial(String translationString)
         {

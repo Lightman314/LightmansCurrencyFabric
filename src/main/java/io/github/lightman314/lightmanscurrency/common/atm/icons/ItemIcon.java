@@ -10,11 +10,11 @@ import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
 import io.github.lightman314.lightmanscurrency.util.FileUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ItemIcon extends ATMIconData {
 
@@ -30,7 +30,7 @@ public class ItemIcon extends ATMIconData {
         JsonElement itemData = data.get("item");
         if(itemData.isJsonPrimitive())
         {
-            this.item = new ItemStack(Registry.ITEM.get(new Identifier(itemData.getAsString())));
+            this.item = new ItemStack(Registries.ITEM.get(new Identifier(itemData.getAsString())));
             simpleItem = true;
         }
         else
@@ -56,7 +56,7 @@ public class ItemIcon extends ATMIconData {
     protected void saveAdditional(JsonObject data) {
 
         if(this.simpleItem)
-            data.addProperty("item", Registry.ITEM.getId(this.item.getItem()).toString());
+            data.addProperty("item", Registries.ITEM.getId(this.item.getItem()).toString());
         else
             data.add("item", FileUtil.convertItemStack(this.item));
     }
@@ -66,8 +66,8 @@ public class ItemIcon extends ATMIconData {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void render(ATMExchangeButton button, MatrixStack pose, boolean isHovered) {
-        ItemRenderUtil.drawItemStack(button, null, this.item, button.x + this.xPos, button.y + this.yPos, "");
+    public void render(ATMExchangeButton button, DrawContext gui, boolean isHovered) {
+        ItemRenderUtil.drawItemStack(gui, null, this.item, button.getX() + this.xPos, button.getY() + this.yPos, "");
     }
 
 }

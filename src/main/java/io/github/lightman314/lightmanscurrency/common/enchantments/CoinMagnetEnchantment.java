@@ -53,7 +53,7 @@ public class CoinMagnetEnchantment extends WalletEnchantment {
             return;
         //Calculate the search radius
         float range = getCollectionRange(enchantLevel);
-        World level = player.world;
+        World level = player.getWorld();
         if(level == null)
             return;
         Box searchBox = new Box(player.getX() - range, player.getY() - range, player.getZ() - range, player.getX() + range, player.getY() + range, player.getZ() + range);

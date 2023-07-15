@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TradingTerminalScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.TraderInterfaceScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.traderinterface.TraderInterfaceClientTab;
@@ -20,9 +18,9 @@ import io.github.lightman314.lightmanscurrency.common.menu.traderinterface.base.
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderSaveData;
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.TraderSearchFilter;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
@@ -114,18 +112,17 @@ public class TraderSelectClientTab extends TraderInterfaceClientTab<TraderSelect
     }
 
     @Override
-    public void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void renderBG(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        RenderSystem.setShaderTexture(0, TraderInterfaceScreen.GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        this.screen.drawTexture(pose, this.screen.getGuiLeft() + 28, this.screen.getGuiTop() + 4, 0, TraderInterfaceScreen.HEIGHT, 117, 12);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
+        gui.drawTexture(TraderInterfaceScreen.GUI_TEXTURE, this.screen.getGuiLeft() + 28, this.screen.getGuiTop() + 4, 0, TraderInterfaceScreen.HEIGHT, 117, 12);
 
         this.scrollBar.beforeWidgetRender(mouseY);
 
     }
 
     @Override
-    public void renderTooltips(MatrixStack pose, int mouseX, int mouseY) { }
+    public void renderTooltips(DrawContext gui, int mouseX, int mouseY) { }
 
     @Override
     public void tick() {

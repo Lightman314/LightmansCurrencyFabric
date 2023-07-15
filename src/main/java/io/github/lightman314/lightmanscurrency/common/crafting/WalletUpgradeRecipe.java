@@ -6,11 +6,12 @@ import com.google.gson.JsonParseException;
 
 import io.github.lightman314.lightmanscurrency.common.core.ModRecipes;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
-import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
@@ -48,19 +49,23 @@ public class WalletUpgradeRecipe implements CraftingRecipe {
      * possible result (e.g. it's dynamic and depends on its inputs), then return an empty stack.
      */
     @Override
-    public ItemStack getOutput() { return this.recipeOutput; }
+    public ItemStack getOutput(DynamicRegistryManager manager) { return this.recipeOutput; }
 
     @Override
     public DefaultedList<Ingredient> getIngredients() { return this.ingredients; }
+
+    @Override
+    public CraftingRecipeCategory getCategory() {
+        return CraftingRecipeCategory.MISC;
+    }
 
     /**
      * Used to check if a recipe matches current crafting inventory
      */
     @Override
-    public boolean matches(CraftingInventory craftingInventory, World world) {
+    public boolean matches(RecipeInputInventory craftingInventory, World world) {
         RecipeMatcher recipeMatcher = new RecipeMatcher();
         int i = 0;
-
         for(int j = 0; j < craftingInventory.size(); ++j) {
             ItemStack itemStack = craftingInventory.getStack(j);
             if (!itemStack.isEmpty()) {
@@ -69,14 +74,14 @@ public class WalletUpgradeRecipe implements CraftingRecipe {
             }
         }
 
-        return i == this.ingredients.size() && recipeMatcher.match(this, (IntList)null);
+        return i == this.ingredients.size() && recipeMatcher.match(this, null);
     }
 
     /**
      * Returns an Item that is the result of this recipe
      */
     @Override
-    public ItemStack craft(CraftingInventory inv) {
+    public ItemStack craft(RecipeInputInventory inv, DynamicRegistryManager manager) {
         ItemStack output = this.recipeOutput.copy();
         ItemStack walletStack = this.getWalletStack(inv);
         if(!walletStack.isEmpty())
@@ -84,7 +89,7 @@ public class WalletUpgradeRecipe implements CraftingRecipe {
         return output;
     }
 
-    private ItemStack getWalletStack(CraftingInventory inv) {
+    private ItemStack getWalletStack(RecipeInputInventory inv) {
         for(int i = 0; i < inv.size(); i++)
         {
             ItemStack stack = inv.getStack(i);

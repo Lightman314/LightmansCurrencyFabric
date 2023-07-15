@@ -10,6 +10,7 @@ import com.google.common.base.Supplier;
 import com.google.gson.JsonObject;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TradeRuleScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.TimeInputWidget;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextInputUtil;
@@ -21,9 +22,9 @@ import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import io.github.lightman314.lightmanscurrency.util.TimeUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -253,7 +254,7 @@ public class PlayerTradeLimit extends TradeRule {
     private static class GUIHandler extends TradeRule.GUIHandler
     {
 
-        private final PlayerTradeLimit getRule()
+        private PlayerTradeLimit getRule()
         {
             if(getRuleRaw() instanceof PlayerTradeLimit)
                 return (PlayerTradeLimit)getRuleRaw();
@@ -278,8 +279,8 @@ public class PlayerTradeLimit extends TradeRule {
             this.limitInput.setMaxLength(3);
             this.limitInput.setText(Integer.toString(this.getRule().limit));
 
-            this.buttonSetLimit = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 41, screen.guiTop() + 19, 40, 20, Text.translatable("gui.button.lightmanscurrency.playerlimit.setlimit"), this::PressSetLimitButton));
-            this.buttonClearMemory = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 50, screen.xSize - 20, 20, Text.translatable("gui.button.lightmanscurrency.playerlimit.clearmemory"), this::PressClearMemoryButton));
+            this.buttonSetLimit = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + 41, screen.guiTop() + 19, 40, 20, Text.translatable("gui.button.lightmanscurrency.playerlimit.setlimit"), this::PressSetLimitButton));
+            this.buttonClearMemory = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + 10, screen.guiTop() + 50, screen.xSize - 20, 20, Text.translatable("gui.button.lightmanscurrency.playerlimit.clearmemory"), this::PressClearMemoryButton));
 
             this.timeInput = this.addCustomRenderable(new TimeInputWidget(screen.guiLeft() + 48, screen.guiTop() + 87, 10, TimeUtil.TimeUnit.DAY, TimeUtil.TimeUnit.MINUTE, this::addCustomRenderable, this::onTimeSet));
             this.timeInput.setTime(this.getRule().timeLimit);
@@ -287,15 +288,15 @@ public class PlayerTradeLimit extends TradeRule {
         }
 
         @Override
-        public void renderTab(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+        public void renderTab(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-            screen.getFont().draw(pose, Text.translatable("gui.button.lightmanscurrency.playerlimit.info", this.getRule().limit).getString(), screen.guiLeft() + 10, screen.guiTop() + 9, 0xFFFFFF);
+            gui.drawText(this.screen.getFont(), Text.translatable("gui.button.lightmanscurrency.playerlimit.info", this.getRule().limit).getString(), screen.guiLeft() + 10, screen.guiTop() + 9, 0xFFFFFF, false);
 
             Text text = this.getRule().timeLimit > 0 ? Text.translatable("gui.widget.lightmanscurrency.playerlimit.duration", new TimeUtil.TimeData(this.getRule().timeLimit).getShortString()) : Text.translatable("gui.widget.lightmanscurrency.playerlimit.noduration");
-            TextRenderUtil.drawCenteredText(pose, text, this.screen.guiLeft() + this.screen.xSize / 2, this.screen.guiTop() + 75, 0xFFFFFF);
+            TextRenderUtil.drawCenteredText(gui, text, this.screen.guiLeft() + this.screen.xSize / 2, this.screen.guiTop() + 75, 0xFFFFFF);
 
             if(this.buttonClearMemory.isMouseOver(mouseX, mouseY))
-                screen.renderTooltip(pose, Text.translatable("gui.button.lightmanscurrency.playerlimit.clearmemory.tooltip"), mouseX, mouseY);
+                gui.drawTooltip(this.screen.getFont(), Text.translatable("gui.button.lightmanscurrency.playerlimit.clearmemory.tooltip"), mouseX, mouseY);
 
         }
 

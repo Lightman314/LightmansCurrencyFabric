@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.google.common.collect.ImmutableList;
-
 import io.github.lightman314.lightmanscurrency.common.blockentity.trader.ItemTraderBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.interfaces.IRotatableBlock;
 import io.github.lightman314.lightmanscurrency.common.blocks.traderblocks.interfaces.IItemTraderBlock;
@@ -21,8 +19,8 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class VendingMachineBlock extends TraderBlockTallRotatable implements IItemTraderBlock {
 
@@ -38,57 +36,57 @@ public class VendingMachineBlock extends TraderBlockTallRotatable implements IIt
 
     @Override
     @Environment(EnvType.CLIENT)
-    public List<Vec3f> GetStackRenderPos(int tradeSlot, BlockState state, boolean isDoubleTrade) {
+    public List<Vector3f> GetStackRenderPos(int tradeSlot, BlockState state, boolean isDoubleTrade) {
         //Get facing
         Direction facing = this.getFacing(state);
         //Define directions for easy positional handling
-        Vec3f forward = IRotatableBlock.getForwardVect(facing);
-        Vec3f right = IRotatableBlock.getRightVect(facing);
-        Vec3f up = Vec3f.POSITIVE_Y;
-        Vec3f offset = IRotatableBlock.getOffsetVect(facing);
+        Vector3f forward = IRotatableBlock.getForwardVect(facing);
+        Vector3f right = IRotatableBlock.getRightVect(facing);
+        Vector3f up = MathUtil.YP();
+        Vector3f offset = IRotatableBlock.getOffsetVect(facing);
 
-        Vec3f forwardOffset = MathUtil.VectorMult(forward, 6f/16f);
+        Vector3f forwardOffset = MathUtil.VectorMult(forward, 6f/16f);
 
-        Vec3f firstPosition = null;
+        Vector3f firstPosition = null;
 
         if(tradeSlot == 0)
         {
-            Vec3f rightOffset = MathUtil.VectorMult(right, 3.5f/16f);
-            Vec3f vertOffset = MathUtil.VectorMult(up, 27f/16f);
+            Vector3f rightOffset = MathUtil.VectorMult(right, 3.5f/16f);
+            Vector3f vertOffset = MathUtil.VectorMult(up, 27f/16f);
             firstPosition = MathUtil.VectorAdd(offset, forwardOffset, rightOffset, vertOffset);
         }
         else if(tradeSlot == 1)
         {
-            Vec3f rightOffset = MathUtil.VectorMult(right, 9.5f/16f);
-            Vec3f vertOffset = MathUtil.VectorMult(up, 27f/16f);
+            Vector3f rightOffset = MathUtil.VectorMult(right, 9.5f/16f);
+            Vector3f vertOffset = MathUtil.VectorMult(up, 27f/16f);
             firstPosition =  MathUtil.VectorAdd(offset, forwardOffset, rightOffset, vertOffset);
         }
         else if(tradeSlot == 2)
         {
-            Vec3f rightOffset = MathUtil.VectorMult(right, 3.5f/16f);
-            Vec3f vertOffset = MathUtil.VectorMult(up, 20f/16f);
+            Vector3f rightOffset = MathUtil.VectorMult(right, 3.5f/16f);
+            Vector3f vertOffset = MathUtil.VectorMult(up, 20f/16f);
             firstPosition =  MathUtil.VectorAdd(offset, forwardOffset, rightOffset, vertOffset);
         }
         else if(tradeSlot == 3)
         {
-            Vec3f rightOffset = MathUtil.VectorMult(right, 9.5f/16f);
-            Vec3f vertOffset = MathUtil.VectorMult(up, 20f/16f);
+            Vector3f rightOffset = MathUtil.VectorMult(right, 9.5f/16f);
+            Vector3f vertOffset = MathUtil.VectorMult(up, 20f/16f);
             firstPosition =  MathUtil.VectorAdd(offset, forwardOffset, rightOffset, vertOffset);
         }
         else if(tradeSlot == 4)
         {
-            Vec3f rightOffset = MathUtil.VectorMult(right, 3.5f/16f);
-            Vec3f vertOffset = MathUtil.VectorMult(up, 13f/16f);
+            Vector3f rightOffset = MathUtil.VectorMult(right, 3.5f/16f);
+            Vector3f vertOffset = MathUtil.VectorMult(up, 13f/16f);
             firstPosition =  MathUtil.VectorAdd(offset, forwardOffset, rightOffset, vertOffset);
         }
         else if(tradeSlot == 5)
         {
-            Vec3f rightOffset = MathUtil.VectorMult(right, 9.5f/16f);
-            Vec3f vertOffset = MathUtil.VectorMult(up, 13f/16f);
+            Vector3f rightOffset = MathUtil.VectorMult(right, 9.5f/16f);
+            Vector3f vertOffset = MathUtil.VectorMult(up, 13f/16f);
             firstPosition =  MathUtil.VectorAdd(offset, forwardOffset, rightOffset, vertOffset);
         }
 
-        List<Vec3f> posList = new ArrayList<>(3);
+        List<Vector3f> posList = new ArrayList<>(3);
         if(firstPosition != null)
         {
             posList.add(firstPosition);
@@ -97,18 +95,18 @@ public class VendingMachineBlock extends TraderBlockTallRotatable implements IIt
         }
         else
         {
-            posList.add(new Vec3f(0F, 1f, 0F));
+            posList.add(new Vector3f(0F, 1f, 0F));
         }
         return posList;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
-    public List<Quaternion> GetStackRenderRot(int tradeSlot, BlockState state)
+    public List<Quaternionf> GetStackRenderRot(int tradeSlot, BlockState state)
     {
-        List<Quaternion> rotation = new ArrayList<>();
+        List<Quaternionf> rotation = new ArrayList<>();
         int facing = this.getFacing(state).getHorizontal();
-        rotation.add(Vec3f.POSITIVE_Y.getDegreesQuaternion(facing * -90f));
+        rotation.add(MathUtil.getRotationDegrees(facing * -90f));
         return rotation;
     }
 

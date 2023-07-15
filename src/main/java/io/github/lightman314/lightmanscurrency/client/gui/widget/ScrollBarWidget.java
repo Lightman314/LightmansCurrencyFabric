@@ -1,13 +1,11 @@
 package io.github.lightman314.lightmanscurrency.client.gui.widget;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -35,41 +33,40 @@ public class ScrollBarWidget extends ClickableWidget {
     public boolean visible() { return this.visible && this.scrollable.getMaxScroll() > this.scrollable.getMinScroll(); }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
         if(!this.visible() && this.isDragging)
             this.isDragging = false;
-        super.render(pose, mouseX, mouseY, partialTicks);
+        super.render(gui, mouseX, mouseY, partialTicks);
     }
 
     @Override
-    public void renderButton(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         if(!this.visible())
             return;
 
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
         //Render the top
-        this.drawTexture(pose, this.x, this.y, 0, 0, WIDTH, 8);
+        gui.drawTexture(GUI_TEXTURE, this.getX(), this.getY(), 0, 0, WIDTH, 8);
         //Render the middle
         int yOffset = 8;
         while(yOffset < this.height - 8)
         {
             int yPart = Math.min(this.height - 8 - yOffset, 240);
-            this.drawTexture(pose, this.x, this.y + yOffset, 0, 8, WIDTH, yPart);
+            gui.drawTexture(GUI_TEXTURE, this.getX(), this.getY() + yOffset, 0, 8, WIDTH, yPart);
             yOffset += yPart;
         }
         //Render the bottom
-        this.drawTexture(pose, this.x, this.y + this.height - 8, 0, 248, WIDTH, 8);
+        gui.drawTexture(GUI_TEXTURE, this.getX(), this.getY() + this.height - 8, 0, 248, WIDTH, 8);
 
         int knobPosition;
         if(this.isDragging)
-            knobPosition = MathUtil.clamp(mouseY - this.y - (this.getKnobHeight() / 2), 0, this.height - this.getKnobHeight());
+            knobPosition = MathUtil.clamp(mouseY - this.getY() - (this.getKnobHeight() / 2), 0, this.height - this.getKnobHeight());
         else
             knobPosition = this.getNaturalKnobPosition();
 
         //Render the knob
-        this.drawTexture(pose, this.x, this.y + knobPosition, this.smallKnob ? WIDTH * 2 : WIDTH, 0, WIDTH, this.getKnobHeight());
+        gui.drawTexture(GUI_TEXTURE, this.getX(), this.getY() + knobPosition, this.smallKnob ? WIDTH * 2 : WIDTH, 0, WIDTH, this.getKnobHeight());
 
     }
 
@@ -118,7 +115,7 @@ public class ScrollBarWidget extends ClickableWidget {
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder narrator) { }
+    public void appendClickableNarrations(NarrationMessageBuilder narrator) { }
 
     protected void dragKnob(double mouseY) {
         //Cannot do anything if the scrollable cannot be scrolled
@@ -140,9 +137,9 @@ public class ScrollBarWidget extends ClickableWidget {
 
         mouseY -= (double)this.getKnobHeight() / 2d;
         //Check if the mouse is out of bounds, upon which return the max/min scroll respectively
-        if(mouseY <= this.y)
+        if(mouseY <= this.getY())
             return this.scrollable.getMinScroll();
-        if(mouseY >= this.y + this.height - this.getKnobHeight())
+        if(mouseY >= this.getY() + this.height - this.getKnobHeight())
             return this.scrollable.getMaxScroll();
 
         //Calculate the scroll based on the mouse position
@@ -151,7 +148,7 @@ public class ScrollBarWidget extends ClickableWidget {
             return Integer.MIN_VALUE;
 
         double sectionHeight = (double)(this.height - this.getKnobHeight()) / (double)deltaScroll;
-        double yPos = (double)this.y - (sectionHeight / 2d);
+        double yPos = (double)this.getY() - (sectionHeight / 2d);
 
         for(int i = this.scrollable.getMinScroll(); i <= this.scrollable.getMaxScroll(); ++i)
         {

@@ -8,6 +8,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.ATMSc
 import io.github.lightman314.lightmanscurrency.client.gui.widget.CoinValueInput;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.TeamSelectWidget;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.TeamButton.Size;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
@@ -20,9 +21,9 @@ import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
 import io.github.lightman314.lightmanscurrency.network.server.messages.bank.CMessageBankTransferPlayer;
 import io.github.lightman314.lightmanscurrency.network.server.messages.bank.CMessageBankTransferTeam;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -77,7 +78,7 @@ public class TransferTab extends ATMTab {
         this.teamSelection.init(this.screen::addRenderableTabWidget, this.screen.getFont());
         this.teamSelection.visible = !this.playerMode;
 
-        this.buttonTransfer = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 10, this.screen.getGuiTop() + 126, this.screen.getImageWidth() - 20, 20, Text.translatable(this.playerMode ? "gui.button.bank.transfer.player" : "gui.button.bank.transfer.team"), this::PressTransfer));
+        this.buttonTransfer = this.screen.addRenderableTabWidget(new VanillaButton(this.screen.getGuiLeft() + 10, this.screen.getGuiTop() + 126, this.screen.getImageWidth() - 20, 20, Text.translatable(this.playerMode ? "gui.button.bank.transfer.player" : "gui.button.bank.transfer.team"), this::PressTransfer));
         this.buttonTransfer.active = false;
 
     }
@@ -138,18 +139,18 @@ public class TransferTab extends ATMTab {
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.hideCoinSlots(pose);
+        this.hideCoinSlots(gui);
 
         //this.screen.getFont().draw(pose, this.getTooltip(), this.screen.getGuiLeft() + 8f, this.screen.getGuiTop() + 6f, 0x404040);
         Text balance = this.screen.getScreenHandler().getBankAccount() == null ? Text.translatable("gui.lightmanscurrency.bank.null") : Text.translatable("gui.lightmanscurrency.bank.balance", this.screen.getScreenHandler().getBankAccount().getCoinStorage().getString("0"));
-        this.screen.getFont().draw(pose, balance, this.screen.getGuiLeft() + 8f, this.screen.getGuiTop() + 72, 0x404040);
+        gui.drawText(this.screen.getFont(), balance, this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 72, 0x404040, false);
 
         if(this.hasMessage())
         {
             //Draw a message background
-            TextRenderUtil.drawCenteredMultilineText(pose, this.getMessage(), this.screen.getGuiLeft() + 2, this.screen.getImageWidth() - 4, this.screen.getGuiTop() + 5, 0x404040);
+            TextRenderUtil.drawCenteredMultilineText(gui, this.getMessage(), this.screen.getGuiLeft() + 2, this.screen.getImageWidth() - 4, this.screen.getGuiTop() + 5, 0x404040);
             this.amountWidget.visible = false;
         }
         else
@@ -157,8 +158,8 @@ public class TransferTab extends ATMTab {
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY) {
-        IconAndButtonUtil.renderButtonTooltips(pose, mouseX, mouseY, Lists.newArrayList(this.buttonToggleMode));
+    public void postRender(DrawContext gui, int mouseX, int mouseY) {
+        IconAndButtonUtil.renderButtonTooltips(gui, this.screen.getFont(), mouseX, mouseY, Lists.newArrayList(this.buttonToggleMode));
     }
 
     @Override

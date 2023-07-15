@@ -212,9 +212,9 @@ public class WalletItem extends Item{
 		}
 		else
 		{
-			player.world.playSound(player, player.getBlockPos(), emptyOpenSound, SoundCategory.PLAYERS, 0.75f, 1.25f + player.world.random.nextFloat() * 0.5f);
+			player.getWorld().playSound(player, player.getBlockPos(), emptyOpenSound, SoundCategory.PLAYERS, 0.75f, 1.25f + player.getWorld().random.nextFloat() * 0.5f);
 			if(!isEmpty(wallet))
-				player.world.playSound(player, player.getBlockPos(), ModSounds.COINS_CLINKING, SoundCategory.PLAYERS, 0.4f, 1f);
+				player.getWorld().playSound(player, player.getBlockPos(), ModSounds.COINS_CLINKING, SoundCategory.PLAYERS, 0.4f, 1f);
 		}
 		
 		return TypedActionResult.success(wallet);

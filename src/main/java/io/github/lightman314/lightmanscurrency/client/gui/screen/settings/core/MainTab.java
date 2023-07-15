@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TraderSettingsScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.SettingsTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainButton;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
@@ -14,9 +15,9 @@ import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
 import io.github.lightman314.lightmanscurrency.network.server.messages.persistentdata.CMessageAddPersistentTrader;
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.CMessageAddOrRemoveTrade;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -59,8 +60,8 @@ public class MainTab extends SettingsTab{
         this.nameInput.setMaxLength(32);
         this.nameInput.setText(trader.getCustomName());
 
-        this.buttonSetName = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 50, 74, 20, Text.translatable("gui.lightmanscurrency.changename"), this::SetName));
-        this.buttonResetName = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + screen.xSize - 93, screen.guiTop() + 50, 74, 20, Text.translatable("gui.lightmanscurrency.resetname"), this::ResetName));
+        this.buttonSetName = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 20, screen.guiTop() + 50, 74, 20, Text.translatable("gui.lightmanscurrency.changename"), this::SetName));
+        this.buttonResetName = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + screen.xSize - 93, screen.guiTop() + 50, 74, 20, Text.translatable("gui.lightmanscurrency.resetname"), this::ResetName));
 
         //Creative Toggle
         this.buttonToggleCreative = screen.addRenderableTabWidget(IconAndButtonUtil.creativeToggleButton(screen.guiLeft() + 176, screen.guiTop() + screen.ySize - 30, this::ToggleCreative, () -> this.getTrader().isCreative()));
@@ -85,29 +86,29 @@ public class MainTab extends SettingsTab{
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         TraderSettingsScreen screen = this.getScreen();
         TraderData trader = this.getScreen().getTrader();
 
-        screen.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.customname"), screen.guiLeft() + 20, screen.guiTop() + 15, 0x404040);
+        gui.drawText(this.getFont(), Text.translatable("gui.lightmanscurrency.customname"), screen.guiLeft() + 20, screen.guiTop() + 15, 0x404040, false);
 
         if(screen.hasPermission(Permissions.BANK_LINK))
-            this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.settings.banklink"), screen.guiLeft() + 32, screen.guiTop() + 101, 0x404040);
+            gui.drawText(this.getFont(), Text.translatable("gui.lightmanscurrency.settings.banklink"), screen.guiLeft() + 32, screen.guiTop() + 101, 0x404040, false);
 
         //Draw current trade count
         if(CommandLCAdmin.isAdminPlayer(this.getScreen().getPlayer()) && trader != null)
         {
             String count = String.valueOf(trader.getTradeCount());
             int width = this.getFont().getWidth(count);
-            this.getFont().draw(pose, count, screen.guiLeft() + 164 - width, screen.guiTop() + screen.ySize - 25, 0x404040);
+            gui.drawText(this.getFont(), count, screen.guiLeft() + 164 - width, screen.guiTop() + screen.ySize - 25, 0x404040, false);
 
             if(this.persistentTraderIDInput != null)
             {
                 //Draw ID input label
-                this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.settings.persistent.id"), screen.guiLeft() + 35, screen.guiTop() + screen.ySize - 25, 0xFFFFFF);
+                gui.drawText(this.getFont(), Text.translatable("gui.lightmanscurrency.settings.persistent.id"), screen.guiLeft() + 35, screen.guiTop() + screen.ySize - 25, 0xFFFFFF, false);
                 //Draw Owner input label
-                this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.settings.persistent.owner"), screen.guiLeft() + 10, screen.guiTop() + screen.ySize - 50, 0xFFFFFF);
+                gui.drawText(this.getFont(), Text.translatable("gui.lightmanscurrency.settings.persistent.owner"), screen.guiLeft() + 10, screen.guiTop() + screen.ySize - 50, 0xFFFFFF, false);
 
             }
 
@@ -116,19 +117,19 @@ public class MainTab extends SettingsTab{
     }
 
     @Override
-    public void postRender(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
         TraderSettingsScreen screen = this.getScreen();
 
-        IconAndButtonUtil.renderButtonTooltips(matrix, mouseX, mouseY, Lists.newArrayList(this.buttonToggleCreative, this.buttonSavePersistentTrader));
+        IconAndButtonUtil.renderButtonTooltips(gui, this.getFont(), mouseX, mouseY, Lists.newArrayList(this.buttonToggleCreative, this.buttonSavePersistentTrader));
 
         //Render button tooltips
         if(this.buttonAddTrade.isMouseOver(mouseX, mouseY))
         {
-            screen.renderTooltip(matrix, Text.translatable("tooltip.lightmanscurrency.trader.creative.addTrade"), mouseX, mouseY);
+            gui.drawTooltip(this.getFont(), Text.translatable("tooltip.lightmanscurrency.trader.creative.addTrade"), mouseX, mouseY);
         }
         else if(this.buttonRemoveTrade.isMouseOver(mouseX, mouseY))
         {
-            screen.renderTooltip(matrix, Text.translatable("tooltip.lightmanscurrency.trader.creative.removeTrade"), mouseX, mouseY);
+            gui.drawTooltip(this.getFont(), Text.translatable("tooltip.lightmanscurrency.trader.creative.removeTrade"), mouseX, mouseY);
         }
 
     }

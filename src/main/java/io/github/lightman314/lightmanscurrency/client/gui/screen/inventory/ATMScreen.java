@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.atm.*;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab.TabButton;
@@ -12,10 +11,10 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.menu.ATMMenu;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -46,24 +45,22 @@ public class ATMScreen extends MenuScreen<ATMMenu>{
     }
 
     @Override
-    protected void drawBackground(MatrixStack pose, float partialTicks, int mouseX, int mouseY)
+    protected void drawBackground(DrawContext gui, float partialTicks, int mouseX, int mouseY)
     {
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-        this.drawTexture(pose, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        gui.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        gui.drawTexture(GUI_TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
 
         try {
-            this.currentTab().preRender(pose, mouseX, mouseY, partialTicks);
-            this.tabWidgets.forEach(widget -> widget.render(pose, mouseX, mouseY, partialTicks));
+            this.currentTab().preRender(gui, mouseX, mouseY, partialTicks);
+            this.tabWidgets.forEach(widget -> widget.render(gui, mouseX, mouseY, partialTicks));
         } catch(Exception e) { if(logError) { LightmansCurrency.LogError("Error rendering " + this.currentTab().getClass().getName() + " tab.", e); logError = false; } }
 
     }
 
     @Override
-    protected void drawForeground(MatrixStack poseStack, int mouseX, int mouseY)
+    protected void drawForeground(DrawContext gui, int mouseX, int mouseY)
     {
-        this.textRenderer.draw(poseStack, this.playerInventoryTitle, 8.0f, (this.backgroundHeight - 94), 0x404040);
+        gui.drawText(this.textRenderer, this.playerInventoryTitle, 8, this.backgroundHeight - 94, 0x404040, false);
     }
 
     @Override
@@ -88,27 +85,27 @@ public class ATMScreen extends MenuScreen<ATMMenu>{
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks)
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
-        this.renderBackground(pose);
+        this.renderBackground(gui);
 
         //Render the tab buttons & background
-        super.render(pose, mouseX, mouseY, partialTicks);
+        super.render(gui, mouseX, mouseY, partialTicks);
 
         //Render the current tab
         try {
             //this.currentTab().preRender(pose, mouseX, mouseY, partialTicks);
             //this.tabWidgets.forEach(widget -> widget.render(pose, mouseX, mouseY, partialTicks));
-            this.currentTab().postRender(pose, mouseX, mouseY);
+            this.currentTab().postRender(gui, mouseX, mouseY);
         } catch(Exception e) { if(logError) { LightmansCurrency.LogError("Error rendering " + this.currentTab().getClass().getName() + " tab.", e); logError = false; } }
 
-        this.drawMouseoverTooltip(pose, mouseX,  mouseY);
+        this.drawMouseoverTooltip(gui, mouseX,  mouseY);
 
         //Render the tab button tooltips
         for(int i = 0; i < this.tabButtons.size(); ++i)
         {
             if(this.tabButtons.get(i).isMouseOver(mouseX, mouseY))
-                this.renderTooltip(pose, this.tabButtons.get(i).tab.getTooltip(), mouseX, mouseY);
+                gui.drawTooltip(this.textRenderer, this.tabButtons.get(i).tab.getTooltip(), mouseX, mouseY);
         }
 
     }

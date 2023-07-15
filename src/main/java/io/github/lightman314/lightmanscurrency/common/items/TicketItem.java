@@ -3,6 +3,9 @@ package io.github.lightman314.lightmanscurrency.common.items;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import org.jetbrains.annotations.Nullable;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
@@ -12,19 +15,16 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.World;
 
 public class TicketItem extends Item{
 
 	public static final Identifier TICKET_TAG = new Identifier(LightmansCurrency.MODID,"ticket");
 	public static final Identifier TICKET_MATERIAL_TAG = new Identifier(LightmansCurrency.MODID,"ticket_material");
-	public static final TagKey<Item> TICKET_MATERIAL_KEY = TagKey.of(Registry.ITEM_KEY, TICKET_MATERIAL_TAG);
+	public static final TagKey<Item> TICKET_MATERIAL_KEY = TagKey.of(Registries.ITEM.getKey(), TICKET_MATERIAL_TAG);
 	
 	public TicketItem(Settings properties) { super(properties); }
 	
@@ -82,7 +82,7 @@ public class TicketItem extends Item{
 		MutableText list = Text.empty();
 		
 		try {
-			Registry.ITEM.getEntryList(TICKET_MATERIAL_KEY).ifPresent(itemList -> {
+			Registries.ITEM.getEntryList(TICKET_MATERIAL_KEY).ifPresent(itemList -> {
 				for(RegistryEntry<Item> item : itemList)
 					list.append(Text.literal("\n")).append(new ItemStack(item.value()).getName());
 			});

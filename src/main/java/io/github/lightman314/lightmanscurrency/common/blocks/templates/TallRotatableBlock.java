@@ -35,7 +35,7 @@ public class TallRotatableBlock extends RotatableBlock implements ITallBlock{
 	
 	protected TallRotatableBlock(Settings properties, BiFunction<Direction,Boolean,VoxelShape> shape)
 	{
-		super(properties);
+		super(properties.pistonBehavior(PistonBehavior.BLOCK));
 		this.shape = shape;
 		this.setDefaultState(
 			this.getDefaultState()
@@ -56,9 +56,6 @@ public class TallRotatableBlock extends RotatableBlock implements ITallBlock{
 	
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) { return super.getPlacementState(context).with(ISBOTTOM,true); }
-	
-	@Override
-	public PistonBehavior getPistonBehavior(BlockState state) { return PistonBehavior.BLOCK; }
 	
 	@Override
 	public void onPlaced(World level, BlockPos pos, BlockState state, LivingEntity player, ItemStack stack)

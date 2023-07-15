@@ -20,9 +20,9 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.shape.VoxelShape;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class ShelfBlock extends TraderBlockRotatable implements IItemTraderBlock {
 
@@ -43,16 +43,16 @@ public class ShelfBlock extends TraderBlockRotatable implements IItemTraderBlock
 
     @Override
     @Environment(EnvType.CLIENT)
-    public List<Vec3f> GetStackRenderPos(int tradeSlot, BlockState state, boolean isDoubleTrade) {
-        List<Vec3f> posList = new ArrayList<Vec3f>(1);
+    public List<Vector3f> GetStackRenderPos(int tradeSlot, BlockState state, boolean isDoubleTrade) {
+        List<Vector3f> posList = new ArrayList<Vector3f>(1);
         if(tradeSlot == 0)
         {
             Direction facing = this.getFacing(state);
             //Define directions for easy positional handling
-            Vec3f forward = IRotatableBlock.getForwardVect(facing);
-            Vec3f right = IRotatableBlock.getRightVect(facing);
-            Vec3f up = Vec3f.POSITIVE_Y;
-            Vec3f offset = IRotatableBlock.getOffsetVect(facing);
+            Vector3f forward = IRotatableBlock.getForwardVect(facing);
+            Vector3f right = IRotatableBlock.getRightVect(facing);
+            Vector3f up = MathUtil.YP();
+            Vector3f offset = IRotatableBlock.getOffsetVect(facing);
             //Only 1 position for shelves
             posList.add(MathUtil.VectorAdd(offset, MathUtil.VectorMult(right, 0.5f), MathUtil.VectorMult(forward, 14.5f/16f), MathUtil.VectorMult(up, 9f/16f)));
         }
@@ -63,12 +63,12 @@ public class ShelfBlock extends TraderBlockRotatable implements IItemTraderBlock
 
     @Override
     @Environment(EnvType.CLIENT)
-    public List<Quaternion> GetStackRenderRot(int tradeSlot, BlockState state)
+    public List<Quaternionf> GetStackRenderRot(int tradeSlot, BlockState state)
     {
         //Return null for automatic rotation
-        List<Quaternion> rotation = new ArrayList<>();
+        List<Quaternionf> rotation = new ArrayList<>();
         int facing = this.getFacing(state).getHorizontal();
-        rotation.add(Vec3f.POSITIVE_Y.getDegreesQuaternion(facing * -90f));
+        rotation.add(MathUtil.getRotationDegrees(facing * -90f));
         return rotation;
     }
 

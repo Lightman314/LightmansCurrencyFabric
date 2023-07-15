@@ -92,7 +92,7 @@ public class WalletHandler{
         ScreenHandler menu = player.currentScreenHandler;
         if(menu == null)
             return;
-        boolean creative = player.isCreative() && !player.world.isClient;
+        boolean creative = player.isCreative() && !player.getWorld().isClient;
         if(!creative)
             heldItem = menu.getCursorStack();
         WalletHandler walletHandler = getWallet(player);

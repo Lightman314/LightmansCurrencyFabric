@@ -5,14 +5,11 @@ import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.Font;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -41,7 +38,7 @@ public abstract class DisplayEntry
         return this.tooltip;
     }
 
-    public abstract void render(ClickableWidget gui, MatrixStack pose, int x, int y, DisplayData area);
+    public abstract void render(ClickableWidget widget, DrawContext gui, int x, int y, DisplayData area);
 
     public abstract boolean isMouseOver(int x, int y, DisplayData area, int mouseX, int mouseY);
 
@@ -66,7 +63,7 @@ public abstract class DisplayEntry
         private int getTopLeft(int xOrY, int availableWidthOrHeight) { return xOrY + (availableWidthOrHeight / 2) - 8; }
 
         @Override
-        public void render(ClickableWidget gui, MatrixStack pose, int x, int y, DisplayData area) {
+        public void render(ClickableWidget widget, DrawContext gui, int x, int y, DisplayData area) {
             if(this.item.isEmpty())
                 return;
             TextRenderer font = this.getFont();
@@ -93,10 +90,10 @@ public abstract class DisplayEntry
         private int getTopLeft(int xOrY, int availableWidthOrHeight) { return xOrY + (availableWidthOrHeight / 2) - 8; }
 
         @Override
-        public void render(ClickableWidget gui, MatrixStack pose, int x, int y, DisplayData area) {
+        public void render(ClickableWidget widget, DrawContext gui, int x, int y, DisplayData area) {
             int left = getTopLeft(x + area.xOffset, area.width);
             int top = getTopLeft(y + area.yOffset, area.height);
-            ItemRenderUtil.drawSlotBackground(pose, left, top, this.background);
+            ItemRenderUtil.drawSlotBackground(gui, left, top, this.background);
         }
 
         @Override
@@ -135,7 +132,7 @@ public abstract class DisplayEntry
         protected int getTextWidth() { return this.getFont().getWidth(this.text); }
 
         @Override
-        public void render(ClickableWidget gui, MatrixStack pose, int x, int y, DisplayData area) {
+        public void render(ClickableWidget widget, DrawContext gui, int x, int y, DisplayData area) {
             if(this.text.getString().isBlank())
                 return;
             TextRenderer font = this.getFont();
@@ -144,7 +141,7 @@ public abstract class DisplayEntry
             //Define the y position
             int top = this.getTextTop(y + area.yOffset, area.height);
             //Draw the text
-            font.drawWithShadow(pose, this.text, left, top, this.format.color());
+            gui.drawText(font, this.text, left, top, this.format.color(), true);
         }
 
         @Override
@@ -178,13 +175,13 @@ public abstract class DisplayEntry
         }
 
         @Override
-        public void render(ClickableWidget gui, MatrixStack pose, int x, int y, DisplayData area) {
+        public void render(ClickableWidget widget, DrawContext gui, int x, int y, DisplayData area) {
             if(this.price.isFree())
             {
                 TextRenderer font = this.getFont();
                 int left = x + area.xOffset + (area.width / 2) - (font.getWidth(this.price.getString()) / 2);
                 int top = y + area.yOffset + (area.height / 2) - (font.fontHeight / 2);
-                font.draw(pose, Text.literal(this.price.getString()), left, top, 0xFFFFFF);
+                gui.drawText(font, Text.literal(this.price.getString()), left, top, 0xFFFFFF, false);
             }
             else
             {

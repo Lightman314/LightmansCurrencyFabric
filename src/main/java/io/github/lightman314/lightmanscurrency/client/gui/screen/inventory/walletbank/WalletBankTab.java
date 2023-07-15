@@ -2,7 +2,7 @@ package io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.wall
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.WalletBankScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab.ITab;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 
 public abstract class WalletBankTab implements ITab
 {
@@ -12,9 +12,9 @@ public abstract class WalletBankTab implements ITab
 
     public abstract void init();
 
-    public abstract void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks);
+    public abstract void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks);
 
-    public abstract void postRender(MatrixStack pose, int mouseX, int mouseY);
+    public abstract void postRender(DrawContext gui, int mouseX, int mouseY);
 
     public abstract void tick();
 

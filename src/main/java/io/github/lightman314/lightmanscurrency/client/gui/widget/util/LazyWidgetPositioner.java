@@ -60,8 +60,7 @@ public class LazyWidgetPositioner {
             if(w.visible)
             {
                 Pair<Integer,Integer> pos = this.mode.apply(this);
-                w.x = pos.getFirst();
-                w.y = pos.getSecond();
+                w.setPosition(pos.getFirst(), pos.getSecond());
                 this.posIndex++;
             }
         }

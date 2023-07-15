@@ -8,7 +8,7 @@ import io.github.lightman314.lightmanscurrency.common.menu.slots.SimpleSlot;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
 import io.github.lightman314.lightmanscurrency.network.server.messages.bank.CMessageSetBankNotificationLevel;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -42,21 +42,21 @@ public class NotificationTab extends ATMTab {
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.hideCoinSlots(pose);
+        this.hideCoinSlots(gui);
 
         BankAccount account = this.screen.getScreenHandler().getBankAccount();
         if(account != null)
-            TextRenderUtil.drawCenteredMultilineText(pose, account.getNotificationLevel() > 0 ? Text.translatable("gui.lightmanscurrency.notification.details", account.getNotificationValue().getString()) : Text.translatable("gui.lightmanscurrency.notification.disabled"), this.screen.getGuiLeft() + 5, this.screen.getImageWidth() - 10, this.screen.getGuiTop() + 70, 0x404040);
+            TextRenderUtil.drawCenteredMultilineText(gui, account.getNotificationLevel() > 0 ? Text.translatable("gui.lightmanscurrency.notification.details", account.getNotificationValue().getString()) : Text.translatable("gui.lightmanscurrency.notification.disabled"), this.screen.getGuiLeft() + 5, this.screen.getImageWidth() - 10, this.screen.getGuiTop() + 70, 0x404040);
 
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY) { }
+    public void postRender(DrawContext gui, int mouseX, int mouseY) { }
 
     @Override
-    public void tick() { this.notificationSelection.tick();; }
+    public void tick() { this.notificationSelection.tick(); }
 
     @Override
     public void onClose() { SimpleSlot.SetActive(this.screen.getScreenHandler()); }

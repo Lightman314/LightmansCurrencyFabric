@@ -9,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TradeRuleScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollTextDisplay;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
@@ -17,9 +18,9 @@ import io.github.lightman314.lightmanscurrency.common.traders.events.TradeEvent;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -158,8 +159,8 @@ public class PlayerBlacklist extends TradeRule {
 
             this.nameInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 9, screen.xSize - 20, 20, Text.empty()));
 
-            this.buttonAddPlayer = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 30, 78, 20, Text.translatable("gui.button.lightmanscurrency.blacklist.add"), this::PressBlacklistButton));
-            this.buttonRemovePlayer = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + screen.xSize - 88, screen.guiTop() + 30, 78, 20, Text.translatable("gui.button.lightmanscurrency.blacklist.remove"), this::PressForgiveButton));
+            this.buttonAddPlayer = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + 10, screen.guiTop() + 30, 78, 20, Text.translatable("gui.button.lightmanscurrency.blacklist.add"), this::PressBlacklistButton));
+            this.buttonRemovePlayer = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + screen.xSize - 88, screen.guiTop() + 30, 78, 20, Text.translatable("gui.button.lightmanscurrency.blacklist.remove"), this::PressForgiveButton));
 
             this.playerDisplay = this.addCustomRenderable(new ScrollTextDisplay(screen.guiLeft() + 7, screen.guiTop() + 55, this.screen.xSize - 14, 114, this.screen.getFont(), this::getBlacklistedPlayers));
             this.playerDisplay.setColumnCount(2);
@@ -177,7 +178,7 @@ public class PlayerBlacklist extends TradeRule {
         }
 
         @Override
-        public void renderTab(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) { }
+        public void renderTab(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
         @Override
         public void onTabClose() {

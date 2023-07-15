@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.walletbank.*;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
@@ -15,11 +14,11 @@ import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletBankMenu
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageOpenWalletMenu;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -77,33 +76,32 @@ public class WalletBankScreen extends MenuScreen<WalletBankMenu>{
     }
 
     @Override
-    protected void drawBackground(MatrixStack pose, float partialTicks, int mouseX, int mouseY) {
+    protected void drawBackground(DrawContext gui, float partialTicks, int mouseX, int mouseY) {
 
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        gui.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         //Draw the top
-        this.drawTexture(pose, this.x, this.y, 0, 0, this.backgroundWidth, WalletBankMenu.BANK_WIDGET_SPACING);
+        gui.drawTexture(GUI_TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, WalletBankMenu.BANK_WIDGET_SPACING);
         //Draw the middle strips
         for(int y = 0; y < this.handler.getRowCount(); y++)
-            this.drawTexture(pose, this.x, this.y + WalletBankMenu.BANK_WIDGET_SPACING + y * 18, 0, WalletBankMenu.BANK_WIDGET_SPACING, this.backgroundWidth, 18);
+            gui.drawTexture(GUI_TEXTURE, this.x, this.y + WalletBankMenu.BANK_WIDGET_SPACING + y * 18, 0, WalletBankMenu.BANK_WIDGET_SPACING, this.backgroundWidth, 18);
 
         //Draw the bottom
-        this.drawTexture(pose, this.x, this.y + WalletBankMenu.BANK_WIDGET_SPACING + this.handler.getRowCount() * 18, 0, WalletBankMenu.BANK_WIDGET_SPACING + 18, this.backgroundWidth, 7);
+        gui.drawTexture(GUI_TEXTURE, this.x, this.y + WalletBankMenu.BANK_WIDGET_SPACING + this.handler.getRowCount() * 18, 0, WalletBankMenu.BANK_WIDGET_SPACING + 18, this.backgroundWidth, 7);
 
         //Draw the slots
         for(int y = 0; y * 9 < this.handler.getSlotCount(); y++)
         {
             for(int x = 0; x < 9 && x + y * 9 < this.handler.getSlotCount(); x++)
             {
-                this.drawTexture(pose, this.x + 7 + x * 18, this.y + WalletBankMenu.BANK_WIDGET_SPACING + y * 18, 0, WalletBankMenu.BANK_WIDGET_SPACING + 18 + 7, 18, 18);
+                gui.drawTexture(GUI_TEXTURE, this.x + 7 + x * 18, this.y + WalletBankMenu.BANK_WIDGET_SPACING + y * 18, 0, WalletBankMenu.BANK_WIDGET_SPACING + 18 + 7, 18, 18);
             }
         }
 
         //Render Current Tab
         try {
-            this.currentTab().preRender(pose, mouseX, mouseY, partialTicks);
-            this.tabWidgets.forEach(widget -> widget.render(pose, mouseX, mouseY, partialTicks));
+            this.currentTab().preRender(gui, mouseX, mouseY, partialTicks);
+            this.tabWidgets.forEach(widget -> widget.render(gui, mouseX, mouseY, partialTicks));
         } catch(Exception e) { if(logError) { LightmansCurrency.LogError("Error rendering " + this.currentTab().getClass().getName() + " tab.", e); logError = false; } }
 
     }
@@ -114,33 +112,33 @@ public class WalletBankScreen extends MenuScreen<WalletBankMenu>{
     }
 
     @Override
-    protected void drawForeground(MatrixStack pose, int mouseX, int mouseY) {
+    protected void drawForeground(DrawContext gui, int mouseX, int mouseY) {
 
-        this.textRenderer.draw(pose, this.getWalletName(), 8.0f, WalletBankMenu.BANK_WIDGET_SPACING - 11, 0x404040);
+        gui.drawText(this.textRenderer, this.getWalletName(), 8, WalletBankMenu.BANK_WIDGET_SPACING - 11, 0x404040, false);
 
     }
 
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.renderBackground(pose);
-        super.render(pose, mouseX, mouseY, partialTicks);
+        this.renderBackground(gui);
+        super.render(gui, mouseX, mouseY, partialTicks);
 
         //Render the current tab
         try {
-            this.currentTab().postRender(pose, mouseX, mouseY);
+            this.currentTab().postRender(gui, mouseX, mouseY);
         } catch(Exception e) { if(logError) { LightmansCurrency.LogError("Error rendering " + this.currentTab().getClass().getName() + " tab.", e); logError = false; } }
 
-        this.drawMouseoverTooltip(pose, mouseX,  mouseY);
+        this.drawMouseoverTooltip(gui, mouseX,  mouseY);
 
         if(this.buttonOpenWallet != null && this.buttonOpenWallet.isMouseOver(mouseX, mouseY))
-            this.renderTooltip(pose, Text.translatable("tooltip.lightmanscurrency.wallet.openwallet"), mouseX, mouseY);
+            gui.drawTooltip(this.textRenderer, Text.translatable("tooltip.lightmanscurrency.wallet.openwallet"), mouseX, mouseY);
 
         //Render the tab button tooltips
         for (TabButton tabButton : this.tabButtons) {
             if (tabButton.isMouseOver(mouseX, mouseY))
-                this.renderTooltip(pose, tabButton.tab.getTooltip(), mouseX, mouseY);
+                gui.drawTooltip(this.textRenderer, tabButton.tab.getTooltip(), mouseX, mouseY);
         }
 
     }

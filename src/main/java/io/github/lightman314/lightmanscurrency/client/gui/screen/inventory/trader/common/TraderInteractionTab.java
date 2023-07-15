@@ -9,7 +9,7 @@ import io.github.lightman314.lightmanscurrency.common.traders.ITraderSource;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.CMessageExecuteTrade;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 
 public class TraderInteractionTab extends TraderClientTab {
 
@@ -28,15 +28,15 @@ public class TraderInteractionTab extends TraderClientTab {
     }
 
     @Override
-    public void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
-        this.tradeDisplay.renderTraderName(pose, this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, this.screen.getImageWidth() - 16, false);
+    public void renderBG(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
+        this.tradeDisplay.renderTraderName(gui, this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, this.screen.getImageWidth() - 16, false);
         this.tradeDisplay.getScrollBar().beforeWidgetRender(mouseY);
     }
 
     @Override
-    public void renderTooltips(MatrixStack pose, int mouseX, int mouseY) {
+    public void renderTooltips(DrawContext gui, int mouseX, int mouseY) {
         if(this.menu.getCursorStack().isEmpty())
-            this.tradeDisplay.renderTooltips(this.screen, pose, this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, this.screen.getImageWidth() - 16, mouseX, mouseY);
+            this.tradeDisplay.renderTooltips(gui, this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, this.screen.getImageWidth() - 16, mouseX, mouseY);
     }
 
     @Override

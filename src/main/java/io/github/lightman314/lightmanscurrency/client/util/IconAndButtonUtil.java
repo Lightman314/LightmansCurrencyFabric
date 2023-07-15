@@ -21,13 +21,11 @@ import io.github.lightman314.lightmanscurrency.common.core.ModItems;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
-import net.minecraft.client.gui.widget.ButtonWidget.TooltipSupplier;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -55,7 +53,7 @@ public class IconAndButtonUtil {
     public static final IconData ICON_SHOW_LOGGER = IconData.of(Items.WRITABLE_BOOK);
     public static final IconData ICON_CLEAR_LOGGER = IconData.of(PotionUtil.setPotion(new ItemStack(Items.POTION), Potions.WATER));
 
-    public static final Function<IconButton,IconData> ICON_CREATIVE(Supplier<Boolean> isCreative) {
+    public static Function<IconButton,IconData> ICON_CREATIVE(Supplier<Boolean> isCreative) {
         return b -> {
             boolean creative = b.isNarratable() ? !isCreative.get() : isCreative.get();
             return creative ? ICON_CREATIVE_ON : ICON_CREATIVE_OFF;
@@ -69,7 +67,7 @@ public class IconAndButtonUtil {
     public static final IconData ICON_TICKET = IconData.of(ModItems.TICKET_MASTER);
     public static final IconData ICON_PAYGATE_ACTIVATE = IconData.of(Items.REDSTONE);
 
-    public static final Supplier<IconData> ICON_INTERFACE_ACTIVE(Supplier<Boolean> isActive) {
+    public static Supplier<IconData> ICON_INTERFACE_ACTIVE(Supplier<Boolean> isActive) {
         return () -> isActive.get() ? ICON_INTERFACE_ON : ICON_INTERFACE_OFF;
     }
     private static final IconData ICON_INTERFACE_ON = IconData.of(Items.REDSTONE_TORCH);
@@ -94,7 +92,7 @@ public class IconAndButtonUtil {
     public static final IconData ICON_MODE_REDSTONE = IconData.of(Items.REDSTONE_TORCH);
     public static final IconData ICON_MODE_ALWAYS_ON = IconData.of(Items.REDSTONE_BLOCK);
 
-    public static final IconData GetIcon(TraderInterfaceBlockEntity.ActiveMode mode) {
+    public static IconData GetIcon(TraderInterfaceBlockEntity.ActiveMode mode) {
         switch(mode) {
             case DISABLED:
                 return ICON_MODE_DISABLED;
@@ -209,27 +207,30 @@ public class IconAndButtonUtil {
     }
 
 
-    public static void renderButtonTooltips(MatrixStack pose, int mouseX, int mouseY, List<? extends Object> widgets)
+    public static void renderButtonTooltips(DrawContext gui, TextRenderer font, int mouseX, int mouseY, List<? extends Object> widgets)
     {
-        for(Object w : widgets)
+        //Nothing to do, as all tooltip-relevant buttons use the vanilla tooltip system.
+        /*for(Object w : widgets)
         {
-            if(w instanceof ButtonWidget && ((ButtonWidget) w).isMouseOver(mouseX, mouseY))
-                ((ButtonWidget)w).renderTooltip(pose, mouseX, mouseY);
-        }
+            if(w instanceof ButtonWidget  button && button.isMouseOver(mouseX, mouseY))
+            {
+                Tooltip t = ((ButtonWidget) w).getTooltip();
+                if(t != null)
+                {
+                    t.getLines(MinecraftClient.getInstance());
+                    gui.drawOrderedTooltip(font, t.getLines(MinecraftClient.getInstance()), mouseX, mouseY);
+                }
+            }
+        }*/
     }
 
-    private static abstract class BaseTooltip implements TooltipSupplier
+    private static abstract class BaseTooltip implements Supplier<Tooltip>
     {
 
         protected abstract Text getTooltip();
 
         @Override
-        public void onTooltip(ButtonWidget button, MatrixStack pose, int mouseX, int mouseY) {
-            if(!button.visible || !button.active)
-                return;
-            MinecraftClient mc = MinecraftClient.getInstance();
-            mc.currentScreen.renderTooltip(pose, this.getTooltip(), mouseX, mouseY);
-        }
+        public Tooltip get() { return Tooltip.of(this.getTooltip()); }
     }
 
     public static class SimpleTooltip extends BaseTooltip

@@ -6,8 +6,8 @@ import io.github.lightman314.lightmanscurrency.client.ClientEventListeners;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import org.jetbrains.annotations.NotNull;
 
 public class WalletVisibilityToggleButton extends InventoryButton {
@@ -34,10 +34,10 @@ public class WalletVisibilityToggleButton extends InventoryButton {
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
         //Change icon based on the current visibility state
         this.setResource(ClientEventListeners.WALLET_SLOT_TEXTURE, U_OFFSET + (isWalletVisible() ? SIZE : 0), V_OFFSET);
-        super.render(pose, mouseX, mouseY, partialTicks);
+        super.render(gui, mouseX, mouseY, partialTicks);
     }
 
 

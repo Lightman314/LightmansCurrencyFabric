@@ -6,8 +6,8 @@ import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageOpenWalletMenu;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import org.jetbrains.annotations.NotNull;
 
 public class WalletButton extends InventoryButton {
@@ -24,10 +24,10 @@ public class WalletButton extends InventoryButton {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTick) {
         if(shouldHide())
             return;
-        super.render(matrixStack, mouseX, mouseY, partialTick);
+        super.render(gui, mouseX, mouseY, partialTick);
     }
 
     private static boolean shouldHide() {

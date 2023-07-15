@@ -2,7 +2,7 @@ package io.github.lightman314.lightmanscurrency.client.util;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
@@ -24,7 +24,7 @@ public class TextRenderUtil {
             private final int horiz;
             private final int vert;
 
-            private Centering(int horiz, int vert) { this.horiz = horiz; this.vert = vert; }
+            Centering(int horiz, int vert) { this.horiz = horiz; this.vert = vert; }
             public boolean isTop() { return vert > 0; }
             public boolean isMiddle() { return vert == 0; }
             public boolean isBottom() { return vert < 0; }
@@ -100,50 +100,49 @@ public class TextRenderUtil {
         return Text.literal(text + edge).setStyle(style);
     }
 
-    public static void drawCenteredText(MatrixStack pose, String string, int centerX, int yPos, int color) { drawCenteredText(pose, Text.literal(string), centerX, yPos, color); }
-    public static void drawCenteredText(MatrixStack pose, Text component, int centerX, int yPos, int color) {
+    public static void drawCenteredText(DrawContext gui, String string, int centerX, int yPos, int color) { drawCenteredText(gui, Text.literal(string), centerX, yPos, color); }
+    public static void drawCenteredText(DrawContext gui, Text component, int centerX, int yPos, int color) {
         TextRenderer font = getFont();
         int width = font.getWidth(component);
-        font.draw(pose, component, centerX - (width/2), yPos, color);
+        gui.drawText(font, component, centerX - (width/2), yPos, color, false);
     }
 
-    public static void drawRightEdgeText(MatrixStack pose, String string, int rightPos, int yPos, int color) { drawRightEdgeText(pose, Text.literal(string), rightPos, yPos, color); }
-    public static void drawRightEdgeText(MatrixStack pose, Text component, int rightPos, int yPos, int color) {
+    public static void drawRightEdgeText(DrawContext gui, String string, int rightPos, int yPos, int color) { drawRightEdgeText(gui, Text.literal(string), rightPos, yPos, color); }
+    public static void drawRightEdgeText(DrawContext gui, Text component, int rightPos, int yPos, int color) {
         TextRenderer font = getFont();
         int width = font.getWidth(component);
-        font.draw(pose, component, rightPos, yPos - width, color);
+        gui.drawText(font, component, rightPos, yPos - width, color, false);
     }
 
-    public static void drawCenteredMultilineText(MatrixStack pose, String string, int leftPos, int width, int topPos, int color) { drawCenteredMultilineText(pose, Text.literal(string), leftPos, width, topPos, color); }
-    public static void drawCenteredMultilineText(MatrixStack pose, Text component, int leftPos, int width, int topPos, int color) {
+    public static void drawCenteredMultilineText(DrawContext gui, String string, int leftPos, int width, int topPos, int color) { drawCenteredMultilineText(gui, Text.literal(string), leftPos, width, topPos, color); }
+    public static void drawCenteredMultilineText(DrawContext gui, Text component, int leftPos, int width, int topPos, int color) {
         TextRenderer font = getFont();
         List<OrderedText> lines = font.wrapLines(component, width);
-        float centerPos = (float)leftPos + ((float)width / 2f);
+        int centerPos = leftPos + (width / 2);
         for(int i = 0; i < lines.size(); ++i)
         {
             OrderedText line = lines.get(i);
             int lineWidth = font.getWidth(line);
-            font.draw(pose, line, centerPos - ((float)lineWidth/2f), topPos + font.fontHeight * i, color);
+            gui.drawText(font, line, centerPos - (lineWidth/2), topPos + font.fontHeight * i, color, false);
         }
     }
 
-    public static void drawVerticallyCenteredMultilineText(MatrixStack pose, String string, int leftPos, int width, int topPos, int height, int color) { drawVerticallyCenteredMultilineText(pose, Text.literal(string), leftPos, width, topPos, height, color); }
-    public static void drawVerticallyCenteredMultilineText(MatrixStack pose, Text component, int leftPos, int width, int topPos, int height, int color) {
+    public static void drawVerticallyCenteredMultilineText(DrawContext gui, String string, int leftPos, int width, int topPos, int height, int color) { drawVerticallyCenteredMultilineText(gui, Text.literal(string), leftPos, width, topPos, height, color); }
+    public static void drawVerticallyCenteredMultilineText(DrawContext gui, Text component, int leftPos, int width, int topPos, int height, int color) {
         TextRenderer font = getFont();
         List<OrderedText> lines = font.wrapLines(component, width);
-        float centerPos = (float)leftPos + ((float)width / 2f);
-        float startHeight = (float)topPos + ((float)height / 2f) - ((float)(font.fontHeight * lines.size())/2f);
+        int centerPos = leftPos + (width / 2);
+        int startHeight = topPos + (height / 2) - ((font.fontHeight * lines.size())/2);
         for(int i = 0; i < lines.size(); ++i)
         {
             OrderedText line = lines.get(i);
             int lineWidth = font.getWidth(line);
-            font.draw(pose, line, centerPos - ((float)lineWidth/2f), startHeight + font.fontHeight * i, color);
+            gui.drawText(font, line, centerPos - (lineWidth/2), startHeight + font.fontHeight * i, color, false);
         }
     }
 
     public static MutableText changeStyle(Text component, UnaryOperator<Style> styleChanges) {
-        if(component instanceof MutableText) {
-            MutableText mc = (MutableText)component;
+        if(component instanceof MutableText mc) {
             return mc.styled(styleChanges);
         }
         return Text.empty().append(component).setStyle(component.getStyle()).styled(styleChanges);

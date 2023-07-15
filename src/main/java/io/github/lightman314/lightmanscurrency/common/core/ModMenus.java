@@ -5,21 +5,23 @@ import io.github.lightman314.lightmanscurrency.common.menu.*;
 import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletBankMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletMenu;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ModMenus {
 
     //ATM
-    public static final ScreenHandlerType<ATMMenu> ATM = new ScreenHandlerType<>(ATMMenu::new);
+    public static final ScreenHandlerType<ATMMenu> ATM = new ScreenHandlerType<>(ATMMenu::new, FeatureSet.empty());
     //Coin Mint
     public static final ScreenHandlerType<MintMenu> MINT = new ExtendedScreenHandlerType<>((windowID, inventory, buffer) -> new MintMenu(windowID, inventory, buffer.readBlockPos()));
 
     //Trader
     public static final ScreenHandlerType<TraderMenu> TRADER = new ExtendedScreenHandlerType<>((windowID, inventory, buffer) -> new TraderMenu(windowID, inventory, buffer.readLong()));
     public static final ScreenHandlerType<TraderMenu.TraderMenuBlockSource> TRADER_BLOCK = new ExtendedScreenHandlerType<>((windowID, inventory, buffer) -> new TraderMenu.TraderMenuBlockSource(windowID, inventory, buffer.readBlockPos()));
-    public static final ScreenHandlerType<TraderMenu.TraderMenuAllNetwork> TRADER_NETWORK_ALL = new ScreenHandlerType<>(TraderMenu.TraderMenuAllNetwork::new);
+    public static final ScreenHandlerType<TraderMenu.TraderMenuAllNetwork> TRADER_NETWORK_ALL = new ScreenHandlerType<>(TraderMenu.TraderMenuAllNetwork::new, FeatureSet.empty());
 
     //Trader Storage
     public static final ScreenHandlerType<TraderStorageMenu> TRADER_STORAGE = new ExtendedScreenHandlerType<>((windowID, inventory, buffer) -> new TraderStorageMenu(windowID, inventory, buffer.readLong()));
@@ -35,35 +37,35 @@ public class ModMenus {
     public static final ScreenHandlerType<TraderInterfaceMenu> TRADER_INTERFACE = new ExtendedScreenHandlerType<>((windowID, inventory, buffer) -> new TraderInterfaceMenu(windowID, inventory, buffer.readBlockPos()));
 
     //Trader Recover
-    public static final ScreenHandlerType<TraderRecoveryMenu> TRADER_RECOVERY = new ScreenHandlerType<>(TraderRecoveryMenu::new);
+    public static final ScreenHandlerType<TraderRecoveryMenu> TRADER_RECOVERY = new ScreenHandlerType<>(TraderRecoveryMenu::new, FeatureSet.empty());
 
     public static void registerMenus()
     {
         //ATM
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "atm"), ATM);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "atm"), ATM);
         //Coin Mint
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "coinmint"), MINT);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "coinmint"), MINT);
 
         //Trader
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader"), TRADER);
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_block"), TRADER_BLOCK);
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_network_all"), TRADER_NETWORK_ALL);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader"), TRADER);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_block"), TRADER_BLOCK);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_network_all"), TRADER_NETWORK_ALL);
 
         //Trader Storage
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_storage"), TRADER_STORAGE);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_storage"), TRADER_STORAGE);
 
         //Wallet
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "wallet"), WALLET);
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "wallet_bank"), WALLET_BANK);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "wallet"), WALLET);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "wallet_bank"), WALLET_BANK);
 
         //Ticket Machine
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "ticket_machine"), TICKET_MACHINE);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "ticket_machine"), TICKET_MACHINE);
 
         //Trader Interface
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_interface"), TRADER_INTERFACE);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_interface"), TRADER_INTERFACE);
 
         //Trader Recovery
-        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_recovery"), TRADER_RECOVERY);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_recovery"), TRADER_RECOVERY);
 
     }
 

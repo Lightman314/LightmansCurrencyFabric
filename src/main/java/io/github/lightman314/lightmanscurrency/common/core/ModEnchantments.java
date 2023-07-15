@@ -4,8 +4,9 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.enchantments.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ModEnchantments {
 
@@ -15,8 +16,8 @@ public class ModEnchantments {
 
     public static void registerEnchantments() {
 
-        Registry.register(Registry.ENCHANTMENT, new Identifier(LightmansCurrency.MODID, "money_mending"), MONEY_MENDING);
-        Registry.register(Registry.ENCHANTMENT, new Identifier(LightmansCurrency.MODID, "coin_magnet"), COIN_MAGNET);
+        Registry.register(Registries.ENCHANTMENT, new Identifier(LightmansCurrency.MODID, "money_mending"), MONEY_MENDING);
+        Registry.register(Registries.ENCHANTMENT, new Identifier(LightmansCurrency.MODID, "coin_magnet"), COIN_MAGNET);
 
     }
 

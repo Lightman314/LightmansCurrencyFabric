@@ -1,5 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.blocks;
 
+import net.minecraft.registry.tag.FluidTags;
 import org.jetbrains.annotations.Nullable;
 
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.interfaces.IRotatableBlock;
@@ -17,7 +18,6 @@ import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -52,7 +52,7 @@ public class CoinpileBlock extends CoinBlock implements IRotatableBlock, Waterlo
 	public BlockState getPlacementState(ItemPlacementContext context) {
 		BlockPos blockpos = context.getBlockPos();
 		FluidState fluidstate = context.getWorld().getFluidState(blockpos);
-		return super.getPlacementState(context).with(FACING, context.getPlayerFacing()).with(WATERLOGGED, fluidstate.isOf(Fluids.WATER));
+		return super.getPlacementState(context).with(FACING, context.getHorizontalPlayerFacing()).with(WATERLOGGED, fluidstate.isOf(Fluids.WATER));
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public class CoinpileBlock extends CoinBlock implements IRotatableBlock, Waterlo
 	
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neightborPos) {
 		if (state.get(WATERLOGGED)) {
-			world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		}
 		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neightborPos);
 	}

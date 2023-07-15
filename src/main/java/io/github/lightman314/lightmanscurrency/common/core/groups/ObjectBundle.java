@@ -1,8 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.core.groups;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
@@ -31,6 +29,13 @@ public class ObjectBundle<T,L> {
 	public T get(L key) { return this.values.getOrDefault(key, null); }
 	
 	public Collection<T> getAll() { return this.values.values(); }
+
+	public Collection<T> getAllSorted(Comparator<L> sorter)
+	{
+		List<T> result = new ArrayList<>();
+		this.values.keySet().stream().sorted(sorter).forEach(k -> result.add(this.get(k)));
+		return result;
+	}
 	
 	public void foreach(BiConsumer<L,T> consumer) { this.values.forEach(consumer); }
 	

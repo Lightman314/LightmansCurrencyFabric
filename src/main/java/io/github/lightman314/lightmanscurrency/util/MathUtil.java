@@ -1,34 +1,43 @@
 package io.github.lightman314.lightmanscurrency.util;
 
-import net.minecraft.util.math.Vec3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class MathUtil {
+
+	public static Vector3f XP() { return new Vector3f(1f,0f,0f); }
+	public static Vector3f YP() { return new Vector3f(0f,1f,0f); }
+	public static Vector3f ZP() { return new Vector3f(0f,0f,1f); }
+
+	public static Quaternionf getRotationDegrees(float angleDegrees) { return new Quaternionf().fromAxisAngleDeg(YP(), angleDegrees); }
+	public static Quaternionf getRotationDegrees(Vector3f direction, float angleDegrees) { return new Quaternionf().fromAxisAngleDeg(direction, angleDegrees); }
+
 
 	/**
 	 * Multiplies all parts of a Vector3f by a float
 	 */
-	public static Vec3f VectorMult(Vec3f vector, float num)
+	public static Vector3f VectorMult(Vector3f vector, float num)
 	{
-		return new Vec3f(vector.getX() * num, vector.getY() * num, vector.getZ() * num);
+		return new Vector3f(vector.x() * num, vector.y() * num, vector.z() * num);
 	}
 	
 	/**
 	 * Sum all of the Vector3f's together
 	 */
-	public static Vec3f VectorAdd(Vec3f... vectors)
+	public static Vector3f VectorAdd(Vector3f... vectors)
 	{
 		float x = 0f;
 		float y = 0f;
 		float z = 0f;
 		
-		for(Vec3f vector : vectors)
+		for(Vector3f vector : vectors)
 		{
-			x += vector.getX();
-			y += vector.getY();
-			z += vector.getZ();
+			x += vector.x();
+			y += vector.y();
+			z += vector.z();
 		}
 		
-		return new Vec3f(x, y, z);
+		return new Vector3f(x, y, z);
 	}
 	
 	/**

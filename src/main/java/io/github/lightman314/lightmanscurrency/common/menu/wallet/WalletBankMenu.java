@@ -24,10 +24,10 @@ public class WalletBankMenu extends WalletMenuBase implements BankAccount.IBankA
     public Inventory getCoinInput() { return this.coinInput; }
 
     @Override
-    public boolean isClient() { return this.player.world.isClient; }
+    public boolean isClient() { return this.player.getWorld().isClient; }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int slot) { return ItemStack.EMPTY; }
+    public ItemStack quickMove(PlayerEntity player, int slot) { return ItemStack.EMPTY; }
 
     @Override
     public boolean canUse(PlayerEntity player) {

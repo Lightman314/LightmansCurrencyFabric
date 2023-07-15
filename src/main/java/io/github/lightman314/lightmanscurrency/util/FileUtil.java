@@ -14,8 +14,8 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class FileUtil {
 
@@ -23,7 +23,7 @@ public class FileUtil {
 
     public static JsonObject convertItemStack(ItemStack item) {
         JsonObject json = new JsonObject();
-        json.addProperty("ID", Registry.ITEM.getId(item.getItem()).toString());
+        json.addProperty("ID", Registries.ITEM.getId(item.getItem()).toString());
         json.addProperty("Count", item.getCount());
         if(item.hasNbt())
         {
@@ -36,7 +36,7 @@ public class FileUtil {
     public static ItemStack parseItemStack(JsonObject json) {
         String id = json.get("ID").getAsString();
         int count = json.get("Count").getAsInt();
-        ItemStack result = new ItemStack(Registry.ITEM.get(new Identifier(id)), count);
+        ItemStack result = new ItemStack(Registries.ITEM.get(new Identifier(id)), count);
         try {
             if(json.has("Tag"))
             {

@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TradeRuleScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.TimeInputWidget;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextInputUtil;
@@ -22,9 +23,9 @@ import io.github.lightman314.lightmanscurrency.util.TimeUtil.TimeUnit;
 import io.github.lightman314.lightmanscurrency.util.TimeUtil.TimeData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -162,7 +163,7 @@ public class PriceFluctuation extends TradeRule {
             this.fluctuationInput.setMaxLength(2);
             this.fluctuationInput.setText(Integer.toString(this.getRule().fluctuation));
 
-            this.buttonSetFluctuation = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 110, screen.guiTop() + 10, 50, 20, Text.translatable("gui.button.lightmanscurrency.discount.set"), this::PressSetFluctuationButton));
+            this.buttonSetFluctuation = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + 110, screen.guiTop() + 10, 50, 20, Text.translatable("gui.button.lightmanscurrency.discount.set"), this::PressSetFluctuationButton));
 
             this.durationInput = this.addCustomRenderable(new TimeInputWidget(screen.guiLeft() + 48, screen.guiTop() + 75, 10, TimeUnit.DAY, TimeUnit.MINUTE, this::addCustomRenderable, this::onTimeSet));
             this.durationInput.setTime(this.getRule().duration);
@@ -170,13 +171,13 @@ public class PriceFluctuation extends TradeRule {
         }
 
         @Override
-        public void renderTab(MatrixStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        public void renderTab(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
             if(getRule() == null)
                 return;
 
-            this.screen.getFont().draw(poseStack, Text.translatable("gui.lightmanscurrency.fluctuation.tooltip"), this.fluctuationInput.x + this.fluctuationInput.getWidth() + 4, this.fluctuationInput.y + 3, 0xFFFFFF);
+            gui.drawText(this.screen.getFont(), Text.translatable("gui.lightmanscurrency.fluctuation.tooltip"), this.fluctuationInput.getX() + this.fluctuationInput.getWidth() + 4, this.fluctuationInput.getY() + 3, 0xFFFFFF, false);
 
-            TextRenderUtil.drawCenteredMultilineText(poseStack, Text.translatable("gui.button.lightmanscurrency.price_fluctuation.info", this.getRule().fluctuation, new TimeData(this.getRule().duration).getShortString()), this.screen.guiLeft() + 10, this.screen.xSize - 20, this.screen.guiTop() + 35, 0xFFFFFF);
+            TextRenderUtil.drawCenteredMultilineText(gui, Text.translatable("gui.button.lightmanscurrency.price_fluctuation.info", this.getRule().fluctuation, new TimeData(this.getRule().duration).getShortString()), this.screen.guiLeft() + 10, this.screen.xSize - 20, this.screen.guiTop() + 35, 0xFFFFFF);
 
         }
 

@@ -40,13 +40,13 @@ public class TraderInterfaceMenu extends Menu {
     public int getCurrentTabIndex() { return this.currentTab; }
     public TraderInterfaceTab getCurrentTab() { return this.availableTabs.get(this.currentTab); }
 
-    public boolean isClient() { return this.player.world.isClient; }
+    public boolean isClient() { return this.player.getWorld().isClient; }
 
     public TraderInterfaceMenu(int windowID, PlayerInventory inventory, BlockPos blockPos) {
         super(ModMenus.TRADER_INTERFACE, windowID);
 
         this.player = inventory.player;
-        BlockEntity blockEntity = this.player.world.getBlockEntity(blockPos);
+        BlockEntity blockEntity = this.player.getWorld().getBlockEntity(blockPos);
         if(blockEntity instanceof TraderInterfaceBlockEntity)
             this.traderInterface = (TraderInterfaceBlockEntity)blockEntity;
         else
@@ -87,8 +87,8 @@ public class TraderInterfaceMenu extends Menu {
     public boolean canUse(PlayerEntity player) { return this.traderInterface != null && !this.traderInterface.isRemoved() && this.traderInterface.canAccess(player); }
 
     @Override
-    public void close(PlayerEntity player) {
-        super.close(player);
+    public void onClosed(PlayerEntity player) {
+        super.onClosed(player);
         this.availableTabs.forEach((key, tab) -> tab.onMenuClose());
     }
 
@@ -98,7 +98,7 @@ public class TraderInterfaceMenu extends Menu {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity, int index)
+    public ItemStack quickMove(PlayerEntity playerEntity, int index)
     {
 
         ItemStack clickedStack = ItemStack.EMPTY;

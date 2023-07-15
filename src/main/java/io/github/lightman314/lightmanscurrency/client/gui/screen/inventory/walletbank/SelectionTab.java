@@ -7,14 +7,15 @@ import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.WalletBankScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.TeamSelectWidget;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.TeamButton.Size;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
 import io.github.lightman314.lightmanscurrency.network.server.messages.bank.CMessageSelectBankAccount;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -39,7 +40,7 @@ public class SelectionTab extends WalletBankTab {
         this.teamSelection = this.screen.addRenderableTabWidget(new TeamSelectWidget(this.screen.getGuiLeft() + 79, this.screen.getGuiTop() + 15, 5, Size.NARROW, this::getTeamList, this::selectedTeam, this::SelectTeam));
         this.teamSelection.init(this.screen::addRenderableTabWidget, this.screen.getFont());
 
-        this.buttonPersonalAccount = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 7, this.screen.getGuiTop() + 15, 70, 20, Text.translatable("gui.button.bank.playeraccount"), this::PressPersonalAccount));
+        this.buttonPersonalAccount = this.screen.addRenderableTabWidget(new VanillaButton(this.screen.getGuiLeft() + 7, this.screen.getGuiTop() + 15, 70, 20, Text.translatable("gui.button.bank.playeraccount"), this::PressPersonalAccount));
 
         this.tick();
 
@@ -90,17 +91,17 @@ public class SelectionTab extends WalletBankTab {
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.screen.getFont().draw(pose, this.getTooltip(), this.screen.getGuiLeft() + 8f, this.screen.getGuiTop() + 6f, 0x404040);
+        gui.drawText(this.screen.getFont(), this.getTooltip(), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040, false);
 
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY) {
+    public void postRender(DrawContext gui, int mouseX, int mouseY) {
         //Render text in front of selection background
         if(this.getTeamList().size() == 0)
-            TextRenderUtil.drawVerticallyCenteredMultilineText(pose, Text.translatable("gui.lightmanscurrency.bank.noteamsavailable"), this.teamSelection.x + 1, Size.NARROW.width - 2, this.teamSelection.y + 1, this.teamSelection.getHeight() - 2, 0xFFFFFF);
+            TextRenderUtil.drawVerticallyCenteredMultilineText(gui, Text.translatable("gui.lightmanscurrency.bank.noteamsavailable"), this.teamSelection.getX() + 1, Size.NARROW.width - 2, this.teamSelection.getY() + 1, this.teamSelection.getHeight() - 2, 0xFFFFFF);
     }
 
     @Override

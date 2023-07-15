@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.SettingsTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
@@ -17,11 +16,11 @@ import io.github.lightman314.lightmanscurrency.network.server.messages.trader.CM
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.CMessageOpenTrades;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -134,41 +133,41 @@ public class TraderSettingsScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrix, int mouseX, int mouseY, float partialTicks)
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
 
-        this.renderBackground(matrix);
+        this.renderBackground(gui);
         //Render the background
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        this.setColor(this.currentTab().getColor());
-        this.drawTexture(matrix, this.guiLeft(), this.guiTop(), 0, 0, this.xSize, this.ySize);
+        this.setColor(gui, this.currentTab().getColor());
+        gui.drawTexture(GUI_TEXTURE, this.guiLeft(), this.guiTop(), 0, 0, this.xSize, this.ySize);
         //Render the tab buttons
-        super.render(matrix, mouseX, mouseY, partialTicks);
+        super.render(gui, mouseX, mouseY, partialTicks);
         //Pre-render the tab
         try {
-            this.currentTab().preRender(matrix, mouseX, mouseY, partialTicks);
+            this.currentTab().preRender(gui, mouseX, mouseY, partialTicks);
         } catch(Throwable t) { LightmansCurrency.LogError("Error in Settings Tab pre-render.", t); }
         //Render the renderables
-        this.tabWidgets.forEach(widget -> widget.render(matrix, mouseX, mouseY, partialTicks));
+        this.tabWidgets.forEach(widget -> widget.render(gui, mouseX, mouseY, partialTicks));
         //Post-render the tab
         try {
-            this.currentTab().postRender(matrix, mouseX, mouseY, partialTicks);
+            this.currentTab().postRender(gui, mouseX, mouseY, partialTicks);
         } catch(Throwable t) { LightmansCurrency.LogError("Error in Settings Tab post-render.", t); }
 
         //Render the tab button tooltips
         for (TabButton tabButton : this.tabButtons) {
             if (tabButton.isMouseOver(mouseX, mouseY))
-                this.renderTooltip(matrix, tabButton.tab.getTooltip(), mouseX, mouseY);
+                gui.drawTooltip(this.textRenderer, tabButton.tab.getTooltip(), mouseX, mouseY);
         }
 
     }
 
-    public void setColor(int color)
+    public void setColor(DrawContext gui, int color)
     {
         float r = (float)(color >> 16 & 255) / 255f;
         float g = (float)(color >> 8 & 255) / 255f;
         float b = (float)(color & 255) / 255f;
-        RenderSystem.setShaderColor(r, g, b, 1f);
+
+        gui.setShaderColor(r, g, b, 1f);
     }
 
     @Override

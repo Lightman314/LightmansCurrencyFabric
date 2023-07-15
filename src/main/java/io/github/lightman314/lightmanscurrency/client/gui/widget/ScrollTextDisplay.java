@@ -6,10 +6,9 @@ import com.google.common.base.Supplier;
 
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class ScrollTextDisplay extends ClickableWidget {
@@ -34,14 +33,11 @@ public class ScrollTextDisplay extends ClickableWidget {
     private int scroll = 0;
 
     @Override
-    public void render(MatrixStack matrix, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
 
-        if(!this.visible)
-            return;
-
         //Render the background
-        Screen.fill(matrix, this.x, this.y, this.x + this.width, this.y + this.height, this.backgroundColor);
+        gui.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, this.backgroundColor);
 
         //Start rendering the text
         List<? extends Text> text = this.textSource.get();
@@ -49,8 +45,8 @@ public class ScrollTextDisplay extends ClickableWidget {
         this.validateScroll(text.size());
         int i = this.getStartingIndex(text.size());
         int columnWidth = this.getColumnWidth();
-        int bottom = this.y + this.height;
-        for(int yPos = this.y + 2; yPos < bottom && i >= 0 && i < text.size();)
+        int bottom = this.getY() + this.height;
+        for(int yPos = this.getY() + 2; yPos < bottom && i >= 0 && i < text.size();)
         {
             int rowHeight = 0;
             for(int col = 0; col < this.columnCount && i >= 0 && i < text.size(); ++col)
@@ -60,7 +56,7 @@ public class ScrollTextDisplay extends ClickableWidget {
                 int thisHeight = this.font.getWrappedLinesHeight(thisText.getString(), columnWidth);
                 if(yPos + thisHeight < bottom)
                 {
-                    this.font.drawTrimmed(thisText, xPos, yPos, columnWidth, this.textColor);
+                    gui.drawTextWrapped(this.font, thisText, xPos, yPos, columnWidth, this.textColor);
                 }
                 if(thisHeight > rowHeight)
                     rowHeight = thisHeight;
@@ -91,7 +87,7 @@ public class ScrollTextDisplay extends ClickableWidget {
     private int getXPos(int column)
     {
         int columnSpacing = this.width / this.columnCount;
-        return this.x + 2 + column * columnSpacing;
+        return this.getX() + 2 + column * columnSpacing;
     }
 
     private boolean canScrollDown()
@@ -127,6 +123,6 @@ public class ScrollTextDisplay extends ClickableWidget {
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) { }
+    public void appendClickableNarrations(NarrationMessageBuilder builder) { }
 
 }

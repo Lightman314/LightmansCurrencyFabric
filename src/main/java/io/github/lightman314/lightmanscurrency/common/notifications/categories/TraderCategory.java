@@ -7,10 +7,10 @@ import io.github.lightman314.lightmanscurrency.common.notifications.Notification
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 public class TraderCategory extends NotificationCategory {
@@ -31,7 +31,7 @@ public class TraderCategory extends NotificationCategory {
     public TraderCategory(NbtCompound compound) {
 
         if(compound.contains("Icon"))
-            this.trader = Registry.ITEM.get(new Identifier(compound.getString("Icon")));
+            this.trader = Registries.ITEM.get(new Identifier(compound.getString("Icon")));
         else
             this.trader = ModItems.TRADING_CORE;
 
@@ -69,7 +69,7 @@ public class TraderCategory extends NotificationCategory {
     }
 
     public void saveAdditional(NbtCompound compound) {
-        compound.putString("Icon", Registry.ITEM.getId(this.trader).toString());
+        compound.putString("Icon", Registries.ITEM.getId(this.trader).toString());
         compound.putString("TraderName", Text.Serializer.toJson(this.traderName));
         compound.putLong("TraderID", this.traderID);
     }

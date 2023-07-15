@@ -57,6 +57,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.MinecraftServer;
@@ -67,8 +70,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -460,7 +461,7 @@ public abstract class TraderData implements IClientTracker, IDumpable, UpgradeTy
             compound.putString("Level", this.level.getValue().toString());
     }
 
-    private void saveTraderItem(NbtCompound compound) { if(this.traderBlock != null) compound.putString("TraderBlock", Registry.ITEM.getId(this.traderBlock).toString()); }
+    private void saveTraderItem(NbtCompound compound) { if(this.traderBlock != null) compound.putString("TraderBlock", Registries.ITEM.getId(this.traderBlock).toString()); }
 
     protected final void saveOwner(NbtCompound compound) { compound.put("OwnerData", this.owner.save()); }
 
@@ -552,12 +553,12 @@ public abstract class TraderData implements IClientTracker, IDumpable, UpgradeTy
             this.pos = new BlockPos(posTag.getInt("x"), posTag.getInt("y"), posTag.getInt("z"));
         }
         if(compound.contains("Level"))
-            this.level = RegistryKey.of(Registry.WORLD_KEY, new Identifier(compound.getString("Level")));
+            this.level = RegistryKey.of(RegistryKeys.WORLD, new Identifier(compound.getString("Level")));
 
         if(compound.contains("TraderBlock"))
         {
             try {
-                this.traderBlock = Registry.ITEM.get(new Identifier(compound.getString("TraderBlock")));
+                this.traderBlock = Registries.ITEM.get(new Identifier(compound.getString("TraderBlock")));
             }catch (Throwable ignored) {}
         }
 

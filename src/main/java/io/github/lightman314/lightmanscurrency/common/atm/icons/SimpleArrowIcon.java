@@ -9,7 +9,7 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
 public class SimpleArrowIcon extends ATMIconData {
@@ -65,9 +65,9 @@ public class SimpleArrowIcon extends ATMIconData {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void render(ATMExchangeButton button, MatrixStack pose, boolean isHovered) {
+    public void render(ATMExchangeButton button, DrawContext gui, boolean isHovered) {
         RenderSystem.setShaderTexture(0, ATMScreen.BUTTON_TEXTURE);
-        button.drawTexture(pose, button.x + this.xPos, button.y + this.yPos, this.direction.uOffset, ATMExchangeButton.HEIGHT * 2, 6, 6);
+        gui.drawTexture(ATMScreen.BUTTON_TEXTURE, button.getX() + this.xPos, button.getY() + this.yPos, this.direction.uOffset, ATMExchangeButton.HEIGHT * 2, 6, 6);
     }
 
 }

@@ -48,7 +48,7 @@ public class WalletMenu extends WalletMenuBase {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity, int index)
+    public ItemStack quickMove(PlayerEntity playerEntity, int index)
     {
 
         if(index + this.coinInput.size() == this.walletStackIndex)

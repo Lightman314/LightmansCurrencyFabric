@@ -1,6 +1,5 @@
 package io.github.lightman314.lightmanscurrency.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.callbacks.RenderInventoryCallback;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.inventory.*;
@@ -21,6 +20,7 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
@@ -30,9 +30,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundEvents;
@@ -68,7 +66,7 @@ public class ClientEventListeners {
             ItemStack walletStack = WalletHandler.getWallet(player).getWallet();
             if(!walletStack.isEmpty())
             {
-                client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.25f + player.world.random.nextFloat() * 0.5f, 0.75f));
+                client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.25f + player.getWorld().random.nextFloat() * 0.5f, 0.75f));
                 if(!WalletItem.isEmpty(walletStack))
                     client.getSoundManager().play(PositionedSoundInstance.master(ModSounds.COINS_CLINKING, 1f, 0.4f));
             }
@@ -109,12 +107,12 @@ public class ClientEventListeners {
         new CMessageSetWalletVisible(nowVisibile).sendToServer();
     }
 
-    public static void renderInventoryScreen(Screen screen, MatrixStack pose, int mouseX, int mouseY, float tickDelta)
+    public static void renderInventoryScreen(Screen screen, DrawContext context, int mouseX, int mouseY, float tickDelta)
     {
         if(screen instanceof AbstractInventoryScreen<?> gui)
         {
-            if(screen instanceof CreativeInventoryScreen creativeScreen) {
-                if(creativeScreen.getSelectedTab() != ItemGroup.INVENTORY.getIndex())
+            if(gui instanceof CreativeInventoryScreen creativeScreen) {
+                if(!creativeScreen.isInventoryTabSelected())
                     return;
             }
 
@@ -122,33 +120,32 @@ public class ClientEventListeners {
             WalletHandler walletHandler = WalletHandler.getWallet(client.player);
 
             ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfig.CLIENT.walletSlotCreative.get() : LCConfig.CLIENT.walletSlot.get();
-            RenderSystem.setShaderTexture(0, WALLET_SLOT_TEXTURE);
-            RenderSystem.setShaderColor(1f,1f,1f,1f);
+            context.setShaderColor(1f,1f,1f,1f);
 
             //Render slot background
             slotPosition = slotPosition.offset(ScreenUtil.getScreenCorner(gui));
-            screen.drawTexture(pose, slotPosition.x, slotPosition.y, 0,0,18,18);
+            context.drawTexture(WALLET_SLOT_TEXTURE, slotPosition.x, slotPosition.y, 0,0,18,18);
             //Render slot item
             ItemStack wallet = walletHandler.getWallet();
             slotPosition = slotPosition.offset(1,1);
             if(wallet.isEmpty())
-                ItemRenderUtil.drawSlotBackground(pose, slotPosition.x, slotPosition.y, WalletSlot.BACKGROUND);
+                ItemRenderUtil.drawSlotBackground(context, slotPosition.x, slotPosition.y, WalletSlot.BACKGROUND);
             else
-                ItemRenderUtil.drawItemStack(screen, null, wallet, slotPosition.x, slotPosition.y);
+                ItemRenderUtil.drawItemStack(context, null, wallet, slotPosition.x, slotPosition.y);
 
             //Render slot highlight
             if(isMouseOverWalletSlot(mouseX, mouseY, slotPosition.offset(-1,-1)))
-                HandledScreen.drawSlotHighlight(pose, slotPosition.x, slotPosition.y, screen.getZOffset());
+                HandledScreen.drawSlotHighlight(context, slotPosition.x, slotPosition.y, 0);
 
         }
     }
 
-    public static void renderInventoryTooltips(Screen screen, MatrixStack pose, int mouseX, int mouseY, float tickDelta)
+    public static void renderInventoryTooltips(Screen screen, DrawContext context, int mouseX, int mouseY, float tickDelta)
     {
         if(screen instanceof AbstractInventoryScreen<?> gui)
         {
             if(screen instanceof CreativeInventoryScreen creativeScreen) {
-                if(creativeScreen.getSelectedTab() != ItemGroup.INVENTORY.getIndex())
+                if(!creativeScreen.isInventoryTabSelected())
                     return;
             }
 
@@ -163,13 +160,13 @@ public class ClientEventListeners {
             if(isMouseOverWalletSlot(mouseX, mouseY, slotPosition.offset(-1,-1)))
             {
                 if(!wallet.isEmpty())
-                    screen.renderTooltip(pose, ItemRenderUtil.getTooltipFromItem(wallet), mouseX, mouseY);
+                    context.drawTooltip(client.textRenderer, ItemRenderUtil.getTooltipFromItem(wallet), mouseX, mouseY);
             }
 
             //Render Notification & Team Manager Tooltips
-            NotificationButton.tryRenderTooltip(pose, mouseX, mouseY);
-            TeamManagerButton.tryRenderTooltip(pose, mouseX, mouseY);
-            TraderRecoveryButton.tryRenderTooltip(pose, mouseX, mouseY);
+            NotificationButton.tryRenderTooltip(context, mouseX, mouseY);
+            TeamManagerButton.tryRenderTooltip(context, mouseX, mouseY);
+            TraderRecoveryButton.tryRenderTooltip(context, mouseX, mouseY);
 
         }
     }
@@ -179,7 +176,7 @@ public class ClientEventListeners {
         if(screen instanceof AbstractInventoryScreen<?> gui)
         {
             if(gui instanceof CreativeInventoryScreen creativeScreen) {
-                if(creativeScreen.getSelectedTab() != ItemGroup.INVENTORY.getIndex())
+                if(!creativeScreen.isInventoryTabSelected())
                     return true;
             }
 

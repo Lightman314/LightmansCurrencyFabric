@@ -20,9 +20,9 @@ public class MintMenu extends ScreenHandler {
     public MintMenu(int windowId, PlayerInventory inventory, BlockPos blockPos)
     {
         super(ModMenus.MINT, windowId);
-        BlockEntity be = inventory.player.world.getBlockEntity(blockPos);
-        if(be instanceof CoinMintBlockEntity coinMint)
-            this.coinMint = coinMint;
+        BlockEntity be = inventory.player.getWorld().getBlockEntity(blockPos);
+        if(be instanceof CoinMintBlockEntity cm)
+            this.coinMint = cm;
         else
             this.coinMint = null;
 
@@ -52,10 +52,10 @@ public class MintMenu extends ScreenHandler {
     public boolean canUse(PlayerEntity player) { return this.coinMint != null && !this.coinMint.isRemoved(); }
 
     @Override
-    public void close(PlayerEntity player) { super.close(player); }
+    public void onClosed(PlayerEntity player) { super.onClosed(player); }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity, int index)
+    public ItemStack quickMove(PlayerEntity playerEntity, int index)
     {
 
         ItemStack clickedStack = ItemStack.EMPTY;

@@ -6,8 +6,8 @@ import java.util.function.Function;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.interfaces.IRotatableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.shape.VoxelShape;
+import org.joml.Vector3f;
 
 public class LazyShapes {
 
@@ -125,8 +125,8 @@ public class LazyShapes {
 				return shape;
 			else
 			{
-				Vec3f offset = IRotatableBlock.getLeftVect(facing);
-				return shape.offset(offset.getX(), offset.getY(), offset.getZ());
+				Vector3f offset = IRotatableBlock.getLeftVect(facing);
+				return shape.offset(offset.x(), offset.y(), offset.z());
 			}
 		}
 		
@@ -152,8 +152,8 @@ public class LazyShapes {
 				return shape;
 			else
 			{
-				Vec3f offset = IRotatableBlock.getLeftVect(facing);
-				return shape.offset(offset.getX(), offset.getY(), offset.getZ());
+				Vector3f offset = IRotatableBlock.getLeftVect(facing);
+				return shape.offset(offset.x(), offset.y(), offset.z());
 			}
 		}
 		

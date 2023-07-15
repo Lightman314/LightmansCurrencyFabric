@@ -1,6 +1,6 @@
 package io.github.lightman314.lightmanscurrency.util.config;
 
-import net.minecraftforge.api.fml.event.config.ModConfigEvents;
+import fuzs.forgeconfigapiport.api.config.v2.ModConfigEvents;
 import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.function.Consumer;

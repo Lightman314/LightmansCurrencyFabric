@@ -18,6 +18,7 @@ import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -26,7 +27,6 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -148,7 +148,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
 
     public void init()
     {
-        this.toggleFree = new PlainButton(this.x + this.width - 14, this.y + 4, 10, 10, this::ToggleFree, GUI_TEXTURE, 40, HEIGHT);
+        this.toggleFree = new PlainButton(this.getX() + this.width - 14, this.getY() + 4, 10, 10, this::ToggleFree, GUI_TEXTURE, 40, HEIGHT);
         this.addWidget.accept(this.toggleFree);
         this.increaseButtons = new ArrayList<>();
         this.decreaseButtons = new ArrayList<>();
@@ -159,20 +159,20 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
             if(buttonCount > MAX_BUTTON_COUNT)
             {
                 buttonCount = MAX_BUTTON_COUNT;
-                this.buttonLeft = new PlainButton(this.x + 4, this.y + 29, 10, 20, b -> this.scrollLeft(), GUI_TEXTURE, 50, HEIGHT);
+                this.buttonLeft = new PlainButton(this.getX() + 4, this.getY() + 29, 10, 20, b -> this.scrollLeft(), GUI_TEXTURE, 50, HEIGHT);
                 this.buttonLeft.visible = false;
                 this.addWidget.accept(this.buttonLeft);
-                this.buttonRight = new PlainButton(this.x + this.width - 14, this.y + 29, 10, 20, b -> this.scrollRight(), GUI_TEXTURE, 60, HEIGHT);
+                this.buttonRight = new PlainButton(this.getX() + this.width - 14, this.getY() + 29, 10, 20, b -> this.scrollRight(), GUI_TEXTURE, 60, HEIGHT);
                 this.addWidget.accept(this.buttonRight);
             }
             int startX = this.getStartX();
             for(int x = 0; x < buttonCount; x++)
             {
-                ButtonWidget newButton = new PlainButton(startX + (x * SEGMENT_TOTAL), this.y + 15, 20, 10, this::IncreaseButtonHit, GUI_TEXTURE, 0, HEIGHT);
+                ButtonWidget newButton = new PlainButton(startX + (x * SEGMENT_TOTAL), this.getY() + 15, 20, 10, this::IncreaseButtonHit, GUI_TEXTURE, 0, HEIGHT);
                 this.addWidget.accept(newButton);
                 newButton.active = true;
                 increaseButtons.add(newButton);
-                newButton = new PlainButton(startX + (x * SEGMENT_TOTAL), this.y + 53, 20, 10, this::DecreaseButtonHit, GUI_TEXTURE, 20, HEIGHT);
+                newButton = new PlainButton(startX + (x * SEGMENT_TOTAL), this.getY() + 53, 20, 10, this::DecreaseButtonHit, GUI_TEXTURE, 20, HEIGHT);
                 this.addWidget.accept(newButton);
                 newButton.active = false;
                 decreaseButtons.add(newButton);
@@ -187,14 +187,14 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
             int postfixWidth = this.font.getWidth(this.postfix);
             if(postfixWidth > 0)
                 postfixWidth += 2;
-            this.valueInput = new TextFieldWidget(this.font, this.x + 10 + prefixWidth, this.y + 20, DISPLAY_WIDTH - 20 - prefixWidth - postfixWidth, 20, Text.empty());
+            this.valueInput = new TextFieldWidget(this.font, this.getX() + 10 + prefixWidth, this.getY() + 20, DISPLAY_WIDTH - 20 - prefixWidth - postfixWidth, 20, Text.empty());
             this.addWidget.accept(this.valueInput);
         }
         this.tick();
     }
 
     @Override
-    public void render(MatrixStack poseStack, int mouseX, int mouseY, float partialTicks)
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
         //Match the buttons visibility to our visibility.
         this.toggleFree.visible = this.allowFreeToggle && this.visible;
@@ -202,16 +202,19 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
         this.decreaseButtons.forEach(button -> button.visible = this.visible);
         if(this.valueInput != null)
             this.valueInput.visible = this.visible;
-        if(!this.visible) //If not visible, render nothing
-            return;
+        super.render(gui, mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    protected void renderButton(DrawContext gui, int mouseX, int mouseY, float delta) {
 
         RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f,  1f,  1f, 1f);
+        gui.setShaderColor(1f,  1f,  1f, 1f);
 
         if(this.drawBG)
         {
             //Render the background
-            this.drawTexture(poseStack, this.x, this.y, 0, 0, DISPLAY_WIDTH, HEIGHT);
+            gui.drawTexture(GUI_TEXTURE, this.getX(), this.getY(), 0, 0, DISPLAY_WIDTH, HEIGHT);
         }
 
         if(this.inputType == CoinValue.ValueType.DEFAULT)
@@ -226,11 +229,11 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
             for(int x = 0; x < buttonCount; x++)
             {
                 //Draw sprite
-                ItemRenderUtil.drawItemStack(this, this.font, new ItemStack(this.coinData.get(x + this.scroll).coinItem), startX + (x * SEGMENT_TOTAL) + 2, this.y + 26);
+                ItemRenderUtil.drawItemStack(gui, this.font, new ItemStack(this.coinData.get(x + this.scroll).coinItem), startX + (x * SEGMENT_TOTAL) + 2, this.getY() + 26);
                 //Draw string
                 String countString = String.valueOf(this.coinValue.getEntry(this.coinData.get(x + this.scroll).coinItem));
                 int width = this.font.getWidth(countString);
-                this.font.draw(poseStack, countString, startX + (x * SEGMENT_TOTAL) + 10 - ((float)width / 2f), this.y + 43, 0x404040);
+                gui.drawText(this.font, countString, startX + (x * SEGMENT_TOTAL) + 10 - (width / 2), this.getY() + 43, 0x404040, false);
 
             }
         }
@@ -239,27 +242,27 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
         {
 
             //Draw the prefix and postfix
-            this.font.draw(poseStack, this.prefix, this.x + 10, this.y + 26, 0xFFFFFF);
+            gui.drawText(this.font, this.prefix, this.getX() + 10, this.getY() + 26, 0xFFFFFF, false);
             int postfixWidth = this.font.getWidth(this.postfix);
-            this.font.draw(poseStack, this.postfix, this.x + DISPLAY_WIDTH - 10 - postfixWidth, this.y + 26, 0xFFFFFF);
+            gui.drawText(this.font, this.postfix, this.getX() + DISPLAY_WIDTH - 10 - postfixWidth, this.getY() + 26, 0xFFFFFF, false);
 
         }
 
         //Render the current price in the top-right corner
         int priceWidth = this.font.getWidth(this.coinValue.getString());
         int freeButtonOffset = this.allowFreeToggle ? 15 : 5;
-        this.font.draw(poseStack, this.coinValue.getString(), this.x + this.width - freeButtonOffset - priceWidth, this.y + 5F, 0x404040);
+        gui.drawText(this.font, this.coinValue.getComponent(), this.getX() + this.width - freeButtonOffset - priceWidth, this.getY() + 5, 0x404040, false);
 
         //Render the title
         int titleWidth = this.width - 7 - freeButtonOffset - priceWidth;
-        this.font.draw(poseStack, TextRenderUtil.fitString(this.title, titleWidth), this.x + 8F, this.y + 5F, 0x404040);
+        gui.drawText(this.font, TextRenderUtil.fitString(this.title, titleWidth), this.getX() + 8, this.getY() + 5, 0x404040, false);
 
     }
 
     private int getStartX() {
         int buttonCount = Math.min(this.coinData.size(), MAX_BUTTON_COUNT);
         int space = this.width - (buttonCount * SEGMENT_TOTAL) + SEGMENT_SPACING;
-        return this.x + space / 2;
+        return this.getX() + space / 2;
     }
 
     public void tick()
@@ -360,7 +363,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
             LightmansCurrency.LogError("Invalid index (" + coinIndex + ") found for the decreasing button.");
     }
 
-    private final int getLargeIncreaseAmount(Item coinItem)
+    private int getLargeIncreaseAmount(Item coinItem)
     {
         Pair<Item,Integer> upwardConversion = MoneyUtil.getUpwardConversion(coinItem);
         if(upwardConversion != null)
@@ -375,7 +378,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
         }
     }
 
-    private final int getLargeAmount(Pair<Item,Integer> conversion)
+    private int getLargeAmount(Pair<Item,Integer> conversion)
     {
         if(conversion.getSecond() >= 64)
             return 16;
@@ -414,12 +417,12 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
     }
 
     @Deprecated
-    public static interface ICoinValueInput
+    public interface ICoinValueInput
     {
-        public <T extends Element & Drawable & Selectable> T addCustomWidget(T button);
-        public int getWidth();
-        public TextRenderer getFont();
-        public void OnCoinValueChanged(CoinValueInput input);
+        <T extends Element & Drawable & Selectable> T addCustomWidget(T button);
+        int getWidth();
+        TextRenderer getFont();
+        void OnCoinValueChanged(CoinValueInput input);
     }
 
     private void scrollLeft() {
@@ -433,7 +436,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder narrator) { }
+    public void appendClickableNarrations(NarrationMessageBuilder narrator) { }
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) { return false; }

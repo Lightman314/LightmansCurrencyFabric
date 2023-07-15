@@ -9,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TradeRuleScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollTextDisplay;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextInputUtil;
@@ -19,10 +20,9 @@ import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -206,13 +206,13 @@ public class PlayerDiscounts extends TradeRule {
 
             this.nameInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 34, screen.xSize - 20, 20, Text.empty()));
 
-            this.buttonAddPlayer = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 55, 78, 20, Text.translatable("gui.button.lightmanscurrency.discount.add"), this::PressAddButton));
-            this.buttonRemovePlayer = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + screen.xSize - 88, screen.guiTop() + 55, 78, 20, Text.translatable("gui.button.lightmanscurrency.discount.remove"), this::PressForgetButton));
+            this.buttonAddPlayer = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + 10, screen.guiTop() + 55, 78, 20, Text.translatable("gui.button.lightmanscurrency.discount.add"), this::PressAddButton));
+            this.buttonRemovePlayer = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + screen.xSize - 88, screen.guiTop() + 55, 78, 20, Text.translatable("gui.button.lightmanscurrency.discount.remove"), this::PressForgetButton));
 
             this.discountInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 9, 20, 20, Text.empty()));
             this.discountInput.setMaxLength(2);
             this.discountInput.setText(Integer.toString(this.getRule().discount));
-            this.buttonSetDiscount = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 110, screen.guiTop() + 10, 50, 20, Text.translatable("gui.button.lightmanscurrency.discount.set"), this::PressSetDiscountButton));
+            this.buttonSetDiscount = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + 110, screen.guiTop() + 10, 50, 20, Text.translatable("gui.button.lightmanscurrency.discount.set"), this::PressSetDiscountButton));
 
             this.playerList = this.addCustomRenderable(new ScrollTextDisplay(screen.guiLeft() + 7, screen.guiTop() + 78, screen.xSize - 14, 91, this.screen.getFont(), this::getPlayerList));
             this.playerList.setColumnCount(2);
@@ -230,14 +230,14 @@ public class PlayerDiscounts extends TradeRule {
         }
 
         @Override
-        public void renderTab(MatrixStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        public void renderTab(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
             if(getRule() == null)
                 return;
 
-            Screen.fill(poseStack, this.screen.guiLeft() + 7, this.screen.guiTop() + 78, this.screen.guiLeft() + this.screen.width - 7, this.screen.guiTop() + 78 + 91, 0x000000FF);
+            gui.fill(this.screen.guiLeft() + 7, this.screen.guiTop() + 78, this.screen.guiLeft() + this.screen.width - 7, this.screen.guiTop() + 78 + 91, 0x000000FF);
 
-            this.screen.getFont().draw(poseStack, Text.translatable("gui.lightmanscurrency.discount.tooltip").getString(), this.discountInput.x + this.discountInput.getWidth() + 4, this.discountInput.y + 3, 0xFFFFFF);
+            gui.drawText(this.screen.getFont(), Text.translatable("gui.lightmanscurrency.discount.tooltip").getString(), this.discountInput.getX() + this.discountInput.getWidth() + 4, this.discountInput.getY() + 3, 0xFFFFFF, false);
 
         }
 

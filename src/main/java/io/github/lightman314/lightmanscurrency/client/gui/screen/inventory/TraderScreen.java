@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TradingTerminalScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trader.TraderClientTab;
@@ -19,11 +18,11 @@ import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.CMessageCollectCoins;
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.CMessageOpenStorage;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
@@ -93,54 +92,53 @@ public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
     }
 
     @Override
-    protected void drawBackground(MatrixStack pose, float partialTicks, int mouseX, int mouseY) {
+    protected void drawBackground(DrawContext gui, float partialTicks, int mouseX, int mouseY) {
 
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
 
         //Main BG
-        this.drawTexture(pose, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        gui.drawTexture(GUI_TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
 
         //Coin Slots
         for(Slot slot : this.handler.getCoinSlots())
         {
-            this.drawTexture(pose, this.x + slot.x - 1, this.y + slot.y - 1, this.backgroundWidth, 0, 18, 18);
+            gui.drawTexture(GUI_TEXTURE, this.x + slot.x - 1, this.y + slot.y - 1, this.backgroundWidth, 0, 18, 18);
         }
 
         //Interaction Slot BG
         if(this.handler.getInteractionSlot().isEnabled())
-            this.drawTexture(pose, this.x + this.handler.getInteractionSlot().x - 1, this.y + this.handler.getInteractionSlot().y - 1, this.backgroundWidth, 0, 18, 18);
+            gui.drawTexture(GUI_TEXTURE, this.x + this.handler.getInteractionSlot().x - 1, this.y + this.handler.getInteractionSlot().y - 1, this.backgroundWidth, 0, 18, 18);
 
         try {
-            this.currentTab.renderBG(pose, mouseX, mouseY, partialTicks);
-            this.tabRenderables.forEach(widget -> widget.render(pose, mouseX, mouseY, partialTicks));
+            this.currentTab.renderBG(gui, mouseX, mouseY, partialTicks);
+            this.tabRenderables.forEach(widget -> widget.render(gui, mouseX, mouseY, partialTicks));
         } catch(Throwable t) { LightmansCurrency.LogError("Error rendering trader tab " + this.currentTab.getClass().getName(), t); }
 
     }
 
     @Override
-    protected void drawForeground(MatrixStack pose, int mouseX, int mouseY) {
+    protected void drawForeground(DrawContext gui, int mouseX, int mouseY) {
 
-        this.textRenderer.draw(pose, this.playerInventoryTitle, TraderMenu.SLOT_OFFSET + 8, this.backgroundHeight - 94, 0x404040);
+        gui.drawText(this.textRenderer, this.playerInventoryTitle, TraderMenu.SLOT_OFFSET + 8, this.backgroundHeight - 94, 0x404040, false);
 
         //Moved to underneath the coin slots
         String valueText = MoneyUtil.getStringOfValue(this.handler.getContext(null).getAvailableFunds());
-        this.textRenderer.draw(pose, valueText, TraderMenu.SLOT_OFFSET + 170 - this.textRenderer.getWidth(valueText), this.backgroundHeight - 94, 0x404040);
+        gui.drawText(this.textRenderer, valueText, TraderMenu.SLOT_OFFSET + 170 - this.textRenderer.getWidth(valueText), this.backgroundHeight - 94, 0x404040, false);
 
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.renderBackground(pose);
-        super.render(pose, mouseX, mouseY, partialTicks);
-        this.drawMouseoverTooltip(pose, mouseX, mouseY);
+        this.renderBackground(gui);
+        super.render(gui, mouseX, mouseY, partialTicks);
+        this.drawMouseoverTooltip(gui, mouseX, mouseY);
 
         try {
-            this.currentTab.renderTooltips(pose, mouseX, mouseY);
+            this.currentTab.renderTooltips(gui, mouseX, mouseY);
         } catch (Throwable t) { LightmansCurrency.LogError("Error rendering trader tab tooltips " + this.currentTab.getClass().getName(), t); }
 
-        IconAndButtonUtil.renderButtonTooltips(pose, mouseX, mouseY, this.children());
+        IconAndButtonUtil.renderButtonTooltips(gui, this.textRenderer, mouseX, mouseY, this.children());
 
     }
 

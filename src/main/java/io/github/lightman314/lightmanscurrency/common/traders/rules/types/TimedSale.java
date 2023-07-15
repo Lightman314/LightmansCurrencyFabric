@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TradeRuleScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.TimeInputWidget;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.client.util.TextInputUtil;
@@ -17,9 +18,9 @@ import io.github.lightman314.lightmanscurrency.util.TimeUtil.TimeData;
 import io.github.lightman314.lightmanscurrency.util.TimeUtil.TimeUnit;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
@@ -212,9 +213,9 @@ public class TimedSale extends TradeRule {
             this.discountInput = this.addCustomRenderable(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 10, screen.guiTop() + 9, 20, 20, Text.empty()));
             this.discountInput.setMaxLength(2);
             this.discountInput.setText(Integer.toString(this.getRule().discount));
-            this.buttonSetDiscount = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 110, screen.guiTop() + 10, 50, 20, Text.translatable("gui.button.lightmanscurrency.discount.set"), this::PressSetDiscountButton));
+            this.buttonSetDiscount = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + 110, screen.guiTop() + 10, 50, 20, Text.translatable("gui.button.lightmanscurrency.discount.set"), this::PressSetDiscountButton));
 
-            this.buttonStartSale = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 45, 156, 20, this.getButtonText(), this::PressStartButton));
+            this.buttonStartSale = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + 10, screen.guiTop() + 45, 156, 20, this.getButtonText(), this::PressStartButton));
 
             this.durationInput = this.addCustomRenderable(new TimeInputWidget(screen.guiLeft() + 48, screen.guiTop() + 75, 10, TimeUnit.DAY, TimeUnit.MINUTE, this::addCustomRenderable, this::onTimeSet));
             this.durationInput.setTime(this.getRule().duration);
@@ -222,23 +223,21 @@ public class TimedSale extends TradeRule {
         }
 
         @Override
-        public void renderTab(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        public void renderTab(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
             if(getRule() == null)
                 return;
 
-            this.screen.getFont().draw(matrixStack, Text.translatable("gui.lightmanscurrency.discount.tooltip"), this.discountInput.x + this.discountInput.getWidth() + 4, this.discountInput.y + 3, 0xFFFFFF);
+            gui.drawText(this.screen.getFont(), Text.translatable("gui.lightmanscurrency.discount.tooltip"), this.discountInput.getX() + this.discountInput.getWidth() + 4, this.discountInput.getY() + 3, 0xFFFFFF, false);
 
             Text infoText = Text.translatable("gui.button.lightmanscurrency.timed_sale.info.inactive", new TimeData(this.getRule().duration).getShortString());
             if(this.getRule().timerActive())
                 infoText = Text.translatable("gui.button.lightmanscurrency.timed_sale.info.active", this.getRule().getTimeRemaining().getShortString(3));
 
-            this.screen.getFont().draw(matrixStack, infoText.getString(), screen.guiLeft() + 10, screen.guiTop() + 35, 0xFFFFFF);
+            gui.drawText(this.screen.getFont(), infoText.getString(), screen.guiLeft() + 10, screen.guiTop() + 35, 0xFFFFFF, false);
 
             if(this.buttonStartSale.isMouseOver(mouseX, mouseY))
-            {
-                screen.renderTooltip(matrixStack, this.getButtonTooltip(), mouseX, mouseY);
-            }
+                gui.drawTooltip(this.screen.getFont(), this.getButtonTooltip(), mouseX, mouseY);
 
         }
 

@@ -14,7 +14,7 @@ import io.github.lightman314.lightmanscurrency.common.atm.icons.SimpleArrowIcon;
 import io.github.lightman314.lightmanscurrency.common.atm.icons.SpriteIcon;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
 public abstract class ATMIconData {
@@ -82,7 +82,7 @@ public abstract class ATMIconData {
     protected abstract void saveAdditional(JsonObject data);
 
     @Environment(EnvType.CLIENT)
-    public abstract void render(ATMExchangeButton button, MatrixStack pose, boolean isHovered);
+    public abstract void render(ATMExchangeButton button, DrawContext gui, boolean isHovered);
 
     public static ATMIconData parse(JsonObject data) throws Exception {
         if(data.has("type"))

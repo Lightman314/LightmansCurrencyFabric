@@ -27,7 +27,7 @@ public class TraderRecoveryMenu extends Menu {
 
     private final PlayerEntity player;
 
-    public boolean isClient() { return this.player.world.isClient; }
+    public boolean isClient() { return this.player.getWorld().isClient; }
 
     public List<EjectionData> getValidEjectionData() {
         return EjectionSaveData.GetValidEjectionData(this.isClient(), this.player);
@@ -84,7 +84,7 @@ public class TraderRecoveryMenu extends Menu {
 
     }
 
-    public ItemStack transferSlot(PlayerEntity player, int slotIndex) {
+    public ItemStack quickMove(PlayerEntity player, int slotIndex) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(slotIndex);
         if (slot.hasStack()) {
@@ -112,8 +112,8 @@ public class TraderRecoveryMenu extends Menu {
     public boolean canUse(PlayerEntity player) { return true; }
 
     @Override
-    public void close(PlayerEntity player) {
-        super.close(player);
+    public void onClosed(PlayerEntity player) {
+        super.onClosed(player);
         //Clear the dummy container for safety.
         this.dropInventory(player, this.dummyContainer);
     }

@@ -1,13 +1,14 @@
 package io.github.lightman314.lightmanscurrency.client.gui.screen.team;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TeamManagerScreen;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.network.server.messages.team.CMessageCreateTeamBankAccount;
 import io.github.lightman314.lightmanscurrency.network.server.messages.team.CMessageSetTeamBankLimit;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -38,27 +39,27 @@ public class TeamBankAccountTab extends TeamTab {
 
         TeamManagerScreen screen = this.getScreen();
 
-        this.buttonCreateBankAccount = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 20, 160, 20, Text.translatable("gui.button.lightmanscurrency.team.bank.create"), this::createBankAccount));
+        this.buttonCreateBankAccount = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 20, screen.guiTop() + 20, 160, 20, Text.translatable("gui.button.lightmanscurrency.team.bank.create"), this::createBankAccount));
 
-        this.buttonToggleAccountLimit = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 60, 160, 20, Text.empty(), this::toggleBankLimit));
+        this.buttonToggleAccountLimit = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 20, screen.guiTop() + 60, 160, 20, Text.empty(), this::toggleBankLimit));
         this.updateBankLimitText();
 
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         if(this.getActiveTeam() == null)
             return;
 
         TeamManagerScreen screen = this.getScreen();
         if(this.getActiveTeam() != null && this.getActiveTeam().hasBankAccount())
-            this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.bank.balance", this.getActiveTeam().getBankAccount().getCoinStorage().getString("0")), screen.guiLeft() + 20, screen.guiTop() + 46, 0x404040);
+            gui.drawText(this.getFont(), Text.translatable("gui.lightmanscurrency.bank.balance", this.getActiveTeam().getBankAccount().getCoinStorage().getString("0")), screen.guiLeft() + 20, screen.guiTop() + 46, 0x404040, false);
 
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) { }
+    public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
     @Override
     public void tick() {

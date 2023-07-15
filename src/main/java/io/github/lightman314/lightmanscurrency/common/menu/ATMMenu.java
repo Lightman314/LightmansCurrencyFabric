@@ -14,11 +14,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ATMMenu extends Menu implements BankAccount.IBankAccountAdvancedMenu {
 
@@ -65,9 +65,9 @@ public class ATMMenu extends Menu implements BankAccount.IBankAccountAdvancedMen
     }
 
     @Override
-    public void close(PlayerEntity playerIn)
+    public void onClosed(PlayerEntity playerIn)
     {
-        super.close(playerIn);
+        super.onClosed(playerIn);
         this.dropInventory(playerIn,  this.coinInput);
         if(!this.isClient())
         {
@@ -84,9 +84,8 @@ public class ATMMenu extends Menu implements BankAccount.IBankAccountAdvancedMen
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity, int index)
+    public ItemStack quickMove(PlayerEntity playerEntity, int index)
     {
-
         ItemStack clickedStack = ItemStack.EMPTY;
 
         Slot slot = this.slots.get(index);
@@ -140,7 +139,7 @@ public class ATMMenu extends Menu implements BankAccount.IBankAccountAdvancedMen
             try {
                 id = command.substring("convertUp-".length());
                 coinID = new Identifier(id);
-                Item coinItem = Registry.ITEM.get(coinID);
+                Item coinItem = Registries.ITEM.get(coinID);
                 if(coinItem == null)
                 {
                     LightmansCurrency.LogError("Error handling ATM Conversion command '" + command + "'.\n'" + coinID.toString() + "' is not a registered item.");
@@ -169,7 +168,7 @@ public class ATMMenu extends Menu implements BankAccount.IBankAccountAdvancedMen
             try {
                 id = command.substring("convertDown-".length());
                 Identifier coinID = new Identifier(id);
-                Item coinItem = Registry.ITEM.get(coinID);
+                Item coinItem = Registries.ITEM.get(coinID);
                 if(coinItem == null)
                 {
                     LightmansCurrency.LogError("Error handling ATM Conversion command '" + command + "'.\n'" + coinID.toString() + "' is not a registered item.");
@@ -221,6 +220,6 @@ public class ATMMenu extends Menu implements BankAccount.IBankAccountAdvancedMen
     public void clearMessage() { this.transferMessage = null; }
 
     @Override
-    public boolean isClient() { return this.player.world.isClient; }
+    public boolean isClient() { return this.player.getWorld().isClient; }
 
 }

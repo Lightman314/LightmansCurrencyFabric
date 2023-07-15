@@ -9,7 +9,7 @@ import io.github.lightman314.lightmanscurrency.common.atm.ATMConversionButtonDat
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
 import io.github.lightman314.lightmanscurrency.network.server.messages.bank.CMessageATMExchange;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
@@ -32,12 +32,12 @@ public class ExchangeTab extends ATMTab{
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
-        this.screen.getFont().draw(pose, this.getTooltip(), this.screen.getGuiLeft() + 8f, this.screen.getGuiTop() + 6f, 0x404040);
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
+        gui.drawText(this.screen.getFont(), this.getTooltip(), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040, false);
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY) { }
+    public void postRender(DrawContext gui, int mouseX, int mouseY) { }
 
     @Override
     public void tick() { }

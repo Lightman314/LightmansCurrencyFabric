@@ -1,7 +1,6 @@
 package io.github.lightman314.lightmanscurrency.util.config;
 
 import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
-import net.minecraftforge.api.fml.event.config.ModConfigEvents;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 

@@ -9,7 +9,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
@@ -65,9 +64,6 @@ public abstract class TraderBlockTallRotatable extends TraderBlockRotatable impl
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext context) { return super.getPlacementState(context).with(ISBOTTOM,true); }
-
-    @Override
-    public PistonBehavior getPistonBehavior(BlockState state) { return PistonBehavior.BLOCK; }
 
     @Override
     public void onPlaced(World level, BlockPos pos, BlockState state, LivingEntity player, ItemStack stack)

@@ -10,9 +10,9 @@ import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainButton;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.traders.InputTraderData;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
@@ -49,13 +49,13 @@ public class DirectionalSettingsWidget {
 
     }
 
-    public void renderTooltips(MatrixStack pose, int mouseX, int mouseY, Screen screen)
+    public void renderTooltips(DrawContext gui, int mouseX, int mouseY, TextRenderer font)
     {
         for(Direction side : Direction.values())
         {
             ButtonWidget button = this.getButton(side);
             if(button.isMouseOver(mouseX, mouseY))
-                screen.renderTooltip(pose, InputTraderData.getFacingName(side), mouseX, mouseY);
+                gui.drawTooltip(font, InputTraderData.getFacingName(side), mouseX, mouseY);
         }
     }
 

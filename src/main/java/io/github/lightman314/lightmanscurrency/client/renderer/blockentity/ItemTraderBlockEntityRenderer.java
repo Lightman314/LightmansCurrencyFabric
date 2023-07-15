@@ -13,11 +13,11 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class ItemTraderBlockEntityRenderer implements BlockEntityRenderer<ItemTraderBlockEntity> {
 
@@ -56,10 +56,10 @@ public class ItemTraderBlockEntityRenderer implements BlockEntityRenderer<ItemTr
                     ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
                     //Get positions
-                    List<Vec3f> positions = blockEntity.GetStackRenderPos(tradeSlot, renderItems.size() > 1);
+                    List<Vector3f> positions = blockEntity.GetStackRenderPos(tradeSlot, renderItems.size() > 1);
 
                     //Get rotation
-                    List<Quaternion> rotation = blockEntity.GetStackRenderRot(tradeSlot, partialTicks);
+                    List<Quaternionf> rotation = blockEntity.GetStackRenderRot(tradeSlot, partialTicks);
 
                     //Get scale
                     float scale = blockEntity.GetStackRenderScale(tradeSlot);
@@ -70,11 +70,11 @@ public class ItemTraderBlockEntityRenderer implements BlockEntityRenderer<ItemTr
 
                         pose.push();
 
-                        Vec3f position = positions.get(pos);
+                        Vector3f position = positions.get(pos);
 
                         //Translate, rotate, and scale the matrix stack
-                        pose.translate(position.getX(), position.getY(), position.getZ());
-                        for(Quaternion rot : rotation)
+                        pose.translate(position.x(), position.y(), position.z());
+                        for(Quaternionf rot : rotation)
                         {
                             pose.multiply(rot);
                         }
@@ -90,7 +90,7 @@ public class ItemTraderBlockEntityRenderer implements BlockEntityRenderer<ItemTr
                             pose.translate(0.25, 0.25, 0d);
                             pose.scale(0.5f, 0.5f, 0.5f);
 
-                            itemRenderer.renderItem(renderItems.get(0), ModelTransformation.Mode.FIXED, lightLevel, OverlayTexture.DEFAULT_UV, pose, buffer, id);
+                            itemRenderer.renderItem(renderItems.get(0), ModelTransformationMode.FIXED, lightLevel, OverlayTexture.DEFAULT_UV, pose, buffer, blockEntity.getWorld(), id);
 
                             pose.pop();
 
@@ -101,12 +101,12 @@ public class ItemTraderBlockEntityRenderer implements BlockEntityRenderer<ItemTr
                             pose.translate(-0.25, -0.25, 0.001d);
                             pose.scale(0.5f, 0.5f, 0.5f);
 
-                            itemRenderer.renderItem(renderItems.get(1), ModelTransformation.Mode.FIXED, lightLevel, OverlayTexture.DEFAULT_UV, pose, buffer, id);
+                            itemRenderer.renderItem(renderItems.get(1), ModelTransformationMode.FIXED, lightLevel, OverlayTexture.DEFAULT_UV, pose, buffer, blockEntity.getWorld(), id);
 
                             pose.pop();
                         }
                         else
-                            itemRenderer.renderItem(renderItems.get(0), ModelTransformation.Mode.FIXED, lightLevel, OverlayTexture.DEFAULT_UV, pose, buffer, id);
+                            itemRenderer.renderItem(renderItems.get(0), ModelTransformationMode.FIXED, lightLevel, OverlayTexture.DEFAULT_UV, pose, buffer, blockEntity.getWorld(), id);
 
                         pose.pop();
 

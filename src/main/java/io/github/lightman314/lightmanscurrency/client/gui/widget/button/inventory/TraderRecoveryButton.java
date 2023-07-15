@@ -7,8 +7,8 @@ import io.github.lightman314.lightmanscurrency.common.emergency_ejection.Ejectio
 import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageOpenRecoveryMenu;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -45,20 +45,20 @@ public class TraderRecoveryButton extends InventoryButton {
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         if(EjectionSaveData.GetValidEjectionData(true, this.getPlayer()).size() > 0)
         {
             this.visible = true;
-            super.render(pose, mouseX, mouseY, partialTicks);
+            super.render(gui, mouseX, mouseY, partialTicks);
         }
         else
             this.visible = false;
     }
 
-    public static void tryRenderTooltip(MatrixStack pose, int mouseX, int mouseY) {
+    public static void tryRenderTooltip(DrawContext gui, int mouseX, int mouseY) {
         if(lastButton != null && lastButton.isMouseOver(mouseX, mouseY))
-            lastButton.screen.renderTooltip(pose, Text.translatable("tooltip.button.team_manager"), mouseX, mouseY);
+            gui.drawTooltip(MinecraftClient.getInstance().textRenderer, Text.translatable("tooltip.button.team_manager"), mouseX, mouseY);
     }
 
     private static void openTraderRecoveryMenu() { new CMessageOpenRecoveryMenu().sendToServer(); }

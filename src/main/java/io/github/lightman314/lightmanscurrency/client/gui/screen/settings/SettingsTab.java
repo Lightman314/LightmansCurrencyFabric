@@ -4,7 +4,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.TraderSettingsS
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.tab.ITab;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 
@@ -38,13 +38,13 @@ public abstract class SettingsTab implements ITab {
      * Called when the tab is being rendered.
      * Used to render any text, images, etc. Called before the buttons are rendered, so you don't have to worry about accidentally drawing over them.
      */
-    public abstract void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks);
+    public abstract void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks);
 
     /**
      * Called when the tab is being rendered.
      * Used to render any tooltips, etc. Called after the buttons are rendered so that tooltips will appear in front.
      */
-    public abstract void postRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks);
+    public abstract void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks);
 
     /**
      * Called every frame.

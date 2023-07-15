@@ -11,7 +11,7 @@ import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.options.PermissionOption;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.options.PermissionOption.OptionWidgets;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -73,7 +73,7 @@ public class PermissionsTab extends SettingsTab {
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
         int startHeight = this.calculateStartHeight();
         for(int i = 0; i < this.options.size(); ++i)
         {
@@ -83,12 +83,12 @@ public class PermissionsTab extends SettingsTab {
             int textWidth = 90 - option.widgetWidth();
             int textHeight = this.getFont().getWrappedLinesHeight(option.widgetName().getString(), textWidth);
             int yStart = ((20 - textHeight) / 2) + yPos;
-            TextRenderUtil.drawVerticallyCenteredMultilineText(pose, option.widgetName(), xPos, textWidth, yStart, textHeight, 0xFFFFFF);
+            TextRenderUtil.drawVerticallyCenteredMultilineText(gui, option.widgetName(), xPos, textWidth, yStart, textHeight, 0xFFFFFF);
         }
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) { }
+    public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
     @Override
     public void tick() {

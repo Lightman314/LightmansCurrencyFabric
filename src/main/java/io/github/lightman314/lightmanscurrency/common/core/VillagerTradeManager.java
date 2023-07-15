@@ -25,14 +25,14 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.*;
 import net.minecraft.item.map.MapIcon;
 import net.minecraft.item.map.MapState;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.StructureTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.StructureTags;
-import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.world.gen.structure.Structure;
@@ -299,8 +299,8 @@ public class VillagerTradeManager {
         TradeOfferHelper.registerWanderingTraderOffers(2, VillagerTradeManager::modifyRareWandererTrades);
 
         //Vanilla/Modded Traders
-        Registry.VILLAGER_PROFESSION.forEach(profession -> {
-            Identifier type = Registry.VILLAGER_PROFESSION.getId(profession);
+        Registries.VILLAGER_PROFESSION.forEach(profession -> {
+            Identifier type = Registries.VILLAGER_PROFESSION.getId(profession);
             if(!Objects.equals(type.getNamespace(), LightmansCurrency.MODID))
             {
                 for(int i = 1; i <= 5; ++i)
@@ -520,8 +520,8 @@ public class VillagerTradeManager {
                     "\ncoinValue=" + coinValue +
                     "\nbaseValue=" + baseValue +
                     "\npriceValue=" + priceValue +
-                    "\nprice1=" + price1.getCount() + "x" + Registry.ITEM.getId(price1.getItem()) +
-                    "\nprice2=" + price2.getCount() + "x" + Registry.ITEM.getId(price2.getItem())
+                    "\nprice1=" + price1.getCount() + "x" + Registries.ITEM.getId(price1.getItem()) +
+                    "\nprice2=" + price2.getCount() + "x" + Registries.ITEM.getId(price2.getItem())
             );
 
             return new TradeOffer(price1, price2, itemstack, this.maxUses, this.xpValue, this.priceMultiplier);
@@ -545,14 +545,14 @@ public class VillagerTradeManager {
         @Override
         public TradeOffer create(Entity trader, Random rand) {
 
-            List<Enchantment> list = Registry.ENCHANTMENT.stream().filter(Enchantment::isAvailableForEnchantedBookOffer).toList();
+            List<Enchantment> list = Registries.ENCHANTMENT.stream().filter(Enchantment::isAvailableForEnchantedBookOffer).toList();
             Enchantment enchantment = list.get(rand.nextInt(list.size()));
 
             int level = 1;
             if(enchantment.getMaxLevel() > 0)
                 level = rand.nextInt(enchantment.getMaxLevel()) + 1;
             else
-                LightmansCurrency.LogError("Enchantment of type '" + Registry.ENCHANTMENT.getId(enchantment) + "' has a max enchantment level of " + enchantment.getMaxLevel() + ". Unable to properly randomize the enchantment level for a villager trade. Will default to a level 1 enchantment.");
+                LightmansCurrency.LogError("Enchantment of type '" + Registries.ENCHANTMENT.getId(enchantment) + "' has a max enchantment level of " + enchantment.getMaxLevel() + ". Unable to properly randomize the enchantment level for a villager trade. Will default to a level 1 enchantment.");
             ItemStack itemstack = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(enchantment, level));
 
             long coinValue = MoneyUtil.getValue(baseCoin);
@@ -576,8 +576,8 @@ public class VillagerTradeManager {
                     "\nlevel=" + level +
                     "\nvalueRandom=" + valueRandom +
                     "\nvalue=" + value +
-                    "\nprice1=" + price1.getCount() + "x" + Registry.ITEM.getId(price1.getItem()) +
-                    "\nprice2=" + price2.getCount() + "x" + Registry.ITEM.getId(price2.getItem())
+                    "\nprice1=" + price1.getCount() + "x" + Registries.ITEM.getId(price1.getItem()) +
+                    "\nprice2=" + price2.getCount() + "x" + Registries.ITEM.getId(price2.getItem())
             );
 
             return new TradeOffer(price1, price2, itemstack, 12, this.xpValue, 0.05f);
@@ -616,7 +616,7 @@ public class VillagerTradeManager {
         @Override
         public TradeOffer create(Entity trader, Random rand) {
 
-            if(!(trader.world instanceof ServerWorld serverworld))
+            if(!(trader.getWorld() instanceof ServerWorld serverworld))
                 return null;
             else
             {
@@ -703,7 +703,7 @@ public class VillagerTradeManager {
         public TradeOffer create(Entity trader, Random random) {
             try {
                 int attempts = 0;
-                TradeOffer offer = null;
+                TradeOffer offer;
                 do
                 {
                     offer = this.tradeSource.create(trader, random);

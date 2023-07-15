@@ -21,7 +21,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
@@ -98,7 +97,7 @@ public class BankSaveData extends PersistentState {
         return results;
     }
 
-    public static BankAccount GetBankAccount(PlayerEntity player) { return GetBankAccount(player.world.isClient, player.getUuid()); }
+    public static BankAccount GetBankAccount(PlayerEntity player) { return GetBankAccount(player.getWorld().isClient, player.getUuid()); }
 
     public static BankAccount GetBankAccount(boolean isClient, UUID player) {
         if(player == null)
@@ -151,7 +150,7 @@ public class BankSaveData extends PersistentState {
     }
 
     public static BankAccount.AccountReference GetSelectedBankAccount(PlayerEntity player) {
-        if(player.world.isClient)
+        if(player.getWorld().isClient)
         {
             ClientBankData.GetLastSelectedAccount();
         }
@@ -184,7 +183,7 @@ public class BankSaveData extends PersistentState {
         //Ignore if the account is null or the player isn't allowed to access it.
         if(account == null)
             return;
-        if(player.world.isClient)
+        if(player.getWorld().isClient)
         {
             new CMessageSelectBankAccount(account).sendToServer();
         }

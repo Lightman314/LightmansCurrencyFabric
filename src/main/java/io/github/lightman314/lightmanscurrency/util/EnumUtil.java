@@ -12,4 +12,6 @@ public class EnumUtil {
         return defaultValue;
     }
 
+    public static <T extends Enum<?>> int sortEnum(T e1, T e2) { return Integer.compare(e1.ordinal(), e2.ordinal()); }
+
 }

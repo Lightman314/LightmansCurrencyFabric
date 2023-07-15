@@ -1,12 +1,11 @@
 package io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,37 +18,42 @@ public class IconButton extends ButtonWidget {
 
     private Function<IconButton, IconData> iconSource;
 
+    private Supplier<Tooltip> tooltip = () -> null;
+
     private Supplier<Boolean> activeCheck = () -> this.active;
     private Supplier<Boolean> visibilityCheck = () -> this.visible;
 
     public IconButton(int x, int y, PressAction pressable, @NotNull IconData icon)
     {
-        super(x, y, SIZE, SIZE, Text.empty(), pressable);
+        super(x, y, SIZE, SIZE, Text.empty(), pressable, DEFAULT_NARRATION_SUPPLIER);
         this.setIcon(icon);
     }
 
     public IconButton(int x, int y, PressAction pressable, @NotNull Supplier<IconData> iconSource)
     {
-        super(x, y, SIZE, SIZE, Text.empty(), pressable);
+        super(x, y, SIZE, SIZE, Text.empty(), pressable, DEFAULT_NARRATION_SUPPLIER);
         this.setIcon(iconSource);
     }
 
-    public IconButton(int x, int y, PressAction pressable, @NotNull IconData icon, TooltipSupplier tooltip)
+    public IconButton(int x, int y, PressAction pressable, @NotNull IconData icon, Supplier<Tooltip> tooltip)
     {
-        super(x, y, SIZE, SIZE, Text.empty(), pressable, tooltip);
+        super(x, y, SIZE, SIZE, Text.empty(), pressable, DEFAULT_NARRATION_SUPPLIER);
         this.setIcon(icon);
+        this.tooltip = tooltip;
     }
 
-    public IconButton(int x, int y, PressAction pressable, @NotNull Supplier<IconData> iconSource, TooltipSupplier tooltip)
+    public IconButton(int x, int y, PressAction pressable, @NotNull Supplier<IconData> iconSource, Supplier<Tooltip> tooltip)
     {
-        super(x, y, SIZE, SIZE, Text.empty(), pressable, tooltip);
+        super(x, y, SIZE, SIZE, Text.empty(), pressable, DEFAULT_NARRATION_SUPPLIER);
         this.setIcon(iconSource);
+        this.tooltip = tooltip;
     }
 
-    public IconButton(int x, int y, PressAction pressable, @NotNull Function<IconButton,IconData> iconSource, TooltipSupplier tooltip)
+    public IconButton(int x, int y, PressAction pressable, @NotNull Function<IconButton,IconData> iconSource, Supplier<Tooltip> tooltip)
     {
-        super(x,y,SIZE, SIZE, Text.empty(), pressable, tooltip);
+        super(x,y,SIZE, SIZE, Text.empty(), pressable, DEFAULT_NARRATION_SUPPLIER);
         this.setIcon(iconSource);
+        this.tooltip = tooltip;
     }
 
     public void setVisiblityCheck(Supplier<Boolean> visibilityCheck) {
@@ -73,30 +77,40 @@ public class IconButton extends ButtonWidget {
     public void setIcon(@NotNull Function<IconButton,IconData> iconSource) { this.iconSource = iconSource; }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
         this.visible = this.visibilityCheck.get();
         this.active = this.activeCheck.get();
-        super.render(pose, mouseX, mouseY, partialTicks);
+        if(this.active)
+            this.setTooltip(this.tooltip.get());
+        else
+            this.setTooltip(null);
+        super.render(gui, mouseX, mouseY, partialTicks);
+    }
+
+    private int getTextureY() {
+        int i = 1;
+        if (!this.active) {
+            i = 0;
+        } else if (this.isSelected()) {
+            i = 2;
+        }
+
+        return 46 + i * 20;
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
-        RenderSystem.setShaderColor(1f,  1f,  1f, 1f);
-
+        gui.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-        RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
-        int offset = this.getYImage(this.hovered);
-        this.drawTexture(matrixStack, this.x, this.y, 0, 46 + offset * 20, this.width / 2, this.height);
-        this.drawTexture(matrixStack, this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + offset * 20, this.width / 2, this.height);
+        RenderSystem.enableDepthTest();
+        gui.drawNineSlicedTexture(WIDGETS_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getTextureY());
+        gui.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         if(!this.active)
             RenderSystem.setShaderColor(0.5F, 0.5F, 0.5F, 1.0F);
 
-        this.iconSource.apply(this).render(matrixStack, this, MinecraftClient.getInstance().textRenderer, this.x + 2, this.y + 2);
+        this.iconSource.apply(this).render(gui, MinecraftClient.getInstance().textRenderer, this.getX() + 2, this.getY() + 2);
 
     }
 

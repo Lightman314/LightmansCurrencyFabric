@@ -32,8 +32,8 @@ import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
 import io.github.lightman314.lightmanscurrency.util.TimeUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -442,10 +442,10 @@ public class AuctionTradeData extends TradeData {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void renderAdditional(ClickableWidget button, MatrixStack pose, int mouseX, int mouseY, TradeContext context) {
+    public void renderAdditional(ClickableWidget button, DrawContext gui, int mouseX, int mouseY, TradeContext context) {
         //Draw remaining time
         TimeUtil.TimeData time = new TimeUtil.TimeData(this.getRemainingTime(TimeUtil.getCurrentTime()));
-        TextRenderUtil.drawCenteredText(pose, time.getShortString(1), button.x + button.getWidth() / 2, button.y + button.getHeight() - 9, this.getTextColor(time));
+        TextRenderUtil.drawCenteredText(gui, time.getShortString(1), button.getX() + button.getWidth() / 2, button.getY() + button.getHeight() - 9, this.getTextColor(time));
     }
 
     public List<Text> getAdditionalTooltips(TradeContext context, int mouseX, int mouseY) {

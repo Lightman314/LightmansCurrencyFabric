@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class BankCategory extends NotificationCategory {
 
@@ -22,7 +23,7 @@ public class BankCategory extends NotificationCategory {
     }
 
     @Override
-    public IconData getIcon() { return IconData.of(ModBlocks.MACHINE_ATM); }
+    public @NotNull IconData getIcon() { return IconData.of(ModBlocks.MACHINE_ATM); }
 
     @Override
     public MutableText getName() { return this.name; }

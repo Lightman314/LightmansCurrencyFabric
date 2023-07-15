@@ -167,7 +167,7 @@ public class BankAccount {
                 if(!player.giveItemStack(remainder))
                 {
                     //Drop the remainder on the ground
-                    InventoryUtil.dumpContents(player.world, player.getBlockPos(), remainder);
+                    InventoryUtil.dumpContents(player.getWorld(), player.getBlockPos(), remainder);
                 }
             }
         }
@@ -229,7 +229,7 @@ public class BankAccount {
         return compound;
     }
 
-    public static AccountReference GenerateReference(PlayerEntity player) { return GenerateReference(player.world.isClient, player.getUuid()); }
+    public static AccountReference GenerateReference(PlayerEntity player) { return GenerateReference(player.getWorld().isClient, player.getUuid()); }
     public static AccountReference GenerateReference(boolean isClient, @Nullable UUID playerID) { return new AccountReference(isClient, playerID); }
     public static AccountReference GenerateReference(boolean isClient, @Nullable PlayerReference player) { return GenerateReference(isClient, player == null ? null : player.id); }
     public static AccountReference GenerateReference(boolean isClient, Team team) { return GenerateReference(isClient, team.getID()); }

@@ -15,11 +15,11 @@ import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -134,30 +134,29 @@ public class TeamManagerScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks)
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
-        this.renderBackground(pose);
+        this.renderBackground(gui);
         //Render the background
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        this.drawTexture(pose, this.guiLeft(), this.guiTop(), 0, 0, this.xSize, this.ySize);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
+        gui.drawTexture(GUI_TEXTURE, this.guiLeft(), this.guiTop(), 0, 0, this.xSize, this.ySize);
         //Render the tab buttons
-        super.render(pose, mouseX, mouseY, partialTicks);
+        super.render(gui, mouseX, mouseY, partialTicks);
 
         try {
             //Pre-render the tab
-            this.currentTab().preRender(pose, mouseX, mouseY, partialTicks);
+            this.currentTab().preRender(gui, mouseX, mouseY, partialTicks);
             //Render the renderables
-            this.tabWidgets.forEach(widget -> widget.render(pose, mouseX, mouseY, partialTicks));
+            this.tabWidgets.forEach(widget -> widget.render(gui, mouseX, mouseY, partialTicks));
             //Post-render the tab
-            this.currentTab().postRender(pose, mouseX, mouseY, partialTicks);
+            this.currentTab().postRender(gui, mouseX, mouseY, partialTicks);
         } catch(Exception ignored) { }
 
 
         //Render the tab button tooltips
         for (TabButton tabButton : this.tabButtons) {
             if (tabButton.isMouseOver(mouseX, mouseY))
-                this.renderTooltip(pose, tabButton.tab.getTooltip(), mouseX, mouseY);
+                gui.drawTooltip(this.textRenderer, tabButton.tab.getTooltip(), mouseX, mouseY);
         }
     }
 

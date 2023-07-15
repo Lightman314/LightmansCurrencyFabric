@@ -11,7 +11,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.common.traders.InputTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
@@ -113,30 +113,30 @@ public class InputTab extends SettingsTab {
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
 
         TraderSettingsScreen screen = this.getScreen();
         //ItemTraderSettings settings = this.getSetting(ItemTraderSettings.class);
 
         //Side Widget Labels
-        this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.settings.iteminput.side"), screen.guiLeft() + 20, screen.guiTop() + 7, this.getTextColor());
-        this.getFont().draw(pose, Text.translatable("gui.lightmanscurrency.settings.itemoutput.side"), screen.guiLeft() + 110, screen.guiTop() + 7, this.getTextColor());
+        gui.drawText(this.getFont(), Text.translatable("gui.lightmanscurrency.settings.iteminput.side"), screen.guiLeft() + 20, screen.guiTop() + 7, this.getTextColor(), false);
+        gui.drawText(this.getFont(), Text.translatable("gui.lightmanscurrency.settings.itemoutput.side"), screen.guiLeft() + 110, screen.guiTop() + 7, this.getTextColor(), false);
 
-        this.getAddons().forEach(a -> a.preRender(screen, pose, mouseX, mouseY, partialTicks));
+        this.getAddons().forEach(a -> a.preRender(screen, gui, mouseX, mouseY, partialTicks));
 
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         TraderSettingsScreen screen = this.getScreen();
 
         //Render side tooltips
-        this.inputWidget.renderTooltips(pose, mouseX, mouseY, this.getScreen());
-        this.outputWidget.renderTooltips(pose, mouseX, mouseY, this.getScreen());
+        this.inputWidget.renderTooltips(gui, mouseX, mouseY, this.getFont());
+        this.outputWidget.renderTooltips(gui, mouseX, mouseY, this.getFont());
 
-        this.getAddons().forEach(a -> a.postRender(screen, pose, mouseX, mouseY, partialTicks));
+        this.getAddons().forEach(a -> a.postRender(screen, gui, mouseX, mouseY, partialTicks));
 
     }
 

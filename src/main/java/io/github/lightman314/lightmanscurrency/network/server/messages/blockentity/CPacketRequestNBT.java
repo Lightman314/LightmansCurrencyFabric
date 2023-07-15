@@ -24,7 +24,7 @@ public class CPacketRequestNBT extends ClientToServerPacket {
     protected void encode(PacketByteBuf buffer) { buffer.writeBlockPos(this.pos); }
 
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        BlockEntity blockEntity = player.world.getBlockEntity(buffer.readBlockPos());
+        BlockEntity blockEntity = player.getWorld().getBlockEntity(buffer.readBlockPos());
         if(blockEntity != null)
             BlockEntityUtil.sendUpdatePacket(blockEntity);
     }

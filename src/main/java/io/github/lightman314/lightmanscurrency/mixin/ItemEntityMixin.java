@@ -18,7 +18,7 @@ public class ItemEntityMixin {
     @Inject(at = @At("HEAD"), method = "onPlayerCollision")
     public void onPlayerCollision(PlayerEntity player, CallbackInfo info) {
         ItemEntity self = this.self();
-        if(!self.world.isClient && !self.isRemoved() && !self.cannotPickup())
+        if(!self.getWorld().isClient && !self.isRemoved() && !self.cannotPickup())
             ItemEntityCollisionCallback.EVENT.invoker().onItemPickup(self, player);
     }
 }

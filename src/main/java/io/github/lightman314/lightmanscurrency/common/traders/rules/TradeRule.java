@@ -16,6 +16,7 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.traders.events.TradeEvent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -212,7 +213,7 @@ public abstract class TradeRule {
 
         public abstract void initTab();
 
-        public abstract void renderTab(MatrixStack poseStack, int mouseX, int mouseY, float partialTicks);
+        public abstract void renderTab(DrawContext gui, int mouseX, int mouseY, float partialTicks);
 
         public abstract void onTabClose();
 

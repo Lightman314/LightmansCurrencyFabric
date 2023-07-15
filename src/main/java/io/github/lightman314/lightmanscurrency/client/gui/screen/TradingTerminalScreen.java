@@ -19,11 +19,10 @@ import io.github.lightman314.lightmanscurrency.common.traders.auction.AuctionHou
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.TraderSearchFilter;
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.CMessageOpenTrades;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -112,25 +111,23 @@ public class TradingTerminalScreen extends Screen implements IScrollable{
     }
 
     @Override
-    public void render(MatrixStack poseStack, int mouseX, int mouseY, float partialTicks)
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
         if(this.client == null)
             this.client = MinecraftClient.getInstance();
 
-        this.renderBackground(poseStack);
+        this.renderBackground(gui);
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        gui.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         int startX = (this.width - this.xSize) / 2;
         int startY = (this.height - this.ySize) / 2;
         //Render the background
-        this.drawTexture(poseStack, startX, startY, 0, 0, this.xSize, this.ySize);
+        gui.drawTexture(GUI_TEXTURE, startX, startY, 0, 0, this.xSize, this.ySize);
 
         this.scrollBar.beforeWidgetRender(mouseY);
 
-        super.render(poseStack, mouseX, mouseY, partialTicks);
+        super.render(gui, mouseX, mouseY, partialTicks);
 
     }
 

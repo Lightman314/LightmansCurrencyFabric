@@ -2,7 +2,6 @@ package io.github.lightman314.lightmanscurrency.common.money;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
@@ -18,9 +17,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class MoneyData extends ServerToClientPacket {
 
@@ -105,18 +104,18 @@ public class MoneyData extends ServerToClientPacket {
             //Confirm that there's no duplicate coin
             if(coinData.coinItem == newCoinData.coinItem)
             {
-                LightmansCurrency.LogWarning("Attempted to add Duplicate Coin Item (" + Registry.ITEM.getId(newCoinData.coinItem).toString() + ") to the coin list.");
+                LightmansCurrency.LogWarning("Attempted to add Duplicate Coin Item (" + Registries.ITEM.getId(newCoinData.coinItem).toString() + ") to the coin list.");
                 //LightmansCurrency.LOGGER.warn("Please use MoneyUtil.changeCoinValue if you wish to change a coins value.");
                 return;
             }
             //Confirm that there's no duplicate dependent (Ignore this if either party is hidden, as conversion will be ignored for that coin)
             if(coinData.worthOtherCoin == newCoinData.worthOtherCoin && !newCoinData.isHidden && !coinData.isHidden && newCoinData.worthOtherCoin != null && coinData.chain.contentEquals(newCoinData.chain))
             {
-                LightmansCurrency.LogWarning("Attempted to add a new Coin Item '" + Registry.ITEM.getId(newCoinData.coinItem) + "' with the same dependent (" + Registry.ITEM.getId(coinData.worthOtherCoin) + ") as another coin (" + Registry.ITEM.getId(coinData.coinItem) + ") in the same chain '" + coinData.chain + "'.\nEntry will be flagged as hidden.");
+                LightmansCurrency.LogWarning("Attempted to add a new Coin Item '" + Registries.ITEM.getId(newCoinData.coinItem) + "' with the same dependent (" + Registries.ITEM.getId(coinData.worthOtherCoin) + ") as another coin (" + Registries.ITEM.getId(coinData.coinItem) + ") in the same chain '" + coinData.chain + "'.\nEntry will be flagged as hidden.");
                 newCoinData = newCoinDataBuilder.setHidden().build();
             }
         }
-        LightmansCurrency.LogInfo("Registered " + Registry.ITEM.getId(newCoinData.coinItem) + " as a coin.");
+        LightmansCurrency.LogInfo("Registered " + Registries.ITEM.getId(newCoinData.coinItem) + " as a coin.");
         coinList.add(newCoinData);
 
     }

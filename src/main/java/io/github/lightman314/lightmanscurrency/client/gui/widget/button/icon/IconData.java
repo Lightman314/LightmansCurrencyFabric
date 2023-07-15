@@ -3,15 +3,12 @@ package io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -20,7 +17,7 @@ import net.minecraft.util.Identifier;
 public abstract class IconData {
 
     @Environment(EnvType.CLIENT)
-    public abstract void render(MatrixStack pose, ClickableWidget widget, TextRenderer font, int x, int y);
+    public abstract void render(DrawContext gui, TextRenderer font, int x, int y);
 
     private static class ItemIcon extends IconData
     {
@@ -28,9 +25,9 @@ public abstract class IconData {
         private ItemIcon(ItemStack iconStack) { this.iconStack = iconStack; }
 
         @Override
-        public void render(MatrixStack matrixStack, ClickableWidget widget, TextRenderer font, int x, int y)
+        public void render(DrawContext gui, TextRenderer font, int x, int y)
         {
-            ItemRenderUtil.drawItemStack(widget, font, this.iconStack, x, y);
+            ItemRenderUtil.drawItemStack(gui, font, this.iconStack, x, y);
         }
 
     }
@@ -47,10 +44,9 @@ public abstract class IconData {
         }
 
         @Override
-        public void render(MatrixStack matrixStack, ClickableWidget widget, TextRenderer font, int x, int y)
+        public void render(DrawContext gui, TextRenderer font, int x, int y)
         {
-            RenderSystem.setShaderTexture(0, this.iconImage);
-            widget.drawTexture(matrixStack, x, y, iconImageU, iconImageV, 16, 16);
+            gui.drawTexture(this.iconImage, x, y, iconImageU, iconImageV, 16, 16);
         }
 
     }
@@ -65,11 +61,12 @@ public abstract class IconData {
         }
 
         @Override
-        public void render(MatrixStack matrixStack, ClickableWidget widget, TextRenderer font, int x, int y)
+        public void render(DrawContext gui, TextRenderer font, int x, int y)
         {
             int xPos = x + 8 - (font.getWidth(iconText.getString())/2);
             int yPos = y + ((16 - font.fontHeight) / 2);
-            font.drawWithShadow(matrixStack, this.iconText.getString(), xPos, yPos, this.textColor);
+
+            gui.drawText(font, this.iconText.getString(), xPos, yPos, this.textColor, true);
         }
     }
 
@@ -78,13 +75,13 @@ public abstract class IconData {
         private final List<IconData> icons;
         private MultiIcon(List<IconData> icons) { this.icons = icons; }
         @Override
-        public void render(MatrixStack pose, ClickableWidget widget, TextRenderer font, int x, int y) {
+        public void render(DrawContext gui, TextRenderer font, int x, int y) {
             for(IconData icon : this.icons)
-                icon.render(pose, widget, font, x, y);
+                icon.render(gui, font, x, y);
         }
     }
 
-    public static final IconData BLANK = new IconData() { public void render(MatrixStack pose, ClickableWidget widget, TextRenderer font, int x, int y) {} };
+    public static final IconData BLANK = new IconData() { public void render(DrawContext gui, TextRenderer font, int x, int y) {} };
 
     public static IconData of(ItemConvertible item) { return of(new ItemStack(item)); }
     public static IconData of(ItemStack iconStack) { return new ItemIcon(iconStack); }

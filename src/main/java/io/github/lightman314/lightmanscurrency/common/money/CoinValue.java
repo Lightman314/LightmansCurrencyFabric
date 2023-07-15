@@ -21,11 +21,11 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.registry.Registry;
 
 
 public class CoinValue
@@ -131,7 +131,7 @@ public class CoinValue
             {
                 NbtCompound thisCompound = new NbtCompound();
                 //new ItemStack(null).write(nbt)
-                Identifier id = Registry.ITEM.getId(value.coin);
+                Identifier id = Registries.ITEM.getId(value.coin);
                 if(id != null && MoneyUtil.isCoin(value.coin))
                 {
                     thisCompound.putString("ID", id.toString());
@@ -164,7 +164,7 @@ public class CoinValue
                 for(int i = 0; i < listNBT.size(); i++)
                 {
                     NbtCompound thisCompound = listNBT.getCompound(i);
-                    Item priceCoin = Registry.ITEM.get(new Identifier(thisCompound.getString("ID")));
+                    Item priceCoin = Registries.ITEM.get(new Identifier(thisCompound.getString("ID")));
                     int amount = thisCompound.getInt("Count");
                     this.coinValues.add(new CoinValuePair(priceCoin,amount));
                 }
@@ -575,13 +575,13 @@ public class CoinValue
                 Item coinItem = Items.AIR;
                 int quantity = 1;
                 if(coinData.has("Coin"))
-                    coinItem = Registry.ITEM.get(new Identifier(coinData.get("Coin").getAsString()));
+                    coinItem = Registries.ITEM.get(new Identifier(coinData.get("Coin").getAsString()));
                 if(coinData.has("Count"))
                     quantity = coinData.get("Count").getAsInt();
                 if(quantity <= 0)
                     LightmansCurrency.LogWarning("Coin Count (" + quantity + ") is <= 0. Entry will be ignored.");
                 else if(!MoneyUtil.isCoin(coinItem))
-                    LightmansCurrency.LogWarning("Coin Item (" + Registry.ITEM.getId(coinItem) + ") is not a valid coin. Entry will be ignored.");
+                    LightmansCurrency.LogWarning("Coin Item (" + Registries.ITEM.getId(coinItem) + ") is not a valid coin. Entry will be ignored.");
                 else
                     pairs.add(new CoinValuePair(coinItem, quantity));
             }
@@ -602,7 +602,7 @@ public class CoinValue
             {
                 JsonObject entry = new JsonObject();
                 CoinValuePair pair = this.coinValues.get(i);
-                entry.addProperty("Coin", Registry.ITEM.getId(pair.coin).toString());
+                entry.addProperty("Coin", Registries.ITEM.getId(pair.coin).toString());
                 entry.addProperty("Count", pair.amount);
                 array.add(entry);
             }

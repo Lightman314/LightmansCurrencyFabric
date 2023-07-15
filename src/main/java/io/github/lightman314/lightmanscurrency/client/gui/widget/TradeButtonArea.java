@@ -20,10 +20,9 @@ import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeDat
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
@@ -81,7 +80,7 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
 
     public void init(int scrollBarXOffset, int scrollBarYOffset, int scrollBarHeight) {
         this.scrollBarXOffset = scrollBarXOffset;
-        this.scrollBar = new ScrollBarWidget(this.x + this.width + scrollBarXOffset, this.y + scrollBarYOffset, scrollBarHeight, this);
+        this.scrollBar = new ScrollBarWidget(this.getX() + this.width + scrollBarXOffset, this.getY() + scrollBarYOffset, scrollBarHeight, this);
         this.addWidget.accept(scrollBar);
         this.resetButtons();
         this.tick();
@@ -145,11 +144,11 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
         if(this.validTrades() <= 0)
         {
             int textWidth = this.font.getWidth(Text.translatable("gui.lightmanscurrency.notrades"));
-            this.font.draw(pose, Text.translatable("gui.lightmanscurrency.notrades"), this.x + (this.width / 2f) - (textWidth / 2f), this.y + (this.height / 2f) - (this.font.fontHeight / 2f), 0x404040);
+            gui.drawText(this.font, Text.translatable("gui.lightmanscurrency.notrades"), this.getX() + (this.width / 2) - (textWidth / 2), this.getY() + (this.height / 2) - (this.font.fontHeight / 2), 0x404040, false);
         }
     }
 
@@ -247,7 +246,7 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
                 TradeButton button = this.allButtons.get(displayIndex);
                 if (trade.getFirst() != null && trade.getSecond() != null) {
                     TradeContext context = this.getContext.apply(trade.getFirst());
-                    button.move(this.x + xOffset, this.y + yOffset);
+                    button.setPosition(this.getX() + xOffset, this.getY() + yOffset);
                     button.visible = true;
                     button.active = !this.isSelected.apply(trade.getFirst(), trade.getSecond());
                     xOffset += trade.getSecond().tradeButtonWidth(context) + spacing;
@@ -276,7 +275,7 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
         }
     }
 
-    public void renderTraderName(MatrixStack pose, int x, int y, int maxWidth, boolean renderTitle)
+    public void renderTraderName(DrawContext gui, int x, int y, int maxWidth, boolean renderTitle)
     {
         if(this.traderSource == null)
             return;
@@ -290,20 +289,20 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
                 text.append(Text.translatable("gui.lightmanscurrency.trading.listseperator").getString()).append(renderTitle ? trader.getTitle().getString() : trader.getName().getString());
         }
 
-        this.font.draw(pose, TextRenderUtil.fitString(text.toString(), maxWidth), x, y, 0x404040);
+        gui.drawText(this.font, TextRenderUtil.fitString(text.toString(), maxWidth), x, y, 0x404040, false);
 
     }
 
-    public void renderTooltips(Screen screen, MatrixStack pose, int nameX, int nameY, int nameWidth, int mouseX, int mouseY)
+    public void renderTooltips(DrawContext gui, int nameX, int nameY, int nameWidth, int mouseX, int mouseY)
     {
         for(TradeButton button : this.allButtons)
         {
-            button.renderTooltips(pose, mouseX, mouseY);
+            button.renderTooltips(gui, this.font, mouseX, mouseY);
         }
-        this.renderTraderNameTooltip(screen, pose, nameX, nameY, nameWidth, mouseX, mouseY);
+        this.renderTraderNameTooltip(gui, nameX, nameY, nameWidth, mouseX, mouseY);
     }
 
-    public void renderTraderNameTooltip(Screen screen, MatrixStack pose, int x, int y, int maxWidth, int mouseX, int mouseY)
+    public void renderTraderNameTooltip(DrawContext gui, int x, int y, int maxWidth, int mouseX, int mouseY)
     {
         if(mouseX >= x && mouseX < x + maxWidth && mouseY >= y && mouseY < y + this.font.fontHeight)
         {
@@ -316,7 +315,7 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
             if(tooltips.size() == 0)
                 return;
 
-            screen.renderTooltip(pose, tooltips, mouseX, mouseY);
+            gui.drawTooltip(this.font, tooltips, mouseX, mouseY);
         }
     }
 
@@ -376,7 +375,7 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) { }
+    public void appendClickableNarrations(NarrationMessageBuilder builder) { }
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) { return true; }

@@ -1,14 +1,11 @@
 package io.github.lightman314.lightmanscurrency.client.gui.widget.button;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -30,7 +27,7 @@ public class NetworkTraderButton extends ButtonWidget {
 
     public NetworkTraderButton(int x, int y, PressAction pressable, TextRenderer font)
     {
-        super(x, y, WIDTH, HEIGHT, Text.empty(), pressable);
+        super(x, y, WIDTH, HEIGHT, Text.empty(), pressable, DEFAULT_NARRATION_SUPPLIER);
         this.font = font;
     }
 
@@ -40,7 +37,7 @@ public class NetworkTraderButton extends ButtonWidget {
     public void SetData(TraderData data) { this.data = data; }
 
     @Override
-    public void renderButton(MatrixStack poseStack, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
         //Set active status
         this.active = this.data != null && !this.selected;
@@ -48,26 +45,24 @@ public class NetworkTraderButton extends ButtonWidget {
         if(this.data == null)
             return;
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, BUTTON_TEXTURES);
         if(this.active)
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            gui.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         else
-            RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1.0F);
+            gui.setShaderColor(0.5f, 0.5f, 0.5f, 1.0F);
 
         int offset = 0;
         if(this.hovered || this.selected)
             offset = HEIGHT;
         //Draw Button BG
-        this.drawTexture(poseStack, this.x, this.y, 0, offset, WIDTH, HEIGHT);
+        gui.drawTexture(BUTTON_TEXTURES, this.getX(), this.getY(), 0, offset, WIDTH, HEIGHT);
 
         //Draw the icon
-        this.data.getIcon().render(poseStack, this, this.font, this.x + 4, this.y + 7);
+        this.data.getIcon().render(gui, this.font, this.getX() + 4, this.getY() + 7);
 
         //Draw the name & owner of the trader
         Style style = this.data.isCreative() ? Style.EMPTY.withFormatting(Formatting.GREEN) : Style.EMPTY;
-        this.font.draw(poseStack, TextRenderUtil.fitString(this.data.getName(), this.width - 26, style), this.x + 24f, this.y + 6f, 0x404040);
-        this.font.draw(poseStack, TextRenderUtil.fitString(this.data.getOwner().getOwnerName(true), this.width - 26), this.x + 24f, this.y + 16f, 0x404040);
+        gui.drawText(this.font, TextRenderUtil.fitString(this.data.getName(), this.width - 26, style), this.getX() + 24, this.getY() + 6, 0x404040, false);
+        gui.drawText(this.font, TextRenderUtil.fitString(this.data.getOwner().getOwnerName(true), this.width - 26), this.getX() + 24, this.getY() + 16, 0x404040, false);
 
     }
 

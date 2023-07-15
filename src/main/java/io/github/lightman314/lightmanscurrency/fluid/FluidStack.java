@@ -1,15 +1,13 @@
 package io.github.lightman314.lightmanscurrency.fluid;
 
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class FluidStack implements FluidVariant {
 
@@ -39,7 +37,7 @@ public class FluidStack implements FluidVariant {
     @Override
     public NbtCompound toNbt() {
         NbtCompound compound = new NbtCompound();
-        compound.putString("Fluid", Registry.FLUID.getId(this.fluid).toString());
+        compound.putString("Fluid", Registries.FLUID.getId(this.fluid).toString());
         compound.putLong("Quantity", Math.max(this.quantity, 0));
         if(this.nbt != null)
             compound.put("Tag", this.nbt);
@@ -47,7 +45,7 @@ public class FluidStack implements FluidVariant {
     }
 
     public static FluidStack fromNbt(NbtCompound compound) {
-        Fluid fluid = Registry.FLUID.get(new Identifier(compound.getString("Fluid")));
+        Fluid fluid = Registries.FLUID.get(new Identifier(compound.getString("Fluid")));
         long quantity = compound.getLong("Quantity");
         NbtCompound nbt = null;
         if(compound.contains("Tag", NbtElement.COMPOUND_TYPE))
@@ -61,7 +59,7 @@ public class FluidStack implements FluidVariant {
         buffer.writeBoolean(this.isEmpty());
         if(!this.isEmpty())
         {
-            buffer.writeString(Registry.FLUID.getId(this.fluid).toString());
+            buffer.writeString(Registries.FLUID.getId(this.fluid).toString());
             buffer.writeLong(Math.max(this.quantity, 0));
             buffer.writeBoolean(this.nbt != null);
             if(this.nbt != null)
@@ -72,7 +70,7 @@ public class FluidStack implements FluidVariant {
     public static FluidStack fromPacket(PacketByteBuf buffer) {
         if(buffer.readBoolean())
             return FluidStack.EMPTY;
-        Fluid fluid = Registry.FLUID.get(new Identifier(buffer.readString()));
+        Fluid fluid = Registries.FLUID.get(new Identifier(buffer.readString()));
         long quantity = buffer.readLong();
         NbtCompound nbt = buffer.readBoolean() ? buffer.readUnlimitedNbt() : null;
         FluidStack stack = new FluidStack(fluid, quantity, nbt);

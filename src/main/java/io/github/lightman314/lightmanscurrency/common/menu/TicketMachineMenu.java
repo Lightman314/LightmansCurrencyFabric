@@ -9,7 +9,6 @@ import io.github.lightman314.lightmanscurrency.common.menu.slots.OutputSlot;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.ticket.TicketMasterSlot;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.ticket.TicketMaterialSlot;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -29,7 +28,7 @@ public class TicketMachineMenu extends Menu {
     public TicketMachineMenu(int windowId, PlayerInventory inventory, BlockPos blockPos)
     {
         super(ModMenus.TICKET_MACHINE, windowId);
-        BlockEntity blockEntity = inventory.player.world.getBlockEntity(blockPos);
+        BlockEntity blockEntity = inventory.player.getWorld().getBlockEntity(blockPos);
         if(blockEntity instanceof TicketMachineBlockEntity)
             this.ticketMachine = (TicketMachineBlockEntity)blockEntity;
         else
@@ -63,14 +62,14 @@ public class TicketMachineMenu extends Menu {
     public boolean canUse(PlayerEntity playerIn) { return this.ticketMachine != null && !this.ticketMachine.isRemoved(); }
 
     @Override
-    public void close(PlayerEntity playerIn)
+    public void onClosed(PlayerEntity playerIn)
     {
-        super.close(playerIn);
+        super.onClosed(playerIn);
         this.dropInventory(playerIn,  this.output);
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity, int index)
+    public ItemStack quickMove(PlayerEntity playerEntity, int index)
     {
 
         ItemStack clickedStack = ItemStack.EMPTY;

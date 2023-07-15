@@ -11,11 +11,11 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.TeamButt
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class TeamSelectWidget extends ClickableWidget {
@@ -45,19 +45,23 @@ public class TeamSelectWidget extends ClickableWidget {
         for(int i = 0; i < this.rows; ++i)
         {
             int index = i;
-            TeamButton button = new TeamButton(this.x, this.y + i * TeamButton.HEIGHT, this.size, this::onTeamSelect, font, () -> this.getTeam(index), () -> this.isSelected(index));
+            TeamButton button = new TeamButton(this.getX(), this.getY() + i * TeamButton.HEIGHT, this.size, this::onTeamSelect, font, () -> this.getTeam(index), () -> this.isSelected(index));
             this.teamButtons.add(button);
             addButton.accept(button);
         }
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks)
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
         this.teamButtons.forEach(b -> b.visible = this.visible);
-        if(!this.visible)
-            return;
-        fill(pose, x, y, x + this.width, y + this.height, 0xFF000000);
+        super.render(gui, mouseX, mouseY, partialTicks);
+
+    }
+
+    @Override
+    protected void renderButton(DrawContext gui, int mouseX, int mouseY, float delta) {
+        gui.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0xFF000000);
     }
 
     private int scroll = 0;
@@ -128,7 +132,7 @@ public class TeamSelectWidget extends ClickableWidget {
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) { }
+    public void appendClickableNarrations(NarrationMessageBuilder builder) { }
 
     @Override
     protected boolean isValidClickButton(int button) { return false; }

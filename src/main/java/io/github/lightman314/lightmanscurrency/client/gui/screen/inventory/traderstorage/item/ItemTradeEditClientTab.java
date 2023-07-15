@@ -1,7 +1,5 @@
 package io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.traderstorage.item;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.TraderScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.TraderStorageScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.traderstorage.TraderStorageClientTab;
@@ -9,6 +7,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.CoinValueInput;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ItemEditWidget;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ItemEditWidget.IItemEditListener;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollBarWidget;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.InteractionConsumer;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.TradeButton;
@@ -17,9 +16,9 @@ import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.ItemTradeData;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
@@ -70,7 +69,7 @@ public class ItemTradeEditClientTab extends TraderStorageClientTab<ItemTradeEdit
         ItemTradeData trade = this.getTrade();
 
         this.tradeDisplay = this.screen.addRenderableTabWidget(new TradeButton(this.menu::getContext, this.commonTab::getTrade, button -> {}));
-        this.tradeDisplay.move(this.screen.getGuiLeft() + 10, this.screen.getGuiTop() + 18);
+        this.tradeDisplay.setPosition(this.screen.getGuiLeft() + 10, this.screen.getGuiTop() + 18);
         this.priceSelection = this.screen.addRenderableTabWidget(new CoinValueInput(this.screen.getGuiLeft() + TraderScreen.WIDTH / 2 - CoinValueInput.DISPLAY_WIDTH / 2, this.screen.getGuiTop() + 40, Text.empty(), trade == null ? CoinValue.EMPTY : trade.getCost(), this.font, this::onValueChanged, this.screen::addRenderableTabWidget));
         this.priceSelection.drawBG = false;
         this.priceSelection.init();
@@ -88,7 +87,7 @@ public class ItemTradeEditClientTab extends TraderStorageClientTab<ItemTradeEdit
         if(this.selection >= 0 && this.selection < 2 && trade != null)
             this.customNameInput.setText(trade.getCustomName(this.selection));
 
-        this.buttonToggleTradeType = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 113, this.screen.getGuiTop() + 15, 80, 20, Text.empty(), this::ToggleTradeType));
+        this.buttonToggleTradeType = this.screen.addRenderableTabWidget(new VanillaButton(this.screen.getGuiLeft() + 113, this.screen.getGuiTop() + 15, 80, 20, Text.empty(), this::ToggleTradeType));
 
     }
 
@@ -96,7 +95,7 @@ public class ItemTradeEditClientTab extends TraderStorageClientTab<ItemTradeEdit
     public void onClose() { this.selection = -1; this.itemEditScrollValue = -1; }
 
     @Override
-    public void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void renderBG(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         if(this.getTrade() == null)
             return;
@@ -107,13 +106,12 @@ public class ItemTradeEditClientTab extends TraderStorageClientTab<ItemTradeEdit
             this.itemEditScroll.beforeWidgetRender(mouseY);
 
         //Render a down arrow over the selected position
-        RenderSystem.setShaderTexture(0, TraderScreen.GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
 
-        this.screen.drawTexture(pose, this.getArrowPosition(), this.screen.getGuiTop() + 10, TraderScreen.WIDTH + 8, 18, 8, 6);
+        gui.drawTexture(TraderScreen.GUI_TEXTURE, this.getArrowPosition(), this.screen.getGuiTop() + 10, TraderScreen.WIDTH + 8, 18, 8, 6);
 
         if(this.customNameInput.visible)
-            this.font.draw(pose, Text.translatable("gui.lightmanscurrency.customname"), this.screen.getGuiLeft() + 13, this.screen.getGuiTop() + 42, 0x404040);
+            gui.drawText(this.font, Text.translatable("gui.lightmanscurrency.customname"), this.screen.getGuiLeft() + 13, this.screen.getGuiTop() + 42, 0x404040, false);
 
     }
 
@@ -165,12 +163,12 @@ public class ItemTradeEditClientTab extends TraderStorageClientTab<ItemTradeEdit
     }
 
     @Override
-    public void renderTooltips(MatrixStack pose, int mouseX, int mouseY) {
+    public void renderTooltips(DrawContext gui, int mouseX, int mouseY) {
 
-        this.tradeDisplay.renderTooltips(pose, mouseX, mouseY);
+        this.tradeDisplay.renderTooltips(gui, this.font, mouseX, mouseY);
 
         if(this.selection >= 0)
-            this.itemEdit.renderTooltips(this.screen, pose, mouseX, mouseY);
+            this.itemEdit.renderTooltips(gui, this.font, mouseX, mouseY);
 
     }
 

@@ -8,7 +8,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.TeamManagerScre
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollTextDisplay;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
@@ -60,10 +60,10 @@ public class TeamMemberListTab extends TeamTab {
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) { }
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) { }
+    public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
     @Override
     public void tick() { }

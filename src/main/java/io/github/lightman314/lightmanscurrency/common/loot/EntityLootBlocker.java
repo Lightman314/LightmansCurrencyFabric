@@ -58,14 +58,14 @@ public class EntityLootBlocker extends PersistentState {
 
     public static boolean BlockEntityDrops(LivingEntity entity)
     {
-        if(entity.world.isClient)
+        if(entity.getWorld().isClient)
             return true;
         EntityLootBlocker elb = get();
         return elb != null && elb.flaggedEntities.contains(entity.getUuid());
     }
 
     public static void StopTrackingEntity(Entity entity) {
-        if(entity.world.isClient)
+        if(entity.getWorld().isClient)
             return;
         EntityLootBlocker elb = get();
         if(elb != null && elb.flaggedEntities.contains(entity.getUuid()))
@@ -77,7 +77,7 @@ public class EntityLootBlocker extends PersistentState {
 
     public static void FlagEntity(LivingEntity entity)
     {
-        if(entity.world.isClient)
+        if(entity.getWorld().isClient)
             return;
 
         EntityLootBlocker elb = get();

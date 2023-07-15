@@ -46,6 +46,7 @@
     "item.lightmanscurrency.network_upgrade": "Network Upgrade",
     "item.lightmanscurrency.hopper_upgrade": "Hopper Upgrade",
     "item.lightmanscurrency.freezer_door": "Freezer Door (INTERNAL USE ONLY)",
+	"item.lightmanscurrency.upgrade_smithing_template": "Upgrade Smithing Template",
     
     "item.lightmanscurrency.generic.plural": "%ss",
     
@@ -115,6 +116,9 @@
     "block.lightmanscurrency.shelf_jungle": "Jungle Shelf",
     "block.lightmanscurrency.shelf_acacia": "Acacia Shelf",
     "block.lightmanscurrency.shelf_dark_oak": "Dark Oak Shelf",
+    "block.lightmanscurrency.shelf_mangrove": "Mangrove Shelf",
+    "block.lightmanscurrency.shelf_cherry": "Cherry Shelf",
+    "block.lightmanscurrency.shelf_bamboo": "Bamboo Shelf",
     "block.lightmanscurrency.shelf_crimson": "Crimson Shelf",
     "block.lightmanscurrency.shelf_warped": "Warped Shelf",
     "block.lightmanscurrency.card_display_oak": "Oak Card Display",
@@ -123,6 +127,9 @@
     "block.lightmanscurrency.card_display_jungle": "Jungle Card Display",
     "block.lightmanscurrency.card_display_acacia": "Acacia Card Display",
     "block.lightmanscurrency.card_display_dark_oak": "Dark Oak Card Display",
+    "block.lightmanscurrency.card_display_mangrove": "Mangrove Card Display",
+    "block.lightmanscurrency.card_display_cherry": "Cherry Card Display",
+    "block.lightmanscurrency.card_display_bamboo": "Bamboo Card Display",
     "block.lightmanscurrency.card_display_crimson": "Crimson Card Display",
     "block.lightmanscurrency.card_display_warped": "Warped Card Display",
     "block.lightmanscurrency.ticket_machine": "Ticket Machine",

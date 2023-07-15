@@ -28,7 +28,6 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import org.jetbrains.annotations.Nullable;
@@ -58,10 +57,10 @@ public class TraderStorageMenu extends Menu {
 
     public TradeContext getContext() { return TradeContext.createStorageMode(this.traderSource.get()); }
 
-    public boolean isClient() { return this.player.world.isClient; }
+    public boolean isClient() { return this.player.getWorld().isClient; }
 
     public TraderStorageMenu(int windowID, PlayerInventory inventory, long traderID) {
-        this(ModMenus.TRADER_STORAGE, windowID, inventory, () -> TraderSaveData.GetTrader(inventory.player.world.isClient, traderID));
+        this(ModMenus.TRADER_STORAGE, windowID, inventory, () -> TraderSaveData.GetTrader(inventory.player.getWorld().isClient, traderID));
     }
 
     protected TraderStorageMenu(ScreenHandlerType<?> type, int windowID, PlayerInventory inventory, Supplier<TraderData> traderSource) {
@@ -109,8 +108,8 @@ public class TraderStorageMenu extends Menu {
     }
 
     @Override
-    public void close(PlayerEntity player) {
-        super.close(player);
+    public void onClosed(PlayerEntity player) {
+        super.onClosed(player);
         this.dropInventory(player, this.coinSlotContainer);
         this.availableTabs.forEach((key, tab) -> tab.onMenuClose());
         TraderData trader = this.getTrader();
@@ -138,7 +137,7 @@ public class TraderStorageMenu extends Menu {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity, int index)
+    public ItemStack quickMove(PlayerEntity playerEntity, int index)
     {
 
         ItemStack clickedStack = ItemStack.EMPTY;

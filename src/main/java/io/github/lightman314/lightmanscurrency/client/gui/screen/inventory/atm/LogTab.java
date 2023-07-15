@@ -9,7 +9,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.notifications.N
 import io.github.lightman314.lightmanscurrency.common.menu.slots.SimpleSlot;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -45,13 +45,13 @@ public class LogTab extends ATMTab{
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
-        this.hideCoinSlots(pose);
-        this.screen.getFont().draw(pose, this.getTooltip(), this.screen.getGuiLeft() + 8f, this.screen.getGuiTop() + 6f, 0x404040);
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
+        this.hideCoinSlots(gui);
+        gui.drawText(this.screen.getFont(), this.getTooltip(), this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + 6, 0x404040, false);
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY) { this.logWidget.tryRenderTooltip(pose, this.screen, mouseX, mouseY); }
+    public void postRender(DrawContext gui, int mouseX, int mouseY) { this.logWidget.tryRenderTooltip(gui, mouseX, mouseY); }
 
     @Override
     public void tick() { }

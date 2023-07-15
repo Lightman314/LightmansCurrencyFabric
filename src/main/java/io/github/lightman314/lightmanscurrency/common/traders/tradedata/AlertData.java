@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.traders.tradedata;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
@@ -35,11 +36,11 @@ public class AlertData {
     }
 
     @Environment(EnvType.CLIENT)
-    public void setShaderColor(float mult) {
+    public void setShaderColor(DrawContext gui, float mult) {
         float red = (float)(this.color >> 16 & 255) / 255.0f;
         float green = (float)(this.color >> 8 & 255) / 255.0f;
         float blue = (float)(this.color & 255) / 255.0f;
-        RenderSystem.setShaderColor(red * mult, green * mult, blue * mult, 1f);
+        gui.setShaderColor(red * mult, green * mult, blue * mult, 1f);
     }
 
     public MutableText getFormattedMessage() { return this.message.styled(this.formatting); }

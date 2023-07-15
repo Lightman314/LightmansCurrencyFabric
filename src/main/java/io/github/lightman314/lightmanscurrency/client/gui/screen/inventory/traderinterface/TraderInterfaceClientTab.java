@@ -6,7 +6,7 @@ import io.github.lightman314.lightmanscurrency.common.menu.TraderInterfaceMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.traderinterface.TraderInterfaceTab;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.nbt.NbtCompound;
 
 public abstract class TraderInterfaceClientTab<T extends TraderInterfaceTab> implements ITab {
@@ -50,12 +50,12 @@ public abstract class TraderInterfaceClientTab<T extends TraderInterfaceTab> imp
     /**
      * Renders background data before the rendering of buttons/widgets and item slots
      */
-    public abstract void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks);
+    public abstract void renderBG(DrawContext gui, int mouseX, int mouseY, float partialTicks);
 
     /**
      * Renders tooltips after the rendering of buttons/widgets and item slots
      */
-    public abstract void renderTooltips(MatrixStack pose, int mouseX, int mouseY);
+    public abstract void renderTooltips(DrawContext gui, int mouseX, int mouseY);
 
     /**
      * Called when the mouse is clicked before any other click interactions are processed.

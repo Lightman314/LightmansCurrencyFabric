@@ -1,14 +1,13 @@
 package io.github.lightman314.lightmanscurrency.common.atm.icons;
 
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.atm.ATMExchangeButton;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
 public class SpriteIcon extends ATMIconData {
@@ -59,9 +58,8 @@ public class SpriteIcon extends ATMIconData {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void render(ATMExchangeButton button, MatrixStack pose, boolean isHovered) {
-        RenderSystem.setShaderTexture(0, this.texture);
-        button.drawTexture(pose, button.x + this.xPos, button.y + this.yPos, this.u, this.v, this.width, this.height);
+    public void render(ATMExchangeButton button, DrawContext gui, boolean isHovered) {
+        gui.drawTexture(this.texture, button.getX() + this.xPos, button.getY() + this.yPos, this.u, this.v, this.width, this.height);
     }
 
 }

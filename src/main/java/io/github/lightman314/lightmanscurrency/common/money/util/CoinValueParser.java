@@ -9,8 +9,8 @@ import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.util.NumberUtil;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +82,7 @@ public class CoinValueParser {
         if(Identifier.isValid(coinIDString))
         {
             Identifier coinID = new Identifier(coinIDString);
-            Item coin = Registry.ITEM.get(coinID);
+            Item coin = Registries.ITEM.get(coinID);
             if(!MoneyUtil.isCoin(coin, false))
                 throw NotACoinException(coinIDString, reader);
             result.addValue(coin, count);

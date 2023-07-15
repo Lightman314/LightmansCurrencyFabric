@@ -26,7 +26,7 @@ public class CMessageHandlerMessage extends ClientToServerPacket {
     protected void encode(PacketByteBuf buffer) { buffer.writeBlockPos(this.blockPos); buffer.writeString(this.handlerType.toString()); buffer.writeNbt(this.message); }
 
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        BlockEntity blockEntity = player.world.getBlockEntity(buffer.readBlockPos());
+        BlockEntity blockEntity = player.getWorld().getBlockEntity(buffer.readBlockPos());
         if(blockEntity instanceof TraderInterfaceBlockEntity traderInterface)
             traderInterface.receiveHandlerMessage(new Identifier(buffer.readString()), player, buffer.readUnlimitedNbt());
     }

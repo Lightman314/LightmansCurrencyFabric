@@ -1,7 +1,6 @@
 package io.github.lightman314.lightmanscurrency.client.util;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.MenuScreen;
-import io.github.lightman314.lightmanscurrency.client.gui.widget.ItemEditWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 
 public final class ScreenPosition {
@@ -14,10 +13,10 @@ public final class ScreenPosition {
 
     public ScreenPosition offset(int x, int y) { return of(this.x + x, this.y + y); }
     public ScreenPosition offset(ScreenPosition other) { return of(this.x + other.x, this.y + other.y); }
-    public ScreenPosition offset(ClickableWidget widget) { return of(this.x + widget.x, this.y + widget.y); }
+    public ScreenPosition offset(ClickableWidget widget) { return of(this.x + widget.getX(), this.y + widget.getY()); }
     public ScreenPosition offset(MenuScreen<?> screen) { return this.offset(getScreenCorner(screen)); }
 
-    public void setPosition(ClickableWidget widget) { widget.x = this.x; widget.y = this.y; }
+    public void setPosition(ClickableWidget widget) { widget.setPosition(this.x,this.y); }
 
     public boolean isMouseInArea(int mouseX, int mouseY, int width, int height) { return ScreenArea.of(this, width, height).isMouseInArea(mouseX, mouseY); }
 

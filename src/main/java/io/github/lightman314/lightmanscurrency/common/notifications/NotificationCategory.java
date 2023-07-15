@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +69,7 @@ public abstract class NotificationCategory implements ITab
 
     public static final NotificationCategory GENERAL = new NotificationCategory() {
         @Override
-        public IconData getIcon() { return IconData.of(Items.CHEST); }
+        public @NotNull IconData getIcon() { return IconData.of(Items.CHEST); }
         @Override
         public MutableText getName() { return Text.translatable("notifications.source.general"); }
         @Override

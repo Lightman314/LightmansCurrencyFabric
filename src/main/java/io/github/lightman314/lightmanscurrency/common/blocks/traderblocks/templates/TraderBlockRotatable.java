@@ -31,7 +31,7 @@ public abstract class TraderBlockRotatable extends TraderBlockBase implements IR
     protected TraderBlockRotatable(Settings properties, Function<Direction,VoxelShape> shape) { super(properties); this.shape = shape; }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext context) { return super.getPlacementState(context).with(FACING, context.getPlayerFacing()); }
+    public BlockState getPlacementState(ItemPlacementContext context) { return super.getPlacementState(context).with(FACING, context.getHorizontalPlayerFacing()); }
 
     @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {return state.with(FACING, rotation.rotate(state.get(FACING)));}

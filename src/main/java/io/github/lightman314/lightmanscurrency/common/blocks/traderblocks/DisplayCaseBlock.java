@@ -17,9 +17,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class DisplayCaseBlock extends TraderBlockBase implements IItemTraderBlock {
 
@@ -35,16 +35,16 @@ public class DisplayCaseBlock extends TraderBlockBase implements IItemTraderBloc
 
     @Override
     @Environment(EnvType.CLIENT)
-    public List<Vec3f> GetStackRenderPos(int tradeSlot, BlockState state, boolean isDoubleTrade) {
-        List<Vec3f> posList = new ArrayList<Vec3f>(1);
-        posList.add(new Vec3f(0.5F, 0.5F + 2F/16F, 0.5F));
+    public List<Vector3f> GetStackRenderPos(int tradeSlot, BlockState state, boolean isDoubleTrade) {
+        List<Vector3f> posList = new ArrayList<>(1);
+        posList.add(new Vector3f(0.5F, 0.5F + 2F/16F, 0.5F));
         return posList;
     }
 
 
     @Override
     @Environment(EnvType.CLIENT)
-    public List<Quaternion> GetStackRenderRot(int tradeSlot, BlockState state)
+    public List<Quaternionf> GetStackRenderRot(int tradeSlot, BlockState state)
     {
         //Return null for automatic rotation
         return null;

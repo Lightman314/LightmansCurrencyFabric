@@ -1,14 +1,12 @@
 package io.github.lightman314.lightmanscurrency.client.gui.screen.inventory;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.emergency_ejection.EjectionData;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderRecoveryMenu;
 import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageChangeSelectedData;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -37,12 +35,11 @@ public class TraderRecoveryScreen extends MenuScreen<TraderRecoveryMenu> {
     }
 
     @Override
-    protected void drawBackground(MatrixStack pose, float partialTicks, int mouseX, int mouseY) {
+    protected void drawBackground(DrawContext gui, float partialTicks, int mouseX, int mouseY) {
 
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
 
-        this.drawTexture(pose, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        gui.drawTexture(GUI_TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
 
     }
 
@@ -54,17 +51,17 @@ public class TraderRecoveryScreen extends MenuScreen<TraderRecoveryMenu> {
     }
 
     @Override
-    protected void drawForeground(MatrixStack pose, int mouseX, int mouseY) {
-        this.textRenderer.draw(pose, this.getTraderTitle(), this.titleX, this.titleY, 0x404040);
-        this.textRenderer.draw(pose, this.playerInventoryTitle, this.playerInventoryTitleX, this.backgroundHeight - 94, 0x404040);
+    protected void drawForeground(DrawContext gui, int mouseX, int mouseY) {
+        gui.drawText(this.textRenderer, this.getTraderTitle(), this.titleX, this.titleY, 0x404040, false);
+        gui.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.backgroundHeight - 94, 0x404040, false);
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.renderBackground(pose);
-        super.render(pose, mouseX, mouseY, partialTicks);
-        this.drawMouseoverTooltip(pose, mouseX, mouseY);
+        this.renderBackground(gui);
+        super.render(gui, mouseX, mouseY, partialTicks);
+        this.drawMouseoverTooltip(gui, mouseX, mouseY);
 
     }
 

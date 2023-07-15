@@ -42,7 +42,7 @@ public class TraderMenu extends Menu {
     public List<Slot> getCoinSlots() { return this.coinSlots; }
 
     public TraderMenu(int windowID, PlayerInventory inventory, long traderID) {
-        this(ModMenus.TRADER, windowID, inventory, () -> TraderSaveData.GetTrader(inventory.player.world.isClient, traderID));
+        this(ModMenus.TRADER, windowID, inventory, () -> TraderSaveData.GetTrader(inventory.player.getWorld().isClient, traderID));
     }
 
     protected TraderMenu(ScreenHandlerType<?> type, int windowID, PlayerInventory inventory, Supplier<ITraderSource> traderSource) {
@@ -98,8 +98,8 @@ public class TraderMenu extends Menu {
     public boolean canUse(PlayerEntity player) { return this.traderSource != null && this.traderSource.getTraders().size() > 0; }
 
     @Override
-    public void close(PlayerEntity player) {
-        super.close(player);
+    public void onClosed(PlayerEntity player) {
+        super.onClosed(player);
         this.dropInventory(player, this.coins);
         this.dropInventory(player, this.interactionSlot.inventory);
         if(this.traderSource != null)
@@ -151,7 +151,7 @@ public class TraderMenu extends Menu {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity, int index)
+    public ItemStack quickMove(PlayerEntity playerEntity, int index)
     {
 
         ItemStack clickedStack = ItemStack.EMPTY;
@@ -213,7 +213,7 @@ public class TraderMenu extends Menu {
     {
         public TraderMenuBlockSource(int windowID, PlayerInventory inventory, BlockPos blockPosition) {
             super(ModMenus.TRADER_BLOCK, windowID, inventory, () -> {
-                BlockEntity be = inventory.player.world.getBlockEntity(blockPosition);
+                BlockEntity be = inventory.player.getWorld().getBlockEntity(blockPosition);
                 if(be instanceof ITraderSource)
                     return (ITraderSource)be;
                 return null;
@@ -223,7 +223,7 @@ public class TraderMenu extends Menu {
 
     public static class TraderMenuAllNetwork extends TraderMenu
     {
-        public TraderMenuAllNetwork(int windowID, PlayerInventory inventory) { super(ModMenus.TRADER_NETWORK_ALL, windowID, inventory, ITraderSource.UniversalTraderSource(inventory.player.world.isClient)); }
+        public TraderMenuAllNetwork(int windowID, PlayerInventory inventory) { super(ModMenus.TRADER_NETWORK_ALL, windowID, inventory, ITraderSource.UniversalTraderSource(inventory.player.getWorld().isClient)); }
     }
 
 

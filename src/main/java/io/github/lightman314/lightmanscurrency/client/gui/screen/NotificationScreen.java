@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.lightman314.lightmanscurrency.client.data.ClientNotificationData;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollBarWidget;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollBarWidget.IScrollable;
@@ -21,9 +21,9 @@ import io.github.lightman314.lightmanscurrency.network.server.messages.notificat
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -142,15 +142,14 @@ public class NotificationScreen extends Screen implements IScrollable{
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.renderBackground(pose);
+        this.renderBackground(gui);
 
         //Render the background
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
         int screenLeft = this.guiLeft() + TabButton.SIZE;
-        this.drawTexture(pose, screenLeft, this.guiTop(), 0, 0, this.xSize, this.ySize);
+        gui.drawTexture(GUI_TEXTURE, screenLeft, this.guiTop(), 0, 0, this.xSize, this.ySize);
 
         this.notificationScroller.beforeWidgetRender(mouseY);
 
@@ -163,13 +162,12 @@ public class NotificationScreen extends Screen implements IScrollable{
         {
             Notification not = notifications.get(index++);
             int yPos = this.guiTop() + 15 + y * NOTIFICATION_HEIGHT;
-            RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+            gui.setShaderColor(1f, 1f, 1f, 1f);
 
             int vPos = not.wasSeen() ? this.ySize : this.ySize + NOTIFICATION_HEIGHT;
             int textColor = not.wasSeen() ? 0xFFFFFF : 0x000000;
 
-            this.drawTexture(pose, screenLeft + 15, yPos, 0, vPos, 170, NOTIFICATION_HEIGHT);
+            gui.drawTexture(GUI_TEXTURE, screenLeft + 15, yPos, 0, vPos, 170, NOTIFICATION_HEIGHT);
             int textXPos = screenLeft + 17;
             int textWidth = 166;
             if(not.getCount() > 1)
@@ -177,9 +175,9 @@ public class NotificationScreen extends Screen implements IScrollable{
                 //Render quantity text
                 String countText = String.valueOf(not.getCount());
                 int quantityWidth = this.textRenderer.getWidth(countText);
-                this.drawTexture(pose, screenLeft + 16 + quantityWidth, yPos, 170, vPos, 3, NOTIFICATION_HEIGHT);
+                gui.drawTexture(GUI_TEXTURE, screenLeft + 16 + quantityWidth, yPos, 170, vPos, 3, NOTIFICATION_HEIGHT);
 
-                this.textRenderer.draw(pose, countText, textXPos, yPos + (NOTIFICATION_HEIGHT / 2f) - (this.textRenderer.fontHeight / 2f), textColor);
+                gui.drawText(this.textRenderer, countText, textXPos, yPos + (NOTIFICATION_HEIGHT / 2) - (this.textRenderer.fontHeight / 2), textColor, false);
 
                 textXPos += quantityWidth + 2;
                 textWidth -= quantityWidth + 2;
@@ -188,12 +186,12 @@ public class NotificationScreen extends Screen implements IScrollable{
             List<OrderedText> lines = this.textRenderer.wrapLines(message, textWidth);
             if(lines.size() == 1)
             {
-                this.textRenderer.draw(pose, lines.get(0), textXPos, yPos + (NOTIFICATION_HEIGHT / 2f) - (this.textRenderer.fontHeight / 2f), textColor);
+                gui.drawText(this.textRenderer, lines.get(0), textXPos, yPos + (NOTIFICATION_HEIGHT / 2) - (this.textRenderer.fontHeight / 2), textColor, false);
             }
             else
             {
                 for(int l = 0; l < lines.size() && l < 2; ++l)
-                    this.textRenderer.draw(pose, lines.get(l), textXPos, yPos + 2 + l * 10, textColor);
+                    gui.drawText(this.textRenderer, lines.get(l), textXPos, yPos + 2 + l * 10, textColor, false);
                 //Set the message as a tooltip if it's too large to fit and the mouse is hovering over the notification
                 if(lines.size() > 2 && tooltip == null && mouseX >= screenLeft + 15 && mouseX < screenLeft + 185 && mouseY >= yPos && mouseY < yPos + NOTIFICATION_HEIGHT)
                     tooltip = message;
@@ -201,14 +199,14 @@ public class NotificationScreen extends Screen implements IScrollable{
         }
 
         //Render widgets
-        super.render(pose, mouseX, mouseY, partialTicks);
+        super.render(gui, mouseX, mouseY, partialTicks);
 
         //Render tooltips
         for(NotificationTabButton tab : this.tabButtons)
-            tab.renderTooltip(pose, mouseX, mouseY, this);
+            tab.renderTooltip(gui, mouseX, mouseY);
 
         if(tooltip != null)
-            this.renderOrderedTooltip(pose, this.textRenderer.wrapLines(tooltip, 170), mouseX, mouseY);
+            gui.drawOrderedTooltip(this.textRenderer, this.textRenderer.wrapLines(tooltip, 170), mouseX, mouseY);
 
     }
 
@@ -320,6 +318,7 @@ public class NotificationScreen extends Screen implements IScrollable{
     @Override
     public boolean keyPressed(int key, int scanCode, int mods) {
         //Manually close the screen when hitting the inventory key
+        assert this.client != null;
         if (this.client.options.inventoryKey.matchesKey(key, scanCode)) {
             this.client.setScreen(null);
             return true;

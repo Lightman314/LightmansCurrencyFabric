@@ -1,13 +1,14 @@
 package io.github.lightman314.lightmanscurrency.client.gui.screen.team;
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TeamManagerScreen;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.network.server.messages.team.CMessageDisbandTeam;
 import io.github.lightman314.lightmanscurrency.network.server.messages.team.CMessageEditTeam;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
@@ -49,31 +50,31 @@ public class TeamOwnerTab extends TeamTab{
         this.newOwnerName = screen.addRenderableTabWidget(new TextFieldWidget(this.getFont(), screen.guiLeft() + 20, screen.guiTop() + 20, 160, 20, Text.empty()));
         this.newOwnerName.setMaxLength(16);
 
-        this.buttonChangeOwner = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 45, 160, 20, Text.translatable("gui.button.lightmanscurrency.set_owner"), this::setNewOwner));
+        this.buttonChangeOwner = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 20, screen.guiTop() + 45, 160, 20, Text.translatable("gui.button.lightmanscurrency.set_owner"), this::setNewOwner));
         this.buttonChangeOwner.active = false;
 
-        this.buttonDisbandTeam = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 160, 160, 20, Text.translatable("gui.button.lightmanscurrency.team.disband"), this::disbandTeam));
+        this.buttonDisbandTeam = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 20, screen.guiTop() + 160, 160, 20, Text.translatable("gui.button.lightmanscurrency.team.disband"), this::disbandTeam));
 
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         if(this.getActiveTeam() == null)
             return;
 
         TeamManagerScreen screen = this.getScreen();
 
-        this.getFont().draw(pose, Text.translatable("gui.button.lightmanscurrency.team.owner", this.getActiveTeam().getOwner().getName(true)), screen.guiLeft() + 20, screen.guiTop() + 10, 0x404040);
+        gui.drawText(this.getFont(), Text.translatable("gui.button.lightmanscurrency.team.owner", this.getActiveTeam().getOwner().getName(true)), screen.guiLeft() + 20, screen.guiTop() + 10, 0x404040, false);
 
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         if(this.buttonChangeOwner.isMouseOver(mouseX, mouseY) || this.buttonDisbandTeam.isMouseOver(mouseX, mouseY))
         {
-            this.getScreen().renderTooltip(pose, Text.translatable("tooltip.lightmanscurrency.warning").formatted(Formatting.BOLD, Formatting.YELLOW), mouseX, mouseY);
+            gui.drawTooltip(this.getFont(), Text.translatable("tooltip.lightmanscurrency.warning").formatted(Formatting.BOLD, Formatting.YELLOW), mouseX, mouseY);
         }
 
     }

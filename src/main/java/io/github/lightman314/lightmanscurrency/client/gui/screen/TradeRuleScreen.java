@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
@@ -17,13 +15,12 @@ import io.github.lightman314.lightmanscurrency.common.traders.rules.*;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.CMessageOpenStorage;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -125,32 +122,29 @@ public class TradeRuleScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack poseStack, int mouseX, int mouseY, float partialTicks)
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
-        this.renderBackground(poseStack);
-
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
+        this.renderBackground(gui);
         if(this.openTab >= 0)
         {
             TradeRule rule = this.currentRule();
             if(rule != null && !rule.isActive())
-                RenderSystem.setShaderColor(1f, 0.5f, 0.5f, 1f);
+                gui.setShaderColor(1f, 0.5f, 0.5f, 1f);
             else
-                RenderSystem.setShaderColor(0f, 1f, 0f, 1f);
+                gui.setShaderColor(0f, 1f, 0f, 1f);
         }
         else
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+            gui.setShaderColor(1f, 1f, 1f, 1f);
 
 
         //Render the background
-        this.drawTexture(poseStack, guiLeft(), guiTop(), 0, 0, this.xSize, this.ySize);
+        gui.drawTexture(GUI_TEXTURE, guiLeft(), guiTop(), 0, 0, this.xSize, this.ySize);
 
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
         //Render the current rule
         if(this.currentGUIHandler!= null)
         {
-            this.currentGUIHandler.renderTab(poseStack, mouseX, mouseY, partialTicks);
+            this.currentGUIHandler.renderTab(gui, mouseX, mouseY, partialTicks);
         }
         else
         {
@@ -159,31 +153,31 @@ public class TradeRuleScreen extends Screen {
             if(this.openTab >= 0)
                 this.openTab = -1;
 
-            this.textRenderer.draw(poseStack, Text.translatable("traderule.list.blurb").formatted(Formatting.BOLD), guiLeft() + 20, guiTop() + 10, 0xFFFFFF);
+            gui.drawText(this.textRenderer, Text.translatable("traderule.list.blurb").formatted(Formatting.BOLD), guiLeft() + 20, guiTop() + 10, 0xFFFFFF, false);
 
             List<TradeRule> rules = this.getTradeRules();
             for(int i = 0; i < this.getTradeRules().size(); ++i)
             {
                 TradeRule rule = rules.get(i);
                 MutableText name = rule.getName().formatted(rule.isActive() ? Formatting.GREEN : Formatting.RED).formatted(Formatting.BOLD);
-                this.textRenderer.draw(poseStack, name, guiLeft() + 32, guiTop() + 26 + (12 * i), 0xFFFFFF);
+                gui.drawText(this.textRenderer, name, guiLeft() + 32, guiTop() + 26 + (12 * i), 0xFFFFFF, false);
             }
 
         }
 
         //Render the buttons, etc
-        super.render(poseStack, mouseX, mouseY, partialTicks);
+        super.render(gui, mouseX, mouseY, partialTicks);
 
         if(this.managerTab.isMouseOver(mouseX, mouseY))
         {
-            this.renderTooltip(poseStack, Text.translatable("gui.button.lightmanscurrency.manager"), mouseX, mouseY);
+            gui.drawTooltip(this.textRenderer, Text.translatable("gui.button.lightmanscurrency.manager"), mouseX, mouseY);
         }
         else
         {
             final List<TradeRule> rules = this.getTradeRules();
             this.tabButtons.forEach((ruleIndex,thisTab) -> {
                 if(thisTab.isMouseOver(mouseX, mouseY) && ruleIndex >= 0 && ruleIndex < rules.size())
-                    this.renderTooltip(poseStack, rules.get(ruleIndex).getName(), mouseX, mouseY);
+                    gui.drawTooltip(this.textRenderer, rules.get(ruleIndex).getName(), mouseX, mouseY);
             });
         }
     }

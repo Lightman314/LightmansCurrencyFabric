@@ -44,7 +44,7 @@ public class CommandBalTop {
 
         ServerCommandSource source = commandContext.getSource();
 
-        //Get and sort all of the bank accounts
+        //Get and sort all the bank accounts
         //Get player bank accounts
         List<BankAccount.AccountReference> allAccounts = BankSaveData.GetPlayerBankAccounts();
         //Get team bank accounts
@@ -68,15 +68,16 @@ public class CommandBalTop {
         }
 
 
-        source.sendFeedback(Text.translatable("command.lightmanscurrency.lcbaltop.title").formatted(Formatting.BOLD).formatted(Formatting.GOLD), false);
-        source.sendFeedback(Text.translatable("command.lightmanscurrency.lcbaltop.page", page, getMaxPage(allAccounts.size())).formatted(Formatting.BOLD).formatted(Formatting.GOLD), false);
+        source.sendFeedback(() -> Text.translatable("command.lightmanscurrency.lcbaltop.title").formatted(Formatting.BOLD).formatted(Formatting.GOLD), false);
+        source.sendFeedback(() -> Text.translatable("command.lightmanscurrency.lcbaltop.page", page, getMaxPage(allAccounts.size())).formatted(Formatting.BOLD).formatted(Formatting.GOLD), false);
         for(int i = startIndex; i < startIndex + ENTRIES_PER_PAGE && i < allAccounts.size(); ++i)
         {
             try {
                 BankAccount account = allAccounts.get(i).get();
                 Text name = account.getName();
                 String amount = account.getCoinStorage().getString("0");
-                source.sendFeedback(Text.translatable("command.lightmanscurrency.lcbaltop.entry", i + 1, name, amount), false);
+                final int index = i;
+                source.sendFeedback(() -> Text.translatable("command.lightmanscurrency.lcbaltop.entry", index + 1, name, amount), false);
             } catch(Exception e) { }
         }
 

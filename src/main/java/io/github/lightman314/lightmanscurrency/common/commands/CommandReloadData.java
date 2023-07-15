@@ -32,7 +32,7 @@ public class CommandReloadData {
         MoneyUtil.reloadMoneyData();
         ATMData.reloadATMData();
         LCConfig.reloadVillagerOverrides();
-        commandContext.getSource().sendFeedback(Text.translatable("command.lightmanscurrency.lcreload"), true);
+        commandContext.getSource().sendFeedback(() -> Text.translatable("command.lightmanscurrency.lcreload"), true);
         return 1;
 
     }

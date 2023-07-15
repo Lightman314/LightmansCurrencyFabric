@@ -1,15 +1,14 @@
 package io.github.lightman314.lightmanscurrency.client.gui.widget.button;
 
 import com.google.common.base.Supplier;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +38,7 @@ public class TeamButton extends ButtonWidget {
 
     public TeamButton(int x, int y, Size size, PressAction press, TextRenderer font, @NotNull Supplier<Team> teamSource, @NotNull Supplier<Boolean> selectedSource)
     {
-        super(x, y, size.width, HEIGHT, Text.empty(), press);
+        super(x, y, size.width, HEIGHT, Text.empty(), press, DEFAULT_NARRATION_SUPPLIER);
         this.font = font;
         this.size = size;
         this.teamSource = teamSource;
@@ -47,21 +46,20 @@ public class TeamButton extends ButtonWidget {
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
-        if(!this.visible || this.getTeam() == null)
+        if(this.getTeam() == null)
             return;
 
         //Render Background
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
 
-        this.drawTexture(pose, this.x, this.y, 0, (selectedSource.get() ? HEIGHT : 0) + this.size.guiPos, this.size.width, HEIGHT);
+        gui.drawTexture(GUI_TEXTURE, this.getX(), this.getY(), 0, (selectedSource.get() ? HEIGHT : 0) + this.size.guiPos, this.size.width, HEIGHT);
 
         //Render Team Name
-        this.font.draw(pose, TextRenderUtil.fitString(this.getTeam().getName(), this.width - 4), this.x + 2, this.y + 2, TEXT_COLOR);
-        //Render Owner Name)
-        this.font.draw(pose, TextRenderUtil.fitString(Text.translatable("gui.button.lightmanscurrency.team.owner", this.getTeam().getOwner().getName(true)), this.width - 4), this.x + 2, this.y + 10, TEXT_COLOR);
+        gui.drawText(this.font, TextRenderUtil.fitString(this.getTeam().getName(), this.width - 4), this.getX() + 2, this.getY() + 2, TEXT_COLOR, false);
+        //Render Owner Name
+        gui.drawText(this.font, TextRenderUtil.fitString(Text.translatable("gui.button.lightmanscurrency.team.owner", this.getTeam().getOwner().getName(true)), this.width - 4), this.getX() + 2, this.getY() + 10, TEXT_COLOR, false);
 
     }
 

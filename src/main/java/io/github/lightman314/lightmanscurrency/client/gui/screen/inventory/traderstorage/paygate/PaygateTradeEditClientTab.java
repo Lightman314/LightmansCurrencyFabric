@@ -18,8 +18,8 @@ import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.paygate.PaygateTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.paygate.tradedata.PaygateTradeData;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -56,7 +56,7 @@ public class PaygateTradeEditClientTab extends TraderStorageClientTab<PaygateTra
         PaygateTradeData trade = this.commonTab.getTrade();
 
         this.tradeDisplay = this.screen.addRenderableTabWidget(new TradeButton(this.menu::getContext, this.commonTab::getTrade, button -> {}));
-        this.tradeDisplay.move(this.screen.getGuiLeft() + 10, this.screen.getGuiTop() + 18);
+        this.tradeDisplay.setPosition(this.screen.getGuiLeft() + 10, this.screen.getGuiTop() + 18);
         this.priceSelection = this.screen.addRenderableTabWidget(new CoinValueInput(this.screen.getGuiLeft() + TraderScreen.WIDTH / 2 - CoinValueInput.DISPLAY_WIDTH / 2, this.screen.getGuiTop() + 55, Text.empty(), trade == null ? CoinValue.EMPTY : trade.getCost(), this.font, this::onValueChanged, this.screen::addRenderableTabWidget));
         this.priceSelection.drawBG = false;
         this.priceSelection.init();
@@ -69,16 +69,16 @@ public class PaygateTradeEditClientTab extends TraderStorageClientTab<PaygateTra
     }
 
     @Override
-    public void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void renderBG(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         if(this.commonTab.getTrade() == null)
             return;
 
         this.validateRenderables();
 
-        this.font.draw(pose, Text.translatable("gui.lightmanscurrency.duration"), this.screen.getGuiLeft() + 13, this.screen.getGuiTop() + 42, 0x404040);
+        gui.drawText(this.font, Text.translatable("gui.lightmanscurrency.duration"), this.screen.getGuiLeft() + 13, this.screen.getGuiTop() + 42, 0x404040, false);
         int unitWidth = this.font.getWidth(Text.translatable("gui.lightmanscurrency.duration.unit"));
-        this.font.draw(pose, Text.translatable("gui.lightmanscurrency.duration.unit"), this.screen.getGuiLeft() + this.screen.getImageWidth() - unitWidth - 13, this.screen.getGuiTop() + 42, 0x404040);
+        gui.drawText(this.font, Text.translatable("gui.lightmanscurrency.duration.unit"), this.screen.getGuiLeft() + this.screen.getImageWidth() - unitWidth - 13, this.screen.getGuiTop() + 42, 0x404040, false);
 
 
     }
@@ -100,9 +100,9 @@ public class PaygateTradeEditClientTab extends TraderStorageClientTab<PaygateTra
     }
 
     @Override
-    public void renderTooltips(MatrixStack pose, int mouseX, int mouseY) {
+    public void renderTooltips(DrawContext gui, int mouseX, int mouseY) {
 
-        this.tradeDisplay.renderTooltips(pose, mouseX, mouseY);
+        this.tradeDisplay.renderTooltips(gui, this.font, mouseX, mouseY);
 
     }
 
@@ -120,12 +120,10 @@ public class PaygateTradeEditClientTab extends TraderStorageClientTab<PaygateTra
             {
                 UUID ticketID = TicketItem.GetTicketID(this.menu.getCursorStack());
                 this.commonTab.setTicket(ticketID);
-                return;
             }
             else if(t.isTicketTrade())
             {
                 this.commonTab.setTicket(null);
-                return;
             }
         }
     }

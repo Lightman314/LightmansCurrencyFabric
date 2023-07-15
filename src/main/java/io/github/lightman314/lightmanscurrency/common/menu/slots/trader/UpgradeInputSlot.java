@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 public class UpgradeInputSlot extends SimpleSlot {
 
-    public static final Identifier EMPTY_UPGRADE_SLOT = new Identifier(LightmansCurrency.MODID, "items/empty_upgrade_slot");
+    public static final Identifier EMPTY_UPGRADE_SLOT = new Identifier(LightmansCurrency.MODID, "item/empty_upgrade_slot");
 
     private final UpgradeType.IUpgradeable machine;
     private final Runnable onModified;

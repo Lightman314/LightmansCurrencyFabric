@@ -14,8 +14,8 @@ import io.github.lightman314.lightmanscurrency.util.config.CustomConfigUtil;
 import io.github.lightman314.lightmanscurrency.util.config.ItemValueConfig;
 import io.github.lightman314.lightmanscurrency.util.config.ScreenPositionConfig;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.Lists;
@@ -113,7 +113,7 @@ public class LCConfig {
                     itemType = new Identifier(split[1]);
                 } catch(Throwable t) { throw new RuntimeException("Item is not a valid resource location.", t); }
 
-                Item item = Registry.ITEM.get(itemType);
+                Item item = Registries.ITEM.get(itemType);
                 if(item == null)
                     throw new RuntimeException("Item '" + itemType + "' is not a registered item.");
 
@@ -219,7 +219,7 @@ public class LCConfig {
                     .defineInRange("buttonCreativeX", 171, Integer.MIN_VALUE, Integer.MAX_VALUE);
             this.notificationAndTeamButtonYCreative = builder
                     .comment("The y position that the notification & team manager buttons will be placed at in the players creative inventory.")
-                    .defineInRange("buttonCreativeY", 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                    .defineInRange("buttonCreativeY", 18, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
             builder.pop();
 

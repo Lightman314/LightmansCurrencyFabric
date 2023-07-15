@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 public class CoinSlot extends SimpleSlot{
 
-    public static final Identifier EMPTY_COIN_SLOT = new Identifier(LightmansCurrency.MODID, "items/empty_coin_slot");
+    public static final Identifier EMPTY_COIN_SLOT = new Identifier(LightmansCurrency.MODID, "item/empty_coin_slot");
 
     private boolean acceptHiddenCoins;
 

@@ -6,8 +6,9 @@ import io.github.lightman314.lightmanscurrency.common.blockentity.trader.*;
 import io.github.lightman314.lightmanscurrency.common.blockentity.traderinterface.item.ItemTraderInterfaceBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.core.util.BlockEntityBlockHelper;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ModBlockEntities {
 
@@ -42,29 +43,29 @@ public class ModBlockEntities {
     public static void registerBlockEntities() {
 
         //Item Traders
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "item_trader"), ITEM_TRADER);
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "armor_trader"), ARMOR_TRADER);
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "freezer_trader"), FREEZER_TRADER);
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "ticket_trader"), TICKET_TRADER);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "item_trader"), ITEM_TRADER);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "armor_trader"), ARMOR_TRADER);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "freezer_trader"), FREEZER_TRADER);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "ticket_trader"), TICKET_TRADER);
 
         //Inventory Extension
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "storage_extension"), STORAGE_EXTENSION);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "storage_extension"), STORAGE_EXTENSION);
 
         //Trader Interface Terminal
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "item_trader_interface"), ITEM_TRADER_INTERFACE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "item_trader_interface"), ITEM_TRADER_INTERFACE);
 
         //Cash Register
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "cash_register"), CASH_REGISTER);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "cash_register"), CASH_REGISTER);
         //Coin Mint
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "coin_mint"), COIN_MINT);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "coin_mint"), COIN_MINT);
         //Ticket Machine
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "ticket_machine"), TICKET_MACHINE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "ticket_machine"), TICKET_MACHINE);
 
         //Paygate
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "paygate"), PAYGATE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "paygate"), PAYGATE);
 
         //Coin Jar
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "coin_jar"), COIN_JAR);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "coin_jar"), COIN_JAR);
 
     }
 

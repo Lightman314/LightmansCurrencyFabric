@@ -60,7 +60,7 @@ public class EventListener {
     //Player Drops
     private static void onPlayerDeath(LivingEntity entity, DamageSource damage)
     {
-        if(entity.world.isClient) //Do nothing client side
+        if(entity.getWorld().isClient) //Do nothing client side
             return;
         if(entity instanceof PlayerEntity player && !player.isSpectator())
         {
@@ -70,8 +70,8 @@ public class EventListener {
             if(walletStack.isEmpty()) //No wallet? Nothing to drop!
                 return;
 
-            boolean keepWallet = player.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || player.world.getGameRules().getBoolean(ModGameRules.KEEP_WALLET);
-            int coinDropPercent = MathUtil.clamp(player.world.getGameRules().getInt(ModGameRules.COIN_DROP_PERCENT), 0, 100);
+            boolean keepWallet = player.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || player.getWorld().getGameRules().getBoolean(ModGameRules.KEEP_WALLET);
+            int coinDropPercent = MathUtil.clamp(player.getWorld().getGameRules().getInt(ModGameRules.COIN_DROP_PERCENT), 0, 100);
 
             if(keepWallet && coinDropPercent <= 0)
                 return;
@@ -92,8 +92,8 @@ public class EventListener {
 
     private static void spawnDrop(PlayerEntity player, ItemStack stack)
     {
-        ItemEntity item = new ItemEntity(player.world, player.getPos().x, player.getPos().y, player.getPos().z, stack);
-        player.world.spawnEntity(item);
+        ItemEntity item = new ItemEntity(player.getWorld(), player.getPos().x, player.getPos().y, player.getPos().z, stack);
+        player.getWorld().spawnEntity(item);
     }
 
     private static void spawnWalletDrops(PlayerEntity player, ItemStack walletStack, int coinDropPercent)

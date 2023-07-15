@@ -7,11 +7,12 @@ import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TraderSettingsScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.settings.SettingsTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ScrollTextDisplay;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
@@ -52,8 +53,8 @@ public class AllyTab extends SettingsTab {
         this.nameInput = screen.addRenderableTabWidget(new TextFieldWidget(screen.getFont(), screen.guiLeft() + 20, screen.guiTop() + 10, 160, 20, Text.empty()));
         this.nameInput.setMaxLength(16);
 
-        this.buttonAddAlly = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + 20, screen.guiTop() + 35, 74, 20, Text.translatable("gui.button.lightmanscurrency.allies.add"), this::AddAlly));
-        this.buttonRemoveAlly = screen.addRenderableTabWidget(new ButtonWidget(screen.guiLeft() + screen.xSize - 93, screen.guiTop() + 35, 74, 20, Text.translatable("gui.button.lightmanscurrency.allies.remove"), this::RemoveAlly));
+        this.buttonAddAlly = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + 20, screen.guiTop() + 35, 74, 20, Text.translatable("gui.button.lightmanscurrency.allies.add"), this::AddAlly));
+        this.buttonRemoveAlly = screen.addRenderableTabWidget(new VanillaButton(screen.guiLeft() + screen.xSize - 93, screen.guiTop() + 35, 74, 20, Text.translatable("gui.button.lightmanscurrency.allies.remove"), this::RemoveAlly));
 
         this.display = screen.addRenderableTabWidget(new ScrollTextDisplay(screen.guiLeft() + 5, screen.guiTop() + 60, 190, 135, screen.getFont(), this::getAllyList));
         this.display.setColumnCount(2);
@@ -61,10 +62,10 @@ public class AllyTab extends SettingsTab {
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) { }
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) { }
+    public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) { }
 
     private List<Text> getAllyList()
     {

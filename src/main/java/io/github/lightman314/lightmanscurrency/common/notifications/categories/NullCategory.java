@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class NullCategory extends NotificationCategory {
 
@@ -18,7 +19,7 @@ public class NullCategory extends NotificationCategory {
     private NullCategory() {}
 
     @Override
-    public IconData getIcon() { return IconData.of(Items.BARRIER); }
+    public @NotNull IconData getIcon() { return IconData.of(Items.BARRIER); }
 
     @Override
     public MutableText getName() { return Text.literal("NULL"); }

@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.google.common.base.Supplier;
 import com.google.gson.JsonObject;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.TradeRuleScreen;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
@@ -15,8 +16,8 @@ import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -148,15 +149,15 @@ public class FreeSample extends TradeRule {
         @Override
         public void initTab() {
 
-            this.buttonClearMemory = this.addCustomRenderable(new ButtonWidget(screen.guiLeft() + 10, screen.guiTop() + 50, screen.xSize - 20, 20, Text.translatable("gui.button.lightmanscurrency.free_sample.reset"), this::PressClearMemoryButton));
+            this.buttonClearMemory = this.addCustomRenderable(new VanillaButton(screen.guiLeft() + 10, screen.guiTop() + 50, screen.xSize - 20, 20, Text.translatable("gui.button.lightmanscurrency.free_sample.reset"), this::PressClearMemoryButton));
 
         }
 
         @Override
-        public void renderTab(MatrixStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        public void renderTab(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
             if(this.buttonClearMemory.isMouseOver(mouseX, mouseY))
-                screen.renderTooltip(poseStack, Text.translatable("gui.button.lightmanscurrency.free_sample.reset.tooltip"), mouseX, mouseY);
+                gui.drawTooltip(this.screen.getFont(), Text.translatable("gui.button.lightmanscurrency.free_sample.reset.tooltip"), mouseX, mouseY);
 
         }
 

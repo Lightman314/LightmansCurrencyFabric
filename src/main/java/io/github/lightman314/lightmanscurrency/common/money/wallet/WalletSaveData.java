@@ -63,7 +63,7 @@ public class WalletSaveData extends PersistentState {
     }
 
     @NotNull
-    public static WalletHandler GetPlayerWallet(PlayerEntity player) { return GetPlayerWallet(player.getUuid(), player.world.isClient); }
+    public static WalletHandler GetPlayerWallet(PlayerEntity player) { return GetPlayerWallet(player.getUuid(), player.getWorld().isClient); }
 
     @NotNull
     public static WalletHandler GetPlayerWallet(UUID playerID, boolean isClient) {

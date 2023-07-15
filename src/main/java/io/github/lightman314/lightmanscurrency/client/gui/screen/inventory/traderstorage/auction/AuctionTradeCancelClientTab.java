@@ -2,14 +2,15 @@ package io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trad
 
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.TraderStorageScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.traderstorage.TraderStorageClientTab;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.VanillaButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.trade.TradeButton;
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.TraderStorageTab;
 import io.github.lightman314.lightmanscurrency.common.menu.traderstorage.auction.AuctionTradeCancelTab;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.tradedata.AuctionTradeData;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -40,29 +41,29 @@ public class AuctionTradeCancelClientTab extends TraderStorageClientTab<AuctionT
     public void onOpen() {
 
         this.tradeDisplay = this.screen.addRenderableTabWidget(new TradeButton(this.menu::getContext, this.commonTab::getTrade, b -> {}));
-        this.tradeDisplay.move(this.screen.getGuiLeft() + (this.screen.getImageWidth() / 2) - 47, this.screen.getGuiTop() + 17);
+        this.tradeDisplay.setPosition(this.screen.getGuiLeft() + (this.screen.getImageWidth() / 2) - 47, this.screen.getGuiTop() + 17);
 
-        this.buttonCancelPlayerGive = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 40, this.screen.getGuiTop() + 60, this.screen.getImageWidth() - 80, 20, Text.translatable("button.lightmanscurrency.auction.cancel.self"), b -> this.commonTab.cancelAuction(true)));
-        this.buttonCancelStorageGive = this.screen.addRenderableTabWidget(new ButtonWidget(this.screen.getGuiLeft() + 40, this.screen.getGuiTop() + 85, this.screen.getImageWidth() - 80, 20, Text.translatable("button.lightmanscurrency.auction.cancel.storage"), b -> this.commonTab.cancelAuction(false)));
-
-    }
-
-    @Override
-    public void renderBG(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
-
-        TextRenderUtil.drawCenteredText(pose, Text.translatable("tooltip.lightmanscurrency.auction.cancel"), this.screen.getGuiLeft() + (this.screen.getImageWidth() / 2), this.screen.getGuiTop() + 50, 0x404040);
+        this.buttonCancelPlayerGive = this.screen.addRenderableTabWidget(new VanillaButton(this.screen.getGuiLeft() + 40, this.screen.getGuiTop() + 60, this.screen.getImageWidth() - 80, 20, Text.translatable("button.lightmanscurrency.auction.cancel.self"), b -> this.commonTab.cancelAuction(true)));
+        this.buttonCancelStorageGive = this.screen.addRenderableTabWidget(new VanillaButton(this.screen.getGuiLeft() + 40, this.screen.getGuiTop() + 85, this.screen.getImageWidth() - 80, 20, Text.translatable("button.lightmanscurrency.auction.cancel.storage"), b -> this.commonTab.cancelAuction(false)));
 
     }
 
     @Override
-    public void renderTooltips(MatrixStack pose, int mouseX, int mouseY) {
+    public void renderBG(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
-        this.tradeDisplay.renderTooltips(pose, mouseX, mouseY);
+        TextRenderUtil.drawCenteredText(gui, Text.translatable("tooltip.lightmanscurrency.auction.cancel"), this.screen.getGuiLeft() + (this.screen.getImageWidth() / 2), this.screen.getGuiTop() + 50, 0x404040);
+
+    }
+
+    @Override
+    public void renderTooltips(DrawContext gui, int mouseX, int mouseY) {
+
+        this.tradeDisplay.renderTooltips(gui, this.font, mouseX, mouseY);
 
         if(this.buttonCancelPlayerGive.isMouseOver(mouseX, mouseY))
-            this.screen.renderOrderedTooltip(pose, this.font.wrapLines(Text.translatable("tooltip.lightmanscurrency.auction.cancel.self"), 160), mouseX, mouseY);
+            gui.drawOrderedTooltip(this.font, this.font.wrapLines(Text.translatable("tooltip.lightmanscurrency.auction.cancel.self"), 160), mouseX, mouseY);
         if(this.buttonCancelStorageGive.isMouseOver(mouseX, mouseY))
-            this.screen.renderOrderedTooltip(pose, this.font.wrapLines(Text.translatable("tooltip.lightmanscurrency.auction.cancel.storage"), 160), mouseX, mouseY);
+            gui.drawOrderedTooltip(this.font, this.font.wrapLines(Text.translatable("tooltip.lightmanscurrency.auction.cancel.storage"), 160), mouseX, mouseY);
     }
 
     @Override

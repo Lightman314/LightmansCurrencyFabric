@@ -12,10 +12,10 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -64,34 +64,34 @@ public class DropdownWidget extends ClickableWidget {
 
         for(int i = 0; i < this.options.size(); ++i)
         {
-            int yPos = this.y + HEIGHT + (i * HEIGHT);
-            this.optionButtons.add(addButton.apply(new DropdownButton(this.x, yPos, this.width, this.font, this.options.get(i), this::OnSelect)));
+            int yPos = this.getY() + HEIGHT + (i * HEIGHT);
+            this.optionButtons.add(addButton.apply(new DropdownButton(this.getX(), yPos, this.width, this.font, this.options.get(i), this::OnSelect)));
             this.optionButtons.get(i).visible = this.open;
         }
 
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
 
         //Draw the background
         RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        gui.setShaderColor(1f, 1f, 1f, 1f);
         int offset = this.hovered ? this.height : 0;
         if(!this.active)
-            RenderSystem.setShaderColor(0.5F, 0.5F, 0.5F, 1.0F);
-        this.drawTexture(pose, this.x, this.y, 0, offset, 2, DropdownWidget.HEIGHT);
+            gui.setShaderColor(0.5F, 0.5F, 0.5F, 1.0F);
+        gui.drawTexture(GUI_TEXTURE, this.getX(), this.getY(), 0, offset, 2, DropdownWidget.HEIGHT);
         int xOffset = 0;
         while(xOffset < this.width - 14)
         {
             int xPart = Math.min(this.width - 14 - xOffset, 244);
-            this.drawTexture(pose, this.x + 2 + xOffset, this.y, 2, offset, xPart, DropdownWidget.HEIGHT);
+            gui.drawTexture(GUI_TEXTURE, this.getX() + 2 + xOffset, this.getY(), 2, offset, xPart, DropdownWidget.HEIGHT);
             xOffset += xPart;
         }
-        this.drawTexture(pose, this.x + this.width - 12, this.y, 244, offset, 12, DropdownWidget.HEIGHT);
+        gui.drawTexture(GUI_TEXTURE, this.getX() + this.width - 12, this.getY(), 244, offset, 12, DropdownWidget.HEIGHT);
 
         //Draw the option text
-        this.font.draw(pose, this.fitString(this.options.get(this.currentlySelected).getString()), this.x + 2, this.y + 2, 0x404040);
+        gui.drawText(this.font, this.fitString(this.options.get(this.currentlySelected).getString()), this.getX() + 2, this.getY() + 2, 0x404040, false);
 
         //Confirm the option buttons active state
         if(this.open)
@@ -134,7 +134,7 @@ public class DropdownWidget extends ClickableWidget {
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) { }
+    public void appendClickableNarrations(NarrationMessageBuilder builder) { }
 
     private String fitString(String text) {
         if(this.font.getWidth(text) <= this.width - 14)

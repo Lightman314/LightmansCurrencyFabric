@@ -1,7 +1,5 @@
 package io.github.lightman314.lightmanscurrency.client.gui.screen.inventory;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconData;
@@ -12,8 +10,8 @@ import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CM
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageWalletExchangeCoins;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageWalletQuickCollect;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageWalletToggleAutoExchange;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -39,28 +37,27 @@ public class WalletScreen extends MenuScreen<WalletMenu> {
     }
 
     @Override
-    protected void drawBackground(MatrixStack poseStack, float partialTicks, int mouseX, int mouseY)
+    protected void drawBackground(DrawContext gui, float partialTicks, int mouseX, int mouseY)
     {
 
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        gui.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         //Draw the top
-        this.drawTexture(poseStack, this.x, this.y, 0, 0, this.backgroundWidth, 17);
+        gui.drawTexture(GUI_TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, 17);
         //Draw the middle strips
         for(int y = 0; y < this.handler.getRowCount(); y++)
         {
-            this.drawTexture(poseStack, this.x, this.y + 17 + y * 18, 0, 17, this.backgroundWidth, 18);
+            gui.drawTexture(GUI_TEXTURE, this.x, this.y + 17 + y * 18, 0, 17, this.backgroundWidth, 18);
         }
         //Draw the bottom
-        this.drawTexture(poseStack, this.x, this.y + 17 + this.handler.getRowCount() * 18, 0, 35, this.backgroundWidth, BASEHEIGHT - 17);
+        gui.drawTexture(GUI_TEXTURE, this.x, this.y + 17 + this.handler.getRowCount() * 18, 0, 35, this.backgroundWidth, BASEHEIGHT - 17);
 
         //Draw the slots
         for(int y = 0; y * 9 < this.handler.getSlotCount(); y++)
         {
             for(int x = 0; x < 9 && x + y * 9 < this.handler.getSlotCount(); x++)
             {
-                this.drawTexture(poseStack, this.x + 7 + x * 18, this.y + 17 + y * 18, 0, BASEHEIGHT + 18, 18, 18);
+                gui.drawTexture(GUI_TEXTURE, this.x + 7 + x * 18, this.y + 17 + y * 18, 0, BASEHEIGHT + 18, 18, 18);
             }
         }
 
@@ -72,10 +69,10 @@ public class WalletScreen extends MenuScreen<WalletMenu> {
     }
 
     @Override
-    protected void drawForeground(MatrixStack pose, int mouseX, int mouseY)
+    protected void drawForeground(DrawContext gui, int mouseX, int mouseY)
     {
-        this.textRenderer.draw(pose, this.getWalletName(), 8.0f, 6.0f, 0x404040);
-        this.textRenderer.draw(pose, this.playerInventoryTitle, 8.0f, (this.backgroundHeight - 94), 0x404040);
+        gui.drawText(this.textRenderer, this.getWalletName(), 8, 6, 0x404040, false);
+        gui.drawText(this.textRenderer, this.playerInventoryTitle, 8, this.backgroundHeight - 94, 0x404040, false);
     }
 
     @Override
@@ -137,27 +134,27 @@ public class WalletScreen extends MenuScreen<WalletMenu> {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks)
     {
 
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.drawMouseoverTooltip(matrixStack, mouseX,  mouseY);
+        this.renderBackground(gui);
+        super.render(gui, mouseX, mouseY, partialTicks);
+        this.drawMouseoverTooltip(gui, mouseX,  mouseY);
 
         if(this.buttonConvert != null && this.buttonConvert.isMouseOver(mouseX, mouseY))
         {
-            this.renderTooltip(matrixStack, Text.translatable("tooltip.lightmanscurrency.wallet.convert"), mouseX, mouseY);
+            gui.drawTooltip(this.textRenderer, Text.translatable("tooltip.lightmanscurrency.wallet.convert"), mouseX, mouseY);
         }
         else if(this.buttonToggleAutoConvert != null && this.buttonToggleAutoConvert.isMouseOver(mouseX, mouseY))
         {
             if(this.autoConvert)
-                this.renderTooltip(matrixStack, Text.translatable("tooltip.lightmanscurrency.wallet.autoconvert.disable"), mouseX, mouseY);
+                gui.drawTooltip(this.textRenderer, Text.translatable("tooltip.lightmanscurrency.wallet.autoconvert.disable"), mouseX, mouseY);
             else
-                this.renderTooltip(matrixStack, Text.translatable("tooltip.lightmanscurrency.wallet.autoconvert.enable"), mouseX, mouseY);
+                gui.drawTooltip(this.textRenderer, Text.translatable("tooltip.lightmanscurrency.wallet.autoconvert.enable"), mouseX, mouseY);
         }
         else if(this.buttonOpenBank != null && this.buttonOpenBank.isMouseOver(mouseX, mouseY))
         {
-            this.renderTooltip(matrixStack, Text.translatable("tooltip.lightmanscurrency.wallet.openbank"), mouseX, mouseY);
+            gui.drawTooltip(this.textRenderer, Text.translatable("tooltip.lightmanscurrency.wallet.openbank"), mouseX, mouseY);
         }
     }
 

@@ -6,16 +6,16 @@ import java.util.List;
 import io.github.lightman314.lightmanscurrency.common.blocks.traderblocks.interfaces.IItemTraderBlock;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
 import io.github.lightman314.lightmanscurrency.common.traders.item.ItemTraderData;
+import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.inventory.SidedInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class ItemTraderBlockEntity extends TraderBlockEntity<ItemTraderData> {
 
@@ -48,7 +48,7 @@ public class ItemTraderBlockEntity extends TraderBlockEntity<ItemTraderData> {
     }
 
     @Environment(EnvType.CLIENT)
-    public List<Vec3f> GetStackRenderPos(int tradeSlot, boolean isDoubleTrade)
+    public List<Vector3f> GetStackRenderPos(int tradeSlot, boolean isDoubleTrade)
     {
         Block block = this.getCachedState().getBlock();
         if(block instanceof IItemTraderBlock)
@@ -58,32 +58,32 @@ public class ItemTraderBlockEntity extends TraderBlockEntity<ItemTraderData> {
         }
         else
         {
-            List<Vec3f> posList = new ArrayList<>();
-            posList.add(new Vec3f(0.0f, 0.0f, 0.0f));
+            List<Vector3f> posList = new ArrayList<>();
+            posList.add(new Vector3f(0.0f, 0.0f, 0.0f));
             return posList;
         }
     }
 
     @Environment(EnvType.CLIENT)
-    public List<Quaternion> GetStackRenderRot(int tradeSlot, float partialTicks)
+    public List<Quaternionf> GetStackRenderRot(int tradeSlot, float partialTicks)
     {
         Block block = this.getCachedState().getBlock();
         if(block instanceof IItemTraderBlock)
         {
             IItemTraderBlock traderBlock = (IItemTraderBlock)block;
-            List<Quaternion> rotation = traderBlock.GetStackRenderRot(tradeSlot, this.getCachedState());
+            List<Quaternionf> rotation = traderBlock.GetStackRenderRot(tradeSlot, this.getCachedState());
             //If null received. Rotate item based on world time
             if(rotation == null)
             {
                 rotation = new ArrayList<>();
-                rotation.add(Vec3f.POSITIVE_Y.getDegreesQuaternion((this.rotationTime + partialTicks) * 2.0F));
+                rotation.add(MathUtil.getRotationDegrees((this.rotationTime + partialTicks) * 2.0F));
             }
             return rotation;
         }
         else
         {
-            List<Quaternion> rotation = new ArrayList<>();
-            rotation.add(Vec3f.POSITIVE_Y.getDegreesQuaternion(0f));
+            List<Quaternionf> rotation = new ArrayList<>();
+            rotation.add(MathUtil.getRotationDegrees(0f));
             return rotation;
         }
     }

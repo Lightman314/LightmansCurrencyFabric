@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class AuctionHouseCategory extends NotificationCategory {
 
@@ -18,7 +19,7 @@ public class AuctionHouseCategory extends NotificationCategory {
     private AuctionHouseCategory() { }
 
     @Override
-    public IconData getIcon() { return AuctionHouseTrader.ICON; }
+    public @NotNull IconData getIcon() { return AuctionHouseTrader.ICON; }
 
     @Override
     public MutableText getName() { return Text.translatable("gui.lightmanscurrency.universaltrader.auction"); }

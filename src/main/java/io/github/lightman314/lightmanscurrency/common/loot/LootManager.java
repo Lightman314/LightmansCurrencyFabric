@@ -1,9 +1,8 @@
 package io.github.lightman314.lightmanscurrency.common.loot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableList;
 
@@ -25,6 +24,7 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.loot.condition.KilledByPlayerLootCondition;
 import net.minecraft.loot.condition.RandomChanceWithLootingLootCondition;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextType;
 import net.minecraft.loot.entry.ItemEntry;
@@ -32,11 +32,12 @@ import net.minecraft.loot.function.LootingEnchantLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.ForgeConfigSpec;
+import org.jetbrains.annotations.NotNull;
 
 public class LootManager {
 
@@ -259,7 +260,7 @@ public class LootManager {
     public static void entityDeath(LivingEntity entity, DamageSource damageSource)
     {
         //Check if this is the server
-        if(entity.world.isClient)
+        if(entity.getWorld().isClient)
             return;
 
         if(!LCConfig.COMMON.enableEntityDrops.get())
@@ -272,7 +273,7 @@ public class LootManager {
                 return;
         }
 
-        String killedType = Registry.ENTITY_TYPE.getId(entity.getType()).toString();
+        String killedType = Registries.ENTITY_TYPE.getId(entity.getType()).toString();
 
         if(damageSource.getAttacker() instanceof PlayerEntity player)
         {
@@ -354,6 +355,11 @@ public class LootManager {
         }
     }
 
+    private static String getSafeId(@NotNull Entity entity) {
+        Identifier id = Registries.ENTITY_TYPE.getId(entity.getType());
+        return id.toString().replace(':','_');
+    }
+
     private static void DropEntityLoot(Entity entity, PlayerEntity player, PoolLevel coinPool)
     {
 
@@ -365,13 +371,14 @@ public class LootManager {
         //LightmansCurrency.LOGGER.info("Dropping entity loot level " + coinPool);
 
         LootTable.Builder table = LootTable.builder();
-        LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) entity.world);
+        LootContextParameterSet.Builder parameterBuilder = new LootContextParameterSet.Builder((ServerWorld) entity.getWorld());
         //Add the KilledByPlayer condition to the Loot Context
         if(player != null)
-            contextBuilder.parameter(LootContextParameters.KILLER_ENTITY, player)
-                    .parameter(LootContextParameters.LAST_DAMAGE_PLAYER, player);
+            parameterBuilder.add(LootContextParameters.KILLER_ENTITY, player)
+                    .add(LootContextParameters.LAST_DAMAGE_PLAYER, player);
 
-        LootContext context = contextBuilder.build(new LootContextType.Builder().allow(LootContextParameters.LAST_DAMAGE_PLAYER).allow(LootContextParameters.KILLER_ENTITY).build());
+        LootContextParameterSet params = parameterBuilder.build(new LootContextType.Builder().allow(LootContextParameters.LAST_DAMAGE_PLAYER).allow(LootContextParameters.KILLER_ENTITY).build());
+        LootContext context = new LootContext.Builder(params).build(new Identifier(LightmansCurrency.MODID, "generated_entity_loot/" + getSafeId(entity)));
 
         try {
 
@@ -384,7 +391,7 @@ public class LootManager {
                     table.pool(builder);
                 }
                 //Generate the loot
-                SpawnLootDrops(entity, table.build().generateLoot(context));
+                table.build().generateLoot(context, LootSpawner(entity));
                 return;
             }
             else if(coinPool == PoolLevel.BOSS_IRON)
@@ -395,7 +402,7 @@ public class LootManager {
                     table.pool(builder);
                 }
                 //Generate the loot
-                SpawnLootDrops(entity, table.build().generateLoot(context));
+                table.build().generateLoot(context, LootSpawner(entity));
                 return;
             }
             else if(coinPool == PoolLevel.BOSS_GOLD)
@@ -406,7 +413,7 @@ public class LootManager {
                     table.pool(builder);
                 }
                 //Generate the loot
-                SpawnLootDrops(entity, table.build().generateLoot(context));
+                table.build().generateLoot(context, LootSpawner(entity));
                 return;
             }
             else if(coinPool == PoolLevel.BOSS_EMERALD)
@@ -417,7 +424,7 @@ public class LootManager {
                     table.pool(builder);
                 }
                 //Generate the loot
-                SpawnLootDrops(entity, table.build().generateLoot(context));
+                table.build().generateLoot(context, LootSpawner(entity));
                 return;
             }
             else if(coinPool == PoolLevel.BOSS_DIAMOND)
@@ -428,7 +435,7 @@ public class LootManager {
                     table.pool(builder);
                 }
                 //Generate the loot
-                SpawnLootDrops(entity, table.build().generateLoot(context));
+                table.build().generateLoot(context, LootSpawner(entity));
                 return;
             }
             else if(coinPool == PoolLevel.BOSS_NETHERITE)
@@ -439,7 +446,7 @@ public class LootManager {
                     table.pool(builder);
                 }
                 //Generate the loot
-                SpawnLootDrops(entity, table.build().generateLoot(context));
+                table.build().generateLoot(context, LootSpawner(entity));
                 return;
             }
 
@@ -464,7 +471,7 @@ public class LootManager {
                 }
             }
 
-            SpawnLootDrops(entity, table.build().generateLoot(context));
+            table.build().generateLoot(context, LootSpawner(entity));
 
         } catch(Exception e) { LightmansCurrency.LogError("Error spawning coin drops!", e); }
 
@@ -564,11 +571,7 @@ public class LootManager {
         return null;
     }
 
-    private static void SpawnLootDrops(Entity entity, List<ItemStack> lootDrops)
-    {
-        //LightmansCurrency.LOGGER.info("Spawning " + lootDrops.size() + " coin drops.");
-        InventoryUtil.dumpContents(entity.world, entity.getBlockPos(), lootDrops);
-    }
+    private static Consumer<ItemStack> LootSpawner(Entity entity) { return i -> InventoryUtil.dumpContents(entity.getWorld(), entity.getBlockPos(), i); }
 
 
     private static LootPool.Builder GenerateEntityCoinPool(ItemConvertible item, float min, float max, float chance, String name, boolean requirePlayerKill)

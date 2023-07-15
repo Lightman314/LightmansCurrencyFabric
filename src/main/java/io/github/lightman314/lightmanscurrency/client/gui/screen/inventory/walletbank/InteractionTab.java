@@ -8,12 +8,12 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.Ico
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -41,16 +41,16 @@ public class InteractionTab extends WalletBankTab implements IBankAccountWidget 
     }
 
     @Override
-    public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void preRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
         Text accountName = Text.literal("ERROR FINDING ACCOUNT");
         if(this.screen.getScreenHandler().getBankAccount() != null)
             accountName = this.screen.getScreenHandler().getBankAccount().getName();
-        this.screen.getFont().draw(pose, accountName, this.screen.getGuiLeft() + 8f, this.screen.getGuiTop() + CoinValueInput.HEIGHT, 0x404040);
-        this.accountWidget.renderInfo(pose);
+        gui.drawText(this.screen.getFont(), accountName, this.screen.getGuiLeft() + 8, this.screen.getGuiTop() + CoinValueInput.HEIGHT, 0x404040, false);
+        this.accountWidget.renderInfo(gui);
     }
 
     @Override
-    public void postRender(MatrixStack pose, int mouseX, int mouseY) { }
+    public void postRender(DrawContext gui, int mouseX, int mouseY) { }
 
     @Override
     public void tick() { this.accountWidget.tick(); }

@@ -8,10 +8,10 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.button.PlainBut
 import io.github.lightman314.lightmanscurrency.client.util.TextRenderUtil;
 import io.github.lightman314.lightmanscurrency.util.TimeUtil.TimeData;
 import io.github.lightman314.lightmanscurrency.util.TimeUtil.TimeUnit;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class TimeInputWidget extends ClickableWidget {
@@ -42,9 +42,9 @@ public class TimeInputWidget extends ClickableWidget {
         {
             final TimeUnit unit = this.relevantUnits.get(i);
 
-            int xPos = this.x + ((20 + this.spacing) * i);
-            PlainButton addButton = new PlainButton(xPos, this.y, 20, 10, b -> this.addTime(unit), CoinValueInput.GUI_TEXTURE, 0, CoinValueInput.HEIGHT);
-            PlainButton removeButton = new PlainButton(xPos, this.y + 23, 20, 10, b -> this.removeTime(unit), CoinValueInput.GUI_TEXTURE, 20, CoinValueInput.HEIGHT);
+            int xPos = this.getX() + ((20 + this.spacing) * i);
+            PlainButton addButton = new PlainButton(xPos, this.getY(), 20, 10, b -> this.addTime(unit), CoinValueInput.GUI_TEXTURE, 0, CoinValueInput.HEIGHT);
+            PlainButton removeButton = new PlainButton(xPos, this.getY() + 23, 20, 10, b -> this.removeTime(unit), CoinValueInput.GUI_TEXTURE, 20, CoinValueInput.HEIGHT);
             widgetAdder.accept(addButton);
             widgetAdder.accept(removeButton);
             this.buttons.add(addButton);
@@ -186,7 +186,7 @@ public class TimeInputWidget extends ClickableWidget {
             this.setTimeInternal(this.minDuration);
     }
 
-    private final List<TimeUnit> getRelevantUnits(TimeUnit largestUnit, TimeUnit smallestUnit) {
+    private List<TimeUnit> getRelevantUnits(TimeUnit largestUnit, TimeUnit smallestUnit) {
         List<TimeUnit> results = new ArrayList<>();
         List<TimeUnit> units = TimeUnit.UNITS_LARGE_TO_SMALL;
         int startIndex = units.indexOf(largestUnit);
@@ -203,23 +203,26 @@ public class TimeInputWidget extends ClickableWidget {
     }
 
     @Override
-    public void render(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
         for(ButtonWidget b : this.buttons)
         {
             b.active = this.active;
             b.visible = this.visible;
         }
+        super.render(gui, mouseX, mouseY, partialTicks);
+    }
 
+    @Override
+    protected void renderButton(DrawContext gui, int mouseX, int mouseY, float delta) {
         for(int i = 0; i < this.relevantUnits.size(); ++i)
         {
-            TextRenderUtil.drawCenteredText(pose, this.getTime().getUnitString(this.relevantUnits.get(i), true), this.x + ((20 + this.spacing) * i) + 10, this.y + 12, 0xFFFFFF);
+            TextRenderUtil.drawCenteredText(gui, this.getTime().getUnitString(this.relevantUnits.get(i), true), this.getX() + ((20 + this.spacing) * i) + 10, this.getY() + 12, 0xFFFFFF);
         }
-
     }
 
     public void removeChildren(Consumer<ClickableWidget> remover) { for(ButtonWidget b : this.buttons) remover.accept(b); }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) { }
+    public void appendClickableNarrations(NarrationMessageBuilder builder) { }
 
 }
