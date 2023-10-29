@@ -33,14 +33,9 @@ import java.util.List;
 
 public class TicketMachineBlock extends RotatableBlock implements BlockEntityProvider {
 
-    private static final VoxelShape SHAPE_NORTH = createCuboidShape(4d,0d,0d,12d,16d,8d);
-    private static final VoxelShape SHAPE_SOUTH = createCuboidShape(4d,0d,8d,12d,16d,16d);
-    private static final VoxelShape SHAPE_EAST = createCuboidShape(8d,0d,4d,16d,16d,12d);
-    private static final VoxelShape SHAPE_WEST = createCuboidShape(0d,0d,4d,8d,16d,12d);
-
     private static final MutableText TITLE = Text.translatable("gui.lightmanscurrency.ticket_machine.title");
 
-    public TicketMachineBlock(Settings properties) { super(properties, LazyShapes.lazyDirectionalShape(SHAPE_NORTH, SHAPE_EAST, SHAPE_SOUTH, SHAPE_WEST)); }
+    public TicketMachineBlock(Settings properties) { super(properties, createCuboidShape(0d,0d,0d,16d,14d,16d)); }
 
     @Nullable
     @Override
