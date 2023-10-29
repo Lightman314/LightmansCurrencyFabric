@@ -1,6 +1,6 @@
 {
     "textures": {
-		"particle": "lightmanscurrency:blocks/void"
+		"particle": "lightmanscurrency:block/void"
 	},
 	"elements": [
 	]

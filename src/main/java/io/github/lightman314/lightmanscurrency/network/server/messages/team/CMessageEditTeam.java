@@ -17,15 +17,15 @@ public class CMessageEditTeam extends ClientToServerPacket {
 
     private final long teamID;
     private final String playerName;
-    private final String category;
-    public CMessageEditTeam(long teamID, String playerName, String category) { super(PACKET_ID); this.teamID = teamID; this.playerName = playerName; this.category = category; }
+    private final byte category;
+    public CMessageEditTeam(long teamID, String playerName, byte category) { super(PACKET_ID); this.teamID = teamID; this.playerName = playerName; this.category = category; }
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeLong(this.teamID); buffer.writeString(this.playerName); buffer.writeString(this.category); }
+    protected void encode(PacketByteBuf buffer) { buffer.writeLong(this.teamID); buffer.writeString(this.playerName); buffer.writeByte(this.category); }
 
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
         Team team = TeamSaveData.GetTeam(false, buffer.readLong());
         if(team != null)
-            team.changeAny(player, buffer.readString(), buffer.readString());
+            team.changeAny(player, buffer.readString(), buffer.readByte());
     }
 }

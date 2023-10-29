@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 public class WalletSlot extends Slot {
 
-    public static final Identifier EMPTY_WALLET_SLOT = new Identifier(LightmansCurrency.MODID, "items/empty_wallet_slot");
+    public static final Identifier EMPTY_WALLET_SLOT = new Identifier(LightmansCurrency.MODID, "item/empty_wallet_slot");
     public static final Pair<Identifier,Identifier> BACKGROUND = Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, EMPTY_WALLET_SLOT);
 
     private final List<Runnable> listeners = Lists.newArrayList();

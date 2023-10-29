@@ -93,22 +93,23 @@ public class TeamOwnerTab extends TeamTab{
 
     private void setNewOwner(ButtonWidget button)
     {
-        if(this.newOwnerName.getText().isBlank() || this.getActiveTeam() == null)
+        Team team = this.getActiveTeam();
+        if(this.newOwnerName.getText().isBlank() || team == null)
             return;
 
-        Team team = this.getActiveTeam();
-        team.changeOwner(this.getPlayer(), this.newOwnerName.getText());
-        new CMessageEditTeam(team.getID(), this.newOwnerName.getText(), Team.CATEGORY_OWNER);
+        //team.changeOwner(this.getPlayer(), this.newOwnerName.getText());
+        new CMessageEditTeam(team.getID(), this.newOwnerName.getText(), Team.CATEGORY_OWNER).sendToServer();
         this.newOwnerName.setText("");
 
     }
 
     private void disbandTeam(ButtonWidget button)
     {
-        if(this.getActiveTeam() == null)
+        Team team = this.getActiveTeam();
+        if(team == null)
             return;
 
-        new CMessageDisbandTeam(this.getActiveTeam().getID()).sendToServer();
+        new CMessageDisbandTeam(team.getID()).sendToServer();
     }
 
 }

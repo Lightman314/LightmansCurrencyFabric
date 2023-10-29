@@ -7,7 +7,6 @@ import io.github.lightman314.lightmanscurrency.client.gui.widget.ItemEditWidget;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.FreezerTraderBlockEntityRenderer;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.ItemTraderBlockEntityRenderer;
 import io.github.lightman314.lightmanscurrency.client.renderer.entity.layers.WalletLayer;
-import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlocks;
@@ -21,6 +20,7 @@ import io.github.lightman314.lightmanscurrency.common.menu.slots.WalletSlot;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.ticket.TicketSlot;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.trader.UpgradeInputSlot;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
+import io.github.lightman314.lightmanscurrency.common.traders.item.tradedata.restrictions.ItemTradeRestriction;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.network.client.LCClientPacketHandler;
 import net.fabricmc.api.ClientModInitializer;
@@ -118,7 +118,7 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		registry.register(CoinSlot.EMPTY_COIN_SLOT);
 		registry.register(TicketSlot.EMPTY_TICKET_SLOT);
 		registry.register(WalletSlot.EMPTY_WALLET_SLOT);
-		registry.register(ItemRenderUtil.EMPTY_SLOT_BG);
+		registry.register(ItemTradeRestriction.DEFAULT_BACKGROUND);
 		registry.register(UpgradeInputSlot.EMPTY_UPGRADE_SLOT);
 
 	}

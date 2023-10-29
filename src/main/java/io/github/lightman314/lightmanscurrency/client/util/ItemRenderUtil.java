@@ -5,7 +5,6 @@ import java.util.List;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.MenuScreen;
-import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -19,16 +18,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 
 public class ItemRenderUtil {
-
-    public static final Identifier EMPTY_SLOT_BG = new Identifier(LightmansCurrency.MODID, "items/empty_item_slot");
-    public static final Pair<Identifier,Identifier> BACKGROUND = Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, EMPTY_SLOT_BG);
 
     public static final int ITEM_BLIT_OFFSET = 100;
 
