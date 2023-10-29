@@ -43,7 +43,6 @@ public class ArmorDisplayTraderBlockEntity extends ItemTraderBlockEntity{
     @Override
     public void serverTick()
     {
-
         super.serverTick();
 
         if(!this.loaded)

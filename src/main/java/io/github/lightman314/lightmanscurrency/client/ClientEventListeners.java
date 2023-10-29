@@ -89,7 +89,6 @@ public class ClientEventListeners {
             screenWidgets.add(new TeamManagerButton(gui));
             screenWidgets.add(new TraderRecoveryButton(gui));
 
-
             //Register screen-specific events
             ScreenExtensions extension = ScreenExtensions.getExtensions(screen);
             extension.fabric_getAfterRenderEvent().register(ClientEventListeners::renderInventoryTooltips);

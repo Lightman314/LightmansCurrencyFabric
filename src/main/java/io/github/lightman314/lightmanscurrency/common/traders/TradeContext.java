@@ -494,7 +494,7 @@ public class TradeContext {
         else if(this.hasInteractionSlot(InteractionSlotData.FLUID_TYPE))
         {
             ItemStack bucketStack = this.getInteractionSlotStack(InteractionSlotData.FLUID_TYPE);
-            Storage<FluidVariant> fluidHandler = ContainerItemContext.withInitial(bucketStack).find(FluidStorage.ITEM);
+            Storage<FluidVariant> fluidHandler = ContainerItemContext.withConstant(bucketStack).find(FluidStorage.ITEM);
             if(fluidHandler != null)
                 return FabricStorageUtil.simulateExtract(fluidHandler, fluid, fluid.getAmount()) == fluid.getAmount();
         }
@@ -512,7 +512,7 @@ public class TradeContext {
             else if(this.hasInteractionSlot(InteractionSlotData.FLUID_TYPE))
             {
                 ItemStack bucketStack = this.getInteractionSlotStack(InteractionSlotData.FLUID_TYPE);
-                Storage<FluidVariant> fluidHandler = ContainerItemContext.withInitial(bucketStack).find(FluidStorage.ITEM);
+                Storage<FluidVariant> fluidHandler = ContainerItemContext.withConstant(bucketStack).find(FluidStorage.ITEM);
                 if(fluidHandler != null)
                     return FabricStorageUtil.tryExtractExact(fluidHandler, fluid, fluid.getAmount());
             }
@@ -527,7 +527,7 @@ public class TradeContext {
         else if(this.hasInteractionSlot(InteractionSlotData.FLUID_TYPE))
         {
             ItemStack bucketStack = this.getInteractionSlotStack(InteractionSlotData.FLUID_TYPE);
-            Storage<FluidVariant> fluidHandler = ContainerItemContext.withInitial(bucketStack).find(FluidStorage.ITEM);
+            Storage<FluidVariant> fluidHandler = ContainerItemContext.withConstant(bucketStack).find(FluidStorage.ITEM);
             if(fluidHandler != null)
                 return FabricStorageUtil.simulateInsert(fluidHandler, fluid, fluid.getAmount()) == fluid.getAmount();
         }
@@ -545,7 +545,7 @@ public class TradeContext {
             else if(this.hasInteractionSlot(InteractionSlotData.FLUID_TYPE))
             {
                 ItemStack bucketStack = this.getInteractionSlotStack(InteractionSlotData.FLUID_TYPE);
-                Storage<FluidVariant> fluidHandler = ContainerItemContext.withInitial(bucketStack).find(FluidStorage.ITEM);
+                Storage<FluidVariant> fluidHandler = ContainerItemContext.withConstant(bucketStack).find(FluidStorage.ITEM);
                 if(fluidHandler != null)
                     return FabricStorageUtil.tryInsertExact(fluidHandler, fluid, fluid.getAmount());
             }

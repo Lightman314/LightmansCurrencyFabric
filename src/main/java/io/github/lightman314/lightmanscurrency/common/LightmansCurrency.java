@@ -64,6 +64,9 @@ public class LightmansCurrency implements ModInitializer {
 
         LightmansCurrency.LogInfo("Registering Lightman's Currency Items/Blocks");
 
+        //WoodType registration (if added at some point)
+
+
 		//Trigger registration
 		ModItems.registerItems();
 		ModBlocks.registerBlocks();

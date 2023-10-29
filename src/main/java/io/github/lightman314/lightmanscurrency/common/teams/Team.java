@@ -7,11 +7,13 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.google.common.collect.Lists;
+import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.NotificationSaveData;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
+import io.github.lightman314.lightmanscurrency.util.DebugUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -22,10 +24,10 @@ public class Team {
 
     public static final int MAX_NAME_LENGTH = 32;
 
-    public static final String CATEGORY_MEMBER = "MEMBER";
-    public static final String CATEGORY_ADMIN = "ADMIN";
-    public static final String CATEGORY_REMOVE = "REMOVE";
-    public static final String CATEGORY_OWNER = "OWNER";
+    public static final byte CATEGORY_MEMBER = 0;
+    public static final byte CATEGORY_ADMIN = 1;
+    public static final byte CATEGORY_REMOVE = 2;
+    public static final byte CATEGORY_OWNER = 10;
 
     private long id;
     public long getID() { return this.id; }
@@ -121,12 +123,24 @@ public class Team {
         }
     }
 
-    public void changeAny(PlayerEntity requestor, String playerName, String category)
+    public void changeAny(PlayerEntity requestor, String playerName, byte category)
     {
+        LightmansCurrency.LogDebug("Member change request received on the " + DebugUtil.getSideText(requestor));
         PlayerReference player = PlayerReference.of(this.isClient, playerName);
         if(player == null)
+        {
+            LightmansCurrency.LogDebug("No player found with the name " + playerName + "!");
             return;
-        if(category.contentEquals(CATEGORY_MEMBER) && this.isAdmin(requestor))
+        }
+        LightmansCurrency.LogDebug(playerName + " found with id " + player.id.toString());
+        LightmansCurrency.LogDebug("Request made: " + switch (category) {
+            case CATEGORY_MEMBER -> "Add Member";
+            case CATEGORY_ADMIN -> "Add Admin";
+            case CATEGORY_REMOVE -> "Remove Member/Admin";
+            case CATEGORY_OWNER -> "Set Owner";
+            default -> "ERROR";
+        });
+        if(category == CATEGORY_MEMBER && this.isAdmin(requestor))
         {
             //Add or remove the member
             //Confirm that this player isn't already on a list
@@ -136,7 +150,7 @@ public class Team {
             this.members.add(player);
             this.markDirty();
         }
-        else if(category.contentEquals(CATEGORY_ADMIN) && this.isAdmin(requestor))
+        else if(category == CATEGORY_ADMIN && this.isAdmin(requestor))
         {
             //Add or remove the admin
             //Check if the player is an admin. If they are demote them
@@ -166,7 +180,7 @@ public class Team {
                 this.markDirty();
             }
         }
-        else if(category.contentEquals(CATEGORY_REMOVE) && (this.isAdmin(requestor) || PlayerReference.of(requestor).is(player)))
+        else if(category == CATEGORY_REMOVE && (this.isAdmin(requestor) || PlayerReference.of(requestor).is(player)))
         {
             //Confirm that this player is a member (Can't remove them if they're not in the list in the first place)
             if(!this.isMember(player.id))
@@ -190,7 +204,7 @@ public class Team {
 
             this.markDirty();
         }
-        else if(category.contentEquals(CATEGORY_OWNER) && this.isOwner(requestor))
+        else if(category == CATEGORY_OWNER && this.isOwner(requestor))
         {
             //Cannot set the owner to yourself
             if(this.owner.is(player))
