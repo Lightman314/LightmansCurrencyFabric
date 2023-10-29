@@ -5,14 +5,10 @@ import java.util.List;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.MenuScreen;
-import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.Font;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.texture.Sprite;
@@ -22,16 +18,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 
 public class ItemRenderUtil {
-
-    public static final Identifier EMPTY_SLOT_BG = new Identifier(LightmansCurrency.MODID, "items/empty_item_slot");
-    public static final Pair<Identifier,Identifier> BACKGROUND = Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, EMPTY_SLOT_BG);
 
     public static final int ITEM_BLIT_OFFSET = 100;
 
@@ -41,7 +33,7 @@ public class ItemRenderUtil {
     {
         if(alexHead != null)
             return alexHead;
-        ItemStack alexHead = new ItemStack(Items.PLAYER_HEAD);
+        alexHead = new ItemStack(Items.PLAYER_HEAD);
         NbtCompound headData = new NbtCompound();
         NbtCompound skullOwner = new NbtCompound();
         skullOwner.putIntArray("Id", new int[] {-731408145, -304985227, -1778597514, 158507129 });

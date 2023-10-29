@@ -593,7 +593,7 @@ public class ItemTradeData extends TradeData implements IBarterTrade {
             if(!item.isEmpty())
                 entries.add(DisplayEntry.of(item, item.getCount(), ItemRenderUtil.getTooltipFromItem(item)));
             else if(context.isStorageMode)
-                entries.add(DisplayEntry.of(ItemRenderUtil.BACKGROUND, Lists.newArrayList(Text.translatable("tooltip.lightmanscurrency.trader.item_edit"))));
+                entries.add(DisplayEntry.of(ItemTradeRestriction.BACKGROUND, Lists.newArrayList(Text.translatable("tooltip.lightmanscurrency.trader.item_edit"))));
         }
         return entries;
     }
