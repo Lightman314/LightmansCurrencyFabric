@@ -1,12 +1,19 @@
 package io.github.lightman314.lightmanscurrency.common.traders.item.storage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import io.github.lightman314.lightmanscurrency.util.FabricStorageUtil;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -24,11 +31,8 @@ public class TraderItemStorage {
 
     public NbtCompound save(NbtCompound compound, String tag) {
         NbtList list = new NbtList();
-        for(int i = 0; i < this.storage.size(); ++i)
-        {
-            ItemStack item = this.storage.get(i);
-            if(!item.isEmpty())
-            {
+        for (ItemStack item : this.storage) {
+            if (!item.isEmpty()) {
                 NbtCompound itemTag = new NbtCompound();
                 item.writeNbt(itemTag);
                 itemTag.putInt("Count", item.getCount());
@@ -128,8 +132,6 @@ public class TraderItemStorage {
 
     /**
      * Returns the amount of the given item within the storage.
-     * @param item
-     * @return
      */
     public int getItemCount(ItemStack item) {
         List<ItemStack> storageCopy = ImmutableList.copyOf(this.storage);
@@ -211,16 +213,12 @@ public class TraderItemStorage {
     /**
      * Adds the item without performing any checks on maximum quantity or trade verification.
      * Used to add item to storage from older systems.
-     * @param item
      */
     public void forceAddItem(ItemStack item) {
         if(item.isEmpty())
             return;
-        for(int i = 0; i < this.storage.size(); ++i)
-        {
-            ItemStack stack = this.storage.get(i);
-            if(InventoryUtil.ItemMatches(stack, item))
-            {
+        for (ItemStack stack : this.storage) {
+            if (InventoryUtil.ItemMatches(stack, item)) {
                 stack.increment(item.getCount());
                 return;
             }
@@ -253,7 +251,6 @@ public class TraderItemStorage {
     /**
      * Removes the requested amount of items with the given item tag from storage.
      * Ignores items within the given blacklist.
-     * @return Whether the items were removed successfully.
      */
     public void removeItemTagCount(Identifier itemTag, int count, List<ItemStack> ignoreIfPossible, Item... blacklistItems) {
         List<Item> blacklist = Lists.newArrayList(blacklistItems);
@@ -328,6 +325,107 @@ public class TraderItemStorage {
         if(slot >= 0 && slot < this.storage.size())
             return this.storage.get(slot);
         return ItemStack.EMPTY;
+    }
+
+    public Storage<ItemVariant> BuildStorage(@NotNull Supplier<Boolean> allowInput, @NotNull Supplier<Boolean> allowOutput, @NotNull Runnable markDirty) {
+        return new Handler(allowInput, allowOutput, markDirty);
+    }
+
+    private class Handler implements Storage<ItemVariant>
+    {
+        private final Supplier<Boolean> allowInput;
+        private final Supplier<Boolean> allowOutput;
+        private final Runnable markDirty;
+
+
+        protected Handler(@NotNull Supplier<Boolean> allowInput, @NotNull Supplier<Boolean> allowOutput, @NotNull Runnable markDirty) {
+            this.allowInput = allowInput;
+            this.allowOutput = allowOutput;
+            this.markDirty = markDirty;
+        }
+
+        protected  final TraderItemStorage getStorage() { return TraderItemStorage.this; }
+        protected  final void markStorageDirty() { this.markDirty.run(); }
+
+        @Override
+        public boolean supportsInsertion() { return this.allowInput.get(); }
+        @Override
+        public boolean supportsExtraction() { return this.allowOutput.get(); }
+
+        @Override
+        public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            if(!this.supportsInsertion())
+                return 0;
+            ItemStack insertStack = FabricStorageUtil.getStack(resource, maxAmount);
+            if(this.getStorage().allowExternalInput(insertStack))
+            {
+                ItemStack fillStack = insertStack.copy();
+                fillStack.setCount(Math.min(this.getStorage().getFittableAmount(fillStack), (int)maxAmount));
+                if(fillStack.isEmpty())
+                    return 0;
+                transaction.addOuterCloseCallback(result -> {
+                    if(result.wasCommitted()) {
+                        this.getStorage().forceAddItem(fillStack.copy());
+                        fillStack.setCount(0);
+                        this.markStorageDirty();
+                    }
+                });
+                return fillStack.getCount();
+            }
+            return 0;
+        }
+
+        @Override
+        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            if(!this.supportsExtraction())
+                return 0;
+            ItemStack drainStack = FabricStorageUtil.getStack(resource, maxAmount);
+            if(this.getStorage().allowExternalOutput(drainStack))
+            {
+                ItemStack removalStack = drainStack.copy();
+                removalStack.setCount(Math.min(this.getStorage().getItemCount(removalStack), (int)maxAmount));
+                if(removalStack.isEmpty())
+                    return 0;
+                transaction.addOuterCloseCallback(result -> {
+                    if(result.wasCommitted()) {
+                        this.getStorage().removeItem(removalStack.copy());
+                        removalStack.setCount(0);
+                        this.markStorageDirty();
+                    }
+                });
+                return removalStack.getCount();
+            }
+            return 0;
+        }
+
+        @Override
+        public Iterator<StorageView<ItemVariant>> iterator() {
+            List<StorageView<ItemVariant>> slotView = new ArrayList<>();
+            List<ItemStack> storageItems = this.getStorage().getContents();
+            for(int i = 0; i < storageItems.size(); ++i)
+                slotView.add(new HandlerSlot(this, i));
+            return FabricStorageUtil.createIterator(slotView);
+        }
+
+        private record HandlerSlot(Handler parent, int slot) implements StorageView<ItemVariant> {
+
+            private ItemStack getStack() {
+                List<ItemStack> contents = this.parent.getStorage().getContents();
+                return this.slot >= contents.size() ? ItemStack.EMPTY : contents.get(this.slot);
+            }
+
+            @Override
+            public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) { return this.parent.extract(resource, maxAmount, transaction); }
+            @Override
+            public boolean isResourceBlank() { return this.getResource().isBlank(); }
+            @Override
+            public ItemVariant getResource() { return ItemVariant.of(this.getStack()); }
+            @Override
+            public long getAmount() { return this.getStack().getCount(); }
+            @Override
+            public long getCapacity() { return this.parent.getStorage().getMaxAmount(); }
+
+        }
     }
 
 }

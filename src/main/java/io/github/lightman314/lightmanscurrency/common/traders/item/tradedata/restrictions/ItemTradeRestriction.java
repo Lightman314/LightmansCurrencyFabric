@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 public class ItemTradeRestriction {
 
-    public static final Identifier DEFAULT_BACKGROUND = new Identifier(LightmansCurrency.MODID, "items/empty_item_slot");
+    public static final Identifier DEFAULT_BACKGROUND = new Identifier(LightmansCurrency.MODID, "item/empty_item_slot");
     public static final Pair<Identifier,Identifier> BACKGROUND = Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, DEFAULT_BACKGROUND);
 
     public static final ItemTradeRestriction NONE = new ItemTradeRestriction();

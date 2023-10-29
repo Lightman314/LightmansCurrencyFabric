@@ -1,8 +1,6 @@
 {
-	"parent": "lightmanscurrency:block/coinblock",
-	"textures": {
-		"side": "lightmanscurrency:blocks/coins_netherite_block",
-		"top": "lightmanscurrency:blocks/coins_netherite_blocktop",
-		"particle": "lightmanscurrency:items/coins_netherite"
-	}
+  "parent": "lightmanscurrency:block/coin_block",
+  "textures": {
+    "main": "lightmanscurrency:block/coinblock_netherite"
+  }
 }

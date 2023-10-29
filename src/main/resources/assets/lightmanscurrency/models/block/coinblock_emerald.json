@@ -1,8 +1,6 @@
 {
-    "parent": "lightmanscurrency:block/coinblock",
-	"textures": {
-		"side": "lightmanscurrency:blocks/coins_emerald_block",
-		"top": "lightmanscurrency:blocks/coins_emerald_blocktop",
-		"particle": "lightmanscurrency:items/coins_emerald"
-	}
+  "parent": "lightmanscurrency:block/coin_block",
+  "textures": {
+    "main": "lightmanscurrency:block/coinblock_emerald"
+  }
 }

@@ -91,7 +91,7 @@ public class TeamMemberEditTab extends TeamTab {
         else
         {
             this.buttonAddMember.active = this.buttonPromoteMember.active = false;
-            this.buttonRemoveMember.active = this.getPlayer().getGameProfile().getName().toLowerCase().equals(this.memberNameInput.getText().toLowerCase());
+            this.buttonRemoveMember.active = this.getPlayer().getGameProfile().getName().equalsIgnoreCase(this.memberNameInput.getText());
         }
 
     }

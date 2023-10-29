@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 
 public class TicketSlot extends Slot {
 
-    public static final Identifier EMPTY_TICKET_SLOT = new Identifier(LightmansCurrency.MODID, "items/empty_ticket_slot");
+    public static final Identifier EMPTY_TICKET_SLOT = new Identifier(LightmansCurrency.MODID, "item/empty_ticket_slot");
 
     public TicketSlot(Inventory inventory, int index, int x, int y)
     {

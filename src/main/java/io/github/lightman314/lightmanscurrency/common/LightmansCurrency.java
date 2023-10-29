@@ -69,7 +69,9 @@ public class LightmansCurrency implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
-		//Trigger registration  xcvdbfghn
+        //WoodType registration (if added at some point)
+
+		//Trigger registration
 		ModItems.registerItems();
 		ModBlocks.registerBlocks();
 		ModBlockEntities.registerBlockEntities();
