@@ -64,14 +64,16 @@ public class TradeButton extends ButtonWidget {
 
         this.recalculateSize();
 
-        this.renderBackground(gui, context.isStorageMode || this.displayOnly ? false : this.hovered);
+        boolean isHovered = !context.isStorageMode && !this.displayOnly && this.hovered;
+
+        this.renderBackground(gui, isHovered);
 
         try {
             trade.renderAdditional(this, gui, mouseX, mouseY, context);
         } catch(Exception e) { LightmansCurrency.LogError("Error on additional Trade Button rendering.", e); }
 
         if(trade.hasArrow(context))
-            this.renderArrow(gui, trade.arrowPosition(context), context.isStorageMode || this.displayOnly ? false : this.hovered);
+            this.renderArrow(gui, trade.arrowPosition(context), isHovered);
 
         this.renderAlert(gui, trade.alertPosition(context), trade.getAlertData(context));
 
@@ -236,9 +238,8 @@ public class TradeButton extends ButtonWidget {
         if(tooltips == null || tooltips.size() == 0)
             return;
 
-        MinecraftClient mc = MinecraftClient.getInstance();
-        if(mc != null)
-            gui.drawTooltip(font, tooltips, mouseX, mouseY);
+        gui.setShaderColor(1f,1f,1f,1f);
+        gui.drawTooltip(font, tooltips, mouseX, mouseY);
 
     }
 

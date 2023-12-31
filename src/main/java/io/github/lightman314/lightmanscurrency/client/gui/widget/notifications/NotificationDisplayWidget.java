@@ -103,6 +103,8 @@ public class NotificationDisplayWidget extends ClickableWidget implements IScrol
 
         }
 
+        gui.setShaderColor(1f,1f,1f,1f);
+
     }
 
     public void tryRenderTooltip(DrawContext gui, int mouseX, int mouseY)

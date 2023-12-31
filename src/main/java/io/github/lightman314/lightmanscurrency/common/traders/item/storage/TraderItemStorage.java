@@ -174,6 +174,18 @@ public class TraderItemStorage {
     /**
      * Returns the amount of the given item that this storage can fit.
      */
+    public boolean canFitItems(List<ItemStack> items) {
+        for(ItemStack item : InventoryUtil.combineQueryItems(items))
+        {
+            if(!this.canFitItem(item))
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Returns the amount of the given item that this storage can fit.
+     */
     public boolean canFitItems(ItemStack... items) {
         for(ItemStack item : InventoryUtil.combineQueryItems(items))
         {

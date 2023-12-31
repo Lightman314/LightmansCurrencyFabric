@@ -150,6 +150,7 @@ public class TradeButtonArea extends ClickableWidget implements IScrollable{
             int textWidth = this.font.getWidth(Text.translatable("gui.lightmanscurrency.notrades"));
             gui.drawText(this.font, Text.translatable("gui.lightmanscurrency.notrades"), this.getX() + (this.width / 2) - (textWidth / 2), this.getY() + (this.height / 2) - (this.font.fontHeight / 2), 0x404040, false);
         }
+        gui.setShaderColor(1f,1f,1f,1f);
     }
 
     //Confirms each trades validity

@@ -127,5 +127,13 @@ public class MathUtil {
 			value = max;
 		return value;
 	}
+
+	public static int DivideByAndRoundUp(int a, int b)
+	{
+		int result = a/b;
+		if(a%b != 0)
+			result++;
+		return result;
+	}
 	
 }

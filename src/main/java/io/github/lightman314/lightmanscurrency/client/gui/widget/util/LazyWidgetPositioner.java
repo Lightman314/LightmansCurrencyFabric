@@ -53,17 +53,28 @@ public class LazyWidgetPositioner {
         return widget;
     }
 
+    public void addWidgets(Object... widgets) {
+        for(Object w : widgets)
+        {
+            if(w instanceof ClickableWidget cw)
+                this.addWidget(cw);
+        }
+    }
+
     public void reposition() {
         this.posIndex = 0;
-        for(int i = 0; i < this.widgetList.size(); ++i) {
-            ClickableWidget w = this.widgetList.get(i);
-            if(w.visible)
-            {
-                Pair<Integer,Integer> pos = this.mode.apply(this);
+        for (ClickableWidget w : new ArrayList<>(this.widgetList)) {
+            if (w.visible) {
+                Pair<Integer, Integer> pos = this.mode.apply(this);
                 w.setPosition(pos.getFirst(), pos.getSecond());
                 this.posIndex++;
             }
         }
+    }
+
+    public void clear()
+    {
+        this.widgetList.clear();
     }
 
 }

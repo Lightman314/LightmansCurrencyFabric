@@ -14,10 +14,10 @@ import net.minecraft.nbt.NbtCompound;
 @Environment(EnvType.CLIENT)
 public abstract class TraderStorageClientTab<T extends TraderStorageTab> implements ITab {
 
-    protected final TraderStorageScreen screen;
-    protected final TraderStorageMenu menu;
-    protected final T commonTab;
-    protected final TextRenderer font;
+    public final TraderStorageScreen screen;
+    public final TraderStorageMenu menu;
+    public final T commonTab;
+    public final TextRenderer font;
 
     protected TraderStorageClientTab(TraderStorageScreen screen, T commonTab) {
         this.screen = screen;

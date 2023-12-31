@@ -218,6 +218,7 @@ public class TimeInputWidget extends ClickableWidget {
         {
             TextRenderUtil.drawCenteredText(gui, this.getTime().getUnitString(this.relevantUnits.get(i), true), this.getX() + ((20 + this.spacing) * i) + 10, this.getY() + 12, 0xFFFFFF);
         }
+        gui.setShaderColor(1f,1f,1f,1f);
     }
 
     public void removeChildren(Consumer<ClickableWidget> remover) { for(ButtonWidget b : this.buttons) remover.accept(b); }

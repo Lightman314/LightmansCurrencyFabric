@@ -67,6 +67,7 @@ public class ItemIcon extends ATMIconData {
     @Override
     @Environment(EnvType.CLIENT)
     public void render(ATMExchangeButton button, DrawContext gui, boolean isHovered) {
+        gui.setShaderColor(1f,1f,1f,1f);
         ItemRenderUtil.drawItemStack(gui, null, this.item, button.getX() + this.xPos, button.getY() + this.yPos, "");
     }
 

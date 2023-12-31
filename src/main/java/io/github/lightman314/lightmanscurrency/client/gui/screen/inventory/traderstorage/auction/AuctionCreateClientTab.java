@@ -142,7 +142,7 @@ public class AuctionCreateClientTab extends TraderStorageClientTab<AuctionCreate
 
         this.tradeDisplay.renderTooltips(gui, this.font, mouseX, mouseY);
 
-        IconAndButtonUtil.renderButtonTooltips(gui, this.font, mouseX, mouseY, Lists.newArrayList(this.buttonSubmitPersistentAuction));
+        //IconAndButtonUtil.renderButtonTooltips(gui, this.font, mouseX, mouseY, Lists.newArrayList(this.buttonSubmitPersistentAuction));
 
     }
 

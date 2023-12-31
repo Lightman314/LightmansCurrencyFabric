@@ -67,6 +67,7 @@ public class SimpleArrowIcon extends ATMIconData {
     @Environment(EnvType.CLIENT)
     public void render(ATMExchangeButton button, DrawContext gui, boolean isHovered) {
         RenderSystem.setShaderTexture(0, ATMScreen.BUTTON_TEXTURE);
+        gui.setShaderColor(1f,1f,1f,1f);
         gui.drawTexture(ATMScreen.BUTTON_TEXTURE, button.getX() + this.xPos, button.getY() + this.yPos, this.direction.uOffset, ATMExchangeButton.HEIGHT * 2, 6, 6);
     }
 

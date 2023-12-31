@@ -20,16 +20,20 @@ public class SidedStorageExtensionBlockEntity extends BlockEntity implements Sid
     @Nullable
     public Storage<FluidVariant> getFluidStorage(Direction side) {
         SidedStorageBlockEntity source = this.getSource();
+        if(source instanceof SidedStorageExtensionBlockEntity)
+            return null;
         return source == null ? null : source.getFluidStorage(side);
     }
 
     @Nullable
     public Storage<ItemVariant> getItemStorage(Direction side) {
         SidedStorageBlockEntity source = this.getSource();
+        if(source instanceof SidedStorageExtensionBlockEntity)
+            return null;
         return source == null ? null : source.getItemStorage(side);
     }
 
-    private final SidedStorageBlockEntity getSource() {
+    private SidedStorageBlockEntity getSource() {
         Block block = this.getCachedState().getBlock();
         if(block instanceof ICapabilityBlock handlerBlock)
         {

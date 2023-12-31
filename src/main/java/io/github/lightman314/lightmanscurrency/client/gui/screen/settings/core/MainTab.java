@@ -120,7 +120,7 @@ public class MainTab extends SettingsTab{
     public void postRender(DrawContext gui, int mouseX, int mouseY, float partialTicks) {
         TraderSettingsScreen screen = this.getScreen();
 
-        IconAndButtonUtil.renderButtonTooltips(gui, this.getFont(), mouseX, mouseY, Lists.newArrayList(this.buttonToggleCreative, this.buttonSavePersistentTrader));
+        //IconAndButtonUtil.renderButtonTooltips(gui, this.getFont(), mouseX, mouseY, Lists.newArrayList(this.buttonToggleCreative, this.buttonSavePersistentTrader));
 
         //Render button tooltips
         if(this.buttonAddTrade.isMouseOver(mouseX, mouseY))

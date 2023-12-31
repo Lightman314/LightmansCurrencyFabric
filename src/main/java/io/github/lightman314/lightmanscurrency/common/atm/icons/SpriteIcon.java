@@ -59,6 +59,7 @@ public class SpriteIcon extends ATMIconData {
     @Override
     @Environment(EnvType.CLIENT)
     public void render(ATMExchangeButton button, DrawContext gui, boolean isHovered) {
+        gui.setShaderColor(1f,1f,1f,1f);
         gui.drawTexture(this.texture, button.getX() + this.xPos, button.getY() + this.yPos, this.u, this.v, this.width, this.height);
     }
 

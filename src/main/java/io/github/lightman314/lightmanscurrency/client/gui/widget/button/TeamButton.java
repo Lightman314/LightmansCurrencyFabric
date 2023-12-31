@@ -61,6 +61,8 @@ public class TeamButton extends ButtonWidget {
         //Render Owner Name
         gui.drawText(this.font, TextRenderUtil.fitString(Text.translatable("gui.button.lightmanscurrency.team.owner", this.getTeam().getOwner().getName(true)), this.width - 4), this.getX() + 2, this.getY() + 10, TEXT_COLOR, false);
 
+        gui.setShaderColor(1f,1f,1f,1f);
+
     }
 
     @Override

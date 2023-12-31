@@ -119,7 +119,7 @@ public class OwnershipClientTab extends TraderInterfaceClientTab<OwnershipTab> {
             gui.drawTooltip(this.font, Text.translatable("tooltip.lightmanscurrency.warning").formatted(Formatting.BOLD, Formatting.YELLOW), mouseX, mouseY);
         }
 
-        IconAndButtonUtil.renderButtonTooltips(gui, this.font, mouseX, mouseY, Lists.newArrayList(this.buttonToggleMode));
+        //IconAndButtonUtil.renderButtonTooltips(gui, this.font, mouseX, mouseY, Lists.newArrayList(this.buttonToggleMode));
 
     }
 

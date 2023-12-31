@@ -6,6 +6,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.*;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ItemEditWidget;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.FreezerTraderBlockEntityRenderer;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.ItemTraderBlockEntityRenderer;
+import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.SlotMachineBlockEntityRenderer;
 import io.github.lightman314.lightmanscurrency.client.renderer.entity.layers.WalletLayer;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
@@ -28,6 +29,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
@@ -56,10 +58,12 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		HandledScreens.register(ModMenus.TRADER_STORAGE, TraderStorageScreen::new);
 		HandledScreens.register(ModMenus.WALLET_BANK, WalletBankScreen::new);
 		HandledScreens.register(ModMenus.WALLET, WalletScreen::new);
+		HandledScreens.register(ModMenus.SLOT_MACHINE, SlotMachineScreen::new);
 
 		//Block Entity Renderers
-		BlockEntityRendererRegistry.register(ModBlockEntities.ITEM_TRADER, ItemTraderBlockEntityRenderer::new);
-		BlockEntityRendererRegistry.register(ModBlockEntities.FREEZER_TRADER, FreezerTraderBlockEntityRenderer::new);
+		BlockEntityRendererFactories.register(ModBlockEntities.ITEM_TRADER, ItemTraderBlockEntityRenderer::new);
+		BlockEntityRendererFactories.register(ModBlockEntities.FREEZER_TRADER, FreezerTraderBlockEntityRenderer::new);
+		BlockEntityRendererFactories.register(ModBlockEntities.SLOT_MACHINE, SlotMachineBlockEntityRenderer::new);
 
 		//Register Item Colors
 		ColorProviderRegistry.ITEM.register(new TicketColor(), ModItems.TICKET, ModItems.TICKET_MASTER);
@@ -103,8 +107,9 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 	}
 
 	private void appendTooltips(ItemStack stack, TooltipContext context, List<Text> lines) {
-		if(MoneyUtil.isCoin(stack) && !(stack.getItem() instanceof CoinItem || stack.getItem()instanceof CoinBlockItem))
+		if(MoneyUtil.isCoin(stack) && !(stack.getItem() instanceof CoinItem || stack.getItem() instanceof CoinBlockItem))
 			CoinItem.addCoinTooltips(stack, lines);
 	}
+
 
 }

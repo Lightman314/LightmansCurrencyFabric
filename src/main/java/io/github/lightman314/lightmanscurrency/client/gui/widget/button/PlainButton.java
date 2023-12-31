@@ -43,6 +43,8 @@ public class PlainButton extends ButtonWidget {
         Pair<Integer,Integer> resource = this.resourceSource.get();
         gui.drawTexture(this.buttonResource, this.getX(), this.getY(), resource.getFirst(), resource.getSecond() + offset, this.width, this.height);
 
+        gui.setShaderColor(1f,1f,1f,1f);
+
     }
 
 }

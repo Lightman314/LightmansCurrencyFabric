@@ -191,7 +191,7 @@ public class InfoClientTab extends TraderInterfaceClientTab<InfoTab> {
         this.tradeDisplay.renderTooltips(gui, this.font, mouseX, mouseY);
         this.newTradeDisplay.renderTooltips(gui, this.font, mouseX, mouseY);
 
-        IconAndButtonUtil.renderButtonTooltips(gui, this.font, mouseX, mouseY, List.of(this.acceptChangesButton));
+        //IconAndButtonUtil.renderButtonTooltips(gui, this.font, mouseX, mouseY, List.of(this.acceptChangesButton));
 
     }
 

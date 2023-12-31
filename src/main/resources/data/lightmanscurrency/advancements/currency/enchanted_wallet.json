@@ -3,7 +3,7 @@
     "display": {
         "icon": {
             "item": "lightmanscurrency:wallet_diamond",
-            "nbt": "{Enchantments:[{id:\"lightmanscurrency:coin_magnet\",lvl:1}]}"
+            "nbt": "{CoinMagnet:1}"
         },
         "title": {
             "translate": "advancements.lightmanscurrency.enchanted_wallet.title"
@@ -20,18 +20,31 @@
                 "items": [
                     {
                         "tag": "lightmanscurrency:wallet",
-                        "enchantments": [
-                            {
-                                "enchantment": "lightmanscurrency:coin_magnet",
-                                "levels": {
-                                    "min": 1,
-                                    "max": 255
-                                }
-                            }
-                        ]
+                        "nbt":"{CoinMagnet:1}"
+                    }
+                ]
+            }
+        },"enchanted_wallet_2": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "tag": "lightmanscurrency:wallet",
+                        "nbt":"{CoinMagnet:2}"
+                    }
+                ]
+            }
+        },"enchanted_wallet_3": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "tag": "lightmanscurrency:wallet",
+                        "nbt":"{CoinMagnet:3}"
                     }
                 ]
             }
         }
-    }
+    },
+	"requirements":[["enchanted_wallet","enchanted_wallet_2","enchanted_wallet_3"]]
 }

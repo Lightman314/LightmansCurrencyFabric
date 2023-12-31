@@ -66,6 +66,7 @@ public abstract class DisplayEntry
         public void render(ClickableWidget widget, DrawContext gui, int x, int y, DisplayData area) {
             if(this.item.isEmpty())
                 return;
+            gui.setShaderColor(1f,1f,1f,1f);
             TextRenderer font = this.getFont();
             //Center the x & y positions
             int left = getTopLeft(x + area.xOffset, area.width);
@@ -91,6 +92,7 @@ public abstract class DisplayEntry
 
         @Override
         public void render(ClickableWidget widget, DrawContext gui, int x, int y, DisplayData area) {
+            gui.setShaderColor(1f,1f,1f,1f);
             int left = getTopLeft(x + area.xOffset, area.width);
             int top = getTopLeft(y + area.yOffset, area.height);
             ItemRenderUtil.drawSlotBackground(gui, left, top, this.background);
@@ -135,6 +137,7 @@ public abstract class DisplayEntry
         public void render(ClickableWidget widget, DrawContext gui, int x, int y, DisplayData area) {
             if(this.text.getString().isBlank())
                 return;
+            gui.setShaderColor(1f,1f,1f,1f);
             TextRenderer font = this.getFont();
             //Define the x position
             int left = this.getTextLeft(x + area.xOffset, area.width);
@@ -176,6 +179,7 @@ public abstract class DisplayEntry
 
         @Override
         public void render(ClickableWidget widget, DrawContext gui, int x, int y, DisplayData area) {
+            gui.setShaderColor(1f,1f,1f,1f);
             if(this.price.isFree())
             {
                 TextRenderer font = this.getFont();
@@ -191,6 +195,7 @@ public abstract class DisplayEntry
                     List<DisplayData> entryPositions = area.divide(entries.size());
                     for(int i = 0; i < entryPositions.size() && i < entries.size(); ++i)
                     {
+                        gui.setShaderColor(1f,1f,1f,1f);
                         DisplayData pos = entryPositions.get(i);
                         int left = this.getTopLeft(x + pos.xOffset, pos.width);
                         int top = this.getTopLeft(y + pos.yOffset, pos.height);
@@ -201,6 +206,7 @@ public abstract class DisplayEntry
                 }
                 else if(entries.size() > 0)
                 {
+                    gui.setShaderColor(1f,1f,1f,1f);
                     int spacing = (area.width - 16) / entries.size();
                     int top = this.getTopLeft(y + area.yOffset, area.height);
                     int left = x + area.xOffset + area.width - 16;

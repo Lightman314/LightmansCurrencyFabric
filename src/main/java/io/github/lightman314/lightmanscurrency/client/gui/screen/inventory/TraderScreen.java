@@ -9,7 +9,6 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.TradingTerminal
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trader.TraderClientTab;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trader.common.TraderInteractionTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
-import io.github.lightman314.lightmanscurrency.client.gui.widget.util.IScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.util.LazyWidgetPositioner;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
@@ -29,7 +28,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
+public class TraderScreen extends MenuScreen<TraderMenu> {
 
     public static final Identifier GUI_TEXTURE = new Identifier(LightmansCurrency.MODID, "textures/gui/container/trader.png");
 
@@ -55,8 +54,6 @@ public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
         this.currentTab.onOpen();
     }
     public void closeTab() { this.setTab(new TraderInteractionTab(this)); }
-
-    private final List<Runnable> tickListeners = new ArrayList<>();
 
     protected boolean forceShowTerminalButton() { return false; }
 
@@ -138,14 +135,13 @@ public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
             this.currentTab.renderTooltips(gui, mouseX, mouseY);
         } catch (Throwable t) { LightmansCurrency.LogError("Error rendering trader tab tooltips " + this.currentTab.getClass().getName(), t); }
 
-        IconAndButtonUtil.renderButtonTooltips(gui, this.textRenderer, mouseX, mouseY, this.children());
+        //IconAndButtonUtil.renderButtonTooltips(gui, this.textRenderer, mouseX, mouseY, this.children());
 
     }
 
     @Override
     protected void handledScreenTick() {
         this.currentTab.tick();
-        for(Runnable r : this.tickListeners) r.run();
     }
 
     private void OpenStorage(ButtonWidget button) {
@@ -220,11 +216,6 @@ public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
                 return true;
         } catch(Throwable t) {}
         return super.mouseReleased(mouseX, mouseY, button);
-    }
-
-    @Override
-    public void addTickListener(Runnable r) {
-        this.tickListeners.add(r);
     }
 
 }

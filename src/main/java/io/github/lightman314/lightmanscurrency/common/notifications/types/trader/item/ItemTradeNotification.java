@@ -205,6 +205,11 @@ public class ItemTradeNotification extends Notification{
 
         public Text formatWith(ItemData other) { return Text.translatable("log.shoplog.and", this.format(), other.format()); }
 
+        public boolean matches(ItemData other)
+        {
+            return this.isEmpty == other.isEmpty && this.itemName.getString().equals(other.itemName.getString()) && this.count == other.count;
+        }
+
     }
 
 }

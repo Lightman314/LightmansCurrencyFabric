@@ -86,11 +86,9 @@ public class CoinValue
         this.coinValues = new ArrayList<>();
         for(CoinValuePair value : priceValues)
         {
-            for(int i = 0; i < this.coinValues.size(); i++)
-            {
-                if(this.coinValues.get(i).coin == value.coin)
-                {
-                    this.coinValues.get(i).amount += value.amount;
+            for (CoinValuePair coinValue : this.coinValues) {
+                if (coinValue.coin == value.coin) {
+                    coinValue.amount += value.amount;
                     value.amount = 0;
                 }
             }
@@ -132,7 +130,7 @@ public class CoinValue
                 NbtCompound thisCompound = new NbtCompound();
                 //new ItemStack(null).write(nbt)
                 Identifier id = Registries.ITEM.getId(value.coin);
-                if(id != null && MoneyUtil.isCoin(value.coin))
+                if(MoneyUtil.isCoin(value.coin))
                 {
                     thisCompound.putString("ID", id.toString());
                     thisCompound.putInt("Count", value.amount);
@@ -505,6 +503,20 @@ public class CoinValue
         return stack;
     }
 
+    public List<ItemStack> getAsSeperatedItemList()
+    {
+        List<ItemStack> items = new ArrayList<>();
+        for(CoinValue.CoinValuePair entry : this.coinValues)
+        {
+            ItemStack stack = new ItemStack(entry.coin, entry.amount);
+            while(stack.getCount() > stack.getMaxCount())
+                items.add(stack.split(stack.getMaxCount()));
+            if(!stack.isEmpty())
+                items.add(stack);
+        }
+        return items;
+    }
+
     public static class CoinValuePair
     {
 
@@ -524,7 +536,12 @@ public class CoinValue
 
     }
 
-    public static final CoinValue EMPTY = new CoinValue();
+    public static final CoinValue EMPTY = new CoinValue() {
+        @Override
+        public void load(NbtCompound compound, String key) {
+            LightmansCurrency.LogError("Attempted to modify the empty constant!");
+        }
+    };
 
     public static CoinValue easyBuild1(ItemStack... stack)
     {

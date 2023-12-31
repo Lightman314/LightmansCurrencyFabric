@@ -159,7 +159,7 @@ public class TransferTab extends ATMTab {
 
     @Override
     public void postRender(DrawContext gui, int mouseX, int mouseY) {
-        IconAndButtonUtil.renderButtonTooltips(gui, this.screen.getFont(), mouseX, mouseY, Lists.newArrayList(this.buttonToggleMode));
+        //IconAndButtonUtil.renderButtonTooltips(gui, this.screen.getFont(), mouseX, mouseY, Lists.newArrayList(this.buttonToggleMode));
     }
 
     @Override

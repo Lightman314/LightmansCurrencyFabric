@@ -45,7 +45,7 @@ public class TraderStorageMenu extends Menu {
     public List<CoinSlot> getCoinSlots() { return this.coinSlots; }
     public boolean coinSlotsActive() { return this.coinSlots.get(0).isEnabled(); }
 
-    private boolean canEditTabs = true;
+    private boolean canEditTabs;
     Map<Integer, TraderStorageTab> availableTabs = new HashMap<>();
     public Map<Integer,TraderStorageTab> getAllTabs() { return this.availableTabs; }
     public void setTab(int key, TraderStorageTab tab) { if(canEditTabs && tab != null) this.availableTabs.put(key, tab); else if(tab == null) LightmansCurrency.LogError("Attempted to set a null storage tab in slot " + key); else LightmansCurrency.LogError("Attempted to define the tab in " + key + " but the tabs have been locked."); }
@@ -53,7 +53,7 @@ public class TraderStorageMenu extends Menu {
     public int getCurrentTabIndex() { return this.currentTab; }
     public TraderStorageTab getCurrentTab() { return this.availableTabs.get(this.currentTab); }
 
-    private List<Consumer<NbtCompound>> listeners = new ArrayList<>();
+    private final List<Consumer<NbtCompound>> listeners = new ArrayList<>();
 
     public TradeContext getContext() { return TradeContext.createStorageMode(this.traderSource.get()); }
 
@@ -67,6 +67,7 @@ public class TraderStorageMenu extends Menu {
         super(type, windowID);
         this.traderSource = traderSource;
         this.player = inventory.player;
+        this.canEditTabs = true;
 
         TraderData trader = this.traderSource.get();
         this.setTab(TraderStorageTab.TAB_TRADE_BASIC, new BasicTradeEditTab(this));

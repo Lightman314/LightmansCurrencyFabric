@@ -99,6 +99,7 @@ public class DropdownWidget extends ClickableWidget {
             for(int i = 0; i < this.optionButtons.size(); ++i)
                 this.optionButtons.get(i).active = this.optionActive.apply(i) && i != this.currentlySelected;
         }
+        gui.setShaderColor(1f,1f,1f,1f);
 
 
     }

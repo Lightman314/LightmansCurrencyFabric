@@ -1,5 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.core;
 
+import java.util.Locale;
 import java.util.function.Function;
 
 import com.google.common.base.Supplier;
@@ -38,11 +39,11 @@ public class ModBlocks {
 		new CoinJarItem(block, new FabricItemSettings());
 
 	public static <T> Function<T,Identifier> BasicIDGeneration(String namespace, String name) {
-		return (val) -> new Identifier(namespace, name + "_" + val.toString().toLowerCase());
+		return BasicIDGeneration(namespace, name, null);
 	}
 
 	public static <T> Function<T,Identifier> BasicIDGeneration(String namespace, String name, @Nullable T ignoreEntry) {
-		return (val) -> val == ignoreEntry ? new Identifier(namespace, name) : new Identifier(namespace, name + "_" + val.toString().toLowerCase());
+		return (val) -> val == ignoreEntry ? new Identifier(namespace, name) : new Identifier(namespace, name + "_" + val.toString().toLowerCase(Locale.ENGLISH));
 	}
 	
 	//Hold the blocks for public access
@@ -93,6 +94,10 @@ public class ModBlocks {
 
 	//Ticket Kiosk
 	public static final BlockItemPair TICKET_KIOSK = build(new TicketKioskBlock(FabricBlockSettings.create().strength(3f, Float.POSITIVE_INFINITY).sounds(BlockSoundGroup.METAL).nonOpaque()));
+
+	//Slot Machine
+	public static final BlockItemPair SLOT_MACHINE = build(new SlotMachineBlock(FabricBlockSettings.create().strength(3f, Float.POSITIVE_INFINITY).sounds(BlockSoundGroup.METAL).nonOpaque()));
+
 
 	//Network Traders
 	public static final BlockItemPair ITEM_NETWORK_TRADER_1 = build(new NetworkItemTraderBlock(FabricBlockSettings.create().strength(5f, Float.POSITIVE_INFINITY).sounds(BlockSoundGroup.METAL).nonOpaque(), NetworkItemTraderBlock.TRADE_COUNT_T1));
@@ -163,6 +168,9 @@ public class ModBlocks {
 		
 		//Ticket Kiosk
 		register(new Identifier(LightmansCurrency.MODID, "ticket_kiosk"), TICKET_KIOSK);
+
+		//Slot Machine
+		register(new Identifier(LightmansCurrency.MODID, "slot_machine"), SLOT_MACHINE);
 
 		//Network Traders
 		register(new Identifier(LightmansCurrency.MODID, "item_trader_server_sml"), ITEM_NETWORK_TRADER_1);

@@ -23,6 +23,9 @@ public class IconButton extends ButtonWidget {
     private Supplier<Boolean> activeCheck = () -> this.active;
     private Supplier<Boolean> visibilityCheck = () -> this.visible;
 
+    public boolean disableTooltip = false;
+    public IconButton tempDisableTooltip() { this.disableTooltip = true; return this; }
+
     public IconButton(int x, int y, PressAction pressable, @NotNull IconData icon)
     {
         super(x, y, SIZE, SIZE, Text.empty(), pressable, DEFAULT_NARRATION_SUPPLIER);
@@ -111,6 +114,8 @@ public class IconButton extends ButtonWidget {
             RenderSystem.setShaderColor(0.5F, 0.5F, 0.5F, 1.0F);
 
         this.iconSource.apply(this).render(gui, MinecraftClient.getInstance().textRenderer, this.getX() + 2, this.getY() + 2);
+
+        gui.setShaderColor(1f,1f,1f,1f);
 
     }
 

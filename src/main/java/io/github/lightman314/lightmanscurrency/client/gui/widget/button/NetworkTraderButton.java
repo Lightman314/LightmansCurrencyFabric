@@ -64,6 +64,8 @@ public class NetworkTraderButton extends ButtonWidget {
         gui.drawText(this.font, TextRenderUtil.fitString(this.data.getName(), this.width - 26, style), this.getX() + 24, this.getY() + 6, 0x404040, false);
         gui.drawText(this.font, TextRenderUtil.fitString(this.data.getOwner().getOwnerName(true), this.width - 26), this.getX() + 24, this.getY() + 16, 0x404040, false);
 
+        gui.setShaderColor(1f,1f,1f,1f);
+
     }
 
 }

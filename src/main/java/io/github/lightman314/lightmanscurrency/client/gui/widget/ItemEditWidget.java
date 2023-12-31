@@ -275,7 +275,6 @@ public class ItemEditWidget extends ClickableWidget implements IScrollable{
 
         super.render(gui, mouseX, mouseY, partialTicks);
 
-
     }
 
     @Override

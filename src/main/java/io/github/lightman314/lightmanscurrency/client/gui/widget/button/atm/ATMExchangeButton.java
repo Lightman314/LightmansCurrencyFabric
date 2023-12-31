@@ -51,6 +51,8 @@ public class ATMExchangeButton extends ButtonWidget {
             } catch(Exception e) { LightmansCurrency.LogError("Error rendering ATM Conversion Button icon.", e); }
         }
 
+        gui.setShaderColor(1f,1f,1f,1f);
+
     }
 
 }

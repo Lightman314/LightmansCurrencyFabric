@@ -115,7 +115,7 @@ public class TraderInterfaceScreen extends MenuScreen<TraderInterfaceMenu> imple
             this.currentTab().renderTooltips(gui, mouseX, mouseY);
         } catch(Exception e) { LightmansCurrency.LogError("Error rendering trader storage tab tooltips " + this.currentTab().getClass().getName(), e); }
 
-        IconAndButtonUtil.renderButtonTooltips(gui, this.textRenderer, mouseX, mouseY, this.children());
+        //IconAndButtonUtil.renderButtonTooltips(gui, this.textRenderer, mouseX, mouseY, this.children());
 
         this.tabButtons.forEach((key, button) -> {
             if(button.isMouseOver(mouseX, mouseY))

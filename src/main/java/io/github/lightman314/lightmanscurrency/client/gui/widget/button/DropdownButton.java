@@ -40,6 +40,7 @@ public class DropdownButton extends ButtonWidget {
         gui.drawTexture(DropdownWidget.GUI_TEXTURE, this.getX() + this.width - 2, this.getY(), 254, offset, 2, DropdownWidget.HEIGHT);
         //Draw the option text
         gui.drawText(this.font, TextRenderUtil.fitString(this.optionText, this.width - 4), this.getX() + 2, this.getY() + 2, 0x404040, false);
+        gui.setShaderColor(1f,1f,1f,1f);
 
     }
 

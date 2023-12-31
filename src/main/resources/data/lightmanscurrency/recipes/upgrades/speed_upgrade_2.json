@@ -1,10 +1,10 @@
 {
   "type": "minecraft:smithing_transform",
-  "base": {
-    "item": "lightmanscurrency:speed_upgrade_1"
-  },
   "addition": {
     "tag": "forge:ingots/gold"
+  },
+  "base": {
+    "item": "lightmanscurrency:speed_upgrade_1"
   },
   "result": {
     "item": "lightmanscurrency:speed_upgrade_2"

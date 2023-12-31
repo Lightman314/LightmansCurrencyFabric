@@ -21,6 +21,7 @@ import io.github.lightman314.lightmanscurrency.common.core.ModItems;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permissions;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -39,6 +40,8 @@ public class IconAndButtonUtil {
     public static final Identifier ICON_TEXTURE = new Identifier(LightmansCurrency.MODID, "textures/gui/icons.png");
 
     public static final IconData ICON_TRADER = IconData.of(ModItems.TRADING_CORE);
+    //TODO add alt trader icon
+    public static final IconData ICON_TRADER_ALT = IconData.of(ICON_TEXTURE, 80, 0);
     public static final IconData ICON_STORAGE = IconData.of(Items.CHEST);
 
     public static final IconData ICON_COLLECT_COINS = IconData.of(ICON_TEXTURE, 0, 0);
@@ -210,18 +213,15 @@ public class IconAndButtonUtil {
     public static void renderButtonTooltips(DrawContext gui, TextRenderer font, int mouseX, int mouseY, List<? extends Object> widgets)
     {
         //Nothing to do, as all tooltip-relevant buttons use the vanilla tooltip system.
-        /*for(Object w : widgets)
+        for(Object w : widgets)
         {
-            if(w instanceof ButtonWidget  button && button.isMouseOver(mouseX, mouseY))
+            if(w instanceof ButtonWidget button && button.isMouseOver(mouseX, mouseY))
             {
-                Tooltip t = ((ButtonWidget) w).getTooltip();
+                Tooltip t = button.getTooltip();
                 if(t != null)
-                {
-                    t.getLines(MinecraftClient.getInstance());
                     gui.drawOrderedTooltip(font, t.getLines(MinecraftClient.getInstance()), mouseX, mouseY);
-                }
             }
-        }*/
+        }
     }
 
     private static abstract class BaseTooltip implements Supplier<Tooltip>

@@ -62,6 +62,7 @@ public class TeamSelectWidget extends ClickableWidget {
     @Override
     protected void renderButton(DrawContext gui, int mouseX, int mouseY, float delta) {
         gui.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0xFF000000);
+        gui.setShaderColor(1f,1f,1f,1f);
     }
 
     private int scroll = 0;

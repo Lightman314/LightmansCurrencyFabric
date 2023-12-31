@@ -504,6 +504,23 @@ public class InventoryUtil {
         return itemList;
     }
 
+    public static List<ItemStack> combineQueryItems(List<ItemStack> items)
+    {
+        List<ItemStack> itemList = new ArrayList<>();
+        for(ItemStack item : items)
+        {
+            boolean addNew = true;
+            for(int i = 0; i < itemList.size() && addNew; ++i)
+            {
+                if(ItemMatches(item, itemList.get(i)))
+                    itemList.get(i).increment(item.getCount());
+            }
+            if(addNew && !item.isEmpty())
+                itemList.add(item.copy());
+        }
+        return itemList;
+    }
+
     /**
      * Determines whether the two item stacks are the same item/nbt. Ignores quantity of the items in the stack
      */

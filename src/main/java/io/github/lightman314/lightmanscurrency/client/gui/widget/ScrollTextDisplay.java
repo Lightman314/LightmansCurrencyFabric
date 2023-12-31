@@ -66,6 +66,8 @@ public class ScrollTextDisplay extends ClickableWidget {
             yPos += rowHeight;
         }
 
+        gui.setShaderColor(1f,1f,1f,1f);
+
     }
 
     private void validateScroll(int listSize)

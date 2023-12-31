@@ -17,7 +17,7 @@ public abstract class Notification {
 
     private static final Map<String,Function<NbtCompound,Notification>> DESERIALIZERS = new HashMap<>();
 
-    public static final void register(Identifier type, Supplier<Notification> deserializer) {
+    public static void register(Identifier type, Supplier<Notification> deserializer) {
         register(type, c -> {
             Notification n = deserializer.get();
             n.load(c);
@@ -25,7 +25,7 @@ public abstract class Notification {
         });
     }
 
-    public static final void register(Identifier type, Function<NbtCompound,Notification> deserializer) {
+    public static void register(Identifier type, Function<NbtCompound,Notification> deserializer) {
         String t = type.toString();
         if(DESERIALIZERS.containsKey(t))
         {
@@ -40,7 +40,7 @@ public abstract class Notification {
         DESERIALIZERS.put(t, deserializer);
     }
 
-    public static final Notification deserialize(NbtCompound compound) {
+    public static Notification deserialize(NbtCompound compound) {
         if(compound.contains("Type") || compound.contains("type"))
         {
             String type = compound.contains("Type") ? compound.getString("Type") : compound.getString("type");
