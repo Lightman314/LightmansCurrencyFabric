@@ -53,7 +53,7 @@ public class TicketItem extends Item{
 		if(ticket.isEmpty() || !(ticket.getItem() instanceof TicketItem) || !ticket.hasNbt())
 			return null;
 		NbtCompound ticketTag = ticket.getNbt();
-		if(!ticketTag.contains("TicketID"))
+		if(ticketTag == null || !ticketTag.contains("TicketID"))
 			return null;
 		return ticketTag.getUuid("TicketID");
 	}

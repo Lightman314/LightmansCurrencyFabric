@@ -94,6 +94,7 @@ public class ScrollBarWidget extends ClickableWidget {
         void setScroll(int newScroll);
         default int getMinScroll() { return 0; }
         int getMaxScroll();
+        default boolean handleScrollWheel(double mouseX, double mouseY, double delta) { return this.handleScrollWheel(delta); }
         default boolean handleScrollWheel(double delta) {
             int scroll = this.currentScroll();
             if(delta < 0)
@@ -115,6 +116,10 @@ public class ScrollBarWidget extends ClickableWidget {
             return false;
         }
         static int calculateMaxScroll(int visibleCount, int totalCount) { return Math.max(0, totalCount - visibleCount); }
+        static int calculateMaxScroll(int visibleCount, int entriesPerScroll, int totalCount)
+        {
+            return Math.max(0, MathUtil.DivideByAndRoundUp(totalCount, entriesPerScroll) - (visibleCount/entriesPerScroll));
+        }
     }
 
     @Override

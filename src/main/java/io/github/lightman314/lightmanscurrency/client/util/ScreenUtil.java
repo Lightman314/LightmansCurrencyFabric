@@ -38,6 +38,16 @@ public class ScreenUtil {
             return ScreenPosition.of(0,0);
     }
 
+    public static ScreenArea getScreenArea(HandledScreen<?> screen)
+    {
+        if(screen instanceof MenuScreen<?> s)
+            return ScreenArea.of(s.getGuiLeft(), s.getGuiTop(), s.getImageWidth(), s.getImageHeight());
+        if(screen instanceof HandledScreenAccessor s)
+            return ScreenArea.of(s.getX(), s.getY(), s.getImageWidth(), s.getImageHeight());
+        else
+            return ScreenArea.of(0,0,0,0);
+    }
+
     private static ScreenPosition calculateScreenCorner(int screenWidth, int screenHeight, int backgroundWidth, int backgroundHeight) {
         int x = (screenWidth - backgroundWidth) / 2;
         int y = (screenHeight - backgroundHeight) / 2;

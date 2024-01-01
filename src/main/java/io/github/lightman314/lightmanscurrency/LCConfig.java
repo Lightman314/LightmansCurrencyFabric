@@ -162,6 +162,14 @@ public class LCConfig {
         public final ForgeConfigSpec.IntValue notificationAndTeamButtonXCreative;
         public final ForgeConfigSpec.IntValue notificationAndTeamButtonYCreative;
 
+        //Chest Button Options
+        public final ForgeConfigSpec.BooleanValue chestButtonVisible;
+        public final ForgeConfigSpec.BooleanValue chestButtonAllowHidden;
+
+        //Slot Machine Options
+        public final ForgeConfigSpec.IntValue slotMachineAnimationTime;
+        public final ForgeConfigSpec.IntValue slotMachineAnimationRestTime;
+
         //Sound Options
         public final ForgeConfigSpec.BooleanValue moneyMendingClink;
 
@@ -224,11 +232,35 @@ public class LCConfig {
 
             builder.pop();
 
+            builder.comment("Chest Button Settings").push("chest_buttons");
+
+            this.chestButtonVisible = builder
+                    .comment("Whether the 'Move Coins into Wallet' button will appear in the top-right corner of the Chest Screen if there are coins in the chest that can be collected.")
+                    .define("enabled", true);
+
+            this.chestButtonAllowHidden = builder
+                    .comment("Whether the 'Move Coins into Wallet' button should collect coins flagged as 'hidden'",
+                            "By default these would be the coin pile and coin block variants of the coins.")
+                    .define("allowHiddenCollection", false);
+
+            builder.pop();
+
             builder.comment("Notification Settings").push("notification");
 
             this.pushNotificationsToChat = builder
                     .comment("Whether notifications should be posted in your chat when you receive them.")
                     .define("notificationsInChat", true);
+
+            builder.pop();
+
+            builder.comment("Slot Machine Animation Settings").push("slot_machine");
+
+            this.slotMachineAnimationTime = builder.comment("The number of Minecraft ticks the slot machine animation will last.",
+                            "Note: 20 ticks = 1 second",
+                            "Must be at least 20 ticks (1s) for coding reasons.")
+                    .defineInRange("animationDuration", 100, 20, 1200);
+            this.slotMachineAnimationRestTime = builder.comment("The number of Minecraft ticks the slot machine will pause before repeating the animation.")
+                    .defineInRange("animationRestDuration", 20, 0, 1200);
 
             builder.pop();
 

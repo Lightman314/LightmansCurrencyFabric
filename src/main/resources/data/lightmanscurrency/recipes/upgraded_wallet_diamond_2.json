@@ -6,10 +6,10 @@
       "item": "lightmanscurrency:wallet_gold"
     },
     {
-      "item": "lightmanscurrency:coin_emerald"
+      "tag": "c:emeralds"
     },
     {
-      "item": "lightmanscurrency:coin_diamond"
+	  "tag": "c:diamonds"
     }
   ],
   "result": {

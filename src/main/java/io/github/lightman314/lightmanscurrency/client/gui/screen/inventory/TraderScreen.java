@@ -10,7 +10,6 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.TradingTerminal
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trader.TraderClientTab;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.trader.common.TraderInteractionTab;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.icon.IconButton;
-import io.github.lightman314.lightmanscurrency.client.gui.widget.util.IScreen;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.util.LazyWidgetPositioner;
 import io.github.lightman314.lightmanscurrency.client.util.IconAndButtonUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
@@ -30,7 +29,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
+public class TraderScreen extends MenuScreen<TraderMenu> {
 
     public static final Identifier GUI_TEXTURE = new Identifier(LightmansCurrency.MODID, "textures/gui/container/trader.png");
 
@@ -56,8 +55,6 @@ public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
         this.currentTab.onOpen();
     }
     public void closeTab() { this.setTab(new TraderInteractionTab(this)); }
-
-    private final List<Runnable> tickListeners = new ArrayList<>();
 
     protected boolean forceShowTerminalButton() { return false; }
 
@@ -146,8 +143,8 @@ public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
 
     @Override
     protected void handledScreenTick() {
+        super.handledScreenTick();
         this.currentTab.tick();
-        for(Runnable r : this.tickListeners) r.run();
     }
 
     private void OpenStorage(ButtonWidget button) {
@@ -171,6 +168,7 @@ public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifier) {
         //Manually block closing by inventory key, to allow usage of all letters while typing player names, etc.
+        assert this.client != null;
         if (this.client.options.inventoryKey.matchesKey(keyCode, scanCode) && this.currentTab.blockInventoryClosing()) {
             return true;
         }
@@ -222,11 +220,6 @@ public class TraderScreen extends MenuScreen<TraderMenu> implements IScreen {
                 return true;
         } catch(Throwable t) {}
         return super.mouseReleased(mouseX, mouseY, button);
-    }
-
-    @Override
-    public void addTickListener(Runnable r) {
-        this.tickListeners.add(r);
     }
 
 }

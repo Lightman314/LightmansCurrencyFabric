@@ -12,6 +12,7 @@ import io.github.lightman314.lightmanscurrency.network.server.messages.emergency
 import io.github.lightman314.lightmanscurrency.network.server.messages.notifications.CMessageFlagNotificationsSeen;
 import io.github.lightman314.lightmanscurrency.network.server.messages.persistentdata.CMessageAddPersistentAuction;
 import io.github.lightman314.lightmanscurrency.network.server.messages.persistentdata.CMessageAddPersistentTrader;
+import io.github.lightman314.lightmanscurrency.network.server.messages.slot_machine.CMessageSlotMachine;
 import io.github.lightman314.lightmanscurrency.network.server.messages.team.*;
 import io.github.lightman314.lightmanscurrency.network.server.messages.ticket_machine.CMessageCraftTicket;
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.*;
@@ -93,10 +94,14 @@ public class LCServerPacketHandler implements PlayChannelHandler {
 		this.registerPacketType(CMessageWalletExchangeCoins.PACKET_ID, CMessageWalletExchangeCoins::handle);
 		this.registerPacketType(CMessageWalletToggleAutoExchange.PACKET_ID, CMessageWalletToggleAutoExchange::handle);
 		this.registerPacketType(CMessageWalletQuickCollect.PACKET_ID, CMessageWalletQuickCollect::handle);
+		this.registerPacketType(CPacketChestQuickCollect.PACKET_ID, CPacketChestQuickCollect::handle);
 
 		//Wallet Slot
 		this.registerPacketType(CMessageSetWalletVisible.PACKET_ID, CMessageSetWalletVisible::handle);
 		this.registerPacketType(CMessageWalletInteraction.PACKET_ID, CMessageWalletInteraction::handle);
+
+		//Slot Machine
+		this.registerPacketType(CMessageSlotMachine.PACKET_ID, CMessageSlotMachine::handle);
 
 	}
 	

@@ -1,27 +1,30 @@
 package io.github.lightman314.lightmanscurrency.common.core;
 
-import com.google.common.collect.ImmutableSet;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
-import net.fabricmc.fabric.mixin.object.builder.PointOfInterestTypeAccessor;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.poi.PointOfInterestType;
-
-import java.util.Set;
 
 public class ModPointsOfInterest {
 
-    public static final PointOfInterestType BANKER = PointOfInterestTypeAccessor.callCreate("lightmanscurrency:banker", getBlockStates(ModBlocks.MACHINE_ATM.block), 1, 1);
-    public static final PointOfInterestType CASHIER = PointOfInterestTypeAccessor.callCreate("lightmanscurrency:cashier", getBlockStates(ModBlocks.CASH_REGISTER.block), 1, 1);
-
-
-    public static void registerPointsOfInterest() {
-        Registry.register(Registry.POINT_OF_INTEREST_TYPE, new Identifier(LightmansCurrency.MODID, "banker"), BANKER);
-        Registry.register(Registry.POINT_OF_INTEREST_TYPE, new Identifier(LightmansCurrency.MODID, "cashier"), CASHIER);
+    private static PointOfInterestType BANKER = null;
+    public static PointOfInterestType getBanker() {
+        if(BANKER == null)
+            registerPointsOfInterest();
+        return BANKER;
+    }
+    private static PointOfInterestType CASHIER = null;
+    public static PointOfInterestType getCashier() {
+        if(CASHIER == null)
+            registerPointsOfInterest();
+        return CASHIER;
     }
 
-    private static Set<BlockState> getBlockStates(Block block) { return ImmutableSet.copyOf(block.getStateManager().getStates()); }
+    public static void registerPointsOfInterest() {
+        if(BANKER != null)
+            return;
+        BANKER = PointOfInterestHelper.register(new Identifier(LightmansCurrency.MODID, "banker"), 1, 1, ModBlocks.MACHINE_ATM.block);
+        CASHIER = PointOfInterestHelper.register(new Identifier(LightmansCurrency.MODID, "cashier"), 1, 1, ModBlocks.CASH_REGISTER.block);
+    }
 
 }

@@ -125,9 +125,8 @@ public class ItemTradeNotification extends Notification{
 
     @Override
     protected boolean canMerge(Notification other) {
-        if(other instanceof ItemTradeNotification)
+        if(other instanceof ItemTradeNotification itn)
         {
-            ItemTradeNotification itn = (ItemTradeNotification)other;
             if(!itn.traderData.matches(this.traderData))
                 return false;
             if(itn.tradeType != this.tradeType)
@@ -205,6 +204,11 @@ public class ItemTradeNotification extends Notification{
         public Text formatWith(Text other) { return EasyText.translatable("log.shoplog.and", this.format(), other); }
 
         public Text formatWith(ItemData other) { return EasyText.translatable("log.shoplog.and", this.format(), other.format()); }
+
+        public boolean matches(ItemData other)
+        {
+            return this.isEmpty == other.isEmpty && this.itemName.getString().equals(other.itemName.getString()) && this.count == other.count;
+        }
 
     }
 

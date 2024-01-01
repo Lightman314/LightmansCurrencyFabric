@@ -20,6 +20,8 @@ public class ModBlockEntities {
     public static final BlockEntityType<FreezerTraderBlockEntity> FREEZER_TRADER = FabricBlockEntityTypeBuilder.create(FreezerTraderBlockEntity::new, ModBlocks.FREEZER.block).build(null);
     //Ticket variant of the trader
     public static final BlockEntityType<TicketTraderBlockEntity> TICKET_TRADER = FabricBlockEntityTypeBuilder.create(TicketTraderBlockEntity::new, ModBlocks.TICKET_KIOSK.block).build(null);
+    //Slot Machine
+    public static final BlockEntityType<SlotMachineTraderBlockEntity> SLOT_MACHINE = FabricBlockEntityTypeBuilder.create(SlotMachineTraderBlockEntity::new, ModBlocks.SLOT_MACHINE.block).build(null);
 
     //Sided Inventory Extension Block Entity
     public static final BlockEntityType<SidedStorageExtensionBlockEntity> STORAGE_EXTENSION = FabricBlockEntityTypeBuilder.create(SidedStorageExtensionBlockEntity::new, BlockEntityBlockHelper.getBlocksForBlockEntity(BlockEntityBlockHelper.INVENTORY_EXTENSION_TYPE)).build(null);
@@ -47,6 +49,7 @@ public class ModBlockEntities {
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "armor_trader"), ARMOR_TRADER);
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "freezer_trader"), FREEZER_TRADER);
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "ticket_trader"), TICKET_TRADER);
+        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "slot_machine"), SLOT_MACHINE);
 
         //Inventory Extension
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(LightmansCurrency.MODID, "storage_extension"), STORAGE_EXTENSION);

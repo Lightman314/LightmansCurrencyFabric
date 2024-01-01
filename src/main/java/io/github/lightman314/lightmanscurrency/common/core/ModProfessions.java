@@ -11,8 +11,8 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 public class ModProfessions {
 
-    public static final VillagerProfession BANKER = create("banker", ModPointsOfInterest.BANKER, ModSounds.COINS_CLINKING);
-    public static final VillagerProfession CASHIER = create("cashier", ModPointsOfInterest.CASHIER, ModSounds.COINS_CLINKING);
+    public static final VillagerProfession BANKER = create("banker", ModPointsOfInterest.getBanker(), ModSounds.COINS_CLINKING);
+    public static final VillagerProfession CASHIER = create("cashier", ModPointsOfInterest.getCashier(), ModSounds.COINS_CLINKING);
 
 
     public static void registerProfessions() {

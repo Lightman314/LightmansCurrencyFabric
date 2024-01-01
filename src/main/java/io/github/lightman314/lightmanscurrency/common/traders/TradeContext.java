@@ -16,14 +16,7 @@ import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
 import io.github.lightman314.lightmanscurrency.common.ownership.PlayerReference;
 import io.github.lightman314.lightmanscurrency.common.traders.item.storage.TraderItemStorage;
-import io.github.lightman314.lightmanscurrency.fluid.FluidStack;
-import io.github.lightman314.lightmanscurrency.util.FabricStorageUtil;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -72,6 +65,7 @@ public class TradeContext {
          */
         FAIL_NULL("lightmanscurrency.remotetrade.fail.null");
         public boolean hasMessage() { return this.failMessage != null; }
+        public boolean isSuccess() { return this == SUCCESS; }
         public final Text failMessage;
         TradeResult(String message) { this.failMessage = message == null ? null : EasyText.translatable(message); }
     }
@@ -118,16 +112,8 @@ public class TradeContext {
     private final TraderItemStorage itemStorage;
     private boolean hasItemStorage() { return this.itemStorage != null; }
 
-    private final Storage<ItemVariant> itemHandler;
-    private boolean hasItemHandler() { return this.itemStorage != null; }
-
-    //Fluid related data
-    private final Storage<FluidVariant> fluidTank;
-    private boolean hasFluidTank() { return this.fluidTank != null; }
-
-    //Energy related data
-    /*private final IEnergyStorage energyTank;
-    private boolean hasEnergyTank() { return this.energyTank != null; }*/
+    private final Inventory inventory;
+    private boolean hasInventory() { return this.inventory != null; }
 
     private TradeContext(Builder builder) {
         this.isStorageMode = builder.storageMode;
@@ -140,8 +126,7 @@ public class TradeContext {
         this.moneyListener = builder.moneyListener;
         this.interactionSlot = builder.interactionSlot;
         this.itemStorage = builder.itemStorage;
-        this.itemHandler = builder.itemHandler;
-        this.fluidTank = builder.fluidHandler;
+        this.inventory = builder.inventory;
         //this.energyTank = builder.energyHandler;
     }
 
@@ -287,8 +272,8 @@ public class TradeContext {
     {
         if(this.hasItemStorage())
             return this.itemStorage.hasItem(item);
-        if(this.hasItemHandler() && this.itemHandler.supportsExtraction())
-            return FabricStorageUtil.simulateExtract(this.itemHandler, ItemVariant.of(item), item.getCount()) == item.getCount();
+        if(this.hasInventory())
+            return InventoryUtil.GetItemCount(this.inventory, item) >= item.getCount();;
         if(this.hasPlayer())
             return InventoryUtil.GetItemCount(this.player.getInventory(), item) >= item.getCount();
         return false;
@@ -324,15 +309,14 @@ public class TradeContext {
                 }
             }
         }
-        else if(this.hasItemHandler() && this.itemHandler.supportsExtraction())
+        else if(this.hasInventory())
         {
-            List<ItemStack> matchingItems = FabricStorageUtil.getMatchingItems(this.itemHandler, item -> item.getItem() == ModItems.TICKET && TicketItem.GetTicketID(item.toStack()) == ticketID);
-            for(ItemStack item : matchingItems)
+            for(int i = 0; i < this.inventory.size(); ++i)
             {
-                if(FabricStorageUtil.simulateExtract(this.itemHandler, ItemVariant.of(item), 1) == 1)
+                ItemStack stack = this.inventory.getStack(i);
+                if(stack.getItem() == ModItems.TICKET && ticketID.equals(TicketItem.GetTicketID(stack)))
                     return true;
             }
-            return false;
         }
         else if(this.hasPlayer())
         {
@@ -364,9 +348,9 @@ public class TradeContext {
                 this.itemStorage.removeItem(item);
                 return true;
             }
-            else if(this.hasItemHandler() && this.itemHandler.supportsExtraction())
+            else if(this.hasInventory())
             {
-                return FabricStorageUtil.tryExtractExact(this.itemHandler, ItemVariant.of(item), item.getCount());
+                return InventoryUtil.RemoveItemCount(this.inventory,item);
             }
             else if(this.hasPlayer())
             {
@@ -402,15 +386,22 @@ public class TradeContext {
                     }
                 }
             }
-            else if(this.hasItemHandler() && this.itemHandler.supportsExtraction())
+            else if(this.hasInventory())
             {
-                List<ItemStack> matchingItems = FabricStorageUtil.getMatchingItems(this.itemHandler, item -> item.getItem() == ModItems.TICKET && TicketItem.GetTicketID(item.toStack()) == ticketID);
-                for(ItemStack item : matchingItems)
+                for(int i = 0; i < this.inventory.size(); ++i)
                 {
-                    if(FabricStorageUtil.tryExtractExact(this.itemHandler, ItemVariant.of(item), 1))
-                        return true;
+                    ItemStack stack = this.inventory.getStack(i);
+                    if(stack.getItem() == ModItems.TICKET)
+                    {
+                        UUID id = TicketItem.GetTicketID(stack);
+                        if(id != null && id.equals(ticketID))
+                        {
+                            this.inventory.removeStack(i, 1);
+                            this.inventory.markDirty();
+                            return true;
+                        }
+                    }
                 }
-                return false;
             }
             else if(this.hasPlayer())
             {
@@ -440,27 +431,32 @@ public class TradeContext {
             return true;
         if(this.hasItemStorage())
             return this.itemStorage.canFitItem(item);
-        if(this.hasItemHandler() && this.itemHandler.supportsInsertion())
-            return FabricStorageUtil.simulateInsert(this.itemHandler, ItemVariant.of(item), item.getCount()) == item.getCount();
+        if(this.hasInventory())
+            return InventoryUtil.CanPutItemStack(this.inventory, item);
         if(this.hasPlayer())
             return true;
         return false;
     }
 
-    @SuppressWarnings("unchecked")
+
+
     public boolean canFitItems(ItemStack... items)
     {
         if(this.hasItemStorage())
             return this.itemStorage.canFitItems(items);
-        if(this.hasItemHandler())
-        {
-            for(ItemStack item : InventoryUtil.combineQueryItems(items))
-            {
-                if(FabricStorageUtil.simulateInsert(this.itemHandler, ItemVariant.of(item), item.getCount()) != item.getCount())
-                    return false;
-            }
+        if(this.hasInventory())
+            return InventoryUtil.CanPutItemStacks(this.inventory, items);
+        if(this.hasPlayer())
             return true;
-        }
+        return false;
+    }
+
+    public boolean canFitItems(List<ItemStack> items)
+    {
+        if(this.hasItemStorage())
+            return this.itemStorage.canFitItems(items);
+        if(this.hasInventory())
+            return InventoryUtil.CanPutItemStacks(this.inventory, items);
         if(this.hasPlayer())
             return true;
         return false;
@@ -475,8 +471,8 @@ public class TradeContext {
                 this.itemStorage.forceAddItem(item);
                 return true;
             }
-            if(this.hasItemHandler())
-                return FabricStorageUtil.tryInsertExact(this.itemHandler, ItemVariant.of(item), item.getCount());
+            if(this.hasInventory())
+                return InventoryUtil.PutItemStack(this.inventory, item);
             if(this.hasPlayer())
             {
                 InventoryUtil.GiveToPlayer(this.player, item);
@@ -485,149 +481,6 @@ public class TradeContext {
         }
         return false;
     }
-
-    public boolean hasFluid(FluidStack fluid)
-    {
-        if(this.hasFluidTank())
-        {
-            return FabricStorageUtil.simulateExtract(this.fluidTank, fluid, fluid.getAmount()) == fluid.getAmount();
-        }
-        else if(this.hasInteractionSlot(InteractionSlotData.FLUID_TYPE))
-        {
-            ItemStack bucketStack = this.getInteractionSlotStack(InteractionSlotData.FLUID_TYPE);
-            Storage<FluidVariant> fluidHandler = ContainerItemContext.withInitial(bucketStack).find(FluidStorage.ITEM);
-            if(fluidHandler != null)
-                return FabricStorageUtil.simulateExtract(fluidHandler, fluid, fluid.getAmount()) == fluid.getAmount();
-        }
-        return false;
-    }
-
-    public boolean drainFluid(FluidStack fluid)
-    {
-        if(this.hasFluid(fluid))
-        {
-            if(this.hasFluidTank())
-            {
-                return FabricStorageUtil.tryExtractExact(this.fluidTank, fluid, fluid.getAmount());
-            }
-            else if(this.hasInteractionSlot(InteractionSlotData.FLUID_TYPE))
-            {
-                ItemStack bucketStack = this.getInteractionSlotStack(InteractionSlotData.FLUID_TYPE);
-                Storage<FluidVariant> fluidHandler = ContainerItemContext.withInitial(bucketStack).find(FluidStorage.ITEM);
-                if(fluidHandler != null)
-                    return FabricStorageUtil.tryExtractExact(fluidHandler, fluid, fluid.getAmount());
-            }
-        }
-        return false;
-    }
-
-    public boolean canFitFluid(FluidStack fluid)
-    {
-        if(this.hasFluidTank())
-            return FabricStorageUtil.simulateInsert(this.fluidTank, fluid, fluid.getAmount()) == fluid.getAmount();
-        else if(this.hasInteractionSlot(InteractionSlotData.FLUID_TYPE))
-        {
-            ItemStack bucketStack = this.getInteractionSlotStack(InteractionSlotData.FLUID_TYPE);
-            Storage<FluidVariant> fluidHandler = ContainerItemContext.withInitial(bucketStack).find(FluidStorage.ITEM);
-            if(fluidHandler != null)
-                return FabricStorageUtil.simulateInsert(fluidHandler, fluid, fluid.getAmount()) == fluid.getAmount();
-        }
-        return false;
-    }
-
-    public boolean fillFluid(FluidStack fluid)
-    {
-        if(this.canFitFluid(fluid))
-        {
-            if(this.hasFluidTank())
-            {
-                return FabricStorageUtil.tryInsertExact(this.fluidTank, fluid, fluid.getAmount());
-            }
-            else if(this.hasInteractionSlot(InteractionSlotData.FLUID_TYPE))
-            {
-                ItemStack bucketStack = this.getInteractionSlotStack(InteractionSlotData.FLUID_TYPE);
-                Storage<FluidVariant> fluidHandler = ContainerItemContext.withInitial(bucketStack).find(FluidStorage.ITEM);
-                if(fluidHandler != null)
-                    return FabricStorageUtil.tryInsertExact(fluidHandler, fluid, fluid.getAmount());
-            }
-        }
-        return false;
-    }
-
-    /*public boolean hasEnergy(int amount)
-    {
-        if(this.hasEnergyTank())
-            return this.energyTank.extractEnergy(amount, true) == amount;
-        else if(this.hasInteractionSlot(InteractionSlotData.ENERGY_TYPE))
-        {
-            ItemStack batteryStack = this.getInteractionSlot(InteractionSlotData.ENERGY_TYPE).getItem();
-            AtomicBoolean hasEnergy = new AtomicBoolean(false);
-            batteryStack.getCapability(CapabilityEnergy.ENERGY).ifPresent(energyHandler ->{
-                hasEnergy.set(energyHandler.extractEnergy(amount, true) == amount);
-            });
-            return hasEnergy.get();
-        }
-        return false;
-    }
-
-    public boolean drainEnergy(int amount)
-    {
-        if(this.hasEnergy(amount))
-        {
-            if(this.hasEnergyTank())
-            {
-                this.energyTank.extractEnergy(amount, false);
-                return true;
-            }
-            if(this.hasInteractionSlot(InteractionSlotData.ENERGY_TYPE))
-            {
-                ItemStack batteryStack = this.getInteractionSlot(InteractionSlotData.ENERGY_TYPE).getItem();
-                batteryStack.getCapability(CapabilityEnergy.ENERGY).ifPresent(energyHandler ->{
-                    energyHandler.extractEnergy(amount, false);
-                });
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean canFitEnergy(int amount)
-    {
-        if(this.hasEnergyTank())
-            return this.energyTank.receiveEnergy(amount, true) == amount;
-        else if(this.hasInteractionSlot(InteractionSlotData.ENERGY_TYPE))
-        {
-            ItemStack batteryStack = this.getInteractionSlot(InteractionSlotData.ENERGY_TYPE).getItem();
-            AtomicBoolean fitsEnergy = new AtomicBoolean(false);
-            batteryStack.getCapability(CapabilityEnergy.ENERGY).ifPresent(energyHandler ->{
-                fitsEnergy.set(energyHandler.receiveEnergy(amount, true) == amount);
-            });
-            return fitsEnergy.get();
-        }
-        return false;
-    }
-
-    public boolean fillEnergy(int amount)
-    {
-        if(this.canFitEnergy(amount))
-        {
-            if(this.hasEnergyTank())
-            {
-                this.energyTank.receiveEnergy(amount, false);
-                return true;
-            }
-            else if(this.hasInteractionSlot(InteractionSlotData.ENERGY_TYPE))
-            {
-                ItemStack batteryStack = this.getInteractionSlot(InteractionSlotData.ENERGY_TYPE).getItem();
-                batteryStack.getCapability(CapabilityEnergy.ENERGY).ifPresent(energyHandler ->{
-                    energyHandler.receiveEnergy(amount, false);
-                });
-                return true;
-            }
-        }
-        return false;
-    }*/
-
     public static TradeContext createStorageMode(TraderData trader) { return new Builder(trader).build(); }
     public static Builder create(TraderData trader, PlayerEntity player) { return new Builder(trader, player); }
     public static Builder create(TraderData trader, PlayerReference player) { return new Builder(trader, player); }
@@ -652,11 +505,7 @@ public class TradeContext {
 
         //Item
         private TraderItemStorage itemStorage;
-        private Storage<ItemVariant> itemHandler;
-        //Fluid
-        private Storage<FluidVariant> fluidHandler;
-        //Energy
-        //private IEnergyStorage energyHandler;
+        private Inventory inventory;
 
         private Builder(TraderData trader) { this.storageMode = true; this.trader = trader; this.player = null; this.playerReference = null; }
         private Builder(TraderData trader, PlayerEntity player) { this.trader = trader; this.player = player; this.playerReference = PlayerReference.of(player); this.storageMode = false; }
@@ -671,9 +520,7 @@ public class TradeContext {
         public Builder withInteractionSlot(InteractionSlot interactionSlot) { this.interactionSlot = interactionSlot; return this; }
 
         public Builder withItemStorage(TraderItemStorage itemStorage) { this.itemStorage = itemStorage; return this; }
-        public Builder withItemHandler(Storage<ItemVariant> itemHandler) { this.itemHandler = itemHandler; return this; }
-        public Builder withFluidHandler(Storage<FluidVariant> fluidHandler) { this.fluidHandler = fluidHandler; return this; }
-        //public Builder withEnergyHandler(IEnergyStorage energyHandler) { this.energyHandler = energyHandler; return this; }
+        public Builder withInventory(Inventory inventory) { this.inventory = inventory; return this; }
 
         public TradeContext build() { return new TradeContext(this); }
 

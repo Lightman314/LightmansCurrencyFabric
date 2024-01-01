@@ -6,10 +6,10 @@
       "item": "lightmanscurrency:wallet_iron"
     },
     {
-      "item": "lightmanscurrency:coin_gold"
+      "tag": "c:gold_ingots"
     },
     {
-      "item": "lightmanscurrency:coin_emerald"
+      "tag": "c:emeralds"
     }
   ],
   "result": {

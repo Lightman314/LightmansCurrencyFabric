@@ -3,11 +3,13 @@ package io.github.lightman314.lightmanscurrency.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.client.callbacks.RenderInventoryCallback;
+import io.github.lightman314.lightmanscurrency.client.gui.widget.button.ChestCoinCollectButton;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.button.inventory.*;
 import io.github.lightman314.lightmanscurrency.client.util.ItemRenderUtil;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenPosition;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.common.blocks.traderblocks.SlotMachineBlock;
 import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.WalletSlot;
@@ -17,15 +19,13 @@ import io.github.lightman314.lightmanscurrency.network.server.messages.walletslo
 import io.github.lightman314.lightmanscurrency.network.server.messages.walletslot.CMessageWalletInteraction;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.fabricmc.fabric.impl.client.screen.ScreenExtensions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.client.gui.screen.ingame.*;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
@@ -34,12 +34,14 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ClientEventListeners {
 
@@ -56,6 +58,12 @@ public class ClientEventListeners {
         ScreenEvents.AFTER_INIT.register(ClientEventListeners::onInventoryScreenInit);
         RenderInventoryCallback.RENDER_BACKGROUND.register(ClientEventListeners::renderInventoryScreen);
 
+        ModelLoadingRegistry.INSTANCE.registerModelProvider(ClientEventListeners::loadExtraModels);
+
+    }
+
+    private static void loadExtraModels(ResourceManager manager, Consumer<Identifier> consumer) {
+        consumer.accept(SlotMachineBlock.LIGHT_MODEL_LOCATION);
     }
 
     //Manual detection of key pressing in the client tick
@@ -97,6 +105,15 @@ public class ClientEventListeners {
             extension.fabric_getAfterRenderEvent().register(ClientEventListeners::renderInventoryTooltips);
             extension.fabric_getAllowMouseClickEvent().register(ClientEventListeners::onInventoryClick);
 
+        }
+        if(screen instanceof GenericContainerScreen gui)
+        {
+            //Add Chest Button to the generic chest screens.
+            List<ClickableWidget> screenWidgets = Screens.getButtons(screen);
+            screenWidgets.add(new ChestCoinCollectButton(gui));
+            //Register screen-specific events
+            ScreenExtensions extension = ScreenExtensions.getExtensions(screen);
+            extension.fabric_getAfterRenderEvent().register((s,p,x,y,d) -> ChestCoinCollectButton.tryRenderTooltip(p,x,y));
         }
     }
 

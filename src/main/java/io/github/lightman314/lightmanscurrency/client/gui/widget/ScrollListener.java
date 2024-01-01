@@ -1,8 +1,10 @@
 package io.github.lightman314.lightmanscurrency.client.gui.widget;
 
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 
-public class ScrollListener implements Element {
+public class ScrollListener implements Element, Selectable {
 
     public int x;
     public int y;
@@ -27,6 +29,15 @@ public class ScrollListener implements Element {
     public boolean isMouseOver(double mouseX, double mouseY) {
         return this.active && mouseX >= this.x && mouseX < this.x + this.width && mouseY >= this.y && mouseY < this.y + this.height;
     }
+
+    @Override
+    public SelectionType getType() { return SelectionType.NONE; }
+
+    @Override
+    public void appendNarrations(NarrationMessageBuilder builder) { }
+
+    @Override
+    public boolean isNarratable() { return false; }
 
     public interface IScrollListener { boolean mouseScrolled(double mouseX, double mouseY, double delta); }
 

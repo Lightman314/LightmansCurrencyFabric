@@ -6,6 +6,7 @@ import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.*;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ItemEditWidget;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.FreezerTraderBlockEntityRenderer;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.ItemTraderBlockEntityRenderer;
+import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.SlotMachineBlockEntityRenderer;
 import io.github.lightman314.lightmanscurrency.client.renderer.entity.layers.WalletLayer;
 import io.github.lightman314.lightmanscurrency.client.util.ScreenUtil;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
@@ -64,10 +65,12 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		HandledScreens.register(ModMenus.TRADER_STORAGE, TraderStorageScreen::new);
 		HandledScreens.register(ModMenus.WALLET_BANK, WalletBankScreen::new);
 		HandledScreens.register(ModMenus.WALLET, WalletScreen::new);
+		HandledScreens.register(ModMenus.SLOT_MACHINE, SlotMachineScreen::new);
 
 		//Block Entity Renderers
 		BlockEntityRendererRegistry.register(ModBlockEntities.ITEM_TRADER, ItemTraderBlockEntityRenderer::new);
 		BlockEntityRendererRegistry.register(ModBlockEntities.FREEZER_TRADER, FreezerTraderBlockEntityRenderer::new);
+		BlockEntityRendererRegistry.register(ModBlockEntities.SLOT_MACHINE, SlotMachineBlockEntityRenderer::new);
 
 		//Register Item Colors
 		ColorProviderRegistry.ITEM.register(new TicketColor(), ModItems.TICKET, ModItems.TICKET_MASTER);
@@ -124,7 +127,7 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 	}
 
 	private void appendTooltips(ItemStack stack, TooltipContext context, List<Text> lines) {
-		if(MoneyUtil.isCoin(stack) && !(stack.getItem() instanceof CoinItem || stack.getItem()instanceof CoinBlockItem))
+		if(MoneyUtil.isCoin(stack) && !(stack.getItem() instanceof CoinItem || stack.getItem() instanceof CoinBlockItem))
 			CoinItem.addCoinTooltips(stack, lines);
 	}
 

@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
 import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
-import io.github.lightman314.lightmanscurrency.common.enchantments.WalletEnchantment;
+import io.github.lightman314.lightmanscurrency.common.enchantments.CoinMagnetEnchantment;
 import io.github.lightman314.lightmanscurrency.common.menu.factory.WalletMenuFactory;
 import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletMenuBase;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
@@ -53,12 +52,6 @@ public class WalletItem extends Item{
 		WalletMenuBase.updateMaxWalletSlots(this.storageSize);
 		this.MODEL_TEXTURE = new Identifier(LightmansCurrency.MODID, "textures/entity/" + modelName + ".png");
 	}
-	
-	@Override
-	public int getEnchantability() { return 10; }
-	
-	@Override
-	public boolean isEnchantable(ItemStack stack) { return true; }
 	
 	/**
 	 * Determines if the given ItemStack can be processed as a wallet.
@@ -134,16 +127,43 @@ public class WalletItem extends Item{
 			return InventorySize(w);
 		return 0;
 	}
+
+	public static int GetMagnetLevel(ItemStack stack)
+	{
+		if(stack.getItem() instanceof WalletItem wallet && CanPickup(wallet))
+		{
+			NbtCompound tag = stack.getNbt();
+			if(tag != null && tag.contains("CoinMagnet", NbtElement.INT_TYPE))
+				return tag.getInt("CoinMagnet");
+		}
+		return 0;
+	}
+
+	public static void SetMagnetLevel(ItemStack stack, int level)
+	{
+		if(stack.getItem() instanceof WalletItem)
+		{
+			NbtCompound tag = stack.getOrCreateNbt();
+			tag.putInt("CoinMagnet", level);
+		}
+	}
 	
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World level, List<Text> tooltip, TooltipContext flagIn)
 	{
+
+		//Coin Magnet Enchantment simulation
+		int magnetLevel = GetMagnetLevel(stack);
+		if(magnetLevel > 0)
+			tooltip.add(EasyText.translatable("enchantment.lightmanscurrency.coin_magnet").formatted(Formatting.GRAY).append(" ").append(EasyText.translatable("enchantment.level." + magnetLevel)));
 		
 		super.appendTooltip(stack,  level,  tooltip,  flagIn);
 		
 		if(CanPickup(this))
 		{
 			tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.pickup").formatted(Formatting.YELLOW));
+			if(magnetLevel < CoinMagnetEnchantment.MAX_LEVEL)
+				tooltip.add(EasyText.translatable("enchantment.lightmanscurrency.coin_magnet.crafting").formatted(Formatting.GRAY));
 		}
 		if(CanExchange(this))
 		{
@@ -161,14 +181,19 @@ public class WalletItem extends Item{
 		{
 			tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.bankaccount").formatted(Formatting.YELLOW));
 		}
-		
-		WalletEnchantment.addWalletEnchantmentTooltips(tooltip, stack);
+
+		//Magnet level tooltip
+		if(magnetLevel > 0)
+			tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.pickup.magnet", CoinMagnetEnchantment.getCollectionRangeDisplay(magnetLevel)).formatted(Formatting.YELLOW));
 		
 		CoinValue contents = new CoinValue(getWalletInventory(stack));
 		if(contents.getRawValue() > 0)
 			tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.wallet.storedmoney", EasyText.literal(contents.getString()).formatted(Formatting.DARK_GREEN)).formatted(Formatting.YELLOW));
 		
 	}
+
+	@Override
+	public boolean hasGlint(ItemStack stack) { return super.hasGlint(stack) || GetMagnetLevel(stack) > 0; }
 	
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand)
@@ -389,6 +414,26 @@ public class WalletItem extends Item{
 		tag.putBoolean("AutoConvert", !oldValue);
 		
 	}
+
+	/**
+	 * Automatically collects all coins from the given container into the players equipped wallet.
+	 */
+	public static void QuickCollect(PlayerEntity player, Inventory container, boolean allowHidden)
+	{
+		ItemStack wallet = WalletHandler.getWallet(player).getWallet();
+		if(isWallet(wallet))
+		{
+			for(int i = 0; i < container.size(); ++i)
+			{
+				ItemStack stack = container.getStack(i);
+				if(MoneyUtil.isCoin(stack, allowHidden))
+				{
+					stack = PickupCoin(wallet, stack);
+					container.setStack(i, stack);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Used to copy a wallets inventory contents to a newly crafted one. Also copies over any auto-conversion settings, custom names, and enchantments.
@@ -397,40 +442,12 @@ public class WalletItem extends Item{
 	 */
 	public static void CopyWalletContents(ItemStack walletIn, ItemStack walletOut)
 	{
-		if(!(walletIn.getItem() instanceof WalletItem && walletIn.getItem() instanceof WalletItem))
+		if(!(walletIn.getItem() instanceof WalletItem && walletOut.getItem() instanceof WalletItem))
 		{
 			LightmansCurrency.LogError("WalletItem.CopyWalletContents() -> One or both of the wallet stacks are not WalletItems.");
 			return;
 		}
-		WalletItem walletItemIn = (WalletItem)walletIn.getItem();
-		WalletItem walletItemOut = (WalletItem)walletOut.getItem();
-		DefaultedList<ItemStack> walletInventory1 = getWalletInventory(walletIn);
-		DefaultedList<ItemStack> walletInventory2 = getWalletInventory(walletOut);
-		if(walletInventory1.size() > walletInventory2.size())
-			LightmansCurrency.LogWarning("WalletItem.CopyWalletContents() -> walletIn has a larger inventory size than walletOut. This may result in a loss of wallet contents.");
-		//Copy over the wallets contents
-		for(int i = 0; i < walletInventory1.size() && i < walletInventory2.size(); i++)
-		{
-			walletInventory2.set(i, walletInventory1.get(i).copy());
-		}
-		//Write walletOut's nbt data
-		putWalletInventory(walletOut, walletInventory2);
-		//If both wallets can convert, confirm that the auto-convert setting matches
-		if(CanExchange(walletItemIn) && CanExchange(walletItemOut) && CanPickup(walletItemIn) && CanPickup(walletItemOut))
-		{
-			if(getAutoConvert(walletIn) != getAutoConvert(walletOut))
-			{
-				toggleAutoConvert(walletOut);
-			}
-		}
-		
-		//Copy custom name
-		if(walletIn.hasCustomName())
-			walletOut.setCustomName(walletIn.getName());
-		
-		//Copy enchantments
-		EnchantmentHelper.set(EnchantmentHelper.get(walletIn), walletOut);
-		
+		walletOut.setNbt(walletIn.getNbt());
 	}
 	
 	/**

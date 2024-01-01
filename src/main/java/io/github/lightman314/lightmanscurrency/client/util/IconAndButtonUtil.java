@@ -41,6 +41,7 @@ public class IconAndButtonUtil {
     public static final Identifier ICON_TEXTURE = new Identifier(LightmansCurrency.MODID, "textures/gui/icons.png");
 
     public static final IconData ICON_TRADER = IconData.of(ModItems.TRADING_CORE);
+    public static final IconData ICON_TRADER_ALT = IconData.of(ICON_TEXTURE, 80, 0);
     public static final IconData ICON_STORAGE = IconData.of(Items.CHEST);
 
     public static final IconData ICON_COLLECT_COINS = IconData.of(ICON_TEXTURE, 0, 0);
@@ -213,8 +214,8 @@ public class IconAndButtonUtil {
     {
         for(Object w : widgets)
         {
-            if(w instanceof ButtonWidget && ((ButtonWidget) w).isMouseOver(mouseX, mouseY))
-                ((ButtonWidget)w).renderTooltip(pose, mouseX, mouseY);
+            if(w instanceof ButtonWidget b && b.isMouseOver(mouseX, mouseY))
+                b.renderTooltip(pose, mouseX, mouseY);
         }
     }
 
@@ -222,6 +223,14 @@ public class IconAndButtonUtil {
     {
 
         protected abstract Text getTooltip();
+
+        public List<Text> get() {
+            List<Text> result = new ArrayList<>();
+            Text tooltip = this.getTooltip();
+            if(tooltip != null)
+                result.add(tooltip);
+            return result;
+        }
 
         @Override
         public void onTooltip(ButtonWidget button, MatrixStack pose, int mouseX, int mouseY) {

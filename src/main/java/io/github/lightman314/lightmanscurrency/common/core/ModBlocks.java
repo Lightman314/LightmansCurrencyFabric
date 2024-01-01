@@ -1,5 +1,6 @@
 package io.github.lightman314.lightmanscurrency.common.core;
 
+import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -60,11 +61,11 @@ public class ModBlocks {
 	};
 
 	public static <T> Function<T,Identifier> BasicIDGeneration(String namespace, String name) {
-		return (val) -> new Identifier(namespace, name + "_" + val.toString().toLowerCase());
+		return BasicIDGeneration(namespace, name, null);
 	}
 
 	public static <T> Function<T,Identifier> BasicIDGeneration(String namespace, String name, @Nullable T ignoreEntry) {
-		return (val) -> val == ignoreEntry ? new Identifier(namespace, name) : new Identifier(namespace, name + "_" + val.toString().toLowerCase());
+		return (val) -> val == ignoreEntry ? new Identifier(namespace, name) : new Identifier(namespace, name + "_" + val.toString().toLowerCase(Locale.ENGLISH));
 	}
 	
 	//Hold the blocks for public access
@@ -115,6 +116,9 @@ public class ModBlocks {
 
 	//Ticket Kiosk
 	public static final BlockItemPair TICKET_KIOSK = build(new TicketKioskBlock(FabricBlockSettings.of(Material.METAL).strength(3f, Float.POSITIVE_INFINITY).sounds(BlockSoundGroup.METAL).nonOpaque()), LightmansCurrency.TRADING_GROUP);
+
+	//Slot Machine
+	public static final BlockItemPair SLOT_MACHINE = build(new SlotMachineBlock(FabricBlockSettings.of(Material.METAL).strength(3f, Float.POSITIVE_INFINITY).sounds(BlockSoundGroup.METAL).nonOpaque()), LightmansCurrency.TRADING_GROUP);
 
 	//Network Traders
 	public static final BlockItemPair ITEM_NETWORK_TRADER_1 = build(new NetworkItemTraderBlock(FabricBlockSettings.of(Material.METAL).strength(5f, Float.POSITIVE_INFINITY).sounds(BlockSoundGroup.METAL).nonOpaque(), NetworkItemTraderBlock.TRADE_COUNT_T1), LightmansCurrency.TRADING_GROUP);
@@ -185,6 +189,9 @@ public class ModBlocks {
 		
 		//Ticket Kiosk
 		register(new Identifier(LightmansCurrency.MODID, "ticket_kiosk"), TICKET_KIOSK);
+
+		//Slot Machine
+		register(new Identifier(LightmansCurrency.MODID, "slot_machine"), SLOT_MACHINE);
 
 		//Network Traders
 		register(new Identifier(LightmansCurrency.MODID, "item_trader_server_sml"), ITEM_NETWORK_TRADER_1);

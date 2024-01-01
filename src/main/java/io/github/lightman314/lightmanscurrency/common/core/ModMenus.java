@@ -20,6 +20,7 @@ public class ModMenus {
     public static final ScreenHandlerType<TraderMenu> TRADER = new ExtendedScreenHandlerType<>((windowID, inventory, buffer) -> new TraderMenu(windowID, inventory, buffer.readLong()));
     public static final ScreenHandlerType<TraderMenu.TraderMenuBlockSource> TRADER_BLOCK = new ExtendedScreenHandlerType<>((windowID, inventory, buffer) -> new TraderMenu.TraderMenuBlockSource(windowID, inventory, buffer.readBlockPos()));
     public static final ScreenHandlerType<TraderMenu.TraderMenuAllNetwork> TRADER_NETWORK_ALL = new ScreenHandlerType<>(TraderMenu.TraderMenuAllNetwork::new);
+    public static final ScreenHandlerType<SlotMachineMenu> SLOT_MACHINE = new ExtendedScreenHandlerType<>((windowID, inventory, buffer) -> new SlotMachineMenu(windowID, inventory, buffer.readLong()));
 
     //Trader Storage
     public static final ScreenHandlerType<TraderStorageMenu> TRADER_STORAGE = new ExtendedScreenHandlerType<>((windowID, inventory, buffer) -> new TraderStorageMenu(windowID, inventory, buffer.readLong()));
@@ -48,6 +49,7 @@ public class ModMenus {
         Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader"), TRADER);
         Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_block"), TRADER_BLOCK);
         Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_network_all"), TRADER_NETWORK_ALL);
+        Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "slot_machine"), SLOT_MACHINE);
 
         //Trader Storage
         Registry.register(Registry.SCREEN_HANDLER, new Identifier(LightmansCurrency.MODID, "trader_storage"), TRADER_STORAGE);
