@@ -175,7 +175,7 @@ public class SlotMachineScreen extends MenuScreen<SlotMachineMenu> implements Sc
         context.drawText(this.textRenderer, this.playerInventoryTitle, 8, this.getImageHeight() - 94, 0x404040, false);
 
         String valueText = MoneyUtil.getStringOfValue(this.handler.getContext(null).getAvailableFunds());
-        context.drawText(this.textRenderer, valueText, 170 - this.textRenderer.getWidth(valueText) - 10, this.getImageWidth() - 94, 0x404040, false);
+        context.drawText(this.textRenderer, valueText, 170 - this.textRenderer.getWidth(valueText) - 10, this.getImageHeight() - 94, 0x404040, false);
     }
 
     @Override
