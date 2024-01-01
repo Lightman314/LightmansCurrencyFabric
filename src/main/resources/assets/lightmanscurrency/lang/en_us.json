@@ -157,8 +157,8 @@
     "gamerule.keepWallet" : "Keep wallet on death",
     "gamerule.coinDropPercent" : "Coin percentage dropped after death",
     
-    "entity.minecraft.villager.lightmanscurrency.banker": "Banker",
-    "entity.minecraft.villager.lightmanscurrency.cashier": "Cashier",
+    "entity.minecraft.villager.banker": "Banker",
+    "entity.minecraft.villager.cashier": "Cashier",
     
     "tooltip.lightmanscurrency.beta": "Feature in beta stage. May have issues!",
     "tooltip.lightmanscurrency.disabled": "DISABLED",

@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smithing_transform",
   "addition": {
-    "tag": "forge:gems/emerald"
+    "tag": "c:emeralds"
   },
   "base": {
     "item": "lightmanscurrency:speed_upgrade_2"

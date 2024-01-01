@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smithing_transform",
   "addition": {
-    "tag": "forge:ingots/gold"
+    "tag": "c:gold_ingots"
   },
   "base": {
     "item": "minecraft:hopper"

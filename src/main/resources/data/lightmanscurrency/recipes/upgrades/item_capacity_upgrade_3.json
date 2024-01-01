@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smithing_transform",
   "addition": {
-    "tag": "forge:gems/diamond"
+    "tag": "c:diamonds"
   },
   "base": {
     "item": "lightmanscurrency:item_capacity_upgrade_2"

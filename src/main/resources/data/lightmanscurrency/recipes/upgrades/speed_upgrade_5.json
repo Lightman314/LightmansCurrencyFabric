@@ -1,7 +1,7 @@
 {
   "type": "minecraft:smithing_transform",
   "addition": {
-    "tag": "forge:ingots/netherite"
+    "tag": "c:netherite_ingots"
   },
   "base": {
     "item": "lightmanscurrency:speed_upgrade_4"

@@ -141,6 +141,7 @@ public class TraderScreen extends MenuScreen<TraderMenu> {
 
     @Override
     protected void handledScreenTick() {
+        super.handledScreenTick();
         this.currentTab.tick();
     }
 

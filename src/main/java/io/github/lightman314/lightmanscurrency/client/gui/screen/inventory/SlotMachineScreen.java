@@ -198,6 +198,8 @@ public class SlotMachineScreen extends MenuScreen<SlotMachineMenu> implements Sc
         context.getMatrices().translate(0d,0d,250d);
         //Manually draw all tooltips on the front layer
 
+        this.drawMouseoverTooltip(context, mouseX, mouseY);
+
         if(this.buttonInteract != null && this.buttonInteract.isMouseOver(mouseX, mouseY))
             context.drawTooltip(this.textRenderer, this.getInteractionTooltip(1), mouseX, mouseY);
         if(this.buttonInteract5 != null && this.buttonInteract5.isMouseOver(mouseX, mouseY))
