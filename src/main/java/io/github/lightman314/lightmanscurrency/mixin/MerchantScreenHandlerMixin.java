@@ -57,8 +57,8 @@ public abstract class MerchantScreenHandlerMixin {
                     TradeOffer offer = self.getRecipes().get(trade);
                     if(MoneyUtil.isCoin(offer.getAdjustedFirstBuyItem(), false) && isCoinOrEmpty(offer.getSecondBuyItem()))
                     {
-                        ItemStack coinA = offer.getAdjustedFirstBuyItem();
-                        ItemStack coinB = offer.getSecondBuyItem();
+                        ItemStack coinA = offer.getAdjustedFirstBuyItem().copy();
+                        ItemStack coinB = offer.getSecondBuyItem().copy();
 
                         CoinValue tradeValue = MoneyUtil.getCoinValue(ImmutableList.of(coinA, coinB));
                         LightmansCurrency.LogDebug("Coin Value of the selected trade is " + tradeValue.getString());
