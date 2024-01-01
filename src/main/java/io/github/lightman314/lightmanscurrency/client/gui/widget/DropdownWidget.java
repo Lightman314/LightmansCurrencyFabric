@@ -100,6 +100,8 @@ public class DropdownWidget extends ClickableWidget {
                 this.optionButtons.get(i).active = this.optionActive.apply(i) && i != this.currentlySelected;
         }
 
+        RenderSystem.setShaderColor(1f,1f,1f,1f);
+
 
     }
 

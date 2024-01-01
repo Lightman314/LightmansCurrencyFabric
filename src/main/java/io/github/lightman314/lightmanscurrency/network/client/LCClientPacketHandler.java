@@ -13,6 +13,7 @@ import io.github.lightman314.lightmanscurrency.network.client.messages.data.*;
 import io.github.lightman314.lightmanscurrency.network.client.messages.ejectiondata.SMessageChangeSelectedData;
 import io.github.lightman314.lightmanscurrency.network.client.messages.enchantments.SMessageMoneyMendingClink;
 import io.github.lightman314.lightmanscurrency.network.client.messages.notifications.SMessageClientNotification;
+import io.github.lightman314.lightmanscurrency.network.client.messages.slot_machine.SMessageSlotMachine;
 import io.github.lightman314.lightmanscurrency.network.client.messages.team.SMessageCreateTeamResponse;
 import io.github.lightman314.lightmanscurrency.network.client.messages.time.SMessageSyncTime;
 import io.github.lightman314.lightmanscurrency.network.client.messages.trader.SMessageStorageInteraction;
@@ -80,7 +81,8 @@ public class LCClientPacketHandler implements PlayChannelHandler {
 		//Ejection Data
 		this.registerPacketType(SMessageChangeSelectedData.PACKET_ID, SMessageChangeSelectedData::handle);
 
-
+		//Slot Machine
+		this.registerPacketType(SMessageSlotMachine.PACKET_ID, SMessageSlotMachine::handle);
 
 	}
 

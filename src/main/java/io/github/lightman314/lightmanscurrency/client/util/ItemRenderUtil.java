@@ -68,7 +68,7 @@ public class ItemRenderUtil {
         if(screen != null)
             imageWidth = screen.width;
         if(screen instanceof MenuScreen<?>)
-            imageWidth = ((MenuScreen) screen).getImageWidth();
+            imageWidth = ((MenuScreen<?>) screen).getImageWidth();
 
         if(font == null)
             font = minecraft.textRenderer;

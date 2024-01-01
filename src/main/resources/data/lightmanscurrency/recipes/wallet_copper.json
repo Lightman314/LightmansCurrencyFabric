@@ -4,7 +4,7 @@
   "ingredients": [{
       "tag": "c:leather"
   },{
-      "item": "lightmanscurrency:coin_copper"
+      "tag": "c:copper_ingots"
   },{
       "tag": "c:leather"
   }],

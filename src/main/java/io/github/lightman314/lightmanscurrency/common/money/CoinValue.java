@@ -86,11 +86,9 @@ public class CoinValue
         this.coinValues = new ArrayList<>();
         for(CoinValuePair value : priceValues)
         {
-            for(int i = 0; i < this.coinValues.size(); i++)
-            {
-                if(this.coinValues.get(i).coin == value.coin)
-                {
-                    this.coinValues.get(i).amount += value.amount;
+            for (CoinValuePair coinValue : this.coinValues) {
+                if (coinValue.coin == value.coin) {
+                    coinValue.amount += value.amount;
                     value.amount = 0;
                 }
             }
@@ -132,7 +130,7 @@ public class CoinValue
                 NbtCompound thisCompound = new NbtCompound();
                 //new ItemStack(null).write(nbt)
                 Identifier id = Registry.ITEM.getId(value.coin);
-                if(id != null && MoneyUtil.isCoin(value.coin))
+                if(MoneyUtil.isCoin(value.coin))
                 {
                     thisCompound.putString("ID", id.toString());
                     thisCompound.putInt("Count", value.amount);
@@ -503,6 +501,20 @@ public class CoinValue
         if(coins.size() > 1)
             LightmansCurrency.LogWarning("A CoinValue used in a trade output gave more than one stack of coins of output.");
         return stack;
+    }
+
+    public List<ItemStack> getAsSeperatedItemList()
+    {
+        List<ItemStack> items = new ArrayList<>();
+        for(CoinValue.CoinValuePair entry : this.coinValues)
+        {
+            ItemStack stack = new ItemStack(entry.coin, entry.amount);
+            while(stack.getCount() > stack.getMaxCount())
+                items.add(stack.split(stack.getMaxCount()));
+            if(!stack.isEmpty())
+                items.add(stack);
+        }
+        return items;
     }
 
     public static class CoinValuePair

@@ -37,6 +37,7 @@ import io.github.lightman314.lightmanscurrency.common.traders.item.ItemTraderDat
 import io.github.lightman314.lightmanscurrency.common.traders.paygate.PaygateTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.types.*;
+import io.github.lightman314.lightmanscurrency.common.traders.slot_machine.SlotMachineTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.*;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.network.client.messages.time.SMessageSyncTime;
@@ -69,9 +70,10 @@ public class LightmansCurrency implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
-        //WoodType registration (if added at some point)
+        //WoodType Registration
+        //Not yet implemented in this version of LC
 
-		//Trigger registration
+		//Trigger Registration
 		ModItems.registerItems();
 		ModBlocks.registerBlocks();
 		ModBlockEntities.registerBlockEntities();
@@ -108,6 +110,7 @@ public class LightmansCurrency implements ModInitializer {
         TraderData.register(ItemTraderDataTicket.TYPE, ItemTraderDataTicket::new);
         TraderData.register(PaygateTraderData.TYPE, PaygateTraderData::new);
         TraderData.register(AuctionHouseTrader.TYPE, AuctionHouseTrader::new);
+        TraderData.register(SlotMachineTraderData.TYPE, SlotMachineTraderData::new);
 
         //Initialize the Trade Rule deserializers
         TradeRule.RegisterDeserializer(PlayerWhitelist.TYPE, PlayerWhitelist::new);
@@ -141,6 +144,7 @@ public class LightmansCurrency implements ModInitializer {
         Notification.register(DepositWithdrawNotification.PLAYER_TYPE, DepositWithdrawNotification.Player::new);
         Notification.register(DepositWithdrawNotification.TRADER_TYPE, DepositWithdrawNotification.Trader::new);
         Notification.register(BankTransferNotification.TYPE, BankTransferNotification::new);
+        Notification.register(SlotMachineTradeNotification.TYPE, SlotMachineTradeNotification::new);
 
         //Initialize the Notification Category deserializers
         NotificationCategory.register(NotificationCategory.GENERAL_TYPE, c -> NotificationCategory.GENERAL);
@@ -248,8 +252,8 @@ public class LightmansCurrency implements ModInitializer {
                 ModBlocks.VENDING_MACHINE_LARGE.get(Color.PURPLE), ModBlocks.VENDING_MACHINE_LARGE.get(Color.BLUE),
                 ModBlocks.VENDING_MACHINE_LARGE.get(Color.BROWN), ModBlocks.VENDING_MACHINE_LARGE.get(Color.GREEN),
                 ModBlocks.VENDING_MACHINE_LARGE.get(Color.RED), ModBlocks.VENDING_MACHINE_LARGE.get(Color.BLACK),
-                ModBlocks.TICKET_KIOSK, ModBlocks.ITEM_NETWORK_TRADER_1, ModBlocks.ITEM_NETWORK_TRADER_2,
-                ModBlocks.ITEM_NETWORK_TRADER_3, ModBlocks.ITEM_NETWORK_TRADER_4
+                ModBlocks.TICKET_KIOSK, ModBlocks.SLOT_MACHINE, ModBlocks.ITEM_NETWORK_TRADER_1,
+                ModBlocks.ITEM_NETWORK_TRADER_2, ModBlocks.ITEM_NETWORK_TRADER_3, ModBlocks.ITEM_NETWORK_TRADER_4
         ));
     }
 

@@ -14,8 +14,8 @@ import java.util.function.Predicate;
 
 public class ModProfessions {
 
-    public static final VillagerProfession BANKER = create("banker", ModPointsOfInterest.BANKER, ModSounds.COINS_CLINKING);
-    public static final VillagerProfession CASHIER = create("cashier", ModPointsOfInterest.CASHIER, ModSounds.COINS_CLINKING);
+    public static final VillagerProfession BANKER = create(new Identifier(LightmansCurrency.MODID, "banker"), ModSounds.COINS_CLINKING);
+    public static final VillagerProfession CASHIER = create(new Identifier(LightmansCurrency.MODID, "cashier"), ModSounds.COINS_CLINKING);
 
 
     public static void registerProfessions() {
@@ -27,9 +27,9 @@ public class ModProfessions {
 
     }
 
-    private static VillagerProfession create(String name, PointOfInterestType poiType, SoundEvent sound) {
-        Predicate<RegistryEntry<PointOfInterestType>> pred = p -> poiType == p.value();
-        return new VillagerProfession(name, pred, pred, ImmutableSet.of(), ImmutableSet.of(), sound);
+    private static VillagerProfession create(Identifier id, SoundEvent sound) {
+        Predicate<RegistryEntry<PointOfInterestType>> pred = p -> p.matchesId(id);
+        return new VillagerProfession(id.toString(), pred, pred, ImmutableSet.of(), ImmutableSet.of(), sound);
     }
 
 }

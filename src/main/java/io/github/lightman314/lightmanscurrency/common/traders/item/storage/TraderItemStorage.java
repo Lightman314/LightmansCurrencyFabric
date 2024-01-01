@@ -183,6 +183,15 @@ public class TraderItemStorage {
         return true;
     }
 
+    public boolean canFitItems(List<ItemStack> items) {
+        for(ItemStack item : InventoryUtil.combineQueryItems(items))
+        {
+            if(!this.canFitItem(item))
+                return false;
+        }
+        return true;
+    }
+
     /**
      * Attempts to add the entire item stack to storage.
      * @return Whether the item was added. If false, no partial stack was added to storage.

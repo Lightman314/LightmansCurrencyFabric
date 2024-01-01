@@ -254,6 +254,8 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
         int titleWidth = this.width - 7 - freeButtonOffset - priceWidth;
         this.font.draw(poseStack, TextRenderUtil.fitString(this.title, titleWidth), this.x + 8F, this.y + 5F, 0x404040);
 
+        RenderSystem.setShaderColor(1f,1f,1f,1f);
+
     }
 
     private int getStartX() {

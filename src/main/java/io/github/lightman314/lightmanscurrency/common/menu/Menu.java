@@ -11,8 +11,8 @@ public abstract class Menu extends ScreenHandler {
     protected Menu(@Nullable ScreenHandlerType<?> type, int windowID) { super(type, windowID); }
 
     public void closeMenu(PlayerEntity player) {
-        if(player instanceof ServerPlayerEntity)
-            ((ServerPlayerEntity) player).closeHandledScreen();
+        if(player instanceof ServerPlayerEntity sp)
+            sp.closeHandledScreen();
     }
 
 }

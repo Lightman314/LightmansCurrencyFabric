@@ -26,6 +26,7 @@ public class LCTooltips {
 	};
 	
 	public static final Supplier<List<Text>> ITEM_TRADER = () -> TooltipItem.getTooltipLines("tooltip.lightmanscurrency.trader.item");
+	public static final Supplier<List<Text>> SLOT_MACHINE = () -> TooltipItem.getTooltipLines("tooltip.lightmanscurrency.trader.slot_machine");
 	public static final Supplier<List<Text>> ITEM_TRADER_ARMOR = () -> TooltipItem.getTooltipLines("tooltip.lightmanscurrency.trader.item.armor");
 	public static final Supplier<List<Text>> ITEM_TRADER_TICKET = () -> TooltipItem.getTooltipLines("tooltip.lightmanscurrency.trader.item.ticket");
 	public static final Supplier<List<Text>> ITEM_NETWORK_TRADER = () -> TooltipItem.getTooltipLines("tooltip.lightmanscurrency.trader.network.item");

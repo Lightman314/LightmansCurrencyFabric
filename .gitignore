@@ -33,4 +33,5 @@ bin/
 run/
 
 #custom
+secrets
 Build Backups

@@ -154,9 +154,9 @@ public class ItemTradeNotification extends Notification{
 
     public static class ItemData
     {
-        final boolean isEmpty;
-        final Text itemName;
-        final int count;
+        public final boolean isEmpty;
+        public final Text itemName;
+        public final int count;
 
         public ItemData(ItemStack item) { this(item, ""); }
 
@@ -204,6 +204,11 @@ public class ItemTradeNotification extends Notification{
         public Text formatWith(Text other) { return Text.translatable("log.shoplog.and", this.format(), other); }
 
         public Text formatWith(ItemData other) { return Text.translatable("log.shoplog.and", this.format(), other.format()); }
+
+        public boolean matches(ItemData other)
+        {
+            return this.isEmpty == other.isEmpty && this.itemName.getString().equals(other.itemName.getString()) && this.count == other.count;
+        }
 
     }
 

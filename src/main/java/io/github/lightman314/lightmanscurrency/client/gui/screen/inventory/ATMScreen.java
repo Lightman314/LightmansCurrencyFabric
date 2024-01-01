@@ -142,6 +142,7 @@ public class ATMScreen extends MenuScreen<ATMMenu>{
 
     @Override
     public void handledScreenTick() {
+        super.handledScreenTick();
         this.currentTab().tick();
     }
 
