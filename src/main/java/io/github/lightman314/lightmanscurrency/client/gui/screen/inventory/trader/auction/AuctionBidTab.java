@@ -105,7 +105,7 @@ public class AuctionBidTab extends TraderClientTab {
     }
 
     private void SubmitBid(ButtonWidget button) {
-        new CMessageSubmitBid(this.auctionHouseID, this.tradeIndex, this.bidAmount.getCoinValue());
+        new CMessageSubmitBid(this.auctionHouseID, this.tradeIndex, this.bidAmount.getCoinValue()).sendToServer();
         this.screen.closeTab();
     }
 
