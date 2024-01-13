@@ -8,6 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.client.ServerToClientPacket;
 import io.github.lightman314.lightmanscurrency.util.FileUtil;
 import net.fabricmc.api.EnvType;
@@ -16,7 +17,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.item.Item;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -63,28 +63,25 @@ public class MoneyData extends ServerToClientPacket {
         return json;
     }
 
-    public void encode(PacketByteBuf buffer) {
+    public void encode(LazyPacketData.Builder dataBuilder) {
         JsonObject json = this.toJson();
         String jsonString = FileUtil.GSON.toJson(json);
-        int stringSize = jsonString.length();
-        buffer.writeInt(stringSize);
-        buffer.writeString(jsonString, stringSize);
+        dataBuilder.setString("json", jsonString);
     }
 
-    private static MoneyData decode(PacketByteBuf buffer) {
+    private static MoneyData decode(LazyPacketData data) {
         try {
             LightmansCurrency.LogDebug("Decoding money data packet:");
-            int stringSize = buffer.readInt();
-            String jsonString = buffer.readString(stringSize);
+            String jsonString = data.getString("json");
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
             return fromJson(json);
         } catch(Throwable t) { LightmansCurrency.LogError("Error decoding MoneyData.", t); return generateDefault(); }
     }
 
     @Environment(EnvType.CLIENT)
-    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
+    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
         LightmansCurrency.LogInfo("Received money data packet from server. Synchronizing coin list.");
-        MoneyUtil.receiveMoneyData(decode(buffer));
+        MoneyUtil.receiveMoneyData(decode(data));
     }
 
     public static MoneyData generateDefault() {

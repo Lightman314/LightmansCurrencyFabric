@@ -7,14 +7,13 @@ import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.traders.TraderSaveData;
 import io.github.lightman314.lightmanscurrency.common.traders.auction.tradedata.AuctionTradeData;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -31,7 +30,10 @@ public class CMessageAddPersistentAuction extends ClientToServerPacket {
     public CMessageAddPersistentAuction(NbtCompound auctionData, String id) { super(PACKET_ID); this.auctionData = auctionData; this.id = id; }
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeNbt(this.auctionData); buffer.writeString(this.id); }
+    protected void encode(LazyPacketData.Builder dataBuilder) {
+        dataBuilder.setCompound("auction", this.auctionData)
+                .setString("id", this.id);
+    }
 
     private static JsonObject getAuctionJson(NbtCompound auctionData, String id) {
         AuctionTradeData auction = new AuctionTradeData(auctionData);
@@ -41,11 +43,11 @@ public class CMessageAddPersistentAuction extends ClientToServerPacket {
         return json;
     }
 
-    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
+    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
         if(CommandLCAdmin.isAdminPlayer(player))
         {
-            NbtCompound auctionNbt = buffer.readUnlimitedNbt();
-            String id = buffer.readString();
+            NbtCompound auctionNbt = data.getCompound("auction");
+            String id = data.getString("id");
 
             boolean generateID = id.isBlank();
             if(!generateID) {
@@ -61,7 +63,7 @@ public class CMessageAddPersistentAuction extends ClientToServerPacket {
                         //Overwrite the existing entry with the same id.
                         persistentAuctions.set(i, auctionJson);
                         TraderSaveData.setPersistentTraderSection(TraderSaveData.PERSISTENT_AUCTION_SECTION, persistentAuctions);
-                        player.sendMessage(EasyText.translatable("lightmanscurrency.message.persistent.auction.overwrite", id), false);
+                        EasyText.sendMessage(player, (EasyText.translatable("lightmanscurrency.message.persistent.auction.overwrite", id)));
                         return;
                     }
                 }
@@ -69,7 +71,7 @@ public class CMessageAddPersistentAuction extends ClientToServerPacket {
                 //If no trader found with the id, add to list
                 persistentAuctions.add(auctionJson);
                 TraderSaveData.setPersistentTraderSection(TraderSaveData.PERSISTENT_AUCTION_SECTION, persistentAuctions);
-                player.sendMessage(EasyText.translatable("lightmanscurrency.message.persistent.auction.add", id), false);
+                EasyText.sendMessage(player, EasyText.translatable("lightmanscurrency.message.persistent.auction.add", id));
                 return;
             }
             else
@@ -94,7 +96,7 @@ public class CMessageAddPersistentAuction extends ClientToServerPacket {
                     {
                         persistentAuctions.add(getAuctionJson(auctionNbt, genID));
                         TraderSaveData.setPersistentTraderSection(TraderSaveData.PERSISTENT_AUCTION_SECTION, persistentAuctions);
-                        player.sendMessage(EasyText.translatable("lightmanscurrency.message.persistent.auction.add", genID), false);
+                        EasyText.sendMessage(player, EasyText.translatable("lightmanscurrency.message.persistent.auction.add", genID));
                         return;
                     }
                 }

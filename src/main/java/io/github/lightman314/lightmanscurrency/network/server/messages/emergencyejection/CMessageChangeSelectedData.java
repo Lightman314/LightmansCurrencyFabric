@@ -2,9 +2,9 @@ package io.github.lightman314.lightmanscurrency.network.server.messages.emergenc
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.menu.TraderRecoveryMenu;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -18,11 +18,11 @@ public class CMessageChangeSelectedData extends ClientToServerPacket {
     public CMessageChangeSelectedData(int newSelection) { super(PACKET_ID); this.newSelection = newSelection; }
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeInt(this.newSelection); }
+    protected void encode(LazyPacketData.Builder dataBuilder) { dataBuilder.setInt("selection", this.newSelection); }
 
-    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
+    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
         if(player.currentScreenHandler instanceof TraderRecoveryMenu menu)
-            menu.changeSelection(buffer.readInt());
+            menu.changeSelection(data.getInt("selection"));
     }
 
 }

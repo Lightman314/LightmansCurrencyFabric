@@ -7,7 +7,6 @@ import io.github.lightman314.lightmanscurrency.network.client.ServerToClientPack
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 public class SMessageSlotMachine extends ServerToClientPacket {
@@ -22,12 +21,9 @@ public class SMessageSlotMachine extends ServerToClientPacket {
     }
 
     @Override
-    protected void encode(PacketByteBuf buffer) {
-        data.encode(buffer);
-    }
+    protected void encode(LazyPacketData.Builder dataBuilder) { dataBuilder.clone(this.data); }
 
-    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        LazyPacketData data = LazyPacketData.decode(buffer);
+    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
         if(client.player.currentScreenHandler instanceof SlotMachineMenu menu)
             menu.HandleMessage(data);
     }

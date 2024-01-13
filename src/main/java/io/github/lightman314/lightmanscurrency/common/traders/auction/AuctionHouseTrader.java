@@ -29,6 +29,7 @@ import io.github.lightman314.lightmanscurrency.common.traders.permissions.Permis
 import io.github.lightman314.lightmanscurrency.common.traders.permissions.options.PermissionOption;
 import io.github.lightman314.lightmanscurrency.common.traders.tradedata.TradeData;
 import io.github.lightman314.lightmanscurrency.common.upgrades.UpgradeType;
+import io.github.lightman314.lightmanscurrency.network.client.messages.auction.SMessageAttemptBid;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -243,7 +244,7 @@ public class AuctionHouseTrader extends TraderData {
         else
         {
             //Open bid menu for the given trade index
-            //TODO bid message
+            new SMessageAttemptBid(this.getID(), tradeIndex).sendTo(context.getPlayer());
             return TradeResult.SUCCESS;
         }
     }

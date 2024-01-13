@@ -5,7 +5,6 @@ import io.github.lightman314.lightmanscurrency.common.menu.SlotMachineMenu;
 import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -23,15 +22,15 @@ public class CMessageSlotMachine extends ClientToServerPacket {
     }
 
     @Override
-    protected void encode(PacketByteBuf buffer) {
-        data.encode(buffer);
-    }
+    protected void encode(LazyPacketData.Builder dataBuilder) { dataBuilder.clone(this.data); }
 
-    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender)
+    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender)
     {
-        LazyPacketData data = LazyPacketData.decode(buffer);
         if(player != null && player.currentScreenHandler instanceof SlotMachineMenu menu)
             menu.HandleMessage(data);
     }
 
+
+
 }
+

@@ -25,6 +25,7 @@ import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class SelectionTab extends ATMTab{
@@ -38,7 +39,7 @@ public class SelectionTab extends ATMTab{
 
     TextFieldWidget playerAccountSelect;
     ButtonWidget buttonSelectPlayerAccount;
-    MutableText responseMessage = EasyText.empty();
+    Text responseMessage = EasyText.empty();
 
     boolean adminMode = false;
 
@@ -134,7 +135,7 @@ public class SelectionTab extends ATMTab{
             new CMessageATMSetPlayerAccount(playerName).sendToServer();
     }
 
-    public void ReceiveSelectPlayerResponse(MutableText message) { this.responseMessage = message; }
+    public void ReceiveSelectPlayerResponse(Text message) { this.responseMessage = message; }
 
     @Override
     public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {

@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 public class BankAccount {
@@ -367,7 +368,7 @@ public class BankAccount {
 
     public interface IBankAccountAdvancedMenu extends IBankAccountMenu
     {
-        void setTransferMessage(MutableText component);
+        void setTransferMessage(Text component);
         default void setNotificationLevel(CoinValue amount) {
             BankAccount account = this.getBankAccount();
             if(account != null)

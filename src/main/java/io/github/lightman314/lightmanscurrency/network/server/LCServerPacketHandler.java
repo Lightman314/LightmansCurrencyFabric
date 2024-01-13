@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.server.messages.auction.CMessageSubmitBid;
 import io.github.lightman314.lightmanscurrency.network.server.messages.bank.*;
 import io.github.lightman314.lightmanscurrency.network.server.messages.blockentity.CPacketRequestNBT;
 import io.github.lightman314.lightmanscurrency.network.server.messages.coinmint.CMessageMintCoin;
 import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageChangeSelectedData;
+import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageOpenRecoveryMenu;
 import io.github.lightman314.lightmanscurrency.network.server.messages.notifications.CMessageFlagNotificationsSeen;
 import io.github.lightman314.lightmanscurrency.network.server.messages.persistentdata.CMessageAddPersistentAuction;
 import io.github.lightman314.lightmanscurrency.network.server.messages.persistentdata.CMessageAddPersistentTrader;
@@ -49,11 +51,13 @@ public class LCServerPacketHandler implements PlayChannelHandler {
 		this.registerPacketType(CMessageSetBankNotificationLevel.PACKET_ID, CMessageSetBankNotificationLevel::handle);
 		this.registerPacketType(CMessageATMSetPlayerAccount.PACKET_ID, CMessageATMSetPlayerAccount::handle);
 		this.registerPacketType(CMessageBankTransferPlayer.PACKET_ID, CMessageBankTransferPlayer::handle);
+		this.registerPacketType(CMessageBankTransferTeam.PACKET_ID, CMessageBankTransferTeam::handle);
 
 		//CoinMint
 		this.registerPacketType(CMessageMintCoin.PACKET_ID, CMessageMintCoin::handle);
 
 		//Emergency Ejection
+		this.registerPacketType(CMessageOpenRecoveryMenu.PACKET_ID, CMessageOpenRecoveryMenu::handle);
 		this.registerPacketType(CMessageChangeSelectedData.PACKET_ID, CMessageChangeSelectedData::handle);
 
 		//Persistent Data
@@ -107,14 +111,17 @@ public class LCServerPacketHandler implements PlayChannelHandler {
 	
 	@Override
 	public void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-		try {
-			Identifier type = new Identifier(buffer.readString());
-			LightmansCurrency.LogDebug("Received server packet of type '" + type + "'!");
-			if(PACKET_HANDLERS.containsKey(type))
-				PACKET_HANDLERS.get(type).handle(server, player, handler, buffer, responseSender);
-			else
-				throw new RuntimeException("No packet handler was registered for Client -> Server packet type '" + type + "'!\nStacktrace: " + new Throwable());
-		} catch(Throwable t) { LightmansCurrency.LogError("Error handling server packet!", t); }
+		Identifier type = new Identifier(buffer.readString());
+		LazyPacketData data = LazyPacketData.decode(buffer);
+		server.execute(() -> {
+			try {
+				LightmansCurrency.LogDebug("Handling server packet of type '" + type + "'!");
+				if(PACKET_HANDLERS.containsKey(type))
+					PACKET_HANDLERS.get(type).handle(server, player, handler, data, responseSender);
+				else
+					throw new RuntimeException("No packet handler was registered for Client -> Server packet type '" + type + "'!\nStacktrace: " + new Throwable());
+			} catch(Throwable t) { LightmansCurrency.LogError("Error handling server packet!", t); }
+		});
 	}
 	
 	private void registerPacketType(Identifier type, IServerPacketHandler handler) {
@@ -127,7 +134,7 @@ public class LCServerPacketHandler implements PlayChannelHandler {
 	}
 	
 	public interface IServerPacketHandler {
-		void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender);
+		void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender);
 	}
 	
 

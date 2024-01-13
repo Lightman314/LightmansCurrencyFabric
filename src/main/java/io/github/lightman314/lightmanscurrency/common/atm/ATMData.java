@@ -4,7 +4,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -14,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.client.ServerToClientPacket;
 import io.github.lightman314.lightmanscurrency.util.FileUtil;
 import net.fabricmc.api.EnvType;
@@ -21,8 +21,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 
@@ -83,27 +81,24 @@ public class ATMData extends ServerToClientPacket {
     }
 
     @Override
-    protected void encode(PacketByteBuf buffer) {
+    protected void encode(LazyPacketData.Builder dataBuilder) {
         JsonObject json = this.save();
         String jsonString = FileUtil.GSON.toJson(json);
-        int stringSize = jsonString.length();
-        buffer.writeInt(stringSize);
-        buffer.writeString(jsonString, stringSize);
+        dataBuilder.setString("json", jsonString);
     }
 
-    public static ATMData decode(PacketByteBuf buffer) {
+    public static ATMData decode(LazyPacketData data) {
         try {
             LightmansCurrency.LogDebug("Decoding atm data packet:");
-            int stringSize = buffer.readInt();
-            String jsonString = buffer.readString(stringSize);
+            String jsonString = data.getString("json");
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
             return new ATMData(json);
         } catch(Throwable t) { LightmansCurrency.LogError("Error decoding ATMData.", t); return generateDefault(); }
     }
 
     @Environment(EnvType.CLIENT)
-    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        loadedData = decode(buffer);
+    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
+        loadedData = decode(data);
     }
 
     private static ATMData generateDefault() {
