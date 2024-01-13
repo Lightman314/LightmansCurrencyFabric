@@ -5,11 +5,11 @@ import io.github.lightman314.lightmanscurrency.client.data.ClientNotificationDat
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.notifications.Notification;
 import io.github.lightman314.lightmanscurrency.common.notifications.events.NotificationEvent;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.client.ServerToClientPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 public class SMessageClientNotification extends ServerToClientPacket {
@@ -21,10 +21,10 @@ public class SMessageClientNotification extends ServerToClientPacket {
     public SMessageClientNotification(Notification notification) { super(PACKET_ID); this.notification = notification;}
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeNbt(this.notification.save()); }
+    protected void encode(LazyPacketData.Builder dataBuilder) { dataBuilder.setCompound("notification", this.notification.save()); }
 
-    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        Notification notification = Notification.deserialize(buffer.readUnlimitedNbt());
+    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
+        Notification notification = Notification.deserialize(data.getCompound("notification"));
         if(notification != null)
         {
             if(!NotificationEvent.CLIENT_NOTIFICATION_EVENT.invoker().display(new NotificationEvent.NotificationReceivedOnClient(client.player.getUuid(), ClientNotificationData.GetNotifications(), notification)))

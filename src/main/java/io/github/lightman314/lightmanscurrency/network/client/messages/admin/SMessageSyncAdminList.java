@@ -2,13 +2,13 @@ package io.github.lightman314.lightmanscurrency.network.client.messages.admin;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.client.ServerToClientPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -23,17 +23,18 @@ public class SMessageSyncAdminList extends ServerToClientPacket {
     public SMessageSyncAdminList(List<UUID> serverAdminList) { super(PACKET_ID); this.serverAdminList = serverAdminList; }
 
     @Override
-    public void encode(PacketByteBuf buffer) {
-        buffer.writeInt(this.serverAdminList.size());
-        this.serverAdminList.forEach(buffer::writeUuid);
+    public void encode(LazyPacketData.Builder dataBuilder) {
+        dataBuilder.setInt("size",this.serverAdminList.size());
+        for(int i = 0; i < this.serverAdminList.size(); ++i)
+            dataBuilder.setUUID("entry_" + i, this.serverAdminList.get(i));
     }
 
     @Environment(EnvType.CLIENT)
-    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
+    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
         List<UUID> clientAdminList = new ArrayList<>();
-        int count = buffer.readInt();
-        for(int i = count; i > 0; i--)
-            clientAdminList.add(buffer.readUuid());
+        int count = data.getInt("size");
+        for(int i = 0; i < count; ++i)
+            clientAdminList.add(data.getUUID("entry_" + i));
         CommandLCAdmin.loadAdminPlayers(clientAdminList);
     }
 }

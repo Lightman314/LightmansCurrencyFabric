@@ -3,10 +3,10 @@ package io.github.lightman314.lightmanscurrency.network.server.messages.team;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.client.messages.team.SMessageCreateTeamResponse;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -20,10 +20,10 @@ public class CMessageCreateTeam extends ClientToServerPacket {
     public CMessageCreateTeam(String teamName) { super(PACKET_ID); this.teamName = teamName; }
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeString(this.teamName); }
+    protected void encode(LazyPacketData.Builder dataBuilder) { dataBuilder.setString("name", this.teamName); }
 
-    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        Team newTeam = TeamSaveData.RegisterTeam(player, buffer.readString());
+    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
+        Team newTeam = TeamSaveData.RegisterTeam(player, data.getString("name"));
         if(newTeam != null)
             new SMessageCreateTeamResponse(newTeam.getID()).sendTo(responseSender);
     }

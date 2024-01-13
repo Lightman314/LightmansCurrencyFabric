@@ -111,7 +111,7 @@ public class TransferTab extends ATMTab {
             if(team.getID() == this.selectedTeam)
                 return;
             this.selectedTeam = team.getID();
-        } catch(Exception e) { }
+        } catch(Exception ignored) { }
     }
 
     private void PressTransfer(ButtonWidget button)
@@ -191,7 +191,7 @@ public class TransferTab extends ATMTab {
 
     private boolean hasMessage() { return this.screen.getScreenHandler().hasTransferMessage(); }
 
-    private MutableText getMessage() { return this.screen.getScreenHandler().getTransferMessage(); }
+    private Text getMessage() { return this.screen.getScreenHandler().getTransferMessage(); }
 
     @Override
     public void onClose() {

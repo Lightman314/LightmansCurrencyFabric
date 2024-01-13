@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.network.client.messages.enchantm
 import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.client.ServerToClientPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -10,10 +11,9 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-public class SMessageMoneyMendingClink extends ServerToClientPacket {
+public class SMessageMoneyMendingClink extends ServerToClientPacket.Simple {
 
     public static final Identifier PACKET_ID = new Identifier(LightmansCurrency.MODID, "enchantment_money_clink");
 
@@ -22,11 +22,8 @@ public class SMessageMoneyMendingClink extends ServerToClientPacket {
 
     public SMessageMoneyMendingClink() { super(PACKET_ID); }
 
-    @Override
-    protected void encode(PacketByteBuf buffer) { }
-
     @Environment(EnvType.CLIENT)
-    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
+    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
 
         if(System.currentTimeMillis() - lastClink < CLINK_DELAY || !LCConfig.CLIENT.moneyMendingClink.get())
             return;

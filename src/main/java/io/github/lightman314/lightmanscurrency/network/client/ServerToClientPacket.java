@@ -1,6 +1,7 @@
 package io.github.lightman314.lightmanscurrency.network.client;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -20,11 +21,13 @@ public abstract class ServerToClientPacket {
 	protected final PacketByteBuf encode() {
 		PacketByteBuf buffer = PacketByteBufs.create();
 		buffer.writeString(this.type.toString());
-		try{ this.encode(buffer);
+		LazyPacketData.Builder builder = LazyPacketData.builder();
+		try{ this.encode(builder);
 		} catch (Throwable t) { LightmansCurrency.LogError("Error encoding ServerToClient packet '" + this.type + "'", t); }
+		builder.build().encode(buffer);
 		return buffer;
 	}
-	protected abstract void encode(PacketByteBuf buffer);
+	protected abstract void encode(LazyPacketData.Builder dataBuilder);
 
 	public final void sendToAll() {
 		MinecraftServer server = ServerHook.getServer();
@@ -41,5 +44,12 @@ public abstract class ServerToClientPacket {
 	public final void sendTo(ServerPlayerEntity player) { ServerPlayNetworking.send(player, PacketChannels.SERVER_TO_CLIENT, this.encode()); }
 
 	public final void sendTo(PacketSender packetSender) { packetSender.sendPacket(PacketChannels.SERVER_TO_CLIENT, this.encode()); }
+
+	public static class Simple extends ServerToClientPacket
+	{
+		protected Simple(Identifier type) { super(type); }
+		@Override
+		protected final void encode(LazyPacketData.Builder dataBuilder) { }
+	}
 
 }

@@ -38,7 +38,7 @@ public class SelectionTab extends ATMTab{
 
     TextFieldWidget playerAccountSelect;
     ButtonWidget buttonSelectPlayerAccount;
-    MutableText responseMessage = Text.empty();
+    Text responseMessage = Text.empty();
 
     boolean adminMode = false;
 
@@ -134,7 +134,7 @@ public class SelectionTab extends ATMTab{
             new CMessageATMSetPlayerAccount(playerName).sendToServer();
     }
 
-    public void ReceiveSelectPlayerResponse(MutableText message) { this.responseMessage = message; }
+    public void ReceiveSelectPlayerResponse(Text message) { this.responseMessage = message; }
 
     @Override
     public void preRender(MatrixStack pose, int mouseX, int mouseY, float partialTicks) {
