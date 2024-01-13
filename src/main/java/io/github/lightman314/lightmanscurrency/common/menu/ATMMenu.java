@@ -28,7 +28,7 @@ public class ATMMenu extends Menu implements BankAccount.IBankAccountAdvancedMen
     private final Inventory coinInput = new SimpleInventory(9);
     public Inventory getCoinInput() { return this.coinInput; }
 
-    private MutableText transferMessage = null;
+    private Text transferMessage = null;
 
     public ATMMenu(int windowId, PlayerInventory inventory)
     {
@@ -212,10 +212,10 @@ public class ATMMenu extends Menu implements BankAccount.IBankAccountAdvancedMen
 
     public boolean hasTransferMessage() { return this.transferMessage != null; }
 
-    public MutableText getTransferMessage() { return this.transferMessage; }
+    public Text getTransferMessage() { return this.transferMessage; }
 
     @Override
-    public void setTransferMessage(MutableText message) { this.transferMessage = message; }
+    public void setTransferMessage(Text message) { this.transferMessage = message; }
 
     public void clearMessage() { this.transferMessage = null; }
 

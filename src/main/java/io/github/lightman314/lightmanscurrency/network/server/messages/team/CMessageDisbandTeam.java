@@ -3,9 +3,9 @@ package io.github.lightman314.lightmanscurrency.network.server.messages.team;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -19,10 +19,10 @@ public class CMessageDisbandTeam extends ClientToServerPacket {
     public CMessageDisbandTeam(long teamID) { super(PACKET_ID); this.teamID = teamID; }
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeLong(this.teamID); }
+    protected void encode(LazyPacketData.Builder dataBuilder) { dataBuilder.setLong("team",this.teamID); }
 
-    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        Team team = TeamSaveData.GetTeam(false, buffer.readLong());
+    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
+        Team team = TeamSaveData.GetTeam(false, data.getLong("team"));
         if(team != null && team.isOwner(player))
             TeamSaveData.RemoveTeam(team.getID());
     }

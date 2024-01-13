@@ -1,11 +1,11 @@
 package io.github.lightman314.lightmanscurrency.network.server.messages.blockentity;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
 import io.github.lightman314.lightmanscurrency.network.util.BlockEntityUtil;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,10 +21,10 @@ public class CPacketRequestNBT extends ClientToServerPacket {
     public CPacketRequestNBT(BlockPos pos) { super(PACKET_ID); this.pos = pos; }
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeBlockPos(this.pos); }
+    protected void encode(LazyPacketData.Builder dataBuilder) { dataBuilder.setBlockPos("pos", this.pos); }
 
-    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-        BlockEntity blockEntity = player.getWorld().getBlockEntity(buffer.readBlockPos());
+    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
+        BlockEntity blockEntity = player.getWorld().getBlockEntity(data.getBlockPos("pos"));
         if(blockEntity != null)
             BlockEntityUtil.sendUpdatePacket(blockEntity);
     }

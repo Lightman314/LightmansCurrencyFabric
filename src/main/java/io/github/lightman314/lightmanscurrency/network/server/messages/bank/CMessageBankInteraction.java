@@ -3,10 +3,9 @@ package io.github.lightman314.lightmanscurrency.network.server.messages.bank;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,13 +20,16 @@ public class CMessageBankInteraction extends ClientToServerPacket {
     public CMessageBankInteraction(boolean deposit, CoinValue amount) { super(PACKET_ID); this.deposit = deposit; this.amount = amount; }
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeBoolean(this.deposit); this.amount.encode(buffer); }
+    protected void encode(LazyPacketData.Builder dataBuilder) {
+        dataBuilder.setBoolean("deposit", this.deposit)
+                .setCoinValue("amount", this.amount);
+    }
 
-    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
+    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
         if(player.currentScreenHandler instanceof BankAccount.IBankAccountMenu menu)
         {
-            boolean isDeposit = buffer.readBoolean();
-            CoinValue amount = CoinValue.decode(buffer);
+            boolean isDeposit = data.getBoolean("deposit");
+            CoinValue amount = data.getCoinValue("amount");
             if(isDeposit)
                 BankAccount.DepositCoins(menu, amount);
             else

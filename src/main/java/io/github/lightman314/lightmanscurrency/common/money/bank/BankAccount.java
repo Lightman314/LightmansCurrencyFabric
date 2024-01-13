@@ -367,8 +367,8 @@ public class BankAccount {
 
     public interface IBankAccountAdvancedMenu extends IBankAccountMenu
     {
-        public void setTransferMessage(MutableText component);
-        public default void setNotificationLevel(CoinValue amount) {
+        void setTransferMessage(Text component);
+        default void setNotificationLevel(CoinValue amount) {
             BankAccount account = this.getBankAccount();
             if(account != null)
                 account.setNotificationValue(amount);

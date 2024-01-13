@@ -6,7 +6,9 @@ import java.util.Map;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyData;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.client.messages.admin.SMessageSyncAdminList;
+import io.github.lightman314.lightmanscurrency.network.client.messages.auction.SMessageAttemptBid;
 import io.github.lightman314.lightmanscurrency.network.client.messages.bank.SMessageATMPlayerAccountResponse;
 import io.github.lightman314.lightmanscurrency.network.client.messages.bank.SMessageBankTransferResponse;
 import io.github.lightman314.lightmanscurrency.network.client.messages.data.*;
@@ -84,20 +86,24 @@ public class LCClientPacketHandler implements PlayChannelHandler {
 		//Slot Machine
 		this.registerPacketType(SMessageSlotMachine.PACKET_ID, SMessageSlotMachine::handle);
 
-
+		//Auction House
+		this.registerPacketType(SMessageAttemptBid.PACKET_ID, SMessageAttemptBid::handle);
 
 	}
 
 	@Override
 	public void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
-		try {
-			Identifier type = new Identifier(buffer.readString());
-			LightmansCurrency.LogDebug("Received client packet of type '" + type + "'!");
-			if(PACKET_HANDLERS.containsKey(type))
-				PACKET_HANDLERS.get(type).handle(client, handler, buffer, responseSender);
-			else
-				throw new RuntimeException("No packet handler was registered for Server -> Client packet type '" + type + "'!");
-		} catch(Throwable t) { LightmansCurrency.LogError("Error handling client packet!", t); }
+		Identifier type = new Identifier(buffer.readString());
+		LazyPacketData data = LazyPacketData.decode(buffer);
+		client.execute(() -> {
+			try {
+				LightmansCurrency.LogDebug("Handling client packet of type '" + type + "'!");
+				if(PACKET_HANDLERS.containsKey(type))
+					PACKET_HANDLERS.get(type).handle(client, handler, data, responseSender);
+				else
+					throw new RuntimeException("No packet handler was registered for Server -> Client packet type '" + type + "'!");
+			} catch(Throwable t) { LightmansCurrency.LogError("Error handling client packet!", t); }
+		});
 	}
 
 	public void registerPacketType(Identifier type, IClientPacketHandler handler) {
@@ -110,7 +116,7 @@ public class LCClientPacketHandler implements PlayChannelHandler {
 	}
 	
 	public interface IClientPacketHandler {
-		void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender);
+		void handle(MinecraftClient client, ClientPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender);
 	}
 	
 }

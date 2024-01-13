@@ -198,6 +198,10 @@ public final class LazyPacketData {
         public Builder setBlockPos(String key, BlockPos value) { this.data.put(key, Data.ofBlockPos(value)); return this; }
         public Builder setCoinValue(String key, CoinValue value) { this.data.put(key, Data.ofCoinValue(value)); return this; }
 
+        public Builder clone(LazyPacketData data) {
+            this.data.putAll(data.dataMap);
+            return this;
+        }
 
         public LazyPacketData build() { return new LazyPacketData(this.data); }
 
@@ -236,7 +240,11 @@ public final class LazyPacketData {
             if(this.type == TYPE_DOUBLE)
                 buffer.writeDouble((double)this.value);
             if(this.type == TYPE_STRING)
-                buffer.writeString((String)this.value);
+            {
+                String s = (String)this.value;
+                buffer.writeInt(s.length());
+                buffer.writeString(s);
+            }
             if(this.type == TYPE_UUID)
                 buffer.writeUuid((UUID)this.value);
             //MC values
@@ -270,14 +278,17 @@ public final class LazyPacketData {
             if(type == TYPE_DOUBLE)
                 return ofDouble(buffer.readDouble());
             if(type == TYPE_STRING)
-                return ofString(buffer.readString());
+            {
+                int length = buffer.readInt();
+                return ofString(buffer.readString(length));
+            }
             if(type == TYPE_UUID)
                 return ofUUID(buffer.readUuid());
             //Minecraft Values
             if(type == TYPE_TEXT)
                 return ofText(Text.Serializer.fromJson(buffer.readString()));
             if(type == TYPE_NBT)
-                return ofNBT(buffer.readNbt());
+                return ofNBT(buffer.readUnlimitedNbt());
             if(type == TYPE_BLOCKPOS)
             {
                 int x = buffer.readInt();

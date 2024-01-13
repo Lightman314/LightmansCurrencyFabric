@@ -68,7 +68,7 @@ public class LightmansCurrency implements ModInitializer {
         //WoodType Registration
         //Not yet implemented in this version of LC
 
-		//Trigger Tegistration
+		//Trigger Registration
 		ModItems.registerItems();
 		ModBlocks.registerBlocks();
 		ModBlockEntities.registerBlockEntities();

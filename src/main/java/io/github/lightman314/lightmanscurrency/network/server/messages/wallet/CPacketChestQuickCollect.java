@@ -3,9 +3,9 @@ package io.github.lightman314.lightmanscurrency.network.server.messages.wallet;
 import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
+import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
 import io.github.lightman314.lightmanscurrency.network.server.ClientToServerPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -20,14 +20,14 @@ public class CPacketChestQuickCollect extends ClientToServerPacket {
     private CPacketChestQuickCollect(boolean allowHidden) { super(PACKET_ID); this.allowHidden = allowHidden; }
 
     @Override
-    protected void encode(PacketByteBuf buffer) { buffer.writeBoolean(this.allowHidden); }
+    protected void encode(LazyPacketData.Builder dataBuilder) { dataBuilder.setBoolean("allowHidden", this.allowHidden); }
 
     public static void send() { new CPacketChestQuickCollect(LCConfig.CLIENT.chestButtonAllowHidden.get()).sendToServer(); }
 
-    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
+    public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
         if(player.currentScreenHandler instanceof GenericContainerScreenHandler menu)
         {
-            WalletItem.QuickCollect(player, menu.getInventory(), buffer.readBoolean());
+            WalletItem.QuickCollect(player, menu.getInventory(), data.getBoolean("allowHidden"));
         }
     }
 
