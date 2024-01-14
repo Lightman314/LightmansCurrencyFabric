@@ -61,7 +61,7 @@ public final class SlotMachineEntry {
     public List<ItemStack> getDisplayItems()
     {
         if(this.isMoney())
-            return this.getMoneyValue().getAsSeperatedItemList();
+            return MoneyUtil.getCoinsOfValue(this.getMoneyValue().getRawValue());
         return InventoryUtil.copyList(this.items);
     }
 
