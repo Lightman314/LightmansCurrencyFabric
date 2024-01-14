@@ -503,20 +503,6 @@ public class CoinValue
         return stack;
     }
 
-    public List<ItemStack> getAsSeperatedItemList()
-    {
-        List<ItemStack> items = new ArrayList<>();
-        for(CoinValue.CoinValuePair entry : this.coinValues)
-        {
-            ItemStack stack = new ItemStack(entry.coin, entry.amount);
-            while(stack.getCount() > stack.getMaxCount())
-                items.add(stack.split(stack.getMaxCount()));
-            if(!stack.isEmpty())
-                items.add(stack);
-        }
-        return items;
-    }
-
     public static class CoinValuePair
     {
 
@@ -539,7 +525,27 @@ public class CoinValue
     public static final CoinValue EMPTY = new CoinValue() {
         @Override
         public void load(NbtCompound compound, String key) {
-            LightmansCurrency.LogError("Attempted to modify the empty constant!");
+            LightmansCurrency.LogError("Attempted to modify the empty constant!", new Throwable());
+        }
+        @Override
+        public void loadFromOldValue(long oldPrice) {
+            LightmansCurrency.LogError("Attempted to modify the empty constant!", new Throwable());
+        }
+        @Override
+        public void addValue(CoinValue other) {
+            LightmansCurrency.LogError("Attempted to modify the empty constant!", new Throwable());
+        }
+        @Override
+        public void addValue(Item coin, int amount) {
+            LightmansCurrency.LogError("Attempted to modify the empty constant!", new Throwable());
+        }
+        @Override
+        public void removeValue(Item coin, int amount) {
+            LightmansCurrency.LogError("Attempted to modify the empty constant!", new Throwable());
+        }
+        @Override
+        public void removeValue(CoinValue otherValue) {
+            LightmansCurrency.LogError("Attempted to modify the empty constant!", new Throwable());
         }
     };
 
@@ -611,7 +617,7 @@ public class CoinValue
 
     public JsonElement toJson() {
         if(this.isFree)
-            return new JsonPrimitive(this.isFree);
+            return new JsonPrimitive(true);
         else
         {
             JsonArray array = new JsonArray();
@@ -636,11 +642,10 @@ public class CoinValue
     public boolean equals(Object other) {
         if(this == other)
             return true;
-        else if(!(other instanceof CoinValue))
+        else if(!(other instanceof CoinValue coinValue))
             return false;
         else
         {
-            CoinValue coinValue = (CoinValue)other;
             if(coinValue.isFree && this.isFree)
                 return true;
             else

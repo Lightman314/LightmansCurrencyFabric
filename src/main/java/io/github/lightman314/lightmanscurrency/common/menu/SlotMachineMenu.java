@@ -287,7 +287,7 @@ public class SlotMachineMenu extends Menu {
     public final class RewardCache
     {
         public final Inventory itemHolder;
-        public CoinValue money = CoinValue.EMPTY;
+        public CoinValue money = new CoinValue();
         public RewardCache() { this.itemHolder = new SimpleInventory(SlotMachineEntry.ITEM_LIMIT); }
         public RewardCache(Inventory itemHolder, CoinValue money) { this.itemHolder = itemHolder; this.money = money; }
         public void giveToPlayer()
@@ -295,16 +295,14 @@ public class SlotMachineMenu extends Menu {
             SlotMachineMenu.this.clearContainer(this.itemHolder);
             this.itemHolder.clear();
             MoneyUtil.ProcessChange(null, SlotMachineMenu.this.player, this.money);
-            this.money = CoinValue.EMPTY;
+            this.money = new CoinValue();
         }
 
         public List<ItemStack> getDisplayItems()
         {
             if(this.money.getRawValue() > 0)
             {
-                List<ItemStack> items = new ArrayList<>();
-                items.addAll(this.money.getAsSeperatedItemList());
-                return items;
+                return MoneyUtil.getCoinsOfValue(this.money.getRawValue());
             }
             else
             {
