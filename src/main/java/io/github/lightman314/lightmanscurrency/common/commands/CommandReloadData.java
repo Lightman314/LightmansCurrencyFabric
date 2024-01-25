@@ -31,7 +31,6 @@ public class CommandReloadData {
         TraderSaveData.ReloadPersistentTraders();
         MoneyUtil.reloadMoneyData();
         ATMData.reloadATMData();
-        LCConfig.reloadVillagerOverrides();
         commandContext.getSource().sendFeedback(() -> Text.translatable("command.lightmanscurrency.lcreload"), true);
         return 1;
 

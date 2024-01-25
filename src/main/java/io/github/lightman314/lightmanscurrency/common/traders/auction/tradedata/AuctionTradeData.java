@@ -45,13 +45,13 @@ import net.minecraft.text.Text;
 public class AuctionTradeData extends TradeData {
 
     public static long GetMinimumDuration() {
-        if(LCConfig.SERVER.minAuctionDuration.get() > 0)
-            return TimeUtil.DURATION_DAY * LCConfig.SERVER.minAuctionDuration.get();
+        if(LCConfig.SERVER.auctionHouseDurationMin.get() > 0)
+            return TimeUtil.DURATION_DAY * LCConfig.SERVER.auctionHouseDurationMin.get();
         return TimeUtil.DURATION_HOUR;
     }
     public static long GetDefaultDuration() {
-        if(LCConfig.SERVER.minAuctionDuration.get() > 0)
-            return TimeUtil.DURATION_DAY * LCConfig.SERVER.minAuctionDuration.get();
+        if(LCConfig.SERVER.auctionHouseDurationMax.get() > 0)
+            return TimeUtil.DURATION_DAY * LCConfig.SERVER.auctionHouseDurationMax.get();
         return TimeUtil.DURATION_DAY;
     }
 

@@ -415,7 +415,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
     {
         this.coinValue = newValue.copy();
         if(this.inputType == CoinValue.ValueType.VALUE)
-            this.valueInput.setText(LCConfig.formatValueOnly(newValue.getDisplayValue()));
+            this.valueInput.setText(LCConfig.SERVER.formatValueOnly(newValue.getDisplayValue()));
     }
 
     @Deprecated

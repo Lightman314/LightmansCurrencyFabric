@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.client.data.ClientBankData;
 import io.github.lightman314.lightmanscurrency.common.commands.CommandLCAdmin;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
@@ -200,6 +201,26 @@ public class BankAccount {
 
         return Text.translatable("gui.bank.transfer.success", withdrawnAmount.getString(), destinationAccount.getName());
 
+    }
+
+    public static boolean ServerGiveCoins(BankAccount account, CoinValue amount)
+    {
+        if(account == null || amount.getEntries().size() == 0)
+            return false;
+
+        account.depositCoins(amount);
+        account.pushNotification(() -> new DepositWithdrawNotification.Server(account.getName(), true, amount.copy()));
+        return true;
+    }
+
+    public static Pair<Boolean, CoinValue> ServerTakeCoins(BankAccount account, CoinValue amount)
+    {
+        if(account == null || amount.getEntries().size() == 0)
+            return Pair.of(false, new CoinValue());
+
+        CoinValue taken = account.withdrawCoins(amount);
+        account.pushNotification(() -> new DepositWithdrawNotification.Server(account.getName(), false, taken));
+        return Pair.of(true,taken);
     }
 
     public BankAccount() { this((IMarkDirty)null); }

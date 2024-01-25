@@ -3,7 +3,6 @@ package io.github.lightman314.lightmanscurrency.common.money.util;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandExceptionType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
@@ -11,23 +10,14 @@ import io.github.lightman314.lightmanscurrency.util.NumberUtil;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class CoinValueParser {
 
-    public static CoinValue ParseConfigString(String string, Supplier<CoinValue> defaultValue) {
-        try{
-            return parse(new StringReader(string));
-        } catch(CommandSyntaxException exception) {
-            LightmansCurrency.LogError("Error parsing Coin Value config input.", exception);
-            return defaultValue.get();
-        }
-    }
-
-    public static CoinValue parse(StringReader reader) throws CommandSyntaxException {
+    public static CoinValue parse(StringReader reader, boolean allowEmpty) throws CommandSyntaxException {
         CoinValue value = new CoinValue();
         StringReader inputReader = new StringReader(readStringUntil(reader, ' '));
         while(inputReader.canRead())
@@ -44,9 +34,24 @@ public class CoinValueParser {
                 TryParseCoin(value, inputReader, s1, 1);
             }
         }
-        if(!value.hasAny())
+        if(!allowEmpty && !value.hasAny())
             throw NoValueException(reader);
         return value;
+    }
+
+    public static String writeParsable(@NotNull CoinValue value)
+    {
+        StringBuilder builder = new StringBuilder();
+        boolean comma = false;
+        for(CoinValue.CoinValuePair pair : value.getEntries())
+        {
+            if(comma)
+                builder.append(',');
+            else
+                comma = true;
+            builder.append(pair.amount).append('-').append(Registries.ITEM.getId(pair.coin));
+        }
+        return builder.toString();
     }
 
     private static String readStringUntil(StringReader reader, char... t) throws CommandSyntaxException {

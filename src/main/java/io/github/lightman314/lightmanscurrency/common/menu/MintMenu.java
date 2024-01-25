@@ -4,16 +4,14 @@ import io.github.lightman314.lightmanscurrency.common.blockentity.CoinMintBlockE
 import io.github.lightman314.lightmanscurrency.common.core.ModMenus;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.OutputSlot;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.mint.MintSlot;
-import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
 
-public class MintMenu extends ScreenHandler {
+public class MintMenu extends Menu {
 
     public final CoinMintBlockEntity coinMint;
 
@@ -91,7 +89,5 @@ public class MintMenu extends ScreenHandler {
         return clickedStack;
 
     }
-
-    public boolean isMeltInput() { return MoneyUtil.isCoin(this.coinMint.getStorage().getStack(0)); }
 
 }

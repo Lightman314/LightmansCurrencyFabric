@@ -6,9 +6,9 @@ import java.util.List;
 import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
 import io.github.lightman314.lightmanscurrency.common.crafting.CoinMintRecipe;
 import io.github.lightman314.lightmanscurrency.common.crafting.RecipeValidator;
+import io.github.lightman314.lightmanscurrency.network.util.BlockEntityUtil;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -16,15 +16,23 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class CoinMintBlockEntity extends BlockEntity implements SidedInventory {
+public class CoinMintBlockEntity extends TickableBlockEntity implements SidedInventory {
 
     SimpleInventory storage = new SimpleInventory(2);
     public SimpleInventory getStorage() { return this.storage; }
+
+    private CoinMintRecipe lastRelevantRecipe = null;
+    private int mintTime = 0;
+    public int getMintTime() { return this.mintTime; }
+    public float getMintProgress() { return (float)this.mintTime/(float)this.getExpectedMintTime(); }
+    public int getExpectedMintTime() { if(this.lastRelevantRecipe != null) return this.lastRelevantRecipe.getDuration(); return -1; }
 
     private List<CoinMintRecipe> getCoinMintRecipes()
     {
@@ -33,22 +41,21 @@ public class CoinMintBlockEntity extends BlockEntity implements SidedInventory {
         return new ArrayList<>();
     }
 
-    public static List<CoinMintRecipe> getCoinMintRecipes(World level) {
-        return RecipeValidator.getValidRecipes(level).getCoinMintRecipes();
-    }
+    public static List<CoinMintRecipe> getCoinMintRecipes(World level) { return RecipeValidator.getValidMintRecipes(level); }
 
     public CoinMintBlockEntity(BlockPos pos, BlockState state) { this(ModBlockEntities.COIN_MINT, pos, state); }
 
     protected CoinMintBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.storage.addListener(container -> this.markDirty());
+        this.storage.addListener(this::onInventoryChanged);
     }
 
     @Override
     public void writeNbt(NbtCompound compound)
     {
         InventoryUtil.saveAllItems("Storage", compound, this.storage);
+        compound.putInt("MintTime", this.mintTime);
         super.writeNbt(compound);
     }
 
@@ -57,22 +64,80 @@ public class CoinMintBlockEntity extends BlockEntity implements SidedInventory {
     {
         super.readNbt(compound);
 
-        this.storage = InventoryUtil.loadAllItems("Storage", compound, 2);
-        this.storage.addListener(container -> this.markDirty());
+        if(compound.contains("Storage"))
+        {
+            this.storage = InventoryUtil.loadAllItems("Storage", compound, 2);
+            this.storage.addListener(this::onInventoryChanged);
+        }
 
+        if(compound.contains("MintTime"))
+            this.mintTime = compound.getInt("MintTime");
+
+    }
+
+    @Override
+    public void onLoad() {
+        if(this.world == null)
+            return;
+        if(this.world.isClient)
+            BlockEntityUtil.requestUpdatePacket(this);
+        this.lastRelevantRecipe = this.getRelevantRecipe();
+    }
+
+    private void onInventoryChanged(Inventory inventory)
+    {
+        if(inventory != this.storage)
+            return;
+        this.markDirty();
+        this.checkRecipes();
+    }
+
+    public void checkRecipes() {
+        CoinMintRecipe newRecipe = this.getRelevantRecipe();
+        if(this.lastRelevantRecipe != newRecipe)
+        {
+            this.lastRelevantRecipe = newRecipe;
+            this.mintTime = 0;
+            this.markMintTimeDirty();
+        }
+    }
+
+    @Override
+    public void serverTick() {
+        if(this.world == null)
+            return;
+        if(this.lastRelevantRecipe != null && this.storage.getStack(0).getCount() >= this.lastRelevantRecipe.ingredientCount && this.hasOutputSpace())
+        {
+            this.mintTime++;
+            if(this.mintTime >= this.lastRelevantRecipe.getDuration())
+            {
+                this.mintTime = 0;
+                this.mintCoin();
+                this.world.playSound(null, this.pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.5f, 1f);
+            }
+            this.markMintTimeDirty();
+        }
+        else if(this.mintTime > 0)
+        {
+            this.mintTime = 0;
+            this.markMintTimeDirty();
+        }
+    }
+
+    private void markMintTimeDirty()
+    {
+        this.markDirty();
+        NbtCompound updateTag = new NbtCompound();
+        updateTag.putInt("MintTime", this.mintTime);
+        BlockEntityUtil.sendUpdatePacket(this, updateTag);
     }
 
     public void dumpContents(World world, BlockPos pos) { InventoryUtil.dumpContents(world, pos, this.storage); }
 
     //Coin Minting Functions
-    public boolean validMintInput()
-    {
-        return !getMintOutput().isEmpty();
-    }
-
     public boolean validMintInput(ItemStack item)
     {
-        Inventory tempInv = new SimpleInventory(1);
+        Inventory tempInv = new SimpleInventory(2);
         tempInv.setStack(0, item);
         for(CoinMintRecipe recipe : this.getCoinMintRecipes())
         {
@@ -84,75 +149,52 @@ public class CoinMintBlockEntity extends BlockEntity implements SidedInventory {
 
     /**
      * Returns the amount of available empty space the output slot has.
-     * Returns 0 if the mint input does not create the same item currently in the output slot.
+     * Returns 0 if the mint input does not createTrue the same item currently in the output slot.
      */
-    public int validOutputSpace()
+    public boolean hasOutputSpace()
     {
         //Determine how many more coins can fit in the output slot based on the input item
-        ItemStack mintOutput = getMintOutput();
+        if(this.lastRelevantRecipe == null || this.world == null)
+            return false;
+        ItemStack mintOutput = this.lastRelevantRecipe.getOutput(this.world.getRegistryManager());
         ItemStack currentOutputSlot = this.getStorage().getStack(1);
         if(currentOutputSlot.isEmpty())
-            return 64;
-        else if(currentOutputSlot.getItem() != mintOutput.getItem())
-            return 0;
-        return 64 - currentOutputSlot.getCount();
+            return true;
+        else if(!InventoryUtil.ItemMatches(currentOutputSlot, mintOutput))
+            return false;
+        return currentOutputSlot.getMaxCount() - currentOutputSlot.getCount() >= this.lastRelevantRecipe.getOutputItem().getCount();
     }
 
-    /**
-     * Returns the current item that would result from a single minting of the current input item
-     */
-    public ItemStack getMintOutput()
+    @Nullable
+    public CoinMintRecipe getRelevantRecipe()
     {
-        ItemStack mintInput = this.getStorage().getStack(0);
-        if(mintInput.isEmpty())
-            return ItemStack.EMPTY;
+        if(this.getStorage().getStack(0).isEmpty())
+            return null;
         for(CoinMintRecipe recipe : this.getCoinMintRecipes())
         {
             if(recipe.matches(this.storage, this.world))
-                return recipe.craft(this.storage, this.world.getRegistryManager()).copy();
+                return recipe;
         }
-
-        return ItemStack.EMPTY;
+        return null;
     }
 
-    /**
-     * Returns the maximum result item stack that can fit into the output slots.
-     */
-    public ItemStack getMintableOutput() {
-        ItemStack output = getMintOutput();
-        int countPerMint = output.getCount();
-        int outputSpace = validOutputSpace();
-        //Shrink by 1, as the first input item is consumed in the starting output item count
-        int inputCount = this.storage.getStack(0).getCount() - 1;
-        while(output.getCount() + countPerMint <= outputSpace && inputCount > 0)
-        {
-            output.increment(countPerMint);
-            inputCount--;
-        }
-        return output;
-    }
-
-    public void mintCoins(int mintCount)
+    public void mintCoin()
     {
-        //Ignore if no valid input is present
-        if(!validMintInput())
+        this.lastRelevantRecipe = this.getRelevantRecipe();
+        if(this.lastRelevantRecipe == null || this.world == null)
             return;
-
-        //Determine how many to mint based on the input count & whether a fullStack input was given.
-        if(mintCount > this.getStorage().getStack(0).getCount())
-        {
-            mintCount = this.getStorage().getStack(0).getCount();
-        }
+        ItemStack mintOutput = this.lastRelevantRecipe.getOutput(this.world.getRegistryManager());
+        //Ignore if no valid input is present
+        if(mintOutput.isEmpty())
+            return;
 
         //Confirm that the output slot has enough room for the expected outputs
-        if(mintCount > validOutputSpace())
-            mintCount = validOutputSpace();
-        if(mintCount <= 0)
+        if(!this.hasOutputSpace())
             return;
 
-        //Get the output items
-        ItemStack mintOutput = getMintOutput();
-        mintOutput.setCount(mintCount);
+        //Confirm that we have the required inputs
+        if(this.storage.getStack(0).getCount() < this.lastRelevantRecipe.ingredientCount)
+            return;
 
         //Place the output item(s)
         if(this.getStorage().getStack(1).isEmpty())
@@ -161,11 +203,11 @@ public class CoinMintBlockEntity extends BlockEntity implements SidedInventory {
         }
         else
         {
-            this.getStorage().getStack(1).setCount(this.getStorage().getStack(1).getCount() + mintOutput.getCount());
+            this.getStorage().getStack(1).increment(mintOutput.getCount());
         }
 
         //Remove the input item(s)
-        this.getStorage().getStack(0).setCount(this.getStorage().getStack(0).getCount() - mintCount);
+        this.getStorage().removeStack(0, mintOutput.getCount());
 
         //Job is done!
         this.markDirty();
@@ -176,13 +218,22 @@ public class CoinMintBlockEntity extends BlockEntity implements SidedInventory {
     public NbtCompound toInitialChunkDataNbt() { return this.createNbt(); }
 
     @Override
-    public int[] getAvailableSlots(Direction side) { return side == Direction.DOWN ? new int[]{1} : new int[]{0}; }
+    public int[] getAvailableSlots(Direction side) {
+        //Insert only from above
+        if(side == Direction.UP)
+            return new int[]{0};
+        //Extract only from below
+        else if(side == Direction.DOWN)
+            return new int[]{1};
+        //Insert and extract from the sides
+        return new int[]{0,1};
+    }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) { return dir != Direction.DOWN; }
+    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) { return slot == 0; }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) { return dir == Direction.DOWN; }
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) { return slot == 1; }
 
     @Override
     public int size() { return this.storage.size(); }
@@ -191,24 +242,13 @@ public class CoinMintBlockEntity extends BlockEntity implements SidedInventory {
     public boolean isEmpty() { return this.storage.isEmpty(); }
 
     @Override
-    public ItemStack getStack(int slot) {
-        if(slot == 1 && this.storage.getStack(1).isEmpty())
-            return this.getMintableOutput();
-        return this.storage.getStack(slot);
-    }
+    public ItemStack getStack(int slot) { return this.storage.getStack(slot); }
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
         if(slot != 1)
             return ItemStack.EMPTY;
-        else
-        {
-            ItemStack outputItem = this.storage.getStack(1);
-            //Mint coins until we have the requested amount if the output stack is empty
-            if(outputItem.isEmpty() || InventoryUtil.ItemMatches(outputItem, this.getMintOutput()))
-                this.mintCoins(amount - outputItem.getCount());
-            return this.storage.removeStack(slot, amount);
-        }
+        return this.storage.removeStack(slot,amount);
     }
 
     @Override

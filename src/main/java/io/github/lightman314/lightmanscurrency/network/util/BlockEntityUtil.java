@@ -35,7 +35,10 @@ public class BlockEntityUtil {
             LightmansCurrency.LogWarning("Cannot send Block Entity Update Packet from a client.");
     }
 
-    public static void requestUpdatePacket(BlockEntity blockEntity) { requestUpdatePacket(blockEntity.getWorld(), blockEntity.getPos()); }
+    public static void requestUpdatePacket(BlockEntity blockEntity) {
+        if(blockEntity == null || blockEntity.getWorld() == null)
+            return;
+        requestUpdatePacket(blockEntity.getWorld(), blockEntity.getPos()); }
 
     public static void requestUpdatePacket(World level, BlockPos pos) { if(level.isClient) new CPacketRequestNBT(pos).sendToServer(); }
 

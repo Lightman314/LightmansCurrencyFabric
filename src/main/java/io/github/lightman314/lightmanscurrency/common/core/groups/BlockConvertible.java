@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface BlockConvertible {
 
-    public Iterable<Block> asBlock();
+    Iterable<Block> asBlock();
 
 }

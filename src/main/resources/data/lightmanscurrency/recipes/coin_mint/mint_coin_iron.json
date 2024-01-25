@@ -1,0 +1,10 @@
+{
+  "type": "lightmanscurrency:coin_mint",
+  "ingredient": {
+    "tag": "c:iron_ingots"
+  },
+  "mintType": "MINT",
+  "result": {
+    "item": "lightmanscurrency:coin_iron"
+  }
+}

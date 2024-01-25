@@ -1,7 +1,10 @@
 package io.github.lightman314.lightmanscurrency.client;
 
+import io.github.lightman314.lightmanscurrency.api.config.ConfigFile;
+import io.github.lightman314.lightmanscurrency.api.config.SyncedConfigFile;
 import io.github.lightman314.lightmanscurrency.client.colors.TicketColor;
 import io.github.lightman314.lightmanscurrency.client.data.*;
+import io.github.lightman314.lightmanscurrency.client.gui.overlay.WalletDisplayOverlay;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.*;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ItemEditWidget;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.FreezerTraderBlockEntityRenderer;
@@ -75,6 +78,11 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		this.registerEventListeners();
 		ClientEventListeners.init();
 
+		//Register Synced Config reset listener
+		ClientPlayConnectionEvents.DISCONNECT.register((handler,client) -> SyncedConfigFile.onClientLeavesServer());
+
+		WalletDisplayOverlay.setup();
+
 	}
 
 	private void setRenderLayer(RenderLayer layer, BlockConvertible... blocks) {
@@ -94,6 +102,7 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		LivingEntityFeatureRendererRegistrationCallback.EVENT.register(WalletLayer::registerLayer);
 
 		ClientPlayConnectionEvents.INIT.register(((handler, client) -> ItemEditWidget.initItemList()));
+		ClientPlayConnectionEvents.INIT.register((handler,client) -> ConfigFile.reloadFiles());
 
 		ClientPlayConnectionEvents.DISCONNECT.register(ClientBankData::onClientLogout);
 		ClientPlayConnectionEvents.DISCONNECT.register(ClientEjectionData::onClientLogout);

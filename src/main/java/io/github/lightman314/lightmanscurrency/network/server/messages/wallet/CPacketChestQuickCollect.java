@@ -22,7 +22,7 @@ public class CPacketChestQuickCollect extends ClientToServerPacket {
     @Override
     protected void encode(LazyPacketData.Builder dataBuilder) { dataBuilder.setBoolean("allowHidden", this.allowHidden); }
 
-    public static void send() { new CPacketChestQuickCollect(LCConfig.CLIENT.chestButtonAllowHidden.get()).sendToServer(); }
+    public static void send() { new CPacketChestQuickCollect(LCConfig.CLIENT.chestButtonAllowSideChains.get()).sendToServer(); }
 
     public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
         if(player.currentScreenHandler instanceof GenericContainerScreenHandler menu)
