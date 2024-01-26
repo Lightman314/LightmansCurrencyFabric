@@ -57,7 +57,7 @@ public class TradingTerminalScreen extends Screen implements IScrollable{
 
     private List<TraderData> traderList(){
         List<TraderData> traderList = TraderSaveData.GetAllTerminalTraders(true);
-        traderList.removeIf(d -> d instanceof AuctionHouseTrader && !LCConfig.SERVER.enableAuctionHouse.get());
+        traderList.removeIf(d -> d instanceof AuctionHouseTrader && !LCConfig.SERVER.auctionHouseEnabled.get());
         traderList.sort(TERMINAL_SORTER);
         return traderList;
     }

@@ -68,7 +68,7 @@ public class CoinMagnetEnchantment {
         enchantLevel -= 1;
         if(enchantLevel < 0)
             return 0f;
-        return LCConfig.SERVER.coinMagnetRangeBase.get() + (LCConfig.SERVER.coinMagnetRangeLevel.get() * Math.min(enchantLevel, MAX_CALCULATION_LEVEL - 1));
+        return LCConfig.SERVER.coinMagnetBaseRange.get() + (LCConfig.SERVER.coinMagnetLeveledRange.get() * Math.min(enchantLevel, MAX_CALCULATION_LEVEL - 1));
     }
 
     public static Text getCollectionRangeDisplay(int enchantLevel) {

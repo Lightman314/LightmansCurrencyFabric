@@ -6,23 +6,18 @@ import com.google.gson.JsonSyntaxException;
 import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.core.ModRecipes;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.*;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.util.JsonHelper;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 public class CoinMintRecipe implements Recipe<Inventory> {
 
     public enum MintType { MINT, MELT, OTHER }
-
 
     public static MintType readType(JsonElement json)
     {
@@ -43,37 +38,32 @@ public class CoinMintRecipe implements Recipe<Inventory> {
 
     private final Identifier id;
     private final MintType type;
+    private final int duration;
     private final Ingredient ingredient;
-    private final Item result;
+    public final int ingredientCount;
+    private final ItemStack result;
 
-    public CoinMintRecipe(Identifier id, MintType type, Ingredient ingredient, ItemConvertible result)
+    public CoinMintRecipe(Identifier id, MintType type, int duration, Ingredient ingredient, int ingredientCount, ItemStack result)
     {
         this.id = id;
         this.type = type;
+        this.duration = duration;
         this.ingredient = ingredient;
-        this.result = result.asItem();
+        this.ingredientCount = Math.max(ingredientCount,1);
+        this.result = result;
     }
 
     public Ingredient getIngredient() { return this.ingredient; }
-    public ItemStack getResult() { if(this.isValid()) return new ItemStack(this.result); return ItemStack.EMPTY; }
+    @Override
+    public DefaultedList<Ingredient> getIngredients() { return DefaultedList.ofSize(1, this.ingredient); }
+
     public MintType getMintType() { return this.type; }
 
-    public boolean allowed()
-    {
-        if(this.type == MintType.MINT)
-        {
-            return LCConfig.SERVER.allowCoinMinting.get() && LCConfig.canMint(this.result);
-        }
-        else if(this.type == MintType.MELT)
-        {
-            try {
-                return LCConfig.SERVER.allowCoinMelting.get() && LCConfig.canMelt(this.ingredient.getMatchingStacks()[0].getItem());
-            } catch(Exception e) { return false; }
-        }
-        return true;
-    }
+    public boolean allowed() { return LCConfig.SERVER.allowCoinMintRecipe(this); }
 
-    public boolean isValid() { return !this.ingredient.isEmpty() && this.result.asItem() != Items.AIR && this.allowed(); }
+    public boolean shouldShowInREI() { return !this.ingredient.isEmpty() && this.result.getItem() != Items.AIR; }
+
+    public boolean isValid() { return !this.ingredient.isEmpty() && this.result.getItem() != Items.AIR && this.allowed(); }
 
     @Override
     public boolean matches(Inventory inventory, World level) {
@@ -84,13 +74,18 @@ public class CoinMintRecipe implements Recipe<Inventory> {
     }
 
     @Override
-    public ItemStack craft(Inventory inventory) { return this.getResult(); }
+    public ItemStack craft(Inventory inventory) { return this.getOutput(); }
 
     @Override
     public boolean fits(int width, int height) { return true; }
 
+    public ItemStack getOutputItem() { return this.result.copy(); }
+
     @Override
-    public ItemStack getOutput() { return this.getResult(); }
+    public ItemStack getOutput() { if(this.isValid()) return this.result.copy(); return ItemStack.EMPTY; }
+
+    public int getInternalDuration() { return this.duration; }
+    public int getDuration() { return this.duration > 0 ? this.duration : LCConfig.SERVER.coinMintDefaultDuration.get(); }
 
     @Override
     public Identifier getId() { return this.id; }
@@ -105,42 +100,39 @@ public class CoinMintRecipe implements Recipe<Inventory> {
 
         @Override
         public CoinMintRecipe read(Identifier id, JsonObject json) {
-            if(!json.has("ingredient"))
-            {
-                throw new JsonSyntaxException("Missing ingredient, expected to find an item.");
-            }
-            Ingredient ingredient = Ingredient.fromJson(json.getAsJsonObject("ingredient"));
-            if(!json.has("result"))
-            {
-                throw new JsonSyntaxException("Missing result. Expected to find an item.");
-            }
-            ItemStack result = new ItemStack(Registry.ITEM.get(new Identifier(json.get("result").getAsString())));
+            Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
+            int ingredientCount = JsonHelper.getInt(json, "count", 1);
+
+            ItemStack result = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "result"));
             if(result.isEmpty())
-            {
                 throw new JsonSyntaxException("Result is empty.");
-            }
             MintType type = MintType.OTHER;
             if(json.has("mintType"))
-                type = CoinMintRecipe.readType(json.get("mintType"));
+                type = CoinMintRecipe.readType(JsonHelper.getString(json, "mintType", "OTHER"));
 
-            return new CoinMintRecipe(id, type, ingredient, result.getItem());
+            int duration = JsonHelper.getInt(json, "duration", 0);
+
+            return new CoinMintRecipe(id, type, duration, ingredient, ingredientCount, result);
         }
 
         @Override
         public CoinMintRecipe read(Identifier id, PacketByteBuf buffer) {
             CoinMintRecipe.MintType type = CoinMintRecipe.readType(buffer.readString());
             Ingredient ingredient = Ingredient.fromPacket(buffer);
+            int ingredientCount = buffer.readInt();
             ItemStack result = buffer.readItemStack();
-            return new CoinMintRecipe(id, type, ingredient, result.getItem());
+            int duration = buffer.readInt();
+            return new CoinMintRecipe(id, type, duration, ingredient, ingredientCount, result);
         }
 
         @Override
         public void write(PacketByteBuf buffer, CoinMintRecipe recipe) {
             buffer.writeString(recipe.getMintType().name());
             recipe.getIngredient().write(buffer);
-            buffer.writeItemStack(recipe.getResult());
+            buffer.writeInt(recipe.ingredientCount);
+            buffer.writeItemStack(recipe.getOutputItem());
+            buffer.writeInt(recipe.getInternalDuration());
         }
     }
-
 
 }

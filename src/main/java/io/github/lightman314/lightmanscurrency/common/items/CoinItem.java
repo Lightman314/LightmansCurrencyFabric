@@ -49,9 +49,9 @@ public class CoinItem extends Item{
 				}
 				case VALUE -> {
 					double value = coinData.getDisplayValue();
-					tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value", LCConfig.formatValueDisplay(value)).formatted(Formatting.YELLOW));
+					tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value", LCConfig.SERVER.formatValueDisplay(value)).formatted(Formatting.YELLOW));
 					if (stack.getCount() > 1)
-						tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value.stack", LCConfig.formatValueDisplay(value * stack.getCount())).formatted(Formatting.YELLOW));
+						tooltip.add(EasyText.translatable("tooltip.lightmanscurrency.coinworth.value.stack", LCConfig.SERVER.formatValueDisplay(value * stack.getCount())).formatted(Formatting.YELLOW));
 				}
 				default -> {
 				} //Default is NONE

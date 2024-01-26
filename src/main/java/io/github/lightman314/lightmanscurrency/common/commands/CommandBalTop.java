@@ -55,7 +55,20 @@ public class CommandBalTop {
                 allAccounts.add(BankAccount.GenerateReference(false, team));
         }
         //Remove any accidental null entries from the list
-        while(allAccounts.remove(null));
+        //Remove any null or empty entries from the list
+        allAccounts.removeIf(bar -> {
+            if(bar == null)
+                return true;
+            BankAccount ba = bar.get();
+            if(ba == null)
+                return true;
+            return ba.getCoinStorage().getRawValue() <= 0;
+        });
+        if(allAccounts.size() == 0)
+        {
+            EasyText.sendCommandFail(source, EasyText.translatable("command.lightmanscurrency.lcbaltop.no_results"));
+            return 0;
+        }
         //Sort the bank account by balance (and name if balance is tied).
         allAccounts.sort(new AccountSorter());
 
@@ -64,7 +77,7 @@ public class CommandBalTop {
 
         if(startIndex >= allAccounts.size())
         {
-            source.sendError(EasyText.translatable("command.lightmanscurrency.lcbaltop.error.page"));
+            EasyText.sendCommandFail(source, EasyText.translatable("command.lightmanscurrency.lcbaltop.error.page"));
             return 0;
         }
 
@@ -78,7 +91,7 @@ public class CommandBalTop {
                 Text name = account.getName();
                 String amount = account.getCoinStorage().getString("0");
                 source.sendFeedback(EasyText.translatable("command.lightmanscurrency.lcbaltop.entry", i + 1, name, amount), false);
-            } catch(Exception e) { }
+            } catch(Exception ignored) { }
         }
 
         return 1;

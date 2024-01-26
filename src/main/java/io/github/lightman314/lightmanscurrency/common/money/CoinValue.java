@@ -403,7 +403,7 @@ public class CoinValue
                     return emptyFiller;
                 return string;
             case VALUE:
-                return LCConfig.formatValueDisplay(this.getDisplayValue());
+                return LCConfig.SERVER.formatValueDisplay(this.getDisplayValue());
             default:
                 return "?";
         }

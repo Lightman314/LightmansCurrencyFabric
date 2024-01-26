@@ -11,11 +11,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class DepositWithdrawNotification extends Notification {
 
     public static final Identifier PLAYER_TYPE = new Identifier(LightmansCurrency.MODID, "bank_deposit_player");
     public static final Identifier TRADER_TYPE = new Identifier(LightmansCurrency.MODID, "bank_deposit_trader");
+    public static final Identifier SERVER_TYPE = new Identifier(LightmansCurrency.MODID, "bank_deposit_server");
 
     protected MutableText accountName;
     protected boolean isDeposit;
@@ -76,9 +78,8 @@ public abstract class DepositWithdrawNotification extends Notification {
 
         @Override
         protected boolean canMerge(Notification other) {
-            if(other instanceof Player)
+            if(other instanceof Player n)
             {
-                Player n = (Player)other;
                 return n.accountName.equals(this.accountName) && n.isDeposit == this.isDeposit && n.amount.equals(this.amount) && n.player.is(this.player);
             }
             return false;
@@ -112,13 +113,28 @@ public abstract class DepositWithdrawNotification extends Notification {
 
         @Override
         protected boolean canMerge(Notification other) {
-            if(other instanceof Trader)
+            if(other instanceof Trader n)
             {
-                Trader n = (Trader)other;
                 return n.accountName.equals(this.accountName) && n.isDeposit == this.isDeposit && n.amount.equals(this.amount) && n.traderName.equals(this.traderName);
             }
             return false;
         }
+
+    }
+
+    public static class Server extends DepositWithdrawNotification {
+
+        public Server(MutableText accountName, boolean isDeposit, CoinValue amount) { super(accountName, isDeposit, amount); }
+        public Server(NbtCompound tag) { this.load(tag); }
+
+        @Override
+        protected MutableText getName() { return EasyText.translatable("notifications.bank.server"); }
+
+        @Override
+        protected Identifier getType() { return SERVER_TYPE; }
+
+        @Override
+        protected boolean canMerge(@NotNull Notification other) { return false; }
 
     }
 

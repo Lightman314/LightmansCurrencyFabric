@@ -46,7 +46,7 @@ public class TraderSaveData extends PersistentState {
     public static final String PERSISTENT_AUCTION_SECTION = "Auctions";
 
     private void validateAuctionHouse() {
-        if(!LCConfig.SERVER.enableAuctionHouse.get())
+        if(!LCConfig.SERVER.auctionHouseEnabled.get())
         {
             LightmansCurrency.LogInfo("Will not create or validate the auction house as the auction house is disabled.");
             return;
@@ -501,7 +501,7 @@ public class TraderSaveData extends PersistentState {
                 tsd.traderData.values().removeIf(traderData -> {
                     if(!traderData.isPersistent() && traderData.shouldRemove(server))
                     {
-                        if(LCConfig.SERVER.safelyEjectIllegalBreaks.get())
+                        if(LCConfig.SERVER.safelyEjectMachineContents.get())
                         {
                             try {
                                 World level = server.getWorld(traderData.getLevel());

@@ -49,7 +49,7 @@ public class ChestCoinCollectButton extends IconButton {
             ItemStack wallet = WalletHandler.getWallet(mc.player).getWallet();
             if(WalletItem.isWallet(wallet))
             {
-                final boolean allowHidden = LCConfig.CLIENT.chestButtonAllowHidden.get();
+                final boolean allowHidden = LCConfig.CLIENT.chestButtonAllowSideChains.get();
                 //Check menu inventory for coins
                 Inventory container = this.screen.getScreenHandler().getInventory();
                 for(int i = 0; i < container.size(); ++i)

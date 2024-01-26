@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.easy.EasyText;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
@@ -31,7 +30,6 @@ public class CommandReloadData {
         TraderSaveData.ReloadPersistentTraders();
         MoneyUtil.reloadMoneyData();
         ATMData.reloadATMData();
-        LCConfig.reloadVillagerOverrides();
         commandContext.getSource().sendFeedback(EasyText.translatable("command.lightmanscurrency.lcreload"), true);
         return 1;
 

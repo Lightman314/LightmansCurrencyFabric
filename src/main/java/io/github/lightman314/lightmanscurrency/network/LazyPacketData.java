@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public final class LazyPacketData {
@@ -31,6 +32,7 @@ public final class LazyPacketData {
     public static final byte TYPE_BLOCKPOS = 66;
 
     private final ImmutableMap<String,Data> dataMap;
+    public Set<String> getAllKeys() { return this.dataMap.keySet(); }
 
     private LazyPacketData(Map<String,Data> data) { this.dataMap = ImmutableMap.copyOf(data); }
 
@@ -159,7 +161,7 @@ public final class LazyPacketData {
         buffer.writeInt(this.dataMap.entrySet().size());
         //Write each entry
         this.dataMap.forEach((key,data) -> {
-            buffer.writeString(key, 32);
+            buffer.writeString(key);
             buffer.writeByte(data.type);
             data.encode(buffer);
         });
@@ -170,7 +172,7 @@ public final class LazyPacketData {
         HashMap<String,Data> dataMap = new HashMap<>();
         for(int i = 0; i < count; ++i)
         {
-            String key = buffer.readString(32);
+            String key = buffer.readString();
             Data data = Data.decode(buffer);
             dataMap.put(key, data);
         }

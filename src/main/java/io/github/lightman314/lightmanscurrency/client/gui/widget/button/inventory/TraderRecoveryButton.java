@@ -41,7 +41,7 @@ public class TraderRecoveryButton extends InventoryButton {
     @Override
     @NotNull
     protected ScreenPosition getScreenPosition(ScreenPosition parentCorner, boolean isParentCreative) {
-        return parentCorner.offset(isParentCreative ? ScreenPosition.of(LCConfig.CLIENT.notificationAndTeamButtonXCreative.get(), LCConfig.CLIENT.notificationAndTeamButtonYCreative.get()): ScreenPosition.of(LCConfig.CLIENT.notificationAndTeamButtonX.get(), LCConfig.CLIENT.notificationAndTeamButtonY.get())).offset(OFFSET);
+        return parentCorner.offset(isParentCreative ? LCConfig.CLIENT.notificationAndTeamButtonCreativePosition.get(): LCConfig.CLIENT.notificationAndTeamButtonPosition.get()).offset(OFFSET);
     }
 
     @Override
