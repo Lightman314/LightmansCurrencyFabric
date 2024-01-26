@@ -321,7 +321,7 @@ public class VillagerTradeManager {
     private static void modifyGenericWandererTrades(List<TradeOffers.Factory> existingOffers)
     {
         if(LCConfig.COMMON.changeWanderingTrades.get())
-            replaceExistingTrades(LCConfig.COMMON.defaultTraderCoin, existingOffers);
+            replaceExistingTrades(LCConfig.COMMON.defaultVillagerReplacementCoin, existingOffers);
         if(LCConfig.COMMON.addCustomWanderingTrades.get())
             existingOffers.addAll(getGenericWandererTrades());
     }
@@ -329,7 +329,7 @@ public class VillagerTradeManager {
     private static void modifyRareWandererTrades(List<TradeOffers.Factory> existingOffers)
     {
         if(LCConfig.COMMON.changeWanderingTrades.get())
-            replaceExistingTrades(LCConfig.COMMON.defaultTraderCoin, existingOffers);
+            replaceExistingTrades(LCConfig.COMMON.defaultVillagerReplacementCoin, existingOffers);
         if(LCConfig.COMMON.addCustomWanderingTrades.get())
             existingOffers.addAll(getRareWandererTrades());
     }
@@ -337,7 +337,7 @@ public class VillagerTradeManager {
     private static void modifyOtherVillagerTrades(Identifier profession, List<TradeOffers.Factory> existingOffers)
     {
         if(profession.getNamespace().contentEquals("minecraft") ? LCConfig.COMMON.changeVanillaTrades.get() : LCConfig.COMMON.changeModdedTrades.get())
-            replaceExistingTrades(() -> LCConfig.getEmeraldReplacementItem(profession.toString()), existingOffers);
+            replaceExistingTrades(() -> LCConfig.COMMON.getEmeraldReplacementItem(profession.toString()), existingOffers);
     }
 
     private static void addBankerTrades(int level, List<TradeOffers.Factory> existingOffers)

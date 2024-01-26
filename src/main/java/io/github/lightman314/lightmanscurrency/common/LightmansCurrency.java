@@ -2,6 +2,8 @@ package io.github.lightman314.lightmanscurrency.common;
 
 import com.google.common.collect.Lists;
 import io.github.lightman314.lightmanscurrency.LCConfig;
+import io.github.lightman314.lightmanscurrency.api.config.ConfigFile;
+import io.github.lightman314.lightmanscurrency.api.config.SyncedConfigFile;
 import io.github.lightman314.lightmanscurrency.common.Reference.*;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMIconData;
@@ -47,8 +49,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraftforge.api.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,9 +87,7 @@ public class LightmansCurrency implements ModInitializer {
         ModGameRules.registerGameRules();
 
         //Register Configs
-        ModLoadingContext.registerConfig(MODID, ModConfig.Type.CLIENT, LCConfig.clientSpec);
-        ModLoadingContext.registerConfig(MODID, ModConfig.Type.COMMON, LCConfig.commonSpec);
-        ModLoadingContext.registerConfig(MODID, ModConfig.Type.SERVER, LCConfig.serverSpec);
+        LCConfig.init();
 
         //Register villager trades
         VillagerTradeManager.registerVillagerTrades();
@@ -143,6 +141,7 @@ public class LightmansCurrency implements ModInitializer {
         Notification.register(ChangeSettingNotification.ADVANCED_TYPE, ChangeSettingNotification.Advanced::new);
         Notification.register(DepositWithdrawNotification.PLAYER_TYPE, DepositWithdrawNotification.Player::new);
         Notification.register(DepositWithdrawNotification.TRADER_TYPE, DepositWithdrawNotification.Trader::new);
+        Notification.register(DepositWithdrawNotification.SERVER_TYPE, DepositWithdrawNotification.Server::new);
         Notification.register(BankTransferNotification.TYPE, BankTransferNotification::new);
         Notification.register(SlotMachineTradeNotification.TYPE, SlotMachineTradeNotification::new);
 
@@ -174,7 +173,7 @@ public class LightmansCurrency implements ModInitializer {
         //Add non-ServerHook listeners to the Server Hook event so that any subclasses can get the server from the ServerHook storage.
         ServerHook.addServerStartListener(server -> MoneyUtil.reloadMoneyData());
         ServerHook.addServerStartListener(server -> ATMData.reloadATMData());
-        ServerHook.addServerStartListener(server -> LCConfig.reloadVillagerOverrides());
+        ServerHook.addServerStartListener(server -> ConfigFile.reloadFiles());
 
         //Server Tick Event
         ServerTickEvents.START_SERVER_TICK.register(TraderSaveData::onServerTick);
@@ -193,6 +192,7 @@ public class LightmansCurrency implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> NotificationSaveData.OnPlayerLogin(handler.player, sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> CommandLCAdmin.SendAdminList(sender));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> SMessageSyncTime.CreatePacket().sendTo(sender));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> SyncedConfigFile.playerJoined(handler.getPlayer()));
 
         //Killed by other entity event
         LootTableEvents.MODIFY.register(LootManager::onLootTableLoaded);
@@ -205,6 +205,8 @@ public class LightmansCurrency implements ModInitializer {
         DefaultMoneyDataCollection.EVENT.register(MoneyUtil::initializeDefaultCoins);
 
         EnchantmentEvents.registerEventListeners();
+
+        LootManager.setup();
 
     }
 
@@ -266,11 +268,9 @@ public class LightmansCurrency implements ModInitializer {
     {
         LOGGER.info(message);
     }
-    
-    public static void LogWarning(String message)
-    {
-        LOGGER.warn(message);
-    }
+
+    public static void LogWarning(String message) { LOGGER.warn(message); }
+    public static void LogWarning(String message, Object... objects) { LOGGER.warn(message, objects); }
     
     public static void LogError(String message, Object... objects)
     {

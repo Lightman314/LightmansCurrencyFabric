@@ -2,9 +2,11 @@ package io.github.lightman314.lightmanscurrency.common.blocks;
 
 import java.util.List;
 
-import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.common.blockentity.CoinMintBlockEntity;
+import io.github.lightman314.lightmanscurrency.common.blockentity.TickableBlockEntity;
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.RotatableBlock;
+import io.github.lightman314.lightmanscurrency.common.blocks.util.TickerUtil;
+import io.github.lightman314.lightmanscurrency.common.core.ModBlockEntities;
 import io.github.lightman314.lightmanscurrency.common.items.TooltipItem;
 import io.github.lightman314.lightmanscurrency.common.items.tooltips.LCTooltips;
 import io.github.lightman314.lightmanscurrency.common.menu.MintMenu;
@@ -12,6 +14,8 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -38,6 +42,8 @@ public class CoinMintBlock extends RotatableBlock implements BlockEntityProvider
 	
 	@Override
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new CoinMintBlockEntity(pos, state); }
+	@Nullable
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World level, BlockState state, BlockEntityType<T> type) { return TickerUtil.createTickerHelper(type, ModBlockEntities.COIN_MINT, TickableBlockEntity::tickHandler); }
 	@Override
 	@SuppressWarnings("deprecation")
 	public ActionResult onUse(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
@@ -45,11 +51,8 @@ public class CoinMintBlock extends RotatableBlock implements BlockEntityProvider
 		if(!level.isClient)
 		{
 			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if(blockEntity instanceof CoinMintBlockEntity && LCConfig.SERVER.allowCoinMinting.get() || LCConfig.SERVER.allowCoinMelting.get())
-			{
+			if(blockEntity instanceof CoinMintBlockEntity)
 				player.openHandledScreen(new CoinMintMenuProvider(pos));
-				return ActionResult.SUCCESS;
-			}
 		}
 		return ActionResult.SUCCESS;
 	}
@@ -59,11 +62,8 @@ public class CoinMintBlock extends RotatableBlock implements BlockEntityProvider
 	public void onStateReplaced(BlockState state, World level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		BlockEntity blockEntity = level.getBlockEntity(pos);
-		if(blockEntity instanceof CoinMintBlockEntity)
-		{
-			CoinMintBlockEntity mintEntity = (CoinMintBlockEntity)blockEntity;
+		if(blockEntity instanceof CoinMintBlockEntity mintEntity)
 			mintEntity.dumpContents(level, pos);
-		}
 		super.onStateReplaced(state, level, pos, newState, isMoving);
 	}
 	

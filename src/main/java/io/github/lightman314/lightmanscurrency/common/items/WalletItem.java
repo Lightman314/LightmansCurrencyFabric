@@ -73,7 +73,7 @@ public class WalletItem extends Item{
 	{
 		if(wallet == null)
 			return false;
-		return wallet.level >= LCConfig.SERVER.walletConvertLevel.get() || wallet.level >= LCConfig.SERVER.walletPickupLevel.get();
+		return wallet.level >= LCConfig.SERVER.walletExchangeLevel.get() || wallet.level >= LCConfig.SERVER.walletPickupLevel.get();
 	}
 	
 	/**

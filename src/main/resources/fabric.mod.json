@@ -23,7 +23,10 @@
     ],
     "client": [
       "io.github.lightman314.lightmanscurrency.client.LightmansCurrencyClient"
-    ]
+    ],
+	"rei_client": [
+	  "io.github.lightman314.lightmanscurrency.integration.rei.LCClientPlugin"
+	]
   },
   "mixins": [
     "lightmanscurrency.mixins.json"
@@ -33,10 +36,7 @@
     "fabricloader": ">=0.14.9",
     "fabric-api": "*",
     "minecraft": "~1.19",
-    "java": ">=17",
-    "forgeconfigapiport": "*",
-    "com_electronwill_night-config_core": "*",
-    "com_electronwill_night-config_toml": "*"
+    "java": ">=17"
   },
   "suggests": {
     "another-mod": "*"

@@ -1,7 +1,10 @@
 package io.github.lightman314.lightmanscurrency.client;
 
+import io.github.lightman314.lightmanscurrency.api.config.ConfigFile;
+import io.github.lightman314.lightmanscurrency.api.config.SyncedConfigFile;
 import io.github.lightman314.lightmanscurrency.client.colors.TicketColor;
 import io.github.lightman314.lightmanscurrency.client.data.*;
+import io.github.lightman314.lightmanscurrency.client.gui.overlay.WalletDisplayOverlay;
 import io.github.lightman314.lightmanscurrency.client.gui.screen.inventory.*;
 import io.github.lightman314.lightmanscurrency.client.gui.widget.ItemEditWidget;
 import io.github.lightman314.lightmanscurrency.client.renderer.blockentity.FreezerTraderBlockEntityRenderer;
@@ -35,7 +38,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -83,6 +85,11 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		this.registerEventListeners();
 		ClientEventListeners.init();
 
+		//Register Synced Config reset listener
+		ClientPlayConnectionEvents.DISCONNECT.register((handler,client) -> SyncedConfigFile.onClientLeavesServer());
+
+		WalletDisplayOverlay.setup();
+
 	}
 
 	private void setRenderLayer(RenderLayer layer, BlockConvertible... blocks) {
@@ -104,6 +111,7 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(this::stitchTextures);
 
 		ClientPlayConnectionEvents.INIT.register(((handler, client) -> ItemEditWidget.initItemList()));
+		ClientPlayConnectionEvents.INIT.register((handler,client) -> ConfigFile.reloadFiles());
 
 		ClientPlayConnectionEvents.DISCONNECT.register(ClientBankData::onClientLogout);
 		ClientPlayConnectionEvents.DISCONNECT.register(ClientEjectionData::onClientLogout);

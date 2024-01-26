@@ -7,19 +7,18 @@ import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.atm.ATMData;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyData;
 import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
-import io.github.lightman314.lightmanscurrency.network.client.messages.admin.SMessageSyncAdminList;
-import io.github.lightman314.lightmanscurrency.network.client.messages.auction.SMessageAttemptBid;
-import io.github.lightman314.lightmanscurrency.network.client.messages.bank.SMessageATMPlayerAccountResponse;
-import io.github.lightman314.lightmanscurrency.network.client.messages.bank.SMessageBankTransferResponse;
+import io.github.lightman314.lightmanscurrency.network.client.messages.admin.*;
+import io.github.lightman314.lightmanscurrency.network.client.messages.auction.*;
+import io.github.lightman314.lightmanscurrency.network.client.messages.bank.*;
+import io.github.lightman314.lightmanscurrency.network.client.messages.config.*;
 import io.github.lightman314.lightmanscurrency.network.client.messages.data.*;
-import io.github.lightman314.lightmanscurrency.network.client.messages.ejectiondata.SMessageChangeSelectedData;
-import io.github.lightman314.lightmanscurrency.network.client.messages.enchantments.SMessageMoneyMendingClink;
-import io.github.lightman314.lightmanscurrency.network.client.messages.notifications.SMessageClientNotification;
-import io.github.lightman314.lightmanscurrency.network.client.messages.slot_machine.SMessageSlotMachine;
-import io.github.lightman314.lightmanscurrency.network.client.messages.team.SMessageCreateTeamResponse;
-import io.github.lightman314.lightmanscurrency.network.client.messages.time.SMessageSyncTime;
-import io.github.lightman314.lightmanscurrency.network.client.messages.trader.SMessageStorageInteraction;
-import io.github.lightman314.lightmanscurrency.network.client.messages.trader.SMessageSyncUserCount;
+import io.github.lightman314.lightmanscurrency.network.client.messages.ejectiondata.*;
+import io.github.lightman314.lightmanscurrency.network.client.messages.enchantments.*;
+import io.github.lightman314.lightmanscurrency.network.client.messages.notifications.*;
+import io.github.lightman314.lightmanscurrency.network.client.messages.slot_machine.*;
+import io.github.lightman314.lightmanscurrency.network.client.messages.team.*;
+import io.github.lightman314.lightmanscurrency.network.client.messages.time.*;
+import io.github.lightman314.lightmanscurrency.network.client.messages.trader.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.PlayChannelHandler;
@@ -88,6 +87,10 @@ public class LCClientPacketHandler implements PlayChannelHandler {
 
 		//Auction House
 		this.registerPacketType(SMessageAttemptBid.PACKET_ID, SMessageAttemptBid::handle);
+
+		//Config
+		this.registerPacketType(SPacketReloadConfig.PACKET_ID, SPacketReloadConfig::handle);
+		this.registerPacketType(SPacketSyncConfig.PACKET_ID, SPacketSyncConfig::handle);
 
 	}
 

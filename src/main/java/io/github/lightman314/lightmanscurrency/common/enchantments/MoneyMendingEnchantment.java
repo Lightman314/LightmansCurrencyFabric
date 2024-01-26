@@ -9,6 +9,7 @@ import io.github.lightman314.lightmanscurrency.common.menu.wallet.WalletMenuBase
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
+import io.github.lightman314.lightmanscurrency.integration.trinketsapi.LCTrinketsAPI;
 import io.github.lightman314.lightmanscurrency.network.client.messages.enchantments.SMessageMoneyMendingClink;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
 import net.minecraft.enchantment.Enchantment;
@@ -42,7 +43,7 @@ public class MoneyMendingEnchantment extends Enchantment {
         return otherEnchant != Enchantments.MENDING && super.canAccept(otherEnchant);
     }
 
-    public static CoinValue getRepairCost() { return LCConfig.SERVER.moneyMendingCoinCost.get(); }
+    public static CoinValue getRepairCost() { return LCConfig.SERVER.moneyMendingRepairCost.get(); }
 
     public static void runPlayerTick(ServerPlayerEntity player) {
         WalletHandler walletHandler = WalletHandler.getWallet(player);
@@ -55,12 +56,16 @@ public class MoneyMendingEnchantment extends Enchantment {
                 return;
             //Go through the players inventory searching for items with the money mending enchantment
             Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.chooseEquipmentWith(ModEnchantments.MONEY_MENDING, player, ItemStack::isDamaged);
-            if (entry != null) {
+            final ItemStack result;
+            if(entry == null)
+                result = LCTrinketsAPI.findMoneyMendingItem(player);
+            else
+                result = entry.getValue();
+            if (result != null) {
                 //Repair the item
-                ItemStack item = entry.getValue();
-                int currentDamage = item.getDamage();
+                int currentDamage = result.getDamage();
                 long repairAmount = Math.min(currentDamage, currentWalletValue / repairCost);
-                item.setDamage(currentDamage - (int) repairAmount);
+                result.setDamage(currentDamage - (int) repairAmount);
                 currentWalletValue -= repairAmount * repairCost;
                 //Remove the coins from the players inventory
                 SimpleInventory newWalletInventory = new SimpleInventory(walletInventory.size());

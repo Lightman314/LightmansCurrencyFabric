@@ -91,8 +91,8 @@ public class AuctionCreateClientTab extends TraderStorageClientTab<AuctionCreate
 
         //Duration Input
         this.timeInput = this.screen.addRenderableTabWidget(new TimeInputWidget(this.screen.getGuiLeft() + 80, this.screen.getGuiTop() + 112, 10, TimeUnit.DAY, TimeUnit.HOUR, this.screen::addRenderableTabWidget, this::updateDuration));
-        this.timeInput.minDuration = Math.max(LCConfig.SERVER.minAuctionDuration.get() * TimeUtil.DURATION_DAY, TimeUtil.DURATION_HOUR);
-        this.timeInput.maxDuration = Math.max(LCConfig.SERVER.maxAuctionDuration.get(), LCConfig.SERVER.minAuctionDuration.get()) * TimeUtil.DURATION_DAY;
+        this.timeInput.minDuration = Math.max(LCConfig.SERVER.auctionHouseDurationMin.get() * TimeUtil.DURATION_DAY, TimeUtil.DURATION_HOUR);
+        this.timeInput.maxDuration = Math.max(LCConfig.SERVER.auctionHouseDurationMax.get(), LCConfig.SERVER.auctionHouseDurationMin.get()) * TimeUtil.DURATION_DAY;
         this.timeInput.setTime(this.timeInput.minDuration);
 
         //Submit Button

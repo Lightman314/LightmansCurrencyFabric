@@ -12,7 +12,6 @@ import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CPacketChestQuickCollect;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
@@ -50,7 +49,7 @@ public class ChestCoinCollectButton extends IconButton {
             ItemStack wallet = WalletHandler.getWallet(mc.player).getWallet();
             if(WalletItem.isWallet(wallet))
             {
-                final boolean allowHidden = LCConfig.CLIENT.chestButtonAllowHidden.get();
+                final boolean allowHidden = LCConfig.CLIENT.chestButtonAllowSideChains.get();
                 //Check menu inventory for coins
                 Inventory container = this.screen.getScreenHandler().getInventory();
                 for(int i = 0; i < container.size(); ++i)

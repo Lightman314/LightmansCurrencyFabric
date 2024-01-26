@@ -362,7 +362,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
             LightmansCurrency.LogError("Invalid index (" + coinIndex + ") found for the decreasing button.");
     }
 
-    private final int getLargeIncreaseAmount(Item coinItem)
+    private int getLargeIncreaseAmount(Item coinItem)
     {
         Pair<Item,Integer> upwardConversion = MoneyUtil.getUpwardConversion(coinItem);
         if(upwardConversion != null)
@@ -377,7 +377,7 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
         }
     }
 
-    private final int getLargeAmount(Pair<Item,Integer> conversion)
+    private int getLargeAmount(Pair<Item,Integer> conversion)
     {
         if(conversion.getSecond() >= 64)
             return 16;
@@ -412,16 +412,16 @@ public class CoinValueInput extends ClickableWidget implements ScrollBarWidget.I
     {
         this.coinValue = newValue.copy();
         if(this.inputType == CoinValue.ValueType.VALUE)
-            this.valueInput.setText(LCConfig.formatValueOnly(newValue.getDisplayValue()));
+            this.valueInput.setText(LCConfig.SERVER.formatValueOnly(newValue.getDisplayValue()));
     }
 
     @Deprecated
-    public static interface ICoinValueInput
+    public interface ICoinValueInput
     {
-        public <T extends Element & Drawable & Selectable> T addCustomWidget(T button);
-        public int getWidth();
-        public TextRenderer getFont();
-        public void OnCoinValueChanged(CoinValueInput input);
+        <T extends Element & Drawable & Selectable> T addCustomWidget(T button);
+        int getWidth();
+        TextRenderer getFont();
+        void OnCoinValueChanged(CoinValueInput input);
     }
 
     private void scrollLeft() {

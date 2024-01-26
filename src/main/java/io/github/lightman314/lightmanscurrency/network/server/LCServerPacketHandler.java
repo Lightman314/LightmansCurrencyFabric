@@ -5,24 +5,19 @@ import java.util.Map;
 
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.network.LazyPacketData;
-import io.github.lightman314.lightmanscurrency.network.server.messages.auction.CMessageSubmitBid;
+import io.github.lightman314.lightmanscurrency.network.server.messages.auction.*;
 import io.github.lightman314.lightmanscurrency.network.server.messages.bank.*;
-import io.github.lightman314.lightmanscurrency.network.server.messages.blockentity.CPacketRequestNBT;
-import io.github.lightman314.lightmanscurrency.network.server.messages.coinmint.CMessageMintCoin;
-import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageChangeSelectedData;
-import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.CMessageOpenRecoveryMenu;
-import io.github.lightman314.lightmanscurrency.network.server.messages.notifications.CMessageFlagNotificationsSeen;
-import io.github.lightman314.lightmanscurrency.network.server.messages.persistentdata.CMessageAddPersistentAuction;
-import io.github.lightman314.lightmanscurrency.network.server.messages.persistentdata.CMessageAddPersistentTrader;
-import io.github.lightman314.lightmanscurrency.network.server.messages.slot_machine.CMessageSlotMachine;
+import io.github.lightman314.lightmanscurrency.network.server.messages.blockentity.*;
+import io.github.lightman314.lightmanscurrency.network.server.messages.emergencyejection.*;
+import io.github.lightman314.lightmanscurrency.network.server.messages.notifications.*;
+import io.github.lightman314.lightmanscurrency.network.server.messages.persistentdata.*;
+import io.github.lightman314.lightmanscurrency.network.server.messages.slot_machine.*;
 import io.github.lightman314.lightmanscurrency.network.server.messages.team.*;
-import io.github.lightman314.lightmanscurrency.network.server.messages.ticket_machine.CMessageCraftTicket;
+import io.github.lightman314.lightmanscurrency.network.server.messages.ticket_machine.*;
 import io.github.lightman314.lightmanscurrency.network.server.messages.trader.*;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.*;
-import io.github.lightman314.lightmanscurrency.network.server.messages.traderinterface.CMessageHandlerMessage;
-import io.github.lightman314.lightmanscurrency.network.server.messages.traderinterface.CMessageInterfaceInteraction;
-import io.github.lightman314.lightmanscurrency.network.server.messages.walletslot.CMessageSetWalletVisible;
-import io.github.lightman314.lightmanscurrency.network.server.messages.walletslot.CMessageWalletInteraction;
+import io.github.lightman314.lightmanscurrency.network.server.messages.traderinterface.*;
+import io.github.lightman314.lightmanscurrency.network.server.messages.walletslot.*;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayChannelHandler;
 import net.minecraft.network.PacketByteBuf;
@@ -52,9 +47,6 @@ public class LCServerPacketHandler implements PlayChannelHandler {
 		this.registerPacketType(CMessageATMSetPlayerAccount.PACKET_ID, CMessageATMSetPlayerAccount::handle);
 		this.registerPacketType(CMessageBankTransferPlayer.PACKET_ID, CMessageBankTransferPlayer::handle);
 		this.registerPacketType(CMessageBankTransferTeam.PACKET_ID, CMessageBankTransferTeam::handle);
-
-		//CoinMint
-		this.registerPacketType(CMessageMintCoin.PACKET_ID, CMessageMintCoin::handle);
 
 		//Emergency Ejection
 		this.registerPacketType(CMessageOpenRecoveryMenu.PACKET_ID, CMessageOpenRecoveryMenu::handle);
