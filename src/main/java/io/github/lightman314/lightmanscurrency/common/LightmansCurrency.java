@@ -169,7 +169,7 @@ public class LightmansCurrency implements ModInitializer {
         //Add non-ServerHook listeners to the Server Hook event so that any subclasses can get the server from the ServerHook storage.
         ServerHook.addServerStartListener(server -> MoneyUtil.reloadMoneyData());
         ServerHook.addServerStartListener(server -> ATMData.reloadATMData());
-        ServerHook.addServerStartListener(server -> ConfigFile.reloadFiles());
+        ServerHook.addServerStartListener(server -> ConfigFile.reloadServerFiles());
 
         //Server Tick Event
         ServerTickEvents.START_SERVER_TICK.register(TraderSaveData::onServerTick);
