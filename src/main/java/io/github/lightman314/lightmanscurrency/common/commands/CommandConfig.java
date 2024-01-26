@@ -28,7 +28,7 @@ public class CommandConfig {
         if(commandContext.getSource().hasPermissionLevel(2))
         {
             involveAdmins = true;
-            ConfigFile.reloadFiles();
+            ConfigFile.reloadServerFiles();
             result++;
         }
         ServerPlayerEntity player = commandContext.getSource().getPlayer();

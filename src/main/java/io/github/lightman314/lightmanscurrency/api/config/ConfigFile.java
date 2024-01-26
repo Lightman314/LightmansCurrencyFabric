@@ -22,28 +22,20 @@ public abstract class ConfigFile {
 
     private static final List<ConfigFile> loadableFiles = new ArrayList<>();
 
-    private static void registerConfig(@NotNull ConfigFile file)
-    {
-        if(file.isClientOnly() && FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT)
-            return;
-        loadableFiles.add(file);
-    }
+    private static void registerConfig(@NotNull ConfigFile file) { loadableFiles.add(file); }
 
-    public static void reloadFiles()
+    public static void reloadClientFiles() { reloadFiles(true); }
+    public static void reloadServerFiles() { reloadFiles(false); }
+    private static void reloadFiles(boolean logicalClient)
     {
         for(ConfigFile file : loadableFiles)
         {
-            if(!file.reloading)
-            {
-                new Thread(() -> {
-                    try { file.reload();
-                    } catch (IllegalArgumentException e) { LightmansCurrency.LogError("Error setting up config file!", e); }
-                }).start();
-            }
+            try {
+                if(file.shouldReload(logicalClient))
+                    file.reload();
+            } catch (IllegalArgumentException e) { LightmansCurrency.LogError("Error setting up config file!", e); }
         }
     }
-
-    private boolean reloading = false;
 
     @NotNull
     protected String getConfigFolder() { return "config"; }
@@ -112,8 +104,19 @@ public abstract class ConfigFile {
 
 
     protected boolean isClientOnly() { return false; }
+    protected boolean isServerOnly() { return false; }
 
     protected abstract void setup(@NotNull ConfigBuilder builder);
+
+    public boolean shouldReload(boolean isLogicalClient) {
+        if(this.isClientOnly() && !isLogicalClient)
+            return false;
+        if(this.isServerOnly() && isLogicalClient)
+            return false;
+        return true;
+    }
+
+    private boolean reloading = false;
 
     public final void reload()
     {
@@ -121,8 +124,9 @@ public abstract class ConfigFile {
         if(this.reloading)
             return;
 
-        LightmansCurrency.LogInfo("Reloading " + this.getFilePath());
         this.reloading = true;
+
+        LightmansCurrency.LogInfo("Reloading " + this.getFilePath());
 
         this.confirmSetup();
 
