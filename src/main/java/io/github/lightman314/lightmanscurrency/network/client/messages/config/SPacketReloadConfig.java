@@ -21,7 +21,7 @@ public class SPacketReloadConfig extends ServerToClientPacket.Simple {
 
     @Environment(EnvType.CLIENT)
     public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, LazyPacketData data, PacketSender responseSender) {
-        ConfigFile.reloadFiles();
+        ConfigFile.reloadClientFiles();
     }
 
 }
