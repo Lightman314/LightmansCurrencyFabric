@@ -86,6 +86,8 @@ public class LightmansCurrency implements ModInitializer {
 
         //Register Configs
         LCConfig.init();
+        //Manually reload common config here for villager trade config options
+        LCConfig.COMMON.reload();
 
         //Register villager trades
         VillagerTradeManager.registerVillagerTrades();
@@ -169,7 +171,7 @@ public class LightmansCurrency implements ModInitializer {
         //Add non-ServerHook listeners to the Server Hook event so that any subclasses can get the server from the ServerHook storage.
         ServerHook.addServerStartListener(server -> MoneyUtil.reloadMoneyData());
         ServerHook.addServerStartListener(server -> ATMData.reloadATMData());
-        ServerHook.addServerStartListener(server -> ConfigFile.reloadServerFiles());
+        ServerHook.addServerStartListener(server -> ConfigFile.loadServerFiles(ConfigFile.LoadPhase.GAME_START));
 
         //Server Tick Event
         ServerTickEvents.START_SERVER_TICK.register(TraderSaveData::onServerTick);

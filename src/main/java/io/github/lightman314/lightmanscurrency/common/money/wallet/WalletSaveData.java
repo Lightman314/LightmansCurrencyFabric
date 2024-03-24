@@ -63,26 +63,24 @@ public class WalletSaveData extends PersistentState {
     }
 
     @NotNull
-    public static WalletHandler GetPlayerWallet(PlayerEntity player) { return GetPlayerWallet(player.getUuid(), player.getWorld().isClient); }
-
-    @NotNull
-    public static WalletHandler GetPlayerWallet(UUID playerID, boolean isClient) {
-        if(isClient)
+    public static WalletHandler GetPlayerWallet(@NotNull PlayerEntity player)
+    {
+        if(player.getWorld().isClient)
         {
-            return ClientWalletData.GetPlayerWallet(playerID);
+            return ClientWalletData.GetPlayerWallet(player);
         }
         else
         {
             WalletSaveData wsd = get();
             if(wsd != null)
             {
-                if(wsd.playerWalletData.containsKey(Objects.requireNonNull(playerID)))
-                    return  wsd.playerWalletData.get(playerID);
+                if(wsd.playerWalletData.containsKey(Objects.requireNonNull(player.getUuid())))
+                    return wsd.playerWalletData.get(player.getUuid()).updatePlayer(player);
                 //Create new wallet handler for the new player
                 WalletHandler newHandler = new WalletHandler();
-                wsd.playerWalletData.put(playerID, newHandler);
-                wsd.markWalletHandlerDirty(playerID, newHandler);
-                return newHandler;
+                wsd.playerWalletData.put(player.getUuid(), newHandler);
+                wsd.markWalletHandlerDirty(player.getUuid(), newHandler);
+                return newHandler.updatePlayer(player);
             }
             return new WalletHandler();
         }
@@ -94,13 +92,14 @@ public class WalletSaveData extends PersistentState {
         WalletSaveData wsd = get();
         if(wsd != null)
         {
-            for(UUID player : wsd.relevantPlayers)
+            for(ServerPlayerEntity player : server.getPlayerManager().getPlayerList())
             {
-                WalletHandler handler = GetPlayerWallet(player, false);
+                WalletHandler handler = GetPlayerWallet(player);
+                handler.tick();
                 if(handler.isDirty())
                 {
                     handler.clean();
-                    wsd.markWalletHandlerDirty(player, handler);
+                    wsd.markWalletHandlerDirty(player.getUuid(), handler);
                 }
             }
         }

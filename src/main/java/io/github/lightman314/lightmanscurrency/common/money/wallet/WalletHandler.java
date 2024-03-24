@@ -3,6 +3,7 @@ package io.github.lightman314.lightmanscurrency.common.money.wallet;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.WalletSlot;
+import io.github.lightman314.lightmanscurrency.integration.trinketsapi.LCTrinketsAPI;
 import io.github.lightman314.lightmanscurrency.util.DebugUtil;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,16 +22,25 @@ public class WalletHandler{
     //Wallet Visibility
     private boolean visible = true;
     private boolean wasVisible = true;
+    private PlayerEntity latestPlayer = null;
+
+    public WalletHandler updatePlayer(@NotNull PlayerEntity player) { this.latestPlayer = player; return this; }
 
     /**
      * The currently equipped wallet on the player.
      */
-    public ItemStack getWallet() { return this.wallet; }
+    public ItemStack getWallet() {
+        if(LCTrinketsAPI.isValid(this.latestPlayer))
+            return LCTrinketsAPI.getWallet(this.latestPlayer);
+        return this.wallet;
+    }
 
     /**
      * Sets the currently equipped wallet on the player.
      */
     public void setWallet(ItemStack walletStack) {
+        if(LCTrinketsAPI.isValid(this.latestPlayer) && LCTrinketsAPI.setWallet(this.latestPlayer,walletStack))
+            return;
         this.wallet = walletStack;
         if(!(walletStack.getItem() instanceof WalletItem) && !walletStack.isEmpty())
             LightmansCurrency.LogWarning("Equipped a non-wallet to the players wallet slot.");
@@ -39,7 +49,11 @@ public class WalletHandler{
     /**
      * Whether the wallet should be rendered
      */
-    public boolean visible() { return this.visible; }
+    public boolean visible() {
+        if(LCTrinketsAPI.isValid(this.latestPlayer))
+            return true;
+        return this.visible;
+    }
 
     /**
      *
@@ -59,7 +73,15 @@ public class WalletHandler{
     /**
      * Run every server tick.
      */
-    public void tick() {}
+    public void tick() {
+        if(this.latestPlayer == null)
+            return;
+        if(!this.wallet.isEmpty() && LCTrinketsAPI.isValid(this.latestPlayer))
+        {
+            if(LCTrinketsAPI.setWallet(this.latestPlayer, this.wallet))
+                this.wallet = ItemStack.EMPTY;
+        }
+    }
 
     /**
      * Save the nbt data to file
@@ -83,7 +105,7 @@ public class WalletHandler{
     }
 
     @NotNull
-    public static WalletHandler getWallet(PlayerEntity player) { return WalletSaveData.GetPlayerWallet(player); }
+    public static WalletHandler getWallet(@NotNull PlayerEntity player) { return WalletSaveData.GetPlayerWallet(player); }
 
     public static void WalletSlotInteraction(PlayerEntity player, int clickedSlot, boolean heldShift, ItemStack heldItem)
     {

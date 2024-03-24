@@ -175,7 +175,7 @@ public final class LCConfig {
     public static class Common extends ConfigFile
     {
 
-        private Common() { super("lightmanscurrency-common"); }
+        private Common() { super("lightmanscurrency-common", LoadPhase.NULL); }
 
 
         //Crafting Options
