@@ -88,6 +88,7 @@ public class LightmansCurrency implements ModInitializer {
 
         //Register Configs
         LCConfig.init();
+        LCConfig.COMMON.reload();
 
         //Register villager trades
         VillagerTradeManager.registerVillagerTrades();
