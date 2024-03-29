@@ -14,7 +14,6 @@ import io.github.lightman314.lightmanscurrency.common.money.bank.BankAccount;
 import io.github.lightman314.lightmanscurrency.common.money.bank.BankSaveData;
 import io.github.lightman314.lightmanscurrency.common.teams.Team;
 import io.github.lightman314.lightmanscurrency.common.teams.TeamSaveData;
-import io.github.lightman314.lightmanscurrency.secrets.Secret;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -29,7 +28,7 @@ public class CommandBank {
 
         LiteralArgumentBuilder<ServerCommandSource> bankCommand
                 = CommandManager.literal("lcbank")
-                .requires(stack -> stack.hasPermissionLevel(2) || Secret.hasSecretAccess(stack))
+                .requires(stack -> stack.hasPermissionLevel(2))
                 .then(CommandManager.literal("give")
                         .then(CommandManager.literal("allPlayers")
                                 .then(CommandManager.argument("amount", MoneyValueArgument.argument(registryAccess))

@@ -36,17 +36,20 @@ public abstract class SyncedConfigFile extends ConfigFile {
     protected final Identifier id;
 
     protected SyncedConfigFile(@NotNull String fileName, @NotNull Identifier id) {
-        super(fileName);
+        super(fileName, LoadPhase.GAME_START);
         this.id = id;
         if(fileMap.containsKey(this.id))
             throw new IllegalArgumentException("Synced Config " + this.id + " already exists!");
         fileMap.put(this.id, this);
     }
 
+    private boolean loadedSyncData = false;
+    @Override
+    public boolean isLoaded() { return super.isLoaded() || this.loadedSyncData; }
     @Override
     protected void afterReload() { this.createSyncPacket().sendToAll(); }
 
-    public final void clearSyncedData() { this.forEach(ConfigOption::clearSyncedData); }
+    public final void clearSyncedData() { this.forEach(ConfigOption::clearSyncedData); this.loadedSyncData = false; }
 
     @NotNull
     private Map<String,String> getSyncData()

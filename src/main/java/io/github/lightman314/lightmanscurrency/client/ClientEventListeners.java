@@ -14,6 +14,7 @@ import io.github.lightman314.lightmanscurrency.common.core.ModSounds;
 import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.menu.slots.WalletSlot;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
+import io.github.lightman314.lightmanscurrency.integration.trinketsapi.LCTrinketsAPI;
 import io.github.lightman314.lightmanscurrency.network.server.messages.wallet.CMessageOpenWalletMenu;
 import io.github.lightman314.lightmanscurrency.network.server.messages.walletslot.CMessageSetWalletVisible;
 import io.github.lightman314.lightmanscurrency.network.server.messages.walletslot.CMessageWalletInteraction;
@@ -89,10 +90,14 @@ public class ClientEventListeners {
         {
             HandledScreen<?> gui = (HandledScreen<?>) screen;
 
-            //Add wallet slot related buttons
             List<ClickableWidget> screenWidgets = Screens.getButtons(screen);
-            screenWidgets.add(new WalletButton(gui));
-            screenWidgets.add(new WalletVisibilityToggleButton(gui));
+
+            //Add wallet slot related buttons
+            if(!LCTrinketsAPI.isValid(client.player))
+            {
+                screenWidgets.add(new WalletButton(gui));
+                screenWidgets.add(new WalletVisibilityToggleButton(gui));
+            }
 
             //Add notification button(s)
             screenWidgets.add(new NotificationButton(gui));
@@ -136,6 +141,8 @@ public class ClientEventListeners {
             }
 
             MinecraftClient client = Screens.getClient(screen);
+            if(LCTrinketsAPI.isValid(client.player))
+                return;
             WalletHandler walletHandler = WalletHandler.getWallet(client.player);
 
             ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfig.CLIENT.walletSlotCreative.get() : LCConfig.CLIENT.walletSlot.get();
@@ -170,17 +177,19 @@ public class ClientEventListeners {
             }
 
             MinecraftClient client = Screens.getClient(screen);
-            WalletHandler walletHandler = WalletHandler.getWallet(client.player);
-            ItemStack wallet = walletHandler.getWallet();
-
-            ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfig.CLIENT.walletSlotCreative.get() : LCConfig.CLIENT.walletSlot.get();
-            slotPosition = slotPosition.offset(ScreenUtil.getScreenCorner(gui));
-
-            //Render slot tooltip
-            if(isMouseOverWalletSlot(mouseX, mouseY, slotPosition.offset(-1,-1)))
+            if(!LCTrinketsAPI.isValid(client.player))
             {
-                if(!wallet.isEmpty())
-                    screen.renderTooltip(pose, ItemRenderUtil.getTooltipFromItem(wallet), mouseX, mouseY);
+                WalletHandler walletHandler = WalletHandler.getWallet(client.player);
+                ItemStack wallet = walletHandler.getWallet();
+
+                ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfig.CLIENT.walletSlotCreative.get() : LCConfig.CLIENT.walletSlot.get();
+                slotPosition = slotPosition.offset(ScreenUtil.getScreenCorner(gui));
+
+                //Render slot tooltip
+                if (isMouseOverWalletSlot(mouseX, mouseY, slotPosition.offset(-1, -1))) {
+                    if (!wallet.isEmpty())
+                        screen.renderTooltip(pose, ItemRenderUtil.getTooltipFromItem(wallet), mouseX, mouseY);
+                }
             }
 
             //Render Notification & Team Manager Tooltips
@@ -199,6 +208,9 @@ public class ClientEventListeners {
                 if(creativeScreen.getSelectedTab() != ItemGroup.INVENTORY.getIndex())
                     return true;
             }
+
+            if(LCTrinketsAPI.isValid(Screens.getClient(screen).player))
+                return true;
 
             ScreenPosition slotPosition = screen instanceof CreativeInventoryScreen ? LCConfig.CLIENT.walletSlotCreative.get() : LCConfig.CLIENT.walletSlot.get();
             slotPosition = slotPosition.offset(ScreenUtil.getScreenCorner(gui));

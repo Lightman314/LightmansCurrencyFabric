@@ -1,0 +1,5 @@
+{
+	"icon": "lightmanscurrency:trinkets/empty_wallet_slot",
+	"order": 0,
+	"validator_predicates": ["trinkets:tag"]
+}

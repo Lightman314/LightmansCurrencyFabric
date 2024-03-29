@@ -5,8 +5,8 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.api.config.options.ConfigOption;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +24,37 @@ public abstract class ConfigFile {
 
     private static void registerConfig(@NotNull ConfigFile file) { loadableFiles.add(file); }
 
+    /**
+     * Load flag to ensure the configs are loaded at the correct times.
+     * It is up to the config file provider to ensure that all relevant data will be loaded by the time the config gets built.
+     */
+    public enum LoadPhase {
+        /**
+         * File will not be loaded automatically.
+         * Use for manually called instant loading via {@link #reload()}
+         */
+        NULL,
+        /**
+         * File will be loaded during the {@link ServerLifecycleEvents#SERVER_STARTED Server Started Callback},<br>
+         * or the {@link ClientPlayConnectionEvents#INIT Logging In Callback} (if flagged as client-only)
+         */
+        GAME_START
+    }
+
+    //Used to load client & common files
+    public static void loadClientFiles(@NotNull LoadPhase phase) { loadFiles(true, phase); }
+    //Used to load server & common files
+    public static void loadServerFiles(@NotNull LoadPhase phase) { loadFiles(false, phase); }
+    public static void loadFiles(boolean logicalClient, @NotNull LoadPhase phase) {
+        for(ConfigFile file : loadableFiles)
+        {
+            try {
+                if(!file.isLoaded() && file.shouldReload(logicalClient) && file.loadPhase == phase)
+                    file.reload();
+            } catch (IllegalArgumentException | NullPointerException e) { LightmansCurrency.LogError("Error reloading config file!", e); }
+        }
+    }
+
     public static void reloadClientFiles() { reloadFiles(true); }
     public static void reloadServerFiles() { reloadFiles(false); }
     private static void reloadFiles(boolean logicalClient)
@@ -33,7 +64,7 @@ public abstract class ConfigFile {
             try {
                 if(file.shouldReload(logicalClient))
                     file.reload();
-            } catch (IllegalArgumentException e) { LightmansCurrency.LogError("Error setting up config file!", e); }
+            } catch (IllegalArgumentException | NullPointerException e) { LightmansCurrency.LogError("Error reloading config file!", e); }
         }
     }
 
@@ -41,6 +72,10 @@ public abstract class ConfigFile {
     protected String getConfigFolder() { return "config"; }
 
     private final String fileName;
+    @NotNull
+    public String getFileName() { return this.fileName; }
+
+
 
     private final List<Runnable> reloadListeners = new ArrayList<>();
     public final void addListener(@NotNull Runnable listener) {
@@ -54,6 +89,7 @@ public abstract class ConfigFile {
     protected final File getFile() { return new File(this.getFilePath()); }
 
     private ConfigSection root = null;
+    public final LoadPhase loadPhase;
     private void confirmSetup() {
         if(this.root == null)
         {
@@ -96,9 +132,11 @@ public abstract class ConfigFile {
         return currentSection;
     }
 
-    protected ConfigFile(@NotNull String fileName) {
+    protected ConfigFile(@NotNull String fileName) { this(fileName, LoadPhase.GAME_START); }
+    protected ConfigFile(@NotNull String fileName, @NotNull LoadPhase loadPhase) {
         this.fileName = fileName;
         //Build config on first use
+        this.loadPhase = loadPhase;
         registerConfig(this);
     }
 
@@ -117,6 +155,8 @@ public abstract class ConfigFile {
     }
 
     private boolean reloading = false;
+    private boolean loaded = false;
+    public boolean isLoaded() { return this.loaded; }
 
     public final void reload()
     {
@@ -179,6 +219,8 @@ public abstract class ConfigFile {
             if(!option.isLoaded())
                 LightmansCurrency.LogWarning("Option " + id + " was missing from the config. Default value will be used instead.");
         });
+
+        this.loaded = true;
 
         this.writeToFile();
 
