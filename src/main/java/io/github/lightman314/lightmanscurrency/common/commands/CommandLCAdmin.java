@@ -22,7 +22,6 @@ import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.types.PlayerWhitelist;
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.TraderSearchFilter;
 import io.github.lightman314.lightmanscurrency.network.client.messages.admin.SMessageSyncAdminList;
-import io.github.lightman314.lightmanscurrency.secrets.Secret;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -51,7 +50,7 @@ public class CommandLCAdmin {
     {
         LiteralArgumentBuilder<ServerCommandSource> lcAdminCommand
                 = CommandManager.literal("lcadmin")
-                .requires((commandSource) -> commandSource.hasPermissionLevel(2) || Secret.hasSecretAccess(commandSource))
+                .requires((commandSource) -> commandSource.hasPermissionLevel(2))
                 .then(CommandManager.literal("toggleadmin")
                         .requires((commandSource) -> commandSource.getEntity() instanceof ServerPlayerEntity)
                         .executes(CommandLCAdmin::toggleAdmin))

@@ -2,7 +2,6 @@ package io.github.lightman314.lightmanscurrency.common.core;
 
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.lightman314.lightmanscurrency.common.commands.*;
-import io.github.lightman314.lightmanscurrency.secrets.Secret;
 import net.minecraft.server.command.ServerCommandSource;
 
 public class CommandLoader {
@@ -13,7 +12,6 @@ public class CommandLoader {
         CommandBalTop.register(dispatcher);
         CommandConfig.register(dispatcher);
         CommandBank.register(dispatcher);
-        Secret.register(dispatcher);
     }
 
 }

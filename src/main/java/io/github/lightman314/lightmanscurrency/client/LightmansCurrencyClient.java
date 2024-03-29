@@ -111,7 +111,7 @@ public class LightmansCurrencyClient implements ClientModInitializer {
 		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(this::stitchTextures);
 
 		ClientPlayConnectionEvents.INIT.register(((handler, client) -> ItemEditWidget.initItemList()));
-		ClientPlayConnectionEvents.INIT.register((handler,client) -> ConfigFile.reloadClientFiles());
+		ClientPlayConnectionEvents.INIT.register((handler,client) -> ConfigFile.loadClientFiles(ConfigFile.LoadPhase.GAME_START));
 
 		ClientPlayConnectionEvents.DISCONNECT.register(ClientBankData::onClientLogout);
 		ClientPlayConnectionEvents.DISCONNECT.register(ClientEjectionData::onClientLogout);
