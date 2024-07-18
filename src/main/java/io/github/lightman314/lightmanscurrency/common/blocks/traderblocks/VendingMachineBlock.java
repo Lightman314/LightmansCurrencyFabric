@@ -19,6 +19,9 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -120,5 +123,13 @@ public class VendingMachineBlock extends TraderBlockTallRotatable implements IIt
 
     @Override
     protected Supplier<List<Text>> getItemTooltips() { return LCTooltips.ITEM_TRADER; }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
+        if(state.get(ISBOTTOM))
+            return VoxelShapes.empty();
+        return super.getCullingShape(state, world, pos);
+    }
 
 }

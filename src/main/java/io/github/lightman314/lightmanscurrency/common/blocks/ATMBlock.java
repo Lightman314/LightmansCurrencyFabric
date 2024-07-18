@@ -4,6 +4,8 @@ import java.util.List;
 
 import io.github.lightman314.lightmanscurrency.common.menu.ATMMenu;
 import io.github.lightman314.lightmanscurrency.common.menu.factory.SimpleMenuFactory;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import org.jetbrains.annotations.Nullable;
 
 import io.github.lightman314.lightmanscurrency.common.blocks.templates.TallRotatableBlock;
@@ -39,6 +41,14 @@ public class ATMBlock extends TallRotatableBlock {
 	public void appendTooltip(ItemStack stack, BlockView world, List<Text> tooltip, TooltipContext flag) {
 		TooltipItem.addTooltip(tooltip, LCTooltips.ATM);
 		super.appendTooltip(stack, world, tooltip, flag);
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
+		if(!state.get(ISBOTTOM))
+			return VoxelShapes.empty();
+		return super.getCullingShape(state, world, pos);
 	}
 	
 }

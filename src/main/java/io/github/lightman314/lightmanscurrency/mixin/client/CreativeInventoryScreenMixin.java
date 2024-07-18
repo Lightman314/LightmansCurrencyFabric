@@ -13,7 +13,7 @@ import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 public class CreativeInventoryScreenMixin {
 
     @Unique
-    protected CreativeInventoryScreen self() { return (CreativeInventoryScreen)(Object) this; }
+    private CreativeInventoryScreen self() { return (CreativeInventoryScreen)(Object) this; }
 
 
     @Inject(at = @At("TAIL"), method = "drawBackground")

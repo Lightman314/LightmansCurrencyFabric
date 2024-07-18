@@ -25,13 +25,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MerchantScreenHandlerMixin {
 
     @Unique
-    protected MerchantScreenHandler self() { return (MerchantScreenHandler)(Object)this; }
+    private MerchantScreenHandler self() { return (MerchantScreenHandler)(Object)this; }
 
     @Accessor("merchant")
     public abstract Merchant getTrader();
     @Accessor("merchantInventory")
     public abstract MerchantInventory getTradeContainer();
-    public PlayerEntity getPlayer() { Merchant m = this.getTrader(); if(m != null) return m.getCustomer(); return null; }
+    @Unique
+    private PlayerEntity getPlayer() { Merchant m = this.getTrader(); if(m != null) return m.getCustomer(); return null; }
 
     @Inject(at = @At("HEAD"), method = "switchTo")
     private void tryMoveItemsEarly(int trade, CallbackInfo info)
@@ -63,6 +64,8 @@ public abstract class MerchantScreenHandlerMixin {
                         CoinValue tradeValue = MoneyUtil.getCoinValue(ImmutableList.of(coinA, coinB));
                         LightmansCurrency.LogDebug("Coin Value of the selected trade is " + tradeValue.getString());
                         PlayerEntity player = this.getPlayer();
+                        if(player == null)
+                            return;
 
                         WalletHandler walletHandler = WalletHandler.getWallet(player);
                         if(walletHandler.getWallet().isEmpty())
@@ -121,7 +124,8 @@ public abstract class MerchantScreenHandlerMixin {
             this.EjectMoneyIntoWallet(player, true);
     }
 
-    protected boolean isPlayerAliveAndValid(PlayerEntity player)
+    @Unique
+    private boolean isPlayerAliveAndValid(PlayerEntity player)
     {
         if(player.isAlive())
         {
@@ -132,6 +136,7 @@ public abstract class MerchantScreenHandlerMixin {
         return false;
     }
 
+    @Unique
     private void EjectMoneyIntoWallet(PlayerEntity player, boolean noUpdate)
     {
         MerchantInventory tradeContainer = this.getTradeContainer();
@@ -153,6 +158,7 @@ public abstract class MerchantScreenHandlerMixin {
         }
     }
 
+    @Unique
     private static boolean isCoinOrEmpty(ItemStack item) { return MoneyUtil.isCoin(item, false) || item.isEmpty(); }
 
 }

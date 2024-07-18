@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ItemEntityMixin {
 
     @Unique
-    protected ItemEntity self() { return (ItemEntity)(Object) this; }
+    private ItemEntity self() { return (ItemEntity)(Object) this; }
 
     @Inject(at = @At("HEAD"), method = "onPlayerCollision")
     public void onPlayerCollision(PlayerEntity player, CallbackInfo info) {

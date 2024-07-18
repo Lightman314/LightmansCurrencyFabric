@@ -8,6 +8,7 @@ import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
 import io.github.lightman314.lightmanscurrency.common.money.MoneyUtil;
 import io.github.lightman314.lightmanscurrency.common.money.wallet.WalletHandler;
+import io.github.lightman314.lightmanscurrency.integration.trinketsapi.LCTrinketsAPI;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
 import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
@@ -64,6 +65,10 @@ public class EventListener {
             return;
         if(entity instanceof PlayerEntity player && !player.isSpectator())
         {
+
+            if(LCTrinketsAPI.isValid(player))
+                return;
+
             WalletHandler walletHandler = WalletHandler.getWallet(player);
 
             ItemStack walletStack = walletHandler.getWallet();
@@ -96,7 +101,7 @@ public class EventListener {
         player.getWorld().spawnEntity(item);
     }
 
-    private static void spawnWalletDrops(PlayerEntity player, ItemStack walletStack, int coinDropPercent)
+    public static void spawnWalletDrops(PlayerEntity player, ItemStack walletStack, int coinDropPercent)
     {
         double coinPercentage = MathUtil.clamp((double)coinDropPercent / 100d, 0d, 1d);
         DefaultedList<ItemStack> walletList = WalletItem.getWalletInventory(walletStack);
