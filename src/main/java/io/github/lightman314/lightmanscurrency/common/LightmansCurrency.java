@@ -42,13 +42,14 @@ import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.types.*;
 import io.github.lightman314.lightmanscurrency.common.traders.slot_machine.SlotMachineTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.*;
+import io.github.lightman314.lightmanscurrency.integration.trinketsapi.LCTrinketsAPI;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.network.client.messages.time.SMessageSyncTime;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,9 +94,6 @@ public class LightmansCurrency implements ModInitializer {
         //Register Event Listeners
         this.registerEventListeners();
         EventListener.registerEventListeners();
-
-        //Register Crafting Conditions
-        //TODO crafting conditions
 
         //TraderData deserializers
         TraderData.register(ItemTraderData.TYPE, ItemTraderData::new);
@@ -199,7 +197,7 @@ public class LightmansCurrency implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> SyncedConfigFile.playerJoined(handler.getPlayer()));
 
         //Killed by other entity event
-        LootTableLoadingCallback.EVENT.register(LootManager::onLootTableLoaded);
+        LootTableEvents.MODIFY.register(LootManager::onLootTableLoaded);
         EntityDeathCallback.EVENT.register(LootManager::entityDeath);
 
         //Entity spawn event
@@ -211,6 +209,9 @@ public class LightmansCurrency implements ModInitializer {
         EnchantmentEvents.registerEventListeners();
 
         LootManager.setup();
+
+        //Setup Trinkets Events (if loaded)
+        LCTrinketsAPI.setupEventListeners();
 
     }
 

@@ -13,8 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class InventoryScreenMixin {
 
     @Unique
-    protected InventoryScreen self() { return (InventoryScreen)(Object) this; }
-
+    private InventoryScreen self() { return (InventoryScreen)(Object) this; }
 
     @Inject(at = @At("TAIL"), method = "drawBackground")
     public void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY, CallbackInfo info) {

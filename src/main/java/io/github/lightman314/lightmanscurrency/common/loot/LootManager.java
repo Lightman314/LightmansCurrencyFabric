@@ -11,8 +11,7 @@ import io.github.lightman314.lightmanscurrency.LCConfig;
 import io.github.lightman314.lightmanscurrency.api.config.options.basic.StringListOption;
 import io.github.lightman314.lightmanscurrency.common.LightmansCurrency;
 import io.github.lightman314.lightmanscurrency.util.InventoryUtil;
-import net.fabricmc.fabric.api.loot.v1.FabricLootSupplierBuilder;
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
+import net.fabricmc.fabric.api.loot.v2.LootTableSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -250,7 +249,7 @@ public class LootManager {
     /**
      * Listens to LootTableEvents.MODIFY to modify the chest loot tables safely.
      */
-    public static void onLootTableLoaded(ResourceManager resourceManager, net.minecraft.loot.LootManager lootManager, Identifier id, FabricLootSupplierBuilder tableBuilder, LootTableLoadingCallback.LootTableSetter source) {
+    public static void onLootTableLoaded(ResourceManager resourceManager, net.minecraft.loot.LootManager lootManager, Identifier id, LootTable.Builder tableBuilder, LootTableSource source) {
         if(!LCConfig.COMMON.enableChestLoot.get())
             return;
         PoolLevel level = GetChestPoolLevel(id.toString());

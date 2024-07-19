@@ -1,8 +1,14 @@
 package io.github.lightman314.lightmanscurrency.integration.trinketsapi;
 
 import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketEnums;
 import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
+import dev.emi.trinkets.api.event.TrinketDropCallback;
+import io.github.lightman314.lightmanscurrency.common.EventListener;
+import io.github.lightman314.lightmanscurrency.common.core.ModGameRules;
+import io.github.lightman314.lightmanscurrency.common.items.WalletItem;
+import io.github.lightman314.lightmanscurrency.util.MathUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -86,6 +92,30 @@ public class LCTrinketsInternal {
             }
         });
         return success.get();
+    }
+
+    public static void setupEventListeners()
+    {
+        TrinketDropCallback.EVENT.register(LCTrinketsInternal::onTrinketsDrop);
+    }
+
+    private static TrinketEnums.DropRule onTrinketsDrop(TrinketEnums.DropRule rule, ItemStack stack, SlotReference ref, LivingEntity entity)
+    {
+        if(entity instanceof PlayerEntity player && WalletItem.isWallet(stack))
+        {
+
+            boolean keepWallet = rule == TrinketEnums.DropRule.KEEP || player.getWorld().getGameRules().getBoolean(ModGameRules.KEEP_WALLET);
+            int coinDropPercent = MathUtil.clamp(player.getWorld().getGameRules().getInt(ModGameRules.COIN_DROP_PERCENT), 0, 100);
+
+            if(keepWallet && coinDropPercent <= 0)
+                return TrinketEnums.DropRule.KEEP;
+
+            if(keepWallet)
+                EventListener.spawnWalletDrops(player, stack, coinDropPercent);
+            else
+                return rule;
+        }
+        return rule;
     }
 
 }

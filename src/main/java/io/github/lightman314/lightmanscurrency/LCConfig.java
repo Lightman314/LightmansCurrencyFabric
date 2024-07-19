@@ -1,11 +1,8 @@
 package io.github.lightman314.lightmanscurrency;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
-import com.google.common.collect.ImmutableList;
 import io.github.lightman314.lightmanscurrency.api.config.ClientConfigFile;
 import io.github.lightman314.lightmanscurrency.api.config.ConfigFile;
 import io.github.lightman314.lightmanscurrency.api.config.SyncedConfigFile;
@@ -26,8 +23,6 @@ import net.minecraft.util.Identifier;
 
 import io.github.lightman314.lightmanscurrency.common.items.CoinItem;
 import io.github.lightman314.lightmanscurrency.common.money.CoinValue;
-import net.minecraft.util.InvalidIdentifierException;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 public final class LCConfig {
@@ -187,19 +182,6 @@ public final class LCConfig {
         public final BooleanOption addCustomWanderingTrades = BooleanOption.createTrue();
         public final BooleanOption addBankerVillager = BooleanOption.createTrue();
         public final BooleanOption addCashierVillager = BooleanOption.createTrue();
-        public final BooleanOption changeVanillaTrades = BooleanOption.createFalse();
-        public final BooleanOption changeModdedTrades = BooleanOption.createFalse();
-        public final BooleanOption changeWanderingTrades = BooleanOption.createFalse();
-        public final ItemOption defaultVillagerReplacementCoin = ItemOption.create(ModItems.COIN_EMERALD, false);
-        public final StringListOption villagerReplacementCoinOverrides = StringListOption.create(ImmutableList.of(
-                "minecraft:butcher-lightmanscurrency:coin_iron",
-                "minecraft:cartographer-lightmanscurrency:coin_iron",
-                "minecraft:farmer-lightmanscurrency:coin_iron",
-                "minecraft:fisherman-lightmanscurrency:coin_iron",
-                "minecraft:fletcher-lightmanscurrency:coin_copper",
-                "minecraft:leatherworker-lightmanscurrency:coin_iron",
-                "minecraft:mason-lightmanscurrency:coin_iron",
-                "minecraft:shepherd-lightmanscurrency:coin_iron"));
 
         //Loot Items
         public final ItemOption lootItem1 = ItemOption.create(ModItems.COIN_COPPER);
@@ -271,26 +253,7 @@ public final class LCConfig {
             builder.comment("Whether the cashier villager profession will have any registered trades.. The cashier sells an amalgamation of vanilla traders products for coins.")
                     .add("addCashier", this.addCashierVillager);
 
-            builder.comment("Villager Trade Modification","Note: Changes made only apply to newly generated trades. Villagers with trades already defined will not be changed.").push("modification");
-
-            builder.comment("Whether vanilla villagers should have the Emeralds from their trades replaced with coins.")
-                    .add("changeVanillaTrades", this.changeVanillaTrades);
-
-            builder.comment("Whether villagers added by other mods should have the Emeralds from their trades replaced with coins.")
-                    .add("changeModdedTrades", this.changeModdedTrades);
-
-            builder.comment("Whether the wandering trader should have the emeralds from their trades replaced with the default replacement coin.")
-                    .add("changeWanderingTrades", this.changeWanderingTrades);
-
-            builder.comment("The default coin to replace a trades emeralds with.")
-                    .add("defaultReplacementCoin", this.defaultVillagerReplacementCoin);
-
-            builder.comment("List of replacement coin overrides.",
-                            "Each entry must be formatted as follows: \"mod:some_trader_type-lightmanscurrency:some_coin\"",
-                            "Every trader not on this list will use the default trader coin defined above.")
-                    .add("replacementCoinOverrides", this.villagerReplacementCoinOverrides);
-
-            builder.pop().pop();
+            builder.pop();
 
             builder.comment("Loot Options").push("loot");
 
@@ -378,51 +341,6 @@ public final class LCConfig {
             //Pop lists -> chests -> loot
             builder.pop().pop().pop();
 
-        }
-
-        private final Map<String,Item> villagerCoinOverrideResults = new HashMap<>();
-
-        @Override
-        protected void afterReload() {
-            this.villagerCoinOverrideResults.clear();
-            List<String> overrides = this.villagerReplacementCoinOverrides.get();
-            for(int i = 0; i < overrides.size(); ++i)
-            {
-                try {
-                    String override = overrides.get(i);
-                    if(!override.contains("-"))
-                        throw new RuntimeException("Input doesn't have a '-' splitter.");
-                    String[] split = override.split("-");
-                    if(split.length != 2)
-                        throw new RuntimeException("Input has more than 1 '-' splitter.");
-
-                    Identifier villagerType;
-                    try { villagerType = new Identifier(split[0]);
-                    } catch(InvalidIdentifierException t) { throw new RuntimeException("Villager type is not a valid resource location.", t); }
-                    Identifier itemType;
-                    try { itemType = new Identifier(split[1]);
-                    } catch(InvalidIdentifierException t) { throw new RuntimeException("Item is not a valid resource location.", t); }
-
-                    Item item = Registry.ITEM.get(itemType);
-                    if(item == Items.AIR)
-                        throw new RuntimeException("Item '" + itemType + "' is air or is not a registered item.");
-
-                    if(this.villagerCoinOverrideResults.containsKey(villagerType.toString()))
-                        throw new RuntimeException("Villager Type '" + villagerType + "' already has an override. Cannot override it twice!");
-
-                    this.villagerCoinOverrideResults.put(villagerType.toString(), item);
-                    LightmansCurrency.LogInfo("Villager Replacement Coin Override loaded: " + villagerType + " -> " + itemType);
-
-                } catch(RuntimeException t) { LightmansCurrency.LogError("Error parsing villager emerald override input #" + (i + 1) + ".", t); }
-            }
-        }
-
-        @NotNull
-        public Item getEmeraldReplacementItem(@NotNull String trader)
-        {
-            if(this.villagerCoinOverrideResults.containsKey(trader))
-                return this.villagerCoinOverrideResults.get(trader);
-            return this.defaultVillagerReplacementCoin.get();
         }
 
     }
@@ -639,15 +557,6 @@ public final class LCConfig {
 
             builder.pop();
 
-            /*builder.comment("Player <-> Player Trading Options").push("player_trading");
-
-            builder.comment("The maximum distance allowed between players in order for a player trade to persist.",
-                            "-1 will always allow trading regardless of dimension.",
-                            "0 will allow infinite distance but require that both players be in the same dimension.")
-                    .add("maxPlayerDistance", this.playerTradingRange);
-
-            builder.pop();*/
-
         }
 
         public String formatValueDisplay(double value)
@@ -664,7 +573,7 @@ public final class LCConfig {
 
         public int getMaxDecimal()
         {
-            double minFraction = MoneyUtil.getData(new CoinValue(1).coinValues.get(0).coin).getDisplayValue() % 1d;
+            double minFraction = Objects.requireNonNull(MoneyUtil.getData(new CoinValue(1).coinValues.get(0).coin)).getDisplayValue() % 1d;
             if(minFraction > 0d)
             {
                 //-2 to ignore the 0.

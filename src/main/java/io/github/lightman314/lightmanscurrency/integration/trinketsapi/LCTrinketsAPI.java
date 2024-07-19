@@ -35,4 +35,10 @@ public class LCTrinketsAPI {
         return LCTrinketsInternal.setWallet(player, wallet);
     }
 
+    public static void setupEventListeners()
+    {
+        if(isActive())
+            LCTrinketsInternal.setupEventListeners();
+    }
+
 }

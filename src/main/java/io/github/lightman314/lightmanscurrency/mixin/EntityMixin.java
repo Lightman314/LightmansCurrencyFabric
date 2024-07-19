@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityMixin {
 
     @Unique
-    protected Entity self() { return (Entity)(Object) this; }
+    private Entity self() { return (Entity)(Object) this; }
 
     @Inject(at = @At("HEAD"), method = "setRemoved")
     private void setRemoved(Entity.RemovalReason reason, CallbackInfo info)
