@@ -1,8 +1,6 @@
 package io.github.lightman314.lightmanscurrency.mixin;
 
 import io.github.lightman314.lightmanscurrency.common.callbacks.EntityDeathCallback;
-import io.github.lightman314.lightmanscurrency.common.loot.EntityLootBlocker;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LivingEntityMixin {
 
     @Unique
-    protected LivingEntity self() { return (LivingEntity)(Object) this; }
+    private LivingEntity self() { return (LivingEntity)(Object) this; }
 
     @Accessor("dead")
     protected abstract boolean isDeadInternally();

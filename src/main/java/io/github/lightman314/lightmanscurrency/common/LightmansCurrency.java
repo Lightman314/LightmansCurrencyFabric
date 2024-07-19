@@ -41,6 +41,7 @@ import io.github.lightman314.lightmanscurrency.common.traders.rules.TradeRule;
 import io.github.lightman314.lightmanscurrency.common.traders.rules.types.*;
 import io.github.lightman314.lightmanscurrency.common.traders.slot_machine.SlotMachineTraderData;
 import io.github.lightman314.lightmanscurrency.common.traders.terminal.filters.*;
+import io.github.lightman314.lightmanscurrency.integration.trinketsapi.LCTrinketsAPI;
 import io.github.lightman314.lightmanscurrency.network.PacketChannels;
 import io.github.lightman314.lightmanscurrency.network.client.messages.time.SMessageSyncTime;
 import io.github.lightman314.lightmanscurrency.server.ServerHook;
@@ -99,9 +100,6 @@ public class LightmansCurrency implements ModInitializer {
         //Register Event Listeners
         this.registerEventListeners();
         EventListener.registerEventListeners();
-
-        //Register Crafting Conditions
-        //TODO crafting conditions
 
         //TraderData deserializers
         TraderData.register(ItemTraderData.TYPE, ItemTraderData::new);
@@ -208,6 +206,9 @@ public class LightmansCurrency implements ModInitializer {
         EnchantmentEvents.registerEventListeners();
 
         LootManager.setup();
+
+        //Setup Trinkets Events (if loaded)
+        LCTrinketsAPI.setupEventListeners();
 
     }
 

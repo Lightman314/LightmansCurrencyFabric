@@ -11,7 +11,7 @@ import net.minecraft.nbt.NbtElement;
 
 public class NetworkTradeReference extends NetworkTraderReference{
 
-    private Function<NbtCompound,TradeData> tradeDeserializer;
+    private final Function<NbtCompound,TradeData> tradeDeserializer;
 
     private int tradeIndex = -1;
     public int getTradeIndex() { return this.tradeIndex; }
@@ -49,11 +49,8 @@ public class NetworkTradeReference extends NetworkTraderReference{
         if(this.tradeIndex < 0)
             return null;
         TraderData trader = this.getTrader();
-        if(trader instanceof ITradeSource<?>)
-        {
-            ITradeSource<?> tradeSource = (ITradeSource<?>)trader;
+        if(trader instanceof ITradeSource<?> tradeSource)
             return tradeSource.getTrade(this.tradeIndex);
-        }
         return null;
     }
 
@@ -73,7 +70,7 @@ public class NetworkTradeReference extends NetworkTraderReference{
         if(compound.contains("TradeIndex", NbtElement.INT_TYPE))
             this.tradeIndex = compound.getInt("TradeIndex");
         //Load trade
-        else if(compound.contains("Trade", NbtElement.COMPOUND_TYPE))
+        if(compound.contains("Trade", NbtElement.COMPOUND_TYPE))
             this.tradeData = this.tradeDeserializer.apply(compound.getCompound("Trade"));
     }
 

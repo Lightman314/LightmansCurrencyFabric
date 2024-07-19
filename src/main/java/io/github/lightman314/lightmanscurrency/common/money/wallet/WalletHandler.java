@@ -15,6 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class WalletHandler{
 
+    private boolean invalidated = false;
+    private boolean wasInvalid = false;
+
     //Wallet Storage
     private ItemStack wallet = ItemStack.EMPTY;
     private ItemStack oldWallet = ItemStack.EMPTY;
@@ -41,6 +44,8 @@ public class WalletHandler{
     public void setWallet(ItemStack walletStack) {
         if(LCTrinketsAPI.isValid(this.latestPlayer) && LCTrinketsAPI.setWallet(this.latestPlayer,walletStack))
             return;
+        //Flag as no-longer invalid if trinkets cannot be found
+        this.invalidated = false;
         this.wallet = walletStack;
         if(!(walletStack.getItem() instanceof WalletItem) && !walletStack.isEmpty())
             LightmansCurrency.LogWarning("Equipped a non-wallet to the players wallet slot.");
@@ -63,23 +68,25 @@ public class WalletHandler{
     /**
      * Returns true if the wallet has been changed, and needs to send an update packet
      */
-    public boolean isDirty() { return this.visible != this.wasVisible || !InventoryUtil.ItemMatches(this.wallet, this.oldWallet) || this.wallet.getCount() != this.oldWallet.getCount(); }
-
+    public boolean isDirty() { return this.wasInvalid != this.invalidated || this.visible != this.wasVisible || !InventoryUtil.ItemMatches(this.wallet, this.oldWallet) || this.wallet.getCount() != this.oldWallet.getCount(); }
     /**
      * Removes the dirty flag, called when an update packet is sent.
      */
-    public void clean() { this.wasVisible = this.visible; this.oldWallet = this.wallet.copy(); }
+    public void clean() { this.wasInvalid = this.invalidated; this.wasVisible = this.visible; this.oldWallet = this.wallet.copy(); }
 
     /**
      * Run every server tick.
      */
     public void tick() {
-        if(this.latestPlayer == null)
+        if(this.invalidated || this.latestPlayer == null)
             return;
         if(!this.wallet.isEmpty() && LCTrinketsAPI.isValid(this.latestPlayer))
         {
             if(LCTrinketsAPI.setWallet(this.latestPlayer, this.wallet))
+            {
                 this.wallet = ItemStack.EMPTY;
+                this.invalidated = true;
+            }
         }
     }
 
@@ -88,6 +95,11 @@ public class WalletHandler{
      */
     public NbtCompound save() {
         NbtCompound compound = new NbtCompound();
+        if(this.invalidated)
+        {
+            compound.putBoolean("Invalidated",true);
+            return compound;
+        }
         NbtCompound walletTag = this.wallet.writeNbt(new NbtCompound());
         compound.put("Wallet", walletTag);
         compound.putBoolean("Visible", this.visible);
@@ -99,6 +111,12 @@ public class WalletHandler{
      */
     public void load(NbtCompound compound)
     {
+        if(compound.contains("Invalidated") && compound.getBoolean("Invalidated"))
+        {
+            this.invalidated = true;
+            this.wallet = ItemStack.EMPTY;
+            this.visible = false;
+        }
         this.wallet = ItemStack.fromNbt(compound.getCompound("Wallet"));
         this.visible = compound.getBoolean("Visible");
         this.clean();
@@ -159,8 +177,6 @@ public class WalletHandler{
                 return;
             }
             ItemStack slotItem = inventory.getStack(clickedSlot);
-            //LightmansCurrency.LogInfo("Clicked on slot " + clickedSlot + " of " + inventory.getContainerSize() + " on the " + DebugUtil.getSideText(player));
-            //LightmansCurrency.LogInfo("Slot had " + slotItem.getCount() + "x " + slotItem.getItem().getRegistryName().toString());
             if(WalletSlot.isValidWallet(slotItem) && walletHandler.getWallet().isEmpty())
             {
                 //Remove the item from inventory
