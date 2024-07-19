@@ -116,6 +116,7 @@ public class WalletHandler{
             this.invalidated = true;
             this.wallet = ItemStack.EMPTY;
             this.visible = false;
+            return;
         }
         this.wallet = ItemStack.fromNbt(compound.getCompound("Wallet"));
         this.visible = compound.getBoolean("Visible");
